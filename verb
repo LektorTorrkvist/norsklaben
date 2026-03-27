@@ -1,761 +1,308 @@
-<!DOCTYPE html>
-<html lang="nn">
-<head>
-  <meta charset="UTF-8">
-  <title>Nynorske verb – 20 oppgåver</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <style>
-    /* ---------- GLOBALT DESIGN ---------- */
-    body {
-      margin: 0;
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #3b5bdb, #9775fa);
-      color: #222;
-      min-height: 100vh;
-    }
-
-    header {
-      text-align: center;
-      padding: 2.5rem 1rem 2rem;
-      color: #fff;
-    }
-
-    h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
-      margin-bottom: 0.3rem;
-    }
-
-    header p {
-      font-size: 1.05rem;
-      opacity: 0.9;
-    }
-
-    main {
-      max-width: 950px;
-      margin: 0 auto;
-      padding: 0 1rem 2.5rem;
-    }
-
-    /* ---------- KORT / GLASS-EFFEKT ---------- */
-    .card {
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-radius: 14px;
-      padding: 1.4rem 1.6rem 1.8rem;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.18);
-      animation: fadein 0.6s ease;
-      color: #fff;
-    }
-
-    @keyframes fadein {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .intro {
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-      opacity: 0.95;
-    }
-
-    /* ---------- OPPGÅVER ---------- */
-    .oppgave {
-      margin-bottom: 1.6rem;
-      padding-bottom: 1.1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.35);
-    }
-
-    .oppgave:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .oppgave h3 {
-      margin: 0 0 0.35rem;
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-
-    .sporsmal, .stamme {
-      margin: 0 0 0.45rem;
-      font-size: 0.98rem;
-    }
-
-    .stamme {
-      font-style: italic;
-      opacity: 0.95;
-    }
-
-    /* ---------- MULTIPLE CHOICE ---------- */
-    .alternativ {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .alternativ label {
-      display: flex;
-      align-items: center;
-      padding: 0.35rem 0.6rem;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.75);
-      color: #222;
-      cursor: pointer;
-      transition: 0.15s ease;
-    }
-
-    .alternativ label:hover {
-      background: rgba(255,255,255,0.95);
-    }
-
-    .alternativ input[type="radio"] {
-      margin-right: 0.45rem;
-    }
-
-    /* ---------- INNSKRIVING ---------- */
-    .text-answer {
-      padding: 0.35rem 0.5rem;
-      border-radius: 6px;
-      border: none;
-      margin-right: 0.4rem;
-      font-size: 0.95rem;
-      min-width: 80px;
-    }
-
-    .text-answer:focus {
-      outline: 2px solid #3b5bdb;
-    }
-
-    /* ---------- DRA OG SLEPP ---------- */
-    .wordbank {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin: 0.4rem 0 0.6rem;
-    }
-
-    .drag-item {
-      background: rgba(255,255,255,0.9);
-      color: #222;
-      padding: 0.25rem 0.6rem;
-      border-radius: 999px;
-      cursor: grab;
-      font-size: 0.9rem;
-      user-select: none;
-    }
-
-    .drag-item.dragging {
-      opacity: 0.6;
-    }
-
-    .dropzone {
-      display: inline-block;
-      min-width: 70px;
-      padding: 0.15rem 0.35rem;
-      margin: 0 0.2rem;
-      border-radius: 6px;
-      border: 1px dashed rgba(255,255,255,0.7);
-      background: rgba(0,0,0,0.08);
-      font-weight: 600;
-    }
-
-    .dropzone.filled {
-      border-style: solid;
-      background: rgba(255,255,255,0.9);
-      color: #222;
-    }
-
-    /* ---------- TILBAKEMELDING ---------- */
-    .tilbakemelding {
-      margin-top: 0.3rem;
-      font-size: 0.9rem;
-      min-height: 1.1rem;
-    }
-
-    .tilbakemelding.rett {
-      color: #d4ffdb;
-    }
-
-    .tilbakemelding.feil {
-      color: #ffe0e0;
-    }
-
-    .rett-label {
-      background: #c8f7c5 !important;
-    }
-
-    .feil-label {
-      background: #f7c5c5 !important;
-    }
-
-    /* ---------- KNAPP OG SKÅR ---------- */
-    #checkBtn {
-      width: 100%;
-      margin-top: 0.7rem;
-      padding: 0.9rem 1.2rem;
-      border-radius: 10px;
-      border: none;
-      background: #fff;
-      color: #3b5bdb;
-      font-size: 1.05rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    #checkBtn:hover {
-      background: #f1f1ff;
-    }
-
-    #score {
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-
-    /* ---------- RESPONSIV ---------- */
-    @media (max-width: 600px) {
-      h1 { font-size: 1.8rem; }
-      .card { padding: 1.1rem 1.1rem 1.4rem; }
-    }
-  </style>
-</head>
-
-<body>
-<header>
-  <h1>Nynorske verb – 20 oppgåver</h1>
-  <p>Øv på verbbøying i presens, preteritum og perfektum. Svar, og trykk på knappen for å sjekke fasit.</p>
-</header>
-
-<main>
-  <div class="card">
-    <p class="intro">
-      Det er tre typar oppgåver:
-      <strong>multiple choice</strong>, <strong>innskriving</strong> og <strong>dra &amp; slepp</strong> («pek og flytt»).
-    </p>
-
-    <!-- OPPGÅVER 1–12: MULTIPLE CHOICE -->
-
-    <!-- Oppgåve 1 -->
-    <div class="oppgave" data-id="OPG-001" data-type="mc">
-      <h3>Oppgåve 1 – presens av svakt verb</h3>
-      <p class="sporsmal">Kva for form er rett i presens på nynorsk?</p>
-      <p class="stamme">Eg ___ ballen til deg kvar dag.</p>
-      <div class="alternativ">
-        <label><input type="radio" name="OPG-001" value="A"> kastar</label>
-        <label><input type="radio" name="OPG-001" value="B"> kaster</label>
-        <label><input type="radio" name="OPG-001" value="C"> kasta</label>
-        <label><input type="radio" name="OPG-001" value="D"> kastet</label>
-      </div>
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 2 -->
-    <div class="oppgave" data-id="OPG-002" data-type="mc">
-      <h3>Oppgåve 2 – presens av svakt verb</h3>
-      <p class="sporsmal">Vel rett presensform på nynorsk.</p>
-      <p class="stamme">Vi ___ fotball etter skulen.</p>
-      <div class="alternativ">
-        <label><input type="radio" name="OPG-002" value="A"> spelar</label>
-        <label><input type="radio" name="OPG-002" value="B"> spiller</label>
-        <label><input type="radio" name="OPG-002" value="C"> spelte</label>
-        <label><input type="radio" name="OPG-002" value="D"> spelt</label>
-      </div>
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 3 -->
-    <div class="oppgave" data-id="OPG-003" data-type="mc">
-      <h3>Oppgåve 3 – preteritum av svakt verb</h3>
-      <p class="sporsmal">Kva for form er rett i preteritum?</p>
-      <p class="stamme">I går ___ eg med matteheftet.</p>
-      <div class="alternativ">
-        <label><input type="radio" name="OPG-003" value="A"> jobba</label>
-        <label><input type="radio" name="OPG-003" value="B"> jobbet</label>
-        <label><input type="radio" name="OPG-003" value="C"> jobber</label>
-        <label><input type="radio" name="OPG-003" value="D"> har jobba</label>
-      </div>
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 4 -->
-    <div class="oppgave" data-id="OPG-004" data-type="mc">
-      <h3>Oppgåve 4 – preteritum av svakt verb</h3>
-      <p class="sporsmal">Vel rett preteritumsform.</p>
-      <p class="stamme">I friminuttet ___ vi om filmen.</p>
-      <div class="alternativ">
-        <label><input type="radio" name="OPG-004" value="A"> snakka</label>
-        <label><input type="radio" name="OPG-004" value="B"> snakket</label>
-        <label><input type="radio" name="OPG-004" value="C"> snakkar</label>
-        <label><input type="radio" name="OPG-004" value="D"> snakker</label>
-      </div>
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 5 -->
-    <div class="oppgave" data-id="OPG-005" data-type="mc">
-      <h3>Oppgåve 5 – presens av sterkt verb</h3>
-      <p class="sporsmal">Kva for form er rett i presens?</p>
-      <p class="stamme">Ho ___ ei melding til læraren.</p>
-      <div class="alternativ">
-        <label><input type="radio" name="OPG-005" value="A"> skriv</label>
-        <label><input type="radio" name="OPG-005" value="B"> skriver</label>
-        <label><input type="radio" name="OPG-005" value="C"> skreiv</label>
-        <label><input type="radio" name="OPG-005" value="D"> skriven</label>
-      </div>
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 6 -->
-    <div class="oppgave" data-id="OPG-006" data-type="mc">
-      <h3>Oppgåve 6 – preteritum av sterkt verb</h3>
-      <p class="sporsmal">Kva for form er rett i preteritum?</p>
-      <p class="stamme">I går ___ vi ein ny tursti.</p>
-      <div class="alternativ">
-        <label><input type="radio" name="OPG-006" value="A"> fann</label>
-        <label><input type="radio" name="OPG-006" value="B"> fant</label>
-        <label><input type="radio" name="OPG-006" value="C"> funne</label>
-        <label><input type="radio" name="OPG-006" value="D"> finn</label>
-      </div>
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 7 -->
-    <div class="oppgave" data-id="OPG-007" data-type="mc">
-      <h3>Oppgåve 7 – preteritum av sterkt verb</h3>
-      <p class="sporsmal">Vel rett preteritumsform av «å sjå».</p>
-      <p class="stamme">Forrige veke ___ eg ein spanande film.</p>
-      <div class="alternativ">
-        <label><input type="radio" name="OPG-007" value="A"> såg</label>
-        <label><input type="radio" name="OPG-007" value="B"> så</label>
-        <label><input type="radio" name="OPG-007" value="C"> sett</label>
-        <label><input type="radio" name="OPG-007" value="D"> sjå</label>
-      </div>
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 8 -->
-    <div class="oppgave" data-id="OPG-008" data-type="mc">
-      <h3>Oppgåve 8 – perfektum partisipp (svakt verb)</h3>
-      <p class="sporsmal">Kva for form er rett i perfektum?</p>
-      <p class="stamme">Vi har ___ heile klasserommet.</p>
-      <div class="alternativ">
-        <label><input type="radio" name="OPG-008" value="A"> rydda</label>
-        <label><input type="radio" name="OPG-008" value="B"> ryddet</label>
-        <label><input type="radio" name="OPG-008" value="C"> rydder</label>
-        <label><input type="radio" name="OPG-008" value="D"> ryddaen</label>
-      </div>
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 9 -->
-    <div class="oppgave" data-id="OPG-009" data-type="mc">
-      <h3>Oppgåve 9 – perfektum partisipp (sterkt verb)</h3>
-      <p class="sporsmal">Vel rett perfektumsform av «å skrive».</p>
-      <p class="stamme">De har ___ ein god tekst.</p>
-      <div class="alternativ">
-        <label><input type="radio" name="OPG-009" value="A"> skrive</label>
-        <label><input type="radio" name="OPG-009" value="B"> skrevet</label>
-        <label><input type="radio" name="OPG-009" value="C"> skreiv</label>
-        <label><input type="radio" name="OPG-009" value="D"> skreiven</label>
-      </div>
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 10 -->
-    <div class="oppgave" data-id="OPG-010" data-type="mc">
-      <h3>Oppgåve 10 – tidsrekkje</h3>
-      <p class="sporsmal">Kva for rad viser korrekt bøying av «å lese» på nynorsk?</p>
-      <div class="alternativ">
-        <label><input type="radio" name="OPG-010" value="A"> lese – les – las – har lese</label>
-        <label><input type="radio" name="OPG-010" value="B"> lese – leser – leste – har lest</label>
-        <label><input type="radio" name="OPG-010" value="C"> lese – les – leste – har lese</label>
-        <label><input type="radio" name="OPG-010" value="D"> lese – lesar – las – har lest</label>
-      </div>
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 11 -->
-    <div class="oppgave" data-id="OPG-011" data-type="mc">
-      <h3>Oppgåve 11 – modalt hjelpeverb</h3>
-      <p class="sporsmal">Vel rett form av hjelpeverbet.</p>
-      <p class="stamme">Eg ___ gjere leksene før eg går ut.</p>
-      <div class="alternativ">
-        <label><input type="radio" name="OPG-011" value="A"> må</label>
-        <label><input type="radio" name="OPG-011" value="B"> måtte</label>
-        <label><input type="radio" name="OPG-011" value="C"> måter</label>
-        <label><input type="radio" name="OPG-011" value="D"> mått</label>
-      </div>
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 12 -->
-    <div class="oppgave" data-id="OPG-012" data-type="mc">
-      <h3>Oppgåve 12 – futurum med «skal»</h3>
-      <p class="sporsmal">Kva for alternativ er rett?</p>
-      <p class="stamme">I morgon ___ vi ___ på tur.</p>
-      <div class="alternativ">
-        <label><input type="radio" name="OPG-012" value="A"> skal reise</label>
-        <label><input type="radio" name="OPG-012" value="B"> skal reiser</label>
-        <label><input type="radio" name="OPG-012" value="C"> skal reist</label>
-        <label><input type="radio" name="OPG-012" value="D"> skal reiste</label>
-      </div>
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- OPPGÅVER 13–16: INNSKRIVING -->
-
-    <!-- Oppgåve 13 -->
-    <div class="oppgave" data-id="OPG-013" data-type="input">
-      <h3>Oppgåve 13 – presens (innskriving)</h3>
-      <p class="sporsmal">Skriv rett presensform av «å lese».</p>
-      <p class="stamme">No ___ eg ei bok.</p>
-      <input class="text-answer" type="text" data-index="0" placeholder="skriv her">
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 14 -->
-    <div class="oppgave" data-id="OPG-014" data-type="input">
-      <h3>Oppgåve 14 – preteritum (innskriving)</h3>
-      <p class="sporsmal">Skriv rett preteritumsform av «å lese».</p>
-      <p class="stamme">I går ___ eg ei lang bok.</p>
-      <input class="text-answer" type="text" data-index="0" placeholder="skriv her">
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 15 -->
-    <div class="oppgave" data-id="OPG-015" data-type="input">
-      <h3>Oppgåve 15 – perfektum partisipp (innskriving)</h3>
-      <p class="sporsmal">Skriv rett perfektum partisipp av «å sjå».</p>
-      <p class="stamme">Vi har ___ filmen mange gongar.</p>
-      <input class="text-answer" type="text" data-index="0" placeholder="skriv her">
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 16 -->
-    <div class="oppgave" data-id="OPG-016" data-type="input">
-      <h3>Oppgåve 16 – presens av «å bu» (innskriving)</h3>
-      <p class="sporsmal">Skriv rett presensform av «å bu».</p>
-      <p class="stamme">Eg ___ i Ålesund.</p>
-      <input class="text-answer" type="text" data-index="0" placeholder="skriv her">
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- OPPGÅVER 17–19: DRA & SLEPP -->
-
-    <!-- Oppgåve 17 -->
-    <div class="oppgave" data-id="OPG-017" data-type="dnd">
-      <h3>Oppgåve 17 – dra og slepp: bøying av «å sjå»</h3>
-      <p class="sporsmal">Dra dei rette formene av «å sjå» til rett plass.</p>
-
-      <div class="wordbank">
-        <div class="drag-item" draggable="true" data-word="sjå">sjå</div>
-        <div class="drag-item" draggable="true" data-word="såg">såg</div>
-        <div class="drag-item" draggable="true" data-word="har sett">har sett</div>
-      </div>
-
-      <p>Infinitiv: <span class="dropzone" data-correct="sjå">slepp ord her</span></p>
-      <p>Preteritum: <span class="dropzone" data-correct="såg">slepp ord her</span></p>
-      <p>Perfektum: <span class="dropzone" data-correct="har sett">slepp ord her</span></p>
-
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 18 -->
-    <div class="oppgave" data-id="OPG-018" data-type="dnd">
-      <h3>Oppgåve 18 – dra og slepp: presens eller preteritum</h3>
-      <p class="sporsmal">Dra rett verbform inn i setningane.</p>
-
-      <div class="wordbank">
-        <div class="drag-item" draggable="true" data-word="spelar">spelar</div>
-        <div class="drag-item" draggable="true" data-word="spelte">spelte</div>
-      </div>
-
-      <p>No ___ vi kamp på bana. <span class="dropzone" data-correct="spelar">slepp ord her</span></p>
-      <p>I går ___ vi ein viktig kamp. <span class="dropzone" data-correct="spelte">slepp ord her</span></p>
-
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 19 -->
-    <div class="oppgave" data-id="OPG-019" data-type="dnd">
-      <h3>Oppgåve 19 – dra og slepp: presens og preteritum (bokmål som felle)</h3>
-      <p class="sporsmal">Dra rett nynorskform inn i setningane. Ei form er berre bokmål og skal <strong>ikkje</strong> brukast.</p>
-
-      <div class="wordbank">
-        <div class="drag-item" draggable="true" data-word="kastar">kastar</div>
-        <div class="drag-item" draggable="true" data-word="kasta">kasta</div>
-        <div class="drag-item" draggable="true" data-word="kaster">kaster</div>
-      </div>
-
-      <p>Til vanleg ___ eg ballen roleg. <span class="dropzone" data-correct="kastar">slepp ord her</span></p>
-      <p>I går ___ eg ballen veldig langt. <span class="dropzone" data-correct="kasta">slepp ord her</span></p>
-
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- Oppgåve 20 – MC igjen -->
-    <div class="oppgave" data-id="OPG-020" data-type="mc">
-      <h3>Oppgåve 20 – heil setning på nynorsk</h3>
-      <p class="sporsmal">Kva for setning er heilt korrekt på nynorsk?</p>
-      <div class="alternativ">
-        <label><input type="radio" name="OPG-020" value="A"> Eg les mykje, og eg skriv tekstar kvar dag.</label>
-        <label><input type="radio" name="OPG-020" value="B"> Jeg leser mykje, og eg skriver tekster hver dag.</label>
-        <label><input type="radio" name="OPG-020" value="C"> Eg les mykje, og eg skriver tekster kvar dag.</label>
-        <label><input type="radio" name="OPG-020" value="D"> Eg leser mykje, og eg skriv tekster kvar dag.</label>
-      </div>
-      <p class="tilbakemelding"></p>
-    </div>
-
-    <!-- KNAPP OG SKÅR -->
-    <button id="checkBtn">Sjekk svar</button>
-    <p id="score"></p>
-  </div>
-</main>
-
-<script>
-  // Fasit for alle oppgåver (type + rett svar + forklaring)
-  const fasit = {
-    "OPG-001": {
-      type: "mc",
-      correct: "A",
-      explanation: "Presens av svake verb på nynorsk får ofte endinga -ar: kaste → kastar. «Kaster» er bokmål."
+{
+  "metadata": {
+    "trinn": "8–10",
+    "emne": ["verb"],
+    "adaptiv": true,
+    "variantpolitikk": "inkluderande",
+    "forklaringsnivå": "standard",
+    "kontrast_til_bokmål": true,
+    "seed": 42
+  },
+  "oppgaver": [
+    {
+      "id": "OPG-001",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: presens av svake verb"],
+      "vanskegrad": 2,
+      "spørsmål": "Kva for form er rett i presens på nynorsk?",
+      "stammesetning": "Eg ___ ballen til deg kvar dag.",
+      "alternativ": ["kaster", "kastar", "kasta", "kastet"],
+      "korrekte_svar": ["kastar"],
+      "fasit_forklaring": "Presens av svake verb på nynorsk får ofte endinga -ar: kaste → kastar. På bokmål heiter det «kaster».",
+      "hint": "Sjå etter presensform med -ar.",
+      "tags": ["verb", "presens", "svake_verb", "bokmålsoverføring"]
     },
-    "OPG-002": {
-      type: "mc",
-      correct: "A",
-      explanation: "Presens av «å spele» er spelar. På bokmål heiter det «spiller»."
+    {
+      "id": "OPG-002",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: presens av svake verb"],
+      "vanskegrad": 2,
+      "spørsmål": "Vel rett presensform på nynorsk.",
+      "stammesetning": "Vi ___ fotball etter skulen.",
+      "alternativ": ["spiller", "spelte", "spelt", "spelar"],
+      "korrekte_svar": ["spelar"],
+      "fasit_forklaring": "Presens av «å spele» er spelar på nynorsk. Bokmål brukar «spiller».",
+      "hint": "Presens på nynorsk brukar ikkje endinga -er.",
+      "tags": ["verb", "presens", "svake_verb", "bokmålsoverføring"]
     },
-    "OPG-003": {
-      type: "mc",
-      correct: "A",
-      explanation: "Preteritum av svake verb i nynorsk endar vanlegvis på -a: jobba. Bokmål har «jobbet»."
+    {
+      "id": "OPG-003",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: preteritum av svake verb"],
+      "vanskegrad": 2,
+      "spørsmål": "Kva for form er rett i preteritum på nynorsk?",
+      "stammesetning": "I går ___ eg med matteheftet.",
+      "alternativ": ["jobber", "jobba", "har jobba", "jobbet"],
+      "korrekte_svar": ["jobba"],
+      "fasit_forklaring": "Preteritum av svake verb i nynorsk endar som regel på -a: jobba. Bokmål har «jobbet».",
+      "hint": "Sjå etter fortidsendinga -a.",
+      "tags": ["verb", "preteritum", "svake_verb", "bokmålsoverføring"]
     },
-    "OPG-004": {
-      type: "mc",
-      correct: "A",
-      explanation: "Å snakke bøyer vi snakke – snakkar – snakka – har snakka på nynorsk. «Snakket/snakker» er bokmål."
+    {
+      "id": "OPG-004",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: preteritum av svake verb"],
+      "vanskegrad": 2,
+      "spørsmål": "Vel rett preteritumsform.",
+      "stammesetning": "I friminuttet ___ vi om filmen.",
+      "alternativ": ["snakkar", "snakka", "snakket", "snakker"],
+      "korrekte_svar": ["snakka"],
+      "fasit_forklaring": "Å snakke bøyer vi snakke – snakkar – snakka – har snakka på nynorsk. «Snakket» og «snakker» er bokmål.",
+      "hint": "Fortid i nynorsk endar ofte på -a, ikkje -et.",
+      "tags": ["verb", "preteritum", "svake_verb", "bokmålsoverføring"]
     },
-    "OPG-005": {
-      type: "mc",
-      correct: "A",
-      explanation: "Sterke verb har ofte kort presens utan -ar: skrive – skriv. Bokmål har «skriver»."
+    {
+      "id": "OPG-005",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: presens av sterke verb"],
+      "vanskegrad": 3,
+      "spørsmål": "Kva for form er rett i presens?",
+      "stammesetning": "Ho ___ ei melding til læraren.",
+      "alternativ": ["skriver", "skriven", "skriv", "skreiv"],
+      "korrekte_svar": ["skriv"],
+      "fasit_forklaring": "Sterke verb har ofte kort presens utan -ar: skrive → skriv. På bokmål heiter det «skriver».",
+      "hint": "Sterke verb i presens har ofte ikkje -ar eller -er.",
+      "tags": ["verb", "presens", "sterke_verb", "bokmålsoverføring"]
     },
-    "OPG-006": {
-      type: "mc",
-      correct: "A",
-      explanation: "Tidsrekkja er finne – fann – har funne på nynorsk. «Fant» er bokmål."
+    {
+      "id": "OPG-006",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: preteritum av sterke verb"],
+      "vanskegrad": 3,
+      "spørsmål": "Kva for form er rett i preteritum?",
+      "stammesetning": "I går ___ vi ein ny tursti.",
+      "alternativ": ["fant", "funne", "finn", "fann"],
+      "korrekte_svar": ["fann"],
+      "fasit_forklaring": "Tidsrekkja er finne – fann – har funne på nynorsk. Bokmål har «fant».",
+      "hint": "Tenk: finne – fann – har funne.",
+      "tags": ["verb", "preteritum", "sterke_verb", "bokmålsoverføring"]
     },
-    "OPG-007": {
-      type: "mc",
-      correct: "A",
-      explanation: "Sterkt verb: sjå – såg – har sett. Bokmål har «så» i preteritum."
+    {
+      "id": "OPG-007",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: preteritum av sterke verb"],
+      "vanskegrad": 3,
+      "spørsmål": "Vel rett preteritumsform av «å sjå».",
+      "stammesetning": "Forrige veke ___ eg ein spanande film.",
+      "alternativ": ["så", "såg", "sett", "sjå"],
+      "korrekte_svar": ["såg"],
+      "fasit_forklaring": "Sterkt verb: sjå – såg – har sett. Bokmål brukar «så» i preteritum.",
+      "hint": "Full rekkje: sjå – såg – har sett.",
+      "tags": ["verb", "preteritum", "sterke_verb", "bokmålsoverføring"]
     },
-    "OPG-008": {
-      type: "mc",
-      correct: "A",
-      explanation: "Mange svake verb har perfektum partisipp på -a: har rydda. Bokmål har «ryddet»."
+    {
+      "id": "OPG-008",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: perfektum partisipp av svake verb"],
+      "vanskegrad": 3,
+      "spørsmål": "Kva for form er rett i perfektum?",
+      "stammesetning": "Vi har ___ heile klasserommet.",
+      "alternativ": ["rydder", "ryddaen", "rydda", "ryddet"],
+      "korrekte_svar": ["rydda"],
+      "fasit_forklaring": "Mange svake verb har perfektum partisipp på -a på nynorsk: har rydda. Bokmål har «har ryddet».",
+      "hint": "Sjå etter forma som liknar på preteritum på -a.",
+      "tags": ["verb", "perfektum_partisipp", "svake_verb", "bokmålsoverføring"]
     },
-    "OPG-009": {
-      type: "mc",
-      correct: "A",
-      explanation: "For sterke verb er infinitiv og perfektum partisipp ofte like: skrive – har skrive. Bokmål har «har skrevet»."
+    {
+      "id": "OPG-009",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: perfektum partisipp av sterke verb"],
+      "vanskegrad": 3,
+      "spørsmål": "Vel rett perfektumsform av «å skrive».",
+      "stammesetning": "De har ___ ein god tekst.",
+      "alternativ": ["skreiv", "skrive", "skrevet", "skreiven"],
+      "korrekte_svar": ["skrive"],
+      "fasit_forklaring": "For sterke verb er infinitiv og perfektum partisipp ofte like: skrive – har skrive. Bokmål har «har skrevet».",
+      "hint": "Tenk: skrive – skreiv – har skrive.",
+      "tags": ["verb", "perfektum_partisipp", "sterke_verb", "bokmålsoverføring"]
     },
-    "OPG-010": {
-      type: "mc",
-      correct: "A",
-      explanation: "Full bøying av «å lese» på nynorsk er lese – les – las – har lese. Formen med leser/leste/har lest er bokmål."
+    {
+      "id": "OPG-010",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: tidssystem sterke verb"],
+      "vanskegrad": 4,
+      "spørsmål": "Kva for rad viser korrekt bøying av «å lese» på nynorsk?",
+      "stammesetning": "",
+      "alternativ": [
+        "lese – lesar – las – har lest",
+        "lese – leser – leste – har lest",
+        "lese – les – las – har lese",
+        "lese – les – leste – har lese"
+      ],
+      "korrekte_svar": ["lese – les – las – har lese"],
+      "fasit_forklaring": "Full bøying av «å lese» på nynorsk er lese – les – las – har lese. Variantar med «leser, leste, har lest» er bokmål.",
+      "hint": "Sjå etter rad utan -er og utan bokmålsformer.",
+      "tags": ["verb", "tidssystem", "sterke_verb", "bokmålsoverføring"]
     },
-    "OPG-011": {
-      type: "mc",
-      correct: "A",
-      explanation: "Presens av måtte er må. Måtte er fortid. Dette gjeld både bokmål og nynorsk."
+    {
+      "id": "OPG-011",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: modale hjelpeverb"],
+      "vanskegrad": 2,
+      "spørsmål": "Vel rett form av hjelpeverbet.",
+      "stammesetning": "Eg ___ gjere leksene før eg går ut.",
+      "alternativ": ["måtte", "må", "måter", "mått"],
+      "korrekte_svar": ["må"],
+      "fasit_forklaring": "Presens av modalverbet «å måtte» er må. «Måtte» er fortid.",
+      "hint": "Tenk på notid: kva seier du akkurat no?",
+      "tags": ["verb", "presens", "hjelpeverb"]
     },
-    "OPG-012": {
-      type: "mc",
-      correct: "A",
-      explanation: "Futurum lagar vi ofte med skal + infinitiv: skal reise. «Skal reiser/reiste» blandar former."
+    {
+      "id": "OPG-012",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: futurum med skal"],
+      "vanskegrad": 2,
+      "spørsmål": "Kva for alternativ er rett?",
+      "stammesetning": "I morgon ___ vi ___ på tur.",
+      "alternativ": ["skal reiser", "skal reise", "skal reiste", "skal reist"],
+      "korrekte_svar": ["skal reise"],
+      "fasit_forklaring": "Futurum på nynorsk blir ofte laga med skal + infinitiv: skal reise.",
+      "hint": "Etter «skal» brukar vi infinitiv.",
+      "tags": ["verb", "futurum", "hjelpeverb", "bokmålsoverføring"]
     },
-    // Innskriving
-    "OPG-013": {
-      type: "input",
-      answers: [["les"]],
-      explanation: "Presens av «å lese» er les: eg les ei bok. Bokmål har «leser»."
+    {
+      "id": "OPG-013",
+      "type": "cloze",
+      "kompetanse": ["verb: presens av sterke verb"],
+      "vanskegrad": 2,
+      "stammesetning": "No ___ eg ei bok.",
+      "alternativ": ["les", "leser", "leste"],
+      "korrekte_svar": ["les"],
+      "fasit_forklaring": "Presens av «å lese» er les: eg les ei bok. «Leser» og «leste» er bokmålsformer.",
+      "hint": "Tenk på tidsrekkja: lese – les – las – har lese.",
+      "tags": ["verb", "presens", "sterke_verb", "bokmålsoverføring"]
     },
-    "OPG-014": {
-      type: "input",
-      answers: [["las"]],
-      explanation: "Preteritum av «å lese» er las: i går las eg ei bok. Bokmål har «leste»."
+    {
+      "id": "OPG-014",
+      "type": "cloze",
+      "kompetanse": ["verb: preteritum av sterke verb"],
+      "vanskegrad": 3,
+      "stammesetning": "I går ___ eg ei lang bok.",
+      "alternativ": ["las", "les", "leste"],
+      "korrekte_svar": ["las"],
+      "fasit_forklaring": "Preteritum av «å lese» er las: i går las eg ei bok. Bokmål har «leste».",
+      "hint": "Tenk: lese – les – las – har lese.",
+      "tags": ["verb", "preteritum", "sterke_verb", "bokmålsoverføring"]
     },
-    "OPG-015": {
-      type: "input",
-      answers: [["sett"]],
-      explanation: "Perfektum partisipp av «å sjå» er sett: har sett. Bokmål er likt her."
+    {
+      "id": "OPG-015",
+      "type": "cloze",
+      "kompetanse": ["verb: perfektum partisipp av sterke verb"],
+      "vanskegrad": 3,
+      "stammesetning": "Vi har ___ filmen mange gongar.",
+      "alternativ": ["sett", "såg", "sjått"],
+      "korrekte_svar": ["sett"],
+      "fasit_forklaring": "Perfektum partisipp av «å sjå» er sett: har sett. Preteritum er såg.",
+      "hint": "Sjå på rekkja: sjå – såg – har sett.",
+      "tags": ["verb", "perfektum_partisipp", "sterke_verb"]
     },
-    "OPG-016": {
-      type: "input",
-      answers: [["bur"]],
-      explanation: "Presens av «å bu» er bur: eg bur i Ålesund. Bokmål har «bor»."
+    {
+      "id": "OPG-016",
+      "type": "cloze",
+      "kompetanse": ["verb: presens av «å bu»"],
+      "vanskegrad": 2,
+      "stammesetning": "Eg ___ i Ålesund.",
+      "alternativ": ["bur", "bor", "budde"],
+      "korrekte_svar": ["bur"],
+      "fasit_forklaring": "Presens av «å bu» er bur: eg bur i Ålesund. Bokmål har «bor».",
+      "hint": "Tenk på bøyinga: bu – bur – budde – har budd.",
+      "tags": ["verb", "presens", "sterke_verb", "bokmålsoverføring"]
     },
-    // Dra og slepp – fasit handterast med dropzone-data, men vi gir forklaring her
-    "OPG-017": {
-      type: "dnd",
-      explanation: "Sterkt verb: sjå – såg – har sett. Infinitiv, preteritum og perfektum må passe saman."
+    {
+      "id": "OPG-017",
+      "type": "sortering",
+      "kompetanse": ["verb: tidssystem «å sjå»"],
+      "vanskegrad": 3,
+      "instruks": "Set formene av «å sjå» i rett rekkjefølgje: infinitiv → presens → preteritum → perfektum partisipp.",
+      "element": ["såg", "sjå", "har sett", "ser"],
+      "korrekte_svar": ["sjå", "ser", "såg", "har sett"],
+      "fasit_forklaring": "Rett tidsrekkje er sjå (infinitiv) – ser (presens) – såg (preteritum) – har sett (perfektum). Bokmål har «se – ser – så – har sett».",
+      "hint": "Start med grunnform (infinitiv), og tenk deretter notid, fortid, perfektum.",
+      "tags": ["verb", "tidssystem", "sterke_verb", "bokmålsoverføring"]
     },
-    "OPG-018": {
-      type: "dnd",
-      explanation: "Presens: spelar → no. Preteritum: spelte → i går."
-    },
-    "OPG-019": {
-      type: "dnd",
-      explanation: "Presens: kastar. Preteritum: kasta. «Kaster» er berre bokmål og skal ikkje brukast."
-    },
-    "OPG-020": {
-      type: "mc",
-      correct: "A",
-      explanation: "Setninga «Eg les mykje, og eg skriv tekstar kvar dag» er heilt på nynorsk. Dei andre har bokmålsord som jeg, leser, skriver eller hver."
-    }
-  };
-
-  // Dra og slepp-logikk
-  let draggedItem = null;
-
-  document.querySelectorAll(".drag-item").forEach(item => {
-    item.addEventListener("dragstart", e => {
-      draggedItem = e.target;
-      e.target.classList.add("dragging");
-    });
-    item.addEventListener("dragend", e => {
-      e.target.classList.remove("dragging");
-      draggedItem = null;
-    });
-  });
-
-  document.querySelectorAll(".dropzone").forEach(zone => {
-    zone.addEventListener("dragover", e => {
-      e.preventDefault();
-    });
-    zone.addEventListener("drop", e => {
-      e.preventDefault();
-      if (!draggedItem) return;
-      const word = draggedItem.getAttribute("data-word");
-      zone.textContent = word;
-      zone.classList.add("filled");
-      zone.dataset.answer = word;
-    });
-  });
-
-  // Sjekk svar
-  document.getElementById("checkBtn").addEventListener("click", () => {
-    let totalt = 0;
-    let rette = 0;
-
-    document.querySelectorAll(".oppgave").forEach(oppg => {
-      totalt++;
-      const id = oppg.dataset.id;
-      const data = fasit[id];
-      const type = oppg.dataset.type || data.type || "mc";
-      const melding = oppg.querySelector(".tilbakemelding");
-      melding.classList.remove("rett", "feil");
-
-      // Fjern gamle fargar
-      oppg.querySelectorAll("label").forEach(l => {
-        l.classList.remove("rett-label", "feil-label");
-      });
-
-      if (type === "mc") {
-        const valt = oppg.querySelector("input[type='radio']:checked");
-        if (!valt) {
-          melding.textContent = "Vel eit alternativ først.";
-          return;
+    {
+      "id": "OPG-018",
+      "type": "matching",
+      "kompetanse": ["verb: presens vs preteritum svake verb"],
+      "vanskegrad": 3,
+      "instruks": "Par saman presens og rett preteritum på nynorsk.",
+      "par": [
+        {
+          "venstre": "spelar",
+          "høgre": ["spilte", "spela", "spelte"]
+        },
+        {
+          "venstre": "snakkar",
+          "høgre": ["snakket", "snakka", "snakker"]
+        },
+        {
+          "venstre": "jobbar",
+          "høgre": ["jobbet", "jobba", "jobber"]
         }
-        const rettVal = data.correct;
-        if (valt.value === rettVal) {
-          rette++;
-          melding.textContent = "Rett. " + data.explanation;
-          melding.classList.add("rett");
-          valt.parentElement.classList.add("rett-label");
-        } else {
-          melding.textContent = "Ikkje heilt. " + data.explanation;
-          melding.classList.add("feil");
-          valt.parentElement.classList.add("feil-label");
-          const rettLabel = oppg.querySelector("input[value='" + rettVal + "']");
-          if (rettLabel) rettLabel.parentElement.classList.add("rett-label");
+      ],
+      "korrekte_svar": [
+        "spelar – spelte",
+        "snakkar – snakka",
+        "jobbar – jobba"
+      ],
+      "fasit_forklaring": "Svake verb i nynorsk: presens på -ar og preteritum ofte på -a eller -te. Døme: spelar – spelte, snakkar – snakka, jobbar – jobba. Bokmål har «spiller – spilte, snakker – snakket, jobber – jobbet».",
+      "hint": "Sjå etter dei formene som endar på -a eller -te og høyrer naturleg saman med presensforma.",
+      "tags": ["verb", "presens", "preteritum", "svake_verb", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-019",
+      "type": "free_text",
+      "kompetanse": ["verb: frå bokmål til nynorsk"],
+      "vanskegrad": 4,
+      "prompt": "Skriv setninga på korrekt nynorsk:\n«Jeg har skrevet mange tekster i år.»",
+      "vurderingsnøklar": [
+        {
+          "regex": "^[Ee]g har skrive mange tekstar i år\\.?$",
+          "poeng": 1.0
         }
-      } else if (type === "input") {
-        const inputs = oppg.querySelectorAll(".text-answer");
-        const svarlister = data.answers; // array av array
-        let alleRette = true;
-
-        inputs.forEach((inp, index) => {
-          const elev = inp.value.trim().toLowerCase();
-          const godtekne = (svarlister[index] || []).map(s => s.toLowerCase());
-          if (!godtekne.includes(elev)) {
-            alleRette = false;
-          }
-        });
-
-        if (inputs.length === 0) {
-          melding.textContent = "Fann ingen svarfelt.";
-          return;
-        }
-
-        if ([...inputs].every(i => i.value.trim() === "")) {
-          melding.textContent = "Skriv inn eit svar først.";
-          return;
-        }
-
-        if (alleRette) {
-          rette++;
-          melding.textContent = "Rett. " + data.explanation;
-          melding.classList.add("rett");
-        } else {
-          melding.textContent = "Ikkje heilt. " + data.explanation;
-          melding.classList.add("feil");
-        }
-      } else if (type === "dnd") {
-        const z = oppg.querySelectorAll(".dropzone");
-        if (z.length === 0) {
-          melding.textContent = "Ingen droppfelt i oppgåva.";
-          return;
-        }
-
-        let alleUtfylt = true;
-        let alleRette = true;
-
-        z.forEach(zone => {
-          const elev = (zone.dataset.answer || "").trim();
-          const fasitOrd = (zone.dataset.correct || "").trim();
-          if (!elev) alleUtfylt = false;
-          if (elev !== fasitOrd) alleRette = false;
-        });
-
-        if (!alleUtfylt) {
-          melding.textContent = "Dra ord til alle felta før du sjekkar.";
-          melding.classList.add("feil");
-          return;
-        }
-
-        if (alleRette) {
-          rette++;
-          melding.textContent = "Rett. " + (data.explanation || "");
-          melding.classList.add("rett");
-        } else {
-          melding.textContent = "Ikkje heilt. " + (data.explanation || "");
-          melding.classList.add("feil");
-        }
-      }
-    });
-
-    document.getElementById("score").textContent =
-      "Du fekk " + rette + " av " + totalt + " rette.";
-  });
-</script>
-
-</body>
-</html>
+      ],
+      "korrekte_svar": ["Eg har skrive mange tekstar i år."],
+      "godtekne_variantar": ["Eg har skrive mange tekstar i år"],
+      "fasit_forklaring": "På nynorsk heiter det eg, har skrive, tekstar. Bokmål har «jeg har skrevet mange tekster i år». Merk at perfektum partisipp er skrive på nynorsk.",
+      "hint": "Byt både pronomen, verbforma og substantivet til nynorsk.",
+      "tags": ["verb", "bokmålsoverføring", "oversetting"]
+    },
+    {
+      "id": "OPG-020",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: heil setning på nynorsk"],
+      "vanskegrad": 3,
+      "spørsmål": "Kva for setning er heilt korrekt på nynorsk?",
+      "stammesetning": "",
+      "alternativ": [
+        "Jeg leser mykje, og eg skriver tekster hver dag.",
+        "Eg les mykje, og eg skriv tekstar kvar dag.",
+        "Eg les mykje, og eg skriver tekster kvar dag.",
+        "Eg leser mykje, og eg skriv tekstar kvar dag."
+      ],
+      "korrekte_svar": ["Eg les mykje, og eg skriv tekstar kvar dag."],
+      "fasit_forklaring": "Setninga «Eg les mykje, og eg skriv tekstar kvar dag» har berre nynorskformer. Dei andre alternativa blandar inn bokmål som «jeg, leser, skriver, hver».",
+      "hint": "Vel setninga utan bokmålsord som jeg, leser, skriver eller hver.",
+      "tags": ["verb", "heil_setning", "bokmålsoverføring"]
+    }
+  ],
+  "vurdering": {
+    "poeng": "1 poeng per oppgåve; delpoeng for fleirledd (0,25 per rett ledd)",
+    "tilbakemelding_ved_feil": [
+      "Regel i eitt utsagn",
+      "Riktig døme i same mønster",
+      "Kort kontrast til bokmål (om aktivert)",
+      "Mini‑repetisjon/mikromål"
+    ]
+  }
+}
