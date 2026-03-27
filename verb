@@ -275,3 +275,280 @@
       "korrekte_svar": ["Eg skriv ikkje noko."],
       "fasit_forklaring": "Nynorsk brukar «ikkje», ikkje «ikke». Pronomen er «eg», og verbet i presens av «å skrive» er skriv, ikkje «skriver».",
       "
+{
+  "metadata": {
+    "trinn": "8–10",
+    "emne": ["verb"],
+    "adaptiv": true,
+    "variantpolitikk": "inkluderande",
+    "forklaringsnivå": "standard",
+    "kontrast_til_bokmål": true,
+    "seed": 42
+  },
+  "oppgaver": [
+    {
+      "id": "OPG-001",
+      "type": "cloze",
+      "kompetanse": ["verb: presens av svake verb"],
+      "vanskegrad": 2,
+      "stammesetning": "Eg ___ (å kaste) ballen til deg kvar dag.",
+      "alternativ": ["kastar", "kaster", "kasta", "kastet"],
+      "korrekte_svar": ["kastar"],
+      "fasit_forklaring": "Presens av svake verb på nynorsk får oftast endinga -ar: kaste → kastar. På bokmål heiter det «kaster».",
+      "hint": "Sjå etter presensform med -ar.",
+      "tags": ["verb", "presens", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-002",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: preteritum av svake verb"],
+      "vanskegrad": 2,
+      "spørsmål": "Kva er korrekt preteritum på nynorsk av verbet «å jobbe»?",
+      "alternativ": ["jobba", "jobbet", "jobber", "har jobba"],
+      "korrekte_svar": ["jobba"],
+      "fasit_forklaring": "Svak verbklasse 1 på nynorsk har preteritum på -a: jobbe → jobba. Bokmål brukar -et: «jobbet».",
+      "hint": "Tenk på regelen: svake verb → preteritum på -a.",
+      "tags": ["verb", "preteritum", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-003",
+      "type": "cloze",
+      "kompetanse": ["verb: presens og preteritum"],
+      "vanskegrad": 3,
+      "stammesetning": "I går ___ (å snakke) vi lenge, men no ___ (å snakke) vi mindre.",
+      "alternativ": ["snakka / snakkar", "snakket / snakker", "snakka / snakka", "snakker / snakkar"],
+      "korrekte_svar": ["snakka / snakkar"],
+      "fasit_forklaring": "Preteritum av «å snakke» er snakka, presens er snakkar. Bokmål har «snakket / snakker».",
+      "hint": "Første verbet er i går (fortid), det andre er no (notid).",
+      "tags": ["verb", "presens", "preteritum", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-004",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: presens av sterke verb"],
+      "vanskegrad": 2,
+      "spørsmål": "Kva for setning har korrekt presens av verbet «å skrive» på nynorsk?",
+      "alternativ": [
+        "Eg skriver ei novelle.",
+        "Eg skriv ei novelle.",
+        "Eg skreiv ei novelle.",
+        "Eg skreiv ei novellen."
+      ],
+      "korrekte_svar": ["Eg skriv ei novelle."],
+      "fasit_forklaring": "Presens av «å skrive» er skriv på nynorsk. «Skriver» er bokmål, «skreiv» er preteritum.",
+      "hint": "Presens av sterke verb endar ofte ikkje på -ar.",
+      "tags": ["verb", "presens", "sterke_verb", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-005",
+      "type": "cloze",
+      "kompetanse": ["verb: preteritum av sterke verb"],
+      "vanskegrad": 3,
+      "stammesetning": "I fjor ___ (å finne) vi ein ny tursti.",
+      "alternativ": ["fann", "fant", "finner", "funne"],
+      "korrekte_svar": ["fann"],
+      "fasit_forklaring": "Preteritum av «å finne» er fann på nynorsk. Bokmål har «fant». «Funne» er perfektum partisipp.",
+      "hint": "Tenk: finne – fann – har funne.",
+      "tags": ["verb", "preteritum", "sterke_verb", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-006",
+      "type": "matching",
+      "kompetanse": ["verb: tidssystem (presens, preteritum, perfektum)"],
+      "vanskegrad": 3,
+      "instruks": "Par saman infinitiv og rett bøygd form i preteritum.",
+      "par": [
+        {"venstre": "å lese", "høgre": ["las", "lest", "leser"]},
+        {"venstre": "å gå", "høgre": ["gjekk", "gikk", "går"]},
+        {"venstre": "å bu", "høgre": ["budde", "bodde", "bur"]}
+      ],
+      "korrekte_svar": [
+        "å lese - las",
+        "å gå - gjekk",
+        "å bu - budde"
+      ],
+      "fasit_forklaring": "Nynorsk preteritum: lese → las, gå → gjekk, bu → budde. Bokmål har «leste, gikk, bodde».",
+      "hint": "Vel alltid den forma utan -e/-et/-de på slutten som liknar mest på nynorsk mønster.",
+      "tags": ["verb", "preteritum", "sterke_verb", "svake_verb", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-007",
+      "type": "cloze",
+      "kompetanse": ["verb: perfektum partisipp svake verb"],
+      "vanskegrad": 3,
+      "stammesetning": "Vi har ___ (å rydde) heile klasserommet.",
+      "alternativ": ["rydda", "ryddet", "rydder", "ryddaen"],
+      "korrekte_svar": ["rydda"],
+      "fasit_forklaring": "Perfektum partisipp av svake verb som «rydda» endar på -a på nynorsk. Bokmål har ofte -et: «ryddet».",
+      "hint": "Perfektum: har + verb på -a i nynorsk for mange svake verb.",
+      "tags": ["verb", "perfektum_partisipp", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-008",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: perfektum partisipp sterke verb"],
+      "vanskegrad": 3,
+      "spørsmål": "Kva for alternativ har korrekt perfektum partisipp på nynorsk?",
+      "alternativ": [
+        "Vi har skrevet ein tekst.",
+        "Vi har skrive ein tekst.",
+        "Vi har skreiv ein tekst.",
+        "Vi har skreiven ein tekst."
+      ],
+      "korrekte_svar": ["Vi har skrive ein tekst."],
+      "fasit_forklaring": "Sterke verb kan ha same form i infinitiv og perfektum partisipp: skrive – har skrive. Bokmål har «har skrevet».",
+      "hint": "Sterkt verb: tenk «å skrive – har skrive».",
+      "tags": ["verb", "perfektum_partisipp", "sterke_verb", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-009",
+      "type": "cloze",
+      "kompetanse": ["verb: presens av modale hjelpeverb"],
+      "vanskegrad": 2,
+      "stammesetning": "Eg ___ (å måtte) gjere leksene før eg går ut.",
+      "alternativ": ["må", "måtte", "måter", "måter ikkje"],
+      "korrekte_svar": ["må"],
+      "fasit_forklaring": "Presens av modalverbet «å måtte» er må. «Måtte» er preteritum. Bokmål har same former, men elles er setninga nynorsk.",
+      "hint": "Tenk på notid: kva seier du når du MÅ noko akkurat no?",
+      "tags": ["verb", "presens", "hjelpeverb"]
+    },
+    {
+      "id": "OPG-010",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: samsvar mellom tid og tidsuttrykk"],
+      "vanskegrad": 3,
+      "spørsmål": "Kva for setning har korrekt samsvar mellom tidsuttrykk og verbtid?",
+      "alternativ": [
+        "I morgon gjekk eg på kino.",
+        "I går går eg på kino.",
+        "I går gjekk eg på kino.",
+        "No gjekk eg på kino."
+      ],
+      "korrekte_svar": ["I går gjekk eg på kino."],
+      "fasit_forklaring": "«I går» krev fortid: gjekk. «I morgon» krev framtid (skal gå), «no» passar med presens (går).",
+      "hint": "Sjå på ordet «i går». Då må verbet vere i fortid.",
+      "tags": ["verb", "preteritum", "tidsuttrykk"]
+    },
+    {
+      "id": "OPG-011",
+      "type": "cloze",
+      "kompetanse": ["verb: presens og bokmålsendingar"],
+      "vanskegrad": 3,
+      "stammesetning": "Ho ___ (å danse) kvar veke, men broren hennar ___ (å trene) berre av og til.",
+      "alternativ": ["dansar / trenar", "danser / trener", "dansar / trener", "danser / trenar"],
+      "korrekte_svar": ["dansar / trenar"],
+      "fasit_forklaring": "Svake verb i presens skal ha -ar på nynorsk: danse → dansar, trene → trenar. «Danser» og «trener» er bokmål.",
+      "hint": "Begge verba er svake verb → presens på -ar.",
+      "tags": ["verb", "presens", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-012",
+      "type": "matching",
+      "kompetanse": ["verb: infinitiv vs presens"],
+      "vanskegrad": 2,
+      "instruks": "Par infinitiv med rett presensform på nynorsk.",
+      "par": [
+        {"venstre": "å køyre", "høgre": ["køyrar", "kjører", "køyrde"]},
+        {"venstre": "å lese", "høgre": ["les", "leser", "leste"]},
+        {"venstre": "å spele", "høgre": ["spelar", "spiller", "spelte"]}
+      ],
+      "korrekte_svar": [
+        "å køyre - køyrar",
+        "å lese - les",
+        "å spele - spelar"
+      ],
+      "fasit_forklaring": "Nynorsk: køyre → køyrar, lese → les, spele → spelar. Bokmål: «kjører, leser, spiller».",
+      "hint": "Sjå etter formene utan -er og utan fortidsending.",
+      "tags": ["verb", "presens", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-013",
+      "type": "cloze",
+      "kompetanse": ["verb: perfektum med ha/vere"],
+      "vanskegrad": 4,
+      "stammesetning": "De ___ (å vere) på fjelltur, og de ___ (å gå) langt.",
+      "alternativ": ["har vore / har gått", "er vore / har gått", "har vært / har gått", "har vore / har gjekk"],
+      "korrekte_svar": ["har vore / har gått"],
+      "fasit_forklaring": "Perfektum: har + perfektum partisipp. «Å vere» → har vore, «å gå» → har gått. Bokmål: «har vært / har gått».",
+      "hint": "Både «vere» og «gå» brukar hjelpeverbet «har» her.",
+      "tags": ["verb", "perfektum", "perfektum_partisipp", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-014",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: sterke verb, heil tidsrekke"],
+      "vanskegrad": 4,
+      "spørsmål": "Kva for rekkje viser korrekt bøying av verbet «å sjå» på nynorsk?",
+      "alternativ": [
+        "sjå – såg – har sett",
+        "se – så – har sett",
+        "sjå – såg – har såg",
+        "sjå – såg – har sjådd"
+      ],
+      "korrekte_svar": ["sjå – såg – har sett"],
+      "fasit_forklaring": "Sterkt verb: sjå (infinitiv) – såg (preteritum) – har sett (perfektum partisipp). Bokmål har «se – så – har sett».",
+      "hint": "Berre eitt av alternativa startar med «sjå» og sluttar med «har sett».",
+      "tags": ["verb", "sterke_verb", "tidssystem", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-015",
+      "type": "cloze",
+      "kompetanse": ["verb: samsvar mellom subjekt og verb"],
+      "vanskegrad": 3,
+      "stammesetning": "Elevane ___ (å jobbe) stille med oppgåvene sine.",
+      "alternativ": ["jobbar", "jobber", "jobba", "jobbast"],
+      "korrekte_svar": ["jobbar"],
+      "fasit_forklaring": "Presens av «å jobbe» er jobbar på nynorsk, uansett om subjektet er eintal eller fleirtal. Bokmål har «jobber».",
+      "hint": "Presensform: svakt verb → -ar.",
+      "tags": ["verb", "presens", "bokmålsoverføring"]
+    },
+    {
+      "id": "OPG-016",
+      "type": "free_text",
+      "kompetanse": ["verb: rette bokmålsformer til nynorsk"],
+      "vanskegrad": 4,
+      "prompt": "Skriv setninga om til korrekt nynorsk:\n«Jeg har jobbet mye med denne oppgaven.»",
+      "vurderingsnøklar": [
+        {
+          "regex": "^[Ee]g har jobba mykje med denne oppgåva\\.?$",
+          "poeng": 1.0
+        }
+      ],
+      "korrekte_svar": ["Eg har jobba mykje med denne oppgåva."],
+      "godtekne_variantar": ["Eg har jobba mykje med denne oppgåva"],
+      "fasit_forklaring": "På nynorsk: jeg → eg, har jobbet → har jobba, mye → mykje, denne oppgaven → denne oppgåva. Verbforma går frå «jobbet» (bokmål) til «jobba» (nynorsk).",
+      "hint": "Byt både pronomen, verb og substantiv til nynorsk, og hugs -a i «jobba».",
+      "tags": ["verb", "bokmålsoverføring", "oversetting"]
+    },
+    {
+      "id": "OPG-017",
+      "type": "free_text",
+      "kompetanse": ["verb: bøying i presens og preteritum i eigenproduksjon"],
+      "vanskegrad": 4,
+      "prompt": "Skriv to setningar på nynorsk:\n1) Ei setning i presens med verbet «å lese».\n2) Ei setning i preteritum med verbet «å lese».",
+      "vurderingsnøklar": [
+        {
+          "regex": "(?s).*\\bles\\b.*\\blas\\b.*",
+          "poeng": 1.0
+        }
+      ],
+      "korrekte_svar": ["Døme: Eg les ei bok. I går las eg ei bok."],
+      "fasit_forklaring": "Presens av «å lese» er les, preteritum er las på nynorsk. Bokmål har «leser» og «leste».",
+      "hint": "Hugs: lese – les – las – har lese.",
+      "tags": ["verb", "presens", "preteritum", "eigenproduksjon", "sterke_verb"]
+    },
+    {
+      "id": "OPG-018",
+      "type": "multiple_choice",
+      "kompetanse": ["verb: nekting + verb"],
+      "vanskegrad": 3,
+      "spørsmål": "Kva for setning er korrekt på nynorsk?",
+      "alternativ": [
+        "Eg ikke skriv noko.",
+        "Eg skriv ikke noko.",
+        "Eg skriv ikkje noko.",
+        "Jeg skriver ikkje noko."
+      ],
+      "korrekte_svar": ["Eg skriv ikkje noko."],
+      "fasit_forklaring": "Nynorsk brukar «ikkje», ikkje «ikke». Pronomen er «eg», og verbet i presens av «å skrive» er skriv, ikkje «skriver».",
+      "
