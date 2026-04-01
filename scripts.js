@@ -3756,6 +3756,22 @@ function kmSjekk(){
 }
 
 
+/* ── Sist oppdatert (GitHub siste commit) ── */
+(function(){
+  fetch('https://api.github.com/repos/LektorTorrkvist/norsklaben/commits?per_page=1')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var el = document.getElementById('sist-oppdatert');
+      if(!el || !data || !data[0]) return;
+      var d = new Date(data[0].commit.committer.date);
+      var maanader = ['januar','februar','mars','april','mai','juni','juli','august','september','oktober','november','desember'];
+      var dato = d.getDate() + '. ' + maanader[d.getMonth()] + ' ' + d.getFullYear();
+      var tid = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+      el.textContent = 'Sist oppdatert ' + dato + ' kl. ' + tid;
+    })
+    .catch(function(){});
+})();
+
 /* ── Finn feila (ff) ── */
 function ffClick(span){
   if(MTS.answered) return;
