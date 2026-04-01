@@ -1812,7 +1812,7 @@ const MT_BANK = [
 
 {kat:'kjeldebruk',kat_label:'Kjeldebruk',type:'cloze',vanske:'medium',
  q:'Fyll inn: «Ifølge ___ (2024) har snøsesongen blitt kortare.»',
- hint:'Bakgrunn: Ei NRK-sak frå 2024 rapporterte om kortare vintersesong. Kva organisasjon stod bak kjelda? (Ikkje ein enkeltperson, men eit kjend norsk mediehus.)',
+ hint:'Bakgrunn: Ei NRK-sak frå 2024 rapporterte om kortare vintersesong. Korleis skriv du kjelda når du ikkje veit forfattarnamnet?',
  fasit:'NRK',fasit_v:['NRK','Etternamn','Forfattarnamn','forfattarnamn','[Etternamn]','[Forfattar]'],
  regel:'Når ei kjelde manglar personleg forfattar, brukar ein organisasjonen sitt namn: (NRK, 2024).',
  eks:'Ifølge NRK (2024) har snøsesongen blitt kortare.'},
