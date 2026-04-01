@@ -2049,8 +2049,8 @@ const MT_BANK = [
 
 /* ── DOBBEL KONSONANT (20 oppgåver) ── */
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'lett',
- q:'Kva er rett skrivemåte av verbet «å hoppe» i infinitiv?',
- alt:['hoppe','hope','hoppé','hopp'],fasit:'hoppe',
+ q:'Kva er rett skrivemåte av verbet i infinitiv?',
+ alt:['hoppe','hoppa','hoppet','hopp'],fasit:'hoppe',
  regel:'Etter kort vokal kjem dobbel konsonant: «hoppe» (kort o → dobbel p).',
  eks:'hoppe, springe, kaste'},
 
@@ -2068,14 +2068,14 @@ const MT_BANK = [
  eks:'ho sit, han sit'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'lett',
- q:'Kva er rett skrivemåte av verbet «å legge» i infinitiv?',
- alt:['legge','lege','legg','lagge'],fasit:'legge',
+ q:'Kva er rett skrivemåte av verbet i infinitiv?',
+ alt:['la','legge','legget','lagt'],fasit:'legge',
  regel:'«Legge» (infinitiv) har dobbel g etter kort e: l-e-g-g-e.',
  eks:'å legge boka på bordet'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'medium',
- q:'Kva er rett skrivemåte av verbet «å kalle» (= å gje eit namn)?',
- alt:['kalle','kale','kallé','kall'],fasit:'kalle',
+ q:'Kva er rett skrivemåte av verbet som handlar om å gje eit namn)?',
+ alt:['kalle','kalte','kallet','kall'],fasit:'kalle',
  regel:'Etter kort vokal i rotstavinga kjem dobbel konsonant: «kalle» (kort a → dobbel l).',
  eks:'Eg kallar han Per.'},
 
@@ -2086,7 +2086,7 @@ const MT_BANK = [
  eks:'sitting, hopping, kalling'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'medium',
- q:'Kva er rett skrivemåte av adjektivet «stille» (= roleg, lydlaus)?',
+ q:'Kva er rett skrivemåte av adjektivet som handlar om å lage lite lyd?',
  alt:['stille','stile','still','sttille'],fasit:'stille',
  regel:'«Stille» (roleg) har dobbel l etter kort i.',
  eks:'Det er stille i rommet. Ei stille natt.'},
@@ -2130,8 +2130,8 @@ const MT_BANK = [
  eks:'Ho ropa, han ropa'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'medium',
- q:'Kva er rett skrivemåte? «Ballen er veldig ___» (å rulle, partisipp)',
- alt:['rulla','rula','rulle','rullt'],fasit:'rulla',
+ q:'Kva er rett skrivemåte? «Kampen er over. Ballen er ___ ferdig» (å rulle, partisipp)',
+ alt:['rulla','rula','rulle','rullet'],fasit:'rulla',
  regel:'«Å rulle» har kort u → dobbel l i infinitiv og partisipp: rulle/rulla.',
  eks:'Ho rulla ballen. Ballen er rulla.'},
 
