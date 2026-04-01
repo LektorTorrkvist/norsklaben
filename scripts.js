@@ -2056,7 +2056,7 @@ const MT_BANK = [
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'lett',
  q:'Kva er rett skrivemåte av verbet i infinitiv?',
- alt:['sitte','siten','site','ssitte'],fasit:'sitte',
+ alt:['sitte','satt','sote','søtte'],fasit:'sitte',
  regel:'Etter kort vokal kjem dobbel konsonant: «sitte» (kort i → dobbel t).',
  eks:'sitte, legge, hoppe'},
 
