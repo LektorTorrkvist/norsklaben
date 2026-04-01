@@ -2055,7 +2055,7 @@ const MT_BANK = [
  eks:'hoppe, springe, kaste'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'lett',
- q:'Kva er rett skrivemåte av verbet «å sitte» i infinitiv?',
+ q:'Kva er rett skrivemåte av verbet i infinitiv?',
  alt:['sitte','siten','site','ssitte'],fasit:'sitte',
  regel:'Etter kort vokal kjem dobbel konsonant: «sitte» (kort i → dobbel t).',
  eks:'sitte, legge, hoppe'},
