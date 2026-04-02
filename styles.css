@@ -294,6 +294,23 @@ textarea.practice::placeholder { color: var(--ink3); }
   background: var(--card);
 }
 
+body.fs-lock {
+  overflow: hidden;
+}
+
+.card.fs-mobile {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  overflow: auto !important;
+  padding: 1.2rem 1.4rem 2rem !important;
+  background: var(--card) !important;
+  z-index: 9999 !important;
+}
+
 #novelle-karussel:fullscreen {
   width: 100vw;
   height: 100vh;

@@ -430,6 +430,7 @@
 (function(){
   var cards = document.querySelectorAll('#ub-slides .ub-slide .card');
   if(!cards.length) return;
+  var mobileActive = null;
 
   function calcZoom(){
     var baseW = 1280;
@@ -439,10 +440,33 @@
   }
 
   function applyZoom(){
-    var active = document.fullscreenElement;
+    var active = document.fullscreenElement || mobileActive;
     cards.forEach(function(card){
       card.style.zoom = active === card ? calcZoom().toFixed(2) : '';
     });
+  }
+
+  function syncButtons(){
+    var active = document.fullscreenElement || mobileActive;
+    cards.forEach(function(card){
+      var btn = card.querySelector('.ub-fs-btn');
+      if(!btn) return;
+      btn.textContent = active === card ? '✕ Lukk fullskjerm' : '⛶ Fullskjerm';
+    });
+  }
+
+  function exitMobileFullscreen(){
+    if(!mobileActive) return;
+    mobileActive.classList.remove('fs-mobile');
+    document.body.classList.remove('fs-lock');
+    mobileActive = null;
+  }
+
+  function enterMobileFullscreen(target){
+    exitMobileFullscreen();
+    mobileActive = target;
+    target.classList.add('fs-mobile');
+    document.body.classList.add('fs-lock');
   }
 
   function fsToggle(target){
@@ -451,15 +475,34 @@
       document.exitFullscreen();
       return;
     }
+    if(mobileActive === target){
+      exitMobileFullscreen();
+      syncButtons();
+      applyZoom();
+      return;
+    }
+    if(!target.requestFullscreen){
+      enterMobileFullscreen(target);
+      syncButtons();
+      applyZoom();
+      return;
+    }
     if(document.fullscreenElement && document.fullscreenElement !== target){
       document.exitFullscreen().then(function(){ target.requestFullscreen(); });
       return;
     }
-    target.requestFullscreen();
+    target.requestFullscreen().catch(function(){
+      enterMobileFullscreen(target);
+      syncButtons();
+      applyZoom();
+    });
   }
 
   cards.forEach(function(card){
     if(card.querySelector('.ub-fs-btn')) return;
+    if(getComputedStyle(card).position === 'static') {
+      card.style.position = 'relative';
+    }
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'fs-btn fs-btn-card ub-fs-btn';
@@ -474,13 +517,16 @@
   });
 
   document.addEventListener('fullscreenchange', function(){
-    var active = document.fullscreenElement;
-    cards.forEach(function(card){
-      var btn = card.querySelector('.ub-fs-btn');
-      if(!btn) return;
-      btn.textContent = active === card ? '✕ Lukk fullskjerm' : '⛶ Fullskjerm';
-    });
+    syncButtons();
     applyZoom();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && mobileActive){
+      exitMobileFullscreen();
+      syncButtons();
+      applyZoom();
+    }
   });
 
   window.addEventListener('resize', applyZoom);
