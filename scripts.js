@@ -578,6 +578,157 @@ const ML_HISTORIER = [
       {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. mislukka'},
     ],
     mal: (v)=>`Då framføringa starta, nekta ${v[0]} å virke, prosjektoren ${v[2]}, og første lysbiletet viste ein ${v[1]} ${v[3]}. Presentatøren prøvde ${v[4]} å ${v[5]} ${v[6]}, men heile opplegget fekk ein ganske ${v[7]} avslutning.`
+  },
+  /* ── 10 nye historier ── */
+  {
+    tittel: 'Trollet som ville leike',
+    humortype: 'barnehage',
+    felt: [
+      {id:'ml0', lbl:'Eit namn', ph:'t.d. Nora'},
+      {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. bustete'},
+      {id:'ml2', lbl:'Eit substantiv (mat)', ph:'t.d. potetmos'},
+      {id:'ml3', lbl:'Eit verb i preteritum', ph:'t.d. trilla'},
+      {id:'ml4', lbl:'Eit adjektiv (farge)', ph:'t.d. lilla'},
+      {id:'ml5', lbl:'Eit leikety', ph:'t.d. sparkesykkel'},
+      {id:'ml6', lbl:'Eit adverb', ph:'t.d. ivrig'},
+      {id:'ml7', lbl:'Eit verb i infinitiv', ph:'t.d. klappe'},
+    ],
+    mal: (v)=>`Under senga til ${v[0]} budde eit ${v[1]} troll som berre åt ${v[2]}. Ein dag ${v[3]} trollet ut og peika på den ${v[4]} ${v[5]}. «Eg vil også ${v[7]}!» ropte trollet ${v[6]}.`
+  },
+  {
+    tittel: 'Superkappa til Knut',
+    humortype: 'barnehage',
+    felt: [
+      {id:'ml0', lbl:'Eit namn', ph:'t.d. Knut'},
+      {id:'ml1', lbl:'Eit adjektiv (farge)', ph:'t.d. raud'},
+      {id:'ml2', lbl:'Eit substantiv (dyr)', ph:'t.d. katt'},
+      {id:'ml3', lbl:'Eit verb i preteritum', ph:'t.d. flaug'},
+      {id:'ml4', lbl:'Eit substantiv (stad)', ph:'t.d. leikerommet'},
+      {id:'ml5', lbl:'Eit adverb', ph:'t.d. superhurtig'},
+      {id:'ml6', lbl:'Eit substantiv (mat)', ph:'t.d. eplejuice'},
+      {id:'ml7', lbl:'Eit verb i infinitiv', ph:'t.d. redde'},
+    ],
+    mal: (v)=>`${v[0]} tok på seg den ${v[1]} superkappa og ${v[3]} rundt i ${v[4]}. Ein ${v[2]} sat fast i gardinene og ropa. ${v[0]} kom ${v[5]}, drakk ein slurk ${v[6]}, og klarte å ${v[7]} ${v[2]}en.`
+  },
+  {
+    tittel: 'Isbjørnen i barnehagen',
+    humortype: 'barnehage',
+    felt: [
+      {id:'ml0', lbl:'Eit adjektiv', ph:'t.d. mjuk'},
+      {id:'ml1', lbl:'Eit verb i preteritum', ph:'t.d. stabba'},
+      {id:'ml2', lbl:'Eit leikety', ph:'t.d. duplo'},
+      {id:'ml3', lbl:'Eit adverb', ph:'t.d. forsiktig'},
+      {id:'ml4', lbl:'Eit substantiv (mat)', ph:'t.d. kakao'},
+      {id:'ml5', lbl:'Eit tal', ph:'t.d. 3'},
+      {id:'ml6', lbl:'Eit verb i infinitiv', ph:'t.d. sove'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. snill'},
+    ],
+    mal: (v)=>`Ein dag kom ein ${v[0]} isbjørn inn i barnehagen og ${v[1]} bort til ${v[2]}. Alle barna lo ${v[3]} og rekte han ${v[4]}. Han drakk ${v[5]} koppar og bestemte seg for å ${v[6]} der for alltid. Han var eigentleg veldig ${v[7]}.`
+  },
+  {
+    tittel: 'Spøkelset i skulesekken',
+    humortype: '1klasse',
+    felt: [
+      {id:'ml0', lbl:'Eit namn', ph:'t.d. Lars'},
+      {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. gjennomsiktig'},
+      {id:'ml2', lbl:'Eit substantiv (ting)', ph:'t.d. pennal'},
+      {id:'ml3', lbl:'Eit verb i preteritum', ph:'t.d. hylte'},
+      {id:'ml4', lbl:'Eit adverb', ph:'t.d. skummelt'},
+      {id:'ml5', lbl:'Eit substantiv (mat)', ph:'t.d. knekkebrød'},
+      {id:'ml6', lbl:'Eit verb i infinitiv', ph:'t.d. rope'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. nøgd'},
+    ],
+    mal: (v)=>`${v[0]} opna skulesekken og fann eit ${v[1]} spøkelse som sat oppå ${v[2]}. Det ${v[3]} ${v[4]}. «Vil du ha ${v[5]}?» spurde ${v[0]}. Spøkelset nikka, åt opp alt, og forsvann med eit ${v[7]} smil.`
+  },
+  {
+    tittel: 'Den blinkande fisken',
+    humortype: '1klasse',
+    felt: [
+      {id:'ml0', lbl:'Eit adjektiv (farge)', ph:'t.d. blå'},
+      {id:'ml1', lbl:'Eit verb i preteritum', ph:'t.d. spruta'},
+      {id:'ml2', lbl:'Eit substantiv (stad)', ph:'t.d. klasserommet'},
+      {id:'ml3', lbl:'Eit adverb', ph:'t.d. vilt'},
+      {id:'ml4', lbl:'Eit namn', ph:'t.d. Tiril'},
+      {id:'ml5', lbl:'Eit substantiv (mat)', ph:'t.d. sjokolade'},
+      {id:'ml6', lbl:'Eit verb i infinitiv', ph:'t.d. symje'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. vått'},
+    ],
+    mal: (v)=>`Ein ${v[0]} fisk ${v[1]} inn i ${v[2]} og byrja ${v[3]} å ${v[6]} rundt pulten til ${v[4]}. Alt vart ${v[7]}, men ingen brydde seg fordi fisken delte ut ${v[5]} til alle saman.`
+  },
+  {
+    tittel: 'Nattevakta på biblioteket',
+    humortype: '5klasse',
+    felt: [
+      {id:'ml0', lbl:'Eit adjektiv', ph:'t.d. støvete'},
+      {id:'ml1', lbl:'Eit substantiv (ting, fleirtal)', ph:'t.d. ordbøker'},
+      {id:'ml2', lbl:'Eit verb i preteritum', ph:'t.d. snika'},
+      {id:'ml3', lbl:'Eit adverb', ph:'t.d. mistenksomt'},
+      {id:'ml4', lbl:'Eit substantiv (mat)', ph:'t.d. nuggets'},
+      {id:'ml5', lbl:'Eit tal', ph:'t.d. 13'},
+      {id:'ml6', lbl:'Eit verb i infinitiv', ph:'t.d. stave'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. forfjamsa'},
+    ],
+    mal: (v)=>`Klokka 23.47 byrja dei ${v[0]} ${v[1]} å bevege seg. Dei ${v[2]} ${v[3]} rundt i biblioteket og leita etter ${v[4]}. For kvar dei fann eit stykke, lærte dei seg å ${v[6]} eit nytt ord. Vakta stod igjen heilt ${v[7]}.`
+  },
+  {
+    tittel: 'Leksemaskina 3000',
+    humortype: '5klasse',
+    felt: [
+      {id:'ml0', lbl:'Eit namn', ph:'t.d. Tobias'},
+      {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. skranglete'},
+      {id:'ml2', lbl:'Eit substantiv (mat)', ph:'t.d. riskrem'},
+      {id:'ml3', lbl:'Eit verb i preteritum', ph:'t.d. spydde'},
+      {id:'ml4', lbl:'Eit substantiv (ting)', ph:'t.d. tannbørste'},
+      {id:'ml5', lbl:'Eit tal', ph:'t.d. 42'},
+      {id:'ml6', lbl:'Eit verb i infinitiv', ph:'t.d. levere'},
+      {id:'ml7', lbl:'Eit adverb', ph:'t.d. skamfullt'},
+    ],
+    mal: (v)=>`${v[0]} bygde Leksemaskina 3000 av ein ${v[1]} kasse og ein brukt ${v[4]}. Første prøvekøyring: maskinen ${v[3]} ut ${v[5]} ark med berre «${v[2]}» på kvar side. ${v[0]} måtte ${v[7]} ${v[6]} dei med eit vedlagt notat: «Maskinlaga.»`
+  },
+  {
+    tittel: 'Kva skjer på lærarrommet?',
+    humortype: 'ungdomsskule',
+    felt: [
+      {id:'ml0', lbl:'Eit adjektiv', ph:'t.d. kaotisk'},
+      {id:'ml1', lbl:'Eit substantiv (mat)', ph:'t.d. lefse'},
+      {id:'ml2', lbl:'Eit verb i preteritum', ph:'t.d. diskuterte'},
+      {id:'ml3', lbl:'Eit substantiv (ting, fleirtal)', ph:'t.d. rettepennar'},
+      {id:'ml4', lbl:'Eit adverb', ph:'t.d. intenst'},
+      {id:'ml5', lbl:'Eit tal', ph:'t.d. 6'},
+      {id:'ml6', lbl:'Eit verb i infinitiv', ph:'t.d. fordele'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. smilande'},
+    ],
+    mal: (v)=>`Tidleg ein måndag låg ${v[3]} overalt og stemninga var heilt ${v[0]}. ${v[5]} lærarar sat rundt bordet og ${v[2]} ${v[4]} om korleis dei best kunne ${v[6]} ${v[1]}. Då klassedøra opna seg, var alle ${v[7]}.`
+  },
+  {
+    tittel: 'Gruppearbeidet',
+    humortype: 'ungdomsskule',
+    felt: [
+      {id:'ml0', lbl:'Eit adjektiv', ph:'t.d. ambisiøs'},
+      {id:'ml1', lbl:'Eit substantiv (stad)', ph:'t.d. kjellaren'},
+      {id:'ml2', lbl:'Eit verb i preteritum', ph:'t.d. krangla'},
+      {id:'ml3', lbl:'Eit substantiv (ting, fleirtal)', ph:'t.d. Post-it-lappar'},
+      {id:'ml4', lbl:'Eit adverb', ph:'t.d. heftig'},
+      {id:'ml5', lbl:'Eit tal', ph:'t.d. 3'},
+      {id:'ml6', lbl:'Eit verb i infinitiv', ph:'t.d. presentere'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. utmatta'},
+    ],
+    mal: (v)=>`Gruppa møttest i ${v[1]} med ein ${v[0]} plan. Dei ${v[2]} ${v[4]} om ${v[3]} i ${v[5]} timar og klarte aldri å ${v[6]} det ferdige resultatet. Alle gjekk heim ${v[7]}.`
+  },
+  {
+    tittel: 'Karakterjakta',
+    humortype: 'ungdomsskule',
+    felt: [
+      {id:'ml0', lbl:'Eit substantiv (person)', ph:'t.d. norsklæraren'},
+      {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. nervøs'},
+      {id:'ml2', lbl:'Eit substantiv (mat, fleirtal)', ph:'t.d. lefsar'},
+      {id:'ml3', lbl:'Eit tal', ph:'t.d. 47'},
+      {id:'ml4', lbl:'Eit adverb', ph:'t.d. stille'},
+      {id:'ml5', lbl:'Eit verb i infinitiv', ph:'t.d. bestikke'},
+      {id:'ml6', lbl:'Eit substantiv (ting)', ph:'t.d. blomsterbukett'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. gjennomskoda'},
+    ],
+    mal: (v)=>`Eleven sat ${v[1]} utanfor kontoret til ${v[0]}, med ${v[3]} heimebakte ${v[2]} og ein ${v[6]} i sekken – eit forsøk på å ${v[5]} seg til betre karakter. ${v[0]} opna døra. Begge stirra ${v[4]} på kvarandre. Blikkene var like ${v[7]}.`
   }
 ];
 
@@ -676,6 +827,14 @@ function mlSetHumortype(value){
   _mlHumortype = value;
   _mlIdx = 0;
   mlNyHistorie();
+}
+
+function mlPrøvLykken(){
+  _mlHumortype = 'alle';
+  const sel = document.getElementById('ml-humortype');
+  if(sel) sel.value = 'alle';
+  _mlIdx = Math.floor(Math.random() * ML_HISTORIER.length);
+  mlInit();
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
