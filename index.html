@@ -817,7 +817,7 @@
           <h3 style="font-size:1.2rem;font-family:'Fraunces',serif;font-weight:600;margin-bottom:0.8rem">Verkemiddel i krimnovella</h3>
           <div style="background:#e8f6ee;border:1px solid #6abf8a;border-radius:8px;padding:0.6rem 1rem;margin-bottom:0.7rem">
             <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#1a5c42;margin-bottom:0.3rem">🎯 Læringsmål</p>
-            <p style="font-size:13.5px;color:#1a3c2e;line-height:1.65;margin:0">Etter denne timen kan du gjenkjenne og namngje fem litterære verkemiddel i ein autentisk novelletekst: <strong>miljøskildring, adjektiv, frampeik, symbol</strong> og <strong>spenningsbygging</strong>. <em>(Kompetansemål: lese skjønnlitteratur og reflektere over sjangertrekk og verkemiddel)</em></p>
+            <p style="font-size:13.5px;color:#1a3c2e;line-height:1.65;margin:0">Etter denne timen kan du gjenkjenne og namngje sentrale verkemiddel i ei krimnovelle: <strong>miljøskildring, adjektiv, frampeik, symbol, spenningsbygging, utvida augneblink, konflikt</strong> og <strong>vendepunkt</strong>. <em>(Kompetansemål: lese skjønnlitteratur og reflektere over sjangertrekk og verkemiddel)</em></p>
           </div>
           <div style="background:#fffbe8;border:1px solid #f5d878;border-radius:8px;padding:0.5rem 1rem;margin-bottom:0.8rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#6b4a00">Du treng:</span>
@@ -827,8 +827,9 @@
           <ol style="font-size:13.5px;color:var(--ink2);line-height:1.9;padding-left:1.4rem;margin-bottom:0.8rem">
             <li>Les heile teksten stille éin gong – <strong>utan</strong> å klikke på noko enno.</li>
             <li>Vel eit verkemiddel frå lista til venstre (t.d. «Miljøskildring»).</li>
-            <li>Klikk på ord og setningar i teksten du meiner høyrer til dette verkemiddelet.</li>
-            <li>Gjenta steg 2–3 for <strong>alle fem</strong> verkemidla.</li>
+            <li>Vel modus: <strong>Ord</strong> når du vil markere enkeltord, eller <strong>Setning</strong> når du vil markere heile setningar.</li>
+            <li>Klikk på ord eller setningar i teksten du meiner høyrer til dette verkemiddelet.</li>
+            <li>Gjenta steg 2–4 for <strong>alle åtte</strong> verkemidla.</li>
             <li>Klikk «Vis fasit» og samanlikn. Kva fekk du rett? Kva overraska deg? Skriv to setningar i skriveboka.</li>
           </ol>
           <div style="display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:start">
@@ -840,6 +841,14 @@
                 <button onclick="novKmVelg(this,'frampeik','#fffbe8','#6b4a00')" class="nov-km-btn" style="font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid #f5d878;background:#fffbe8;color:#6b4a00;cursor:pointer;text-align:left">🔮 Frampeik</button>
                 <button onclick="novKmVelg(this,'symbol','#fdf2f8','#831843')" class="nov-km-btn" style="font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid #f9a8d4;background:#fdf2f8;color:#831843;cursor:pointer;text-align:left">🔁 Symbol</button>
                 <button onclick="novKmVelg(this,'spenning','#fff0ed','#7f1d1d')" class="nov-km-btn" style="font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid #f0a090;background:#fff0ed;color:#7f1d1d;cursor:pointer;text-align:left">⚡ Spenning</button>
+                <button onclick="novKmVelg(this,'utvida','#ede9fe','#6d28d9')" class="nov-km-btn" style="font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid #d3ccff;background:#ede9fe;color:#4c1d95;cursor:pointer;text-align:left">⏳ Utvida augneblink</button>
+                <button onclick="novKmVelg(this,'konflikt','#ffe7d6','#c2410c')" class="nov-km-btn" style="font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid #ffc8a6;background:#ffe7d6;color:#9a3412;cursor:pointer;text-align:left">🧭 Konflikt</button>
+                <button onclick="novKmVelg(this,'vendepunkt','#e6fff6','#0f766e')" class="nov-km-btn" style="font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid #a7f3d0;background:#e6fff6;color:#115e59;cursor:pointer;text-align:left">🔀 Vendepunkt</button>
+              </div>
+              <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-top:0.8rem;margin-bottom:0.45rem">Markeringsmodus:</p>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button onclick="novKmSetModus('ord', this)" class="nov-km-mode-btn" style="font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid var(--line);background:#fff;color:var(--ink2);cursor:pointer">Ord</button>
+                <button onclick="novKmSetModus('setning', this)" class="nov-km-mode-btn" style="font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid var(--line);background:#fff;color:var(--ink2);cursor:pointer">Setning</button>
               </div>
               <p id="nov-km-aktiv" style="font-size:11px;color:var(--ink3);margin-top:0.6rem;font-style:italic">Ingen valt</p>
             </div>
@@ -847,6 +856,7 @@
           </div>
           <button onclick="novKmVis()" style="margin-top:0.8rem;background:var(--c5);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;padding:7px 16px;cursor:pointer">Vis fasit</button>
           <button onclick="novKmReset()" style="margin-left:8px;background:transparent;border:1px solid var(--line);color:var(--ink3);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;padding:7px 12px;cursor:pointer">Nullstill</button>
+          <div id="nov-km-score" style="display:none;margin-top:0.7rem;background:#f8f9fb;border:1px solid #d8dee6;border-radius:8px;padding:0.55rem 0.7rem;font-family:'DM Sans',sans-serif;font-size:12.5px;line-height:1.55;color:#1a2a5e"></div>
         </div>
       </div>
 
@@ -1957,6 +1967,20 @@
   <!-- INPUT-SKJEMA -->
   <div id="ml-form" style="background:#fff;border:1px solid #d0d8df;border-radius:14px;padding:1.5rem;margin-bottom:1.5rem">
     <h3 style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;margin-bottom:1rem;color:#1a1a18">Fyll inn orda dine:</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:end;margin-bottom:1rem">
+      <label style="display:flex;flex-direction:column;gap:4px;font-size:13px;color:#4a4a46;font-weight:500">
+        Humortype
+        <select id="ml-humortype" onchange="mlSetHumortype(this.value)"
+          style="border:1px solid #d0d8df;border-radius:8px;padding:8px 12px;font-size:14px;font-family:'DM Sans',sans-serif;color:#1a1a18;background:#fff;outline:none">
+          <option value="barnehage">Barnehage (3-6 år)</option>
+          <option value="1klasse">1.klasse (6 år)</option>
+          <option value="5klasse">5.klasse (10 år)</option>
+          <option value="ungdomsskule" selected>Ungdomsskule (13-16 år)</option>
+          <option value="alle">🎲 Tilfeldig frå alle kategoriar</option>
+        </select>
+      </label>
+      <div id="ml-current-meta" style="font-size:13px;color:#1a3a8a;line-height:1.6;background:#f6f9ff;border:1px solid #dce8ff;border-radius:10px;padding:0.75rem 0.9rem"></div>
+    </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px" id="ml-inputs">
       <!-- generert av JS -->
     </div>
@@ -1965,7 +1989,8 @@
 
   <!-- RESULTAT -->
   <div id="ml-result" style="display:none;background:#fff;border:1px solid #d0d8df;border-radius:14px;padding:1.5rem">
-    <h3 style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;margin-bottom:1rem;color:#1a1a18">Her er historia di:</h3>
+    <h3 id="ml-result-heading" style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;margin-bottom:0.4rem;color:#1a1a18">Her er historia di:</h3>
+    <div id="ml-result-meta" style="font-size:13px;color:#1a3a8a;line-height:1.6;margin-bottom:1rem"></div>
     <div id="ml-story" style="font-size:15px;line-height:1.9;color:#1a1a18;font-family:'Fraunces',serif;font-style:italic"></div>
     <div style="margin-top:1.2rem;display:flex;gap:10px;flex-wrap:wrap">
       <button onclick="mlReset()" style="background:#1a56db;color:#fff;border:none;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:10px 24px;cursor:pointer">Prøv igjen</button>

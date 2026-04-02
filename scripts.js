@@ -42,55 +42,69 @@
     render();
   
 /* ── Krimnovelle klikk-og-marker ── */
-const NOV_KM_TEKST = [
-  {w:'Regnet', t:[]},
-  {w:'hamra', t:['spenning']},
-  {w:'mot', t:[]},
-  {w:'vindauga', t:['miljo']},
-  {w:'då', t:[]},
-  {w:'meldinga', t:['frampeik']},
-  {w:'dukka', t:[]},
-  {w:'opp.', t:['spenning']},
-  {w:'__BR__', t:[]},
-  {w:'Emilie,', t:[]},
-  {w:'14', t:[]},
-  {w:'år', t:[]},
-  {w:'og', t:[]},
-  {w:'elles', t:[]},
-  {w:'ganske', t:[]},
-  {w:'urokkeleg,', t:['adjektiv']},
-  {w:'kjende', t:[]},
-  {w:'korleis', t:[]},
-  {w:'magen', t:[]},
-  {w:'snudde', t:['spenning']},
-  {w:'seg.', t:[]},
-  {w:'Meldinga', t:['symbol']},
-  {w:'var', t:[]},
-  {w:'frå', t:[]},
-  {w:'eit', t:[]},
-  {w:'ukjent', t:['adjektiv','spenning']},
-  {w:'nummer.', t:[]},
-  {w:'__BR__', t:[]},
-  {w:'«Eg', t:['frampeik']},
-  {w:'veit', t:['frampeik']},
-  {w:'kva', t:['frampeik']},
-  {w:'du', t:['frampeik']},
-  {w:'gjorde', t:['frampeik']},
-  {w:'i', t:['frampeik']},
-  {w:'sommar.»', t:['frampeik']},
-  {w:'__BR__', t:[]},
-  {w:'Ute', t:['miljo']},
-  {w:'slo', t:['miljo']},
-  {w:'den', t:['miljo']},
-  {w:'gamle', t:['adjektiv','miljo']},
-  {w:'lyktestolpen', t:['symbol','miljo']},
-  {w:'sitt', t:['miljo']},
-  {w:'blinkande,', t:['spenning','miljo']},
-  {w:'gule', t:['adjektiv','miljo']},
-  {w:'lys.', t:['symbol']},
-  {w:'Som', t:['symbol']},
-  {w:'alltid.', t:['symbol','spenning']},
+const NOV_KM_SETNINGAR = [
+  {
+    txt: 'Regnet låg som nåler i lufta då Emilie drog opp glidelåsen på den våte jakka og sprang over den tomme skulegarden.',
+    tags: ['miljo', 'spenning', 'utvida'],
+    ord: { nåler: ['symbol'], våte: ['adjektiv'], tomme: ['adjektiv'] }
+  },
+  {
+    txt: 'Lyset frå gymnastikksalen blinka tre gonger, som om bygget prøvde å varsle henne om at nokon allereie var inne.',
+    tags: ['miljo', 'frampeik', 'spenning'],
+    ord: { blinka: ['spenning'], varsle: ['frampeik'] }
+  },
+  {
+    txt: 'I gangen stod den gamle pokalen frå 1978, og det skeive spegelbiletet hennar i metallet fekk henne til å sjå dobbelt så liten ut.',
+    tags: ['miljo', 'symbol', 'utvida'],
+    ord: { gamle: ['adjektiv'], skeive: ['adjektiv'], pokalen: ['symbol'] }
+  },
+  {
+    txt: 'Telefonen vibrerte, og på skjermen stod det berre: Eg veit kva du gøymde i skap 14.',
+    tags: ['frampeik', 'konflikt', 'spenning'],
+    ord: { vibrerte: ['spenning'], gøymde: ['konflikt'] }
+  },
+  {
+    txt: 'Ho visste at nøkkelen låg i penalhuset til Nora, men viss ho henta han no, ville bestevenninna bli skulda for noko ho ikkje hadde gjort.',
+    tags: ['konflikt', 'utvida'],
+    ord: { bestevenninna: ['symbol'] }
+  },
+  {
+    txt: 'Emilie stod heilt stille, høyrde dråpane treffe takrenna ein etter ein, og kjende korleis kvart sekund strekte seg som tyggegummi.',
+    tags: ['utvida', 'spenning'],
+    ord: { stille: ['adjektiv'], strekte: ['utvida'] }
+  },
+  {
+    txt: 'Då døra til lagerrommet gjekk opp av seg sjølv, såg ho raudmåla tal på veggen: 14, 14, 14.',
+    tags: ['spenning', 'symbol', 'vendepunkt'],
+    ord: { raudmåla: ['adjektiv'], tal: ['symbol'] }
+  },
+  {
+    txt: 'Bak hylla stod rektor med mobilen hennar i handa, og han sa lågt at meldinga ikkje var ein spøk, men eit val: snakk no, eller lat Nora ta skulda åleine.',
+    tags: ['konflikt', 'vendepunkt', 'spenning'],
+    ord: { val: ['vendepunkt'] }
+  },
+  {
+    txt: 'I det same Emilie opna munnen, slokna lyset i heile bygget, og stillheita vart så tung at ho høyrde sitt eige hjarte slå mot ribbeina.',
+    tags: ['spenning', 'utvida', 'vendepunkt'],
+    ord: { stillheita: ['symbol'], tung: ['adjektiv'] }
+  }
 ];
+
+function novKmByggTekst(){
+  const tokens = [];
+  NOV_KM_SETNINGAR.forEach(function(s, sIdx){
+    s.txt.split(/\s+/).forEach(function(w){
+      const clean = w.toLowerCase().replace(/^[^a-zA-ZæøåÆØÅ0-9]+|[^a-zA-ZæøåÆØÅ0-9]+$/g, '');
+      const ordTags = (s.ord && s.ord[clean]) ? s.ord[clean] : [];
+      const types = Array.from(new Set([].concat(s.tags || [], ordTags)));
+      tokens.push({ w: w, t: types, s: String(sIdx) });
+    });
+    tokens.push({ w: '__BR__', t: [], s: String(sIdx) });
+  });
+  return tokens;
+}
+
+const NOV_KM_TEKST = novKmByggTekst();
 
 let _novKmAktiv = null;
 const _novKmFargar = {
@@ -99,18 +113,89 @@ const _novKmFargar = {
   frampeik:{bg:'#fffbe8',border:'#f5d878'},
   symbol: {bg:'#fdf2f8',border:'#831843'},
   spenning:{bg:'#fff0ed',border:'#f0a090'},
+  utvida:  {bg:'#ede9fe',border:'#6d28d9'},
+  konflikt:{bg:'#ffe7d6',border:'#c2410c'},
+  vendepunkt:{bg:'#e6fff6',border:'#0f766e'},
 };
+let _novKmModus = 'ord';
 
 function novKmInit(){
   const el = document.getElementById('nov-km-tekst');
   if(!el) return;
+  _novKmModus = 'ord';
   let html = '';
   NOV_KM_TEKST.forEach((tok,i)=>{
     if(tok.w === '__BR__'){ html+='<br>'; return; }
-    html+=`<span class="nov-km-tok" data-i="${i}" data-types="${tok.t.join(',')}" onclick="novKmKlikk(this)"
+    html+=`<span class="nov-km-tok" data-i="${i}" data-s="${tok.s}" data-types="${tok.t.join(',')}" onclick="novKmKlikk(this)"
       style="display:inline;cursor:pointer;padding:1px 4px;border-radius:4px;border:1px solid transparent;margin:1px;transition:background 0.12s">${tok.w}</span> `;
   });
   el.innerHTML = html;
+  const firstModeBtn = document.querySelector('.nov-km-mode-btn');
+  if(firstModeBtn) novKmSetModus('ord', firstModeBtn);
+}
+
+function novKmSetModus(modus, btn){
+  _novKmModus = modus;
+  document.querySelectorAll('.nov-km-mode-btn').forEach(function(b){
+    b.style.fontWeight = 'normal';
+    b.style.borderColor = 'var(--line)';
+    b.style.background = '#fff';
+  });
+  if(btn){
+    btn.style.fontWeight = '700';
+    btn.style.borderColor = '#1a56db';
+    btn.style.background = '#eef4ff';
+  }
+}
+
+function novKmSetMark(span, type, on){
+  const f = _novKmFargar[type];
+  if(!f) return;
+  span.dataset['mark_'+type] = on ? '1' : '0';
+  if(on){
+    span.style.background = f.bg;
+    span.style.borderColor = f.border;
+  } else {
+    novKmOppdaterFarge(span);
+  }
+}
+
+function novKmOppdaterScore(visFasit){
+  const box = document.getElementById('nov-km-score');
+  if(!box) return;
+  if(!_novKmAktiv){
+    box.style.display = 'none';
+    box.innerHTML = '';
+    return;
+  }
+
+  const type = _novKmAktiv;
+  let total = 0;
+  let marked = 0;
+  let correct = 0;
+  let wrong = 0;
+
+  document.querySelectorAll('.nov-km-tok').forEach(function(span){
+    const types = span.dataset.types ? span.dataset.types.split(',').filter(Boolean) : [];
+    const inFasit = types.includes(type);
+    const inMark = span.dataset['mark_'+type] === '1';
+    if(inFasit) total++;
+    if(inMark) marked++;
+    if(inFasit && inMark) correct++;
+    if(!inFasit && inMark) wrong++;
+  });
+  const missed = Math.max(0, total - correct);
+
+  box.style.display = 'block';
+  box.style.background = visFasit ? '#eef4ff' : '#f8f9fb';
+  box.style.border = visFasit ? '1px solid #b6ccff' : '1px solid #d8dee6';
+  box.style.color = '#1a2a5e';
+  box.innerHTML = '<strong>Oversikt for valt verkemiddel:</strong> '
+    + correct + ' rette · '
+    + wrong + ' feilmarkerte · '
+    + missed + ' manglar'
+    + ' <span style="opacity:0.75">(' + marked + ' markert, ' + total + ' i fasit)</span>'
+    + (visFasit ? '<div style="margin-top:4px;font-size:12px;opacity:0.9">Fasit er vist for denne kategorien.</div>' : '');
 }
 
 function novKmVelg(btn, type, bg, col){
@@ -119,21 +204,22 @@ function novKmVelg(btn, type, bg, col){
   btn.style.fontWeight='700';
   const aktiv = document.getElementById('nov-km-aktiv');
   if(aktiv) aktiv.textContent='Valt: '+btn.textContent.trim();
+  novKmOppdaterScore(false);
 }
 
 function novKmKlikk(span){
   if(!_novKmAktiv) return;
-  const f = _novKmFargar[_novKmAktiv];
-  const cur = span.dataset['mark_'+_novKmAktiv];
-  if(cur==='1'){
-    span.dataset['mark_'+_novKmAktiv]='0';
-    // recompute background from remaining marks
-    novKmOppdaterFarge(span);
+  const type = _novKmAktiv;
+  if(_novKmModus === 'setning'){
+    const sid = span.dataset.s;
+    const gruppe = document.querySelectorAll('.nov-km-tok[data-s="'+sid+'"]');
+    const allOn = Array.from(gruppe).every(function(t){ return t.dataset['mark_'+type] === '1'; });
+    gruppe.forEach(function(t){ novKmSetMark(t, type, !allOn); });
   } else {
-    span.dataset['mark_'+_novKmAktiv]='1';
-    span.style.background=f.bg;
-    span.style.borderColor=f.border;
+    const cur = span.dataset['mark_'+type];
+    novKmSetMark(span, type, cur !== '1');
   }
+  novKmOppdaterScore(false);
 }
 
 function novKmOppdaterFarge(span){
@@ -147,23 +233,41 @@ function novKmOppdaterFarge(span){
 }
 
 function novKmVis(){
+  if(!_novKmAktiv) return;
+  const type = _novKmAktiv;
+  const f = _novKmFargar[type];
   document.querySelectorAll('.nov-km-tok').forEach(span=>{
     const types = span.dataset.types ? span.dataset.types.split(',').filter(Boolean) : [];
-    if(types.length===0){ span.style.background=''; span.style.borderColor='transparent'; return; }
-    const f=_novKmFargar[types[0]];
-    if(f){ span.style.background=f.bg; span.style.borderColor=f.border; span.style.outline='2px solid '+f.border; }
+    const hit = types.includes(type);
+    span.style.outline = '';
+    if(hit){
+      span.style.background = f.bg;
+      span.style.borderColor = f.border;
+      span.style.outline = '2px solid '+f.border;
+    } else {
+      span.style.background = '';
+      span.style.borderColor = 'transparent';
+    }
   });
+  novKmOppdaterScore(true);
 }
 
 function novKmReset(){
   _novKmAktiv=null;
   document.querySelectorAll('.nov-km-btn').forEach(b=>b.style.fontWeight='normal');
+  document.querySelectorAll('.nov-km-mode-btn').forEach(function(b){
+    b.style.fontWeight = 'normal';
+    b.style.borderColor = 'var(--line)';
+    b.style.background = '#fff';
+  });
   const aktiv=document.getElementById('nov-km-aktiv');
   if(aktiv) aktiv.textContent='Ingen valt';
+  _novKmModus = 'ord';
   document.querySelectorAll('.nov-km-tok').forEach(span=>{
     span.style.background=''; span.style.borderColor='transparent'; span.style.outline='';
     Object.keys(_novKmFargar).forEach(t=>{ delete span.dataset['mark_'+t]; });
   });
+  novKmOppdaterScore(false);
 }
 
 // Init krimnovelle-slide viss ho er synleg ved sideopning
@@ -172,12 +276,27 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(slide && slide.style.display==='block') novKmInit();
 });
 
+window.novKmInit = novKmInit;
+window.novKmVelg = novKmVelg;
+window.novKmKlikk = novKmKlikk;
+window.novKmVis = novKmVis;
+window.novKmReset = novKmReset;
+window.novKmSetModus = novKmSetModus;
+
 })();
 
 /* ── Mad Libs ── */
+const ML_HUMORTYPAR = {
+  barnehage: { label: 'Barnehage', alder: '3-6 år' },
+  '1klasse': { label: '1.klasse', alder: '6 år' },
+  '5klasse': { label: '5.klasse', alder: '10 år' },
+  ungdomsskule: { label: 'Ungdomsskule', alder: '13-16 år' }
+};
+
 const ML_HISTORIER = [
   {
     tittel: 'Skuledag på månen',
+    humortype: '5klasse',
     felt: [
       {id:'ml0', lbl:'Eit substantiv (stad)', ph:'t.d. biblioteket'},
       {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. enorm'},
@@ -188,10 +307,11 @@ const ML_HISTORIER = [
       {id:'ml6', lbl:'Eit verb i infinitiv', ph:'t.d. danse'},
       {id:'ml7', lbl:'Eit substantiv (mat)', ph:'t.d. spagetti'},
     ],
-    mal: (v)=>`Ein [${v[1]}] dag på månen byrja då læraren vår ${v[2]} inn i ${v[0]} ridande på ein ${v[3]}. Alle sat ${v[4]} og stirra. «God morgon!» ropte læraren ${v[4]}, og huda hennar var ${v[5]}. «I dag skal vi lære å ${v[6]}!» sa ho, og la fram ein tallerken med ${v[7]}. Ingen visste kva som skjedde, men alle lo høgt.`
+    mal: (v)=>`Ein ${v[1]} dag på månen byrja då læraren vår ${v[2]} inn i ${v[0]} ridande på ein ${v[3]}. Alle sat ${v[4]} og stirra. «God morgon!» ropte læraren ${v[4]}, og huda hennar var ${v[5]}. «I dag skal vi lære å ${v[6]}!» sa ho, og la fram ein tallerken med ${v[7]}. Ingen visste kva som skjedde, men alle lo høgt.`
   },
   {
     tittel: 'Helten og draken',
+    humortype: '1klasse',
     felt: [
       {id:'ml0', lbl:'Eit namn (person)', ph:'t.d. Sigrid'},
       {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. modige'},
@@ -206,6 +326,7 @@ const ML_HISTORIER = [
   },
   {
     tittel: 'Dagdrøm i norsktimen',
+    humortype: '5klasse',
     felt: [
       {id:'ml0', lbl:'Eit verb i preteritum', ph:'t.d. drøymde'},
       {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. mystisk'},
@@ -217,10 +338,10 @@ const ML_HISTORIER = [
       {id:'ml7', lbl:'Eit substantiv (mat)', ph:'t.d. vaflar'},
     ],
     mal: (v)=>`Midt i norsktimen ${v[0]} eg om eit ${v[1]} land der ${v[2]} sat og ${v[3]} peika med ein ${v[4]}. Plutseleg ${v[5]} alt, og eg vakna opp, heilt ${v[6]}, med ansiktet fullt av ${v[7]}.`
-  }
-,
+  },
   {
     tittel: 'Skuleturen til Paris',
+    humortype: 'ungdomsskule',
     felt: [
       {id:'ml0', lbl:'Eit substantiv (ting, eintal)', ph:'t.d. koffert'},
       {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. enorm'},
@@ -235,6 +356,7 @@ const ML_HISTORIER = [
   },
   {
     tittel: 'Prøvedagen',
+    humortype: 'ungdomsskule',
     felt: [
       {id:'ml0', lbl:'Eit verb i preteritum', ph:'t.d. hoppa'},
       {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. glinsande'},
@@ -249,6 +371,7 @@ const ML_HISTORIER = [
   },
   {
     tittel: 'Straumbrotet',
+    humortype: '5klasse',
     felt: [
       {id:'ml0', lbl:'Eit adjektiv', ph:'t.d. mystisk'},
       {id:'ml1', lbl:'Eit substantiv (stad)', ph:'t.d. gymsalen'},
@@ -263,6 +386,7 @@ const ML_HISTORIER = [
   },
   {
     tittel: 'Roboten',
+    humortype: '1klasse',
     felt: [
       {id:'ml0', lbl:'Eit namn på ein robot', ph:'t.d. Robo-Ola'},
       {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. rugglete'},
@@ -277,6 +401,7 @@ const ML_HISTORIER = [
   },
   {
     tittel: 'Dei mystiske leksene',
+    humortype: '5klasse',
     felt: [
       {id:'ml0', lbl:'Eit verb i presens', ph:'t.d. søv'},
       {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. glinsande'},
@@ -288,15 +413,207 @@ const ML_HISTORIER = [
       {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. nøgd'},
     ],
     mal: (v)=>`${v[6]} ${v[0]} aldri på skuledagar, for leksene skriv seg sjølv. ${v[3]} ${v[2]} og ein ${v[1]} penn er alt ein treng. Etter ${v[3]} minutt er alt klart, og eleven er ${v[7]} nok til å ${v[4]} ${v[5]} ut vindauga.`
+  },
+  {
+    tittel: 'Bursdag i dyrehagen',
+    humortype: 'barnehage',
+    felt: [
+      {id:'ml0', lbl:'Eit namn', ph:'t.d. Ola'},
+      {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. tullete'},
+      {id:'ml2', lbl:'Eit substantiv (dyr)', ph:'t.d. giraff'},
+      {id:'ml3', lbl:'Eit verb i preteritum', ph:'t.d. dansa'},
+      {id:'ml4', lbl:'Eit substantiv (mat)', ph:'t.d. gelé'},
+      {id:'ml5', lbl:'Eit adverb', ph:'t.d. sakte'},
+      {id:'ml6', lbl:'Eit adjektiv', ph:'t.d. lilla'},
+      {id:'ml7', lbl:'Eit verb i infinitiv', ph:'t.d. hoppe'},
+    ],
+    mal: (v)=>`${v[0]} hadde bursdag i dag, og ein ${v[1]} ${v[2]} ${v[3]} rett inn med ei kake av ${v[4]}. Alle klappa ${v[5]}, medan den ${v[6]} løva prøvde å ${v[7]} på bordet.`
+  },
+  {
+    tittel: 'Pannekake-raketten',
+    humortype: 'barnehage',
+    felt: [
+      {id:'ml0', lbl:'Eit substantiv (mat)', ph:'t.d. pannekake'},
+      {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. klissete'},
+      {id:'ml2', lbl:'Eit verb i preteritum', ph:'t.d. susa'},
+      {id:'ml3', lbl:'Eit substantiv (stad)', ph:'t.d. sandkassa'},
+      {id:'ml4', lbl:'Eit tal', ph:'t.d. 4'},
+      {id:'ml5', lbl:'Eit dyr', ph:'t.d. mus'},
+      {id:'ml6', lbl:'Eit adverb', ph:'t.d. fort'},
+      {id:'ml7', lbl:'Eit verb i infinitiv', ph:'t.d. synge'},
+    ],
+    mal: (v)=>`Ein ${v[1]} ${v[0]} ${v[2]} opp frå ${v[3]} som ein rakett. Etter ${v[4]} sekund landa han på hovudet til ein ${v[5]}, som byrja ${v[6]} å ${v[7]}.`
+  },
+  {
+    tittel: 'Den snakkande matboksen',
+    humortype: '1klasse',
+    felt: [
+      {id:'ml0', lbl:'Eit namn', ph:'t.d. Mina'},
+      {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. rar'},
+      {id:'ml2', lbl:'Eit substantiv (mat)', ph:'t.d. banan'},
+      {id:'ml3', lbl:'Eit verb i preteritum', ph:'t.d. kviskra'},
+      {id:'ml4', lbl:'Eit substantiv (ting)', ph:'t.d. blyant'},
+      {id:'ml5', lbl:'Eit adverb', ph:'t.d. høgt'},
+      {id:'ml6', lbl:'Eit verb i infinitiv', ph:'t.d. rulle'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. fnisete'},
+    ],
+    mal: (v)=>`Då ${v[0]} opna matboksen sin, låg det ein ${v[1]} ${v[2]} inni som ${v[3]}: «Eg vil ha ein ${v[4]}!» Heile klassa lo ${v[5]}, og matboksen byrja å ${v[6]} over golvet som om han var heilt ${v[7]}.`
+  },
+  {
+    tittel: 'Gymtime med dinosaurar',
+    humortype: '1klasse',
+    felt: [
+      {id:'ml0', lbl:'Eit adjektiv', ph:'t.d. svett'},
+      {id:'ml1', lbl:'Eit dyr', ph:'t.d. dinosaur'},
+      {id:'ml2', lbl:'Eit verb i preteritum', ph:'t.d. snubla'},
+      {id:'ml3', lbl:'Eit substantiv (ting)', ph:'t.d. rockering'},
+      {id:'ml4', lbl:'Eit adverb', ph:'t.d. vilt'},
+      {id:'ml5', lbl:'Eit namn', ph:'t.d. Emma'},
+      {id:'ml6', lbl:'Eit verb i infinitiv', ph:'t.d. brøle'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. mjuk'},
+    ],
+    mal: (v)=>`I gymtimen kom ein ${v[0]} ${v[1]} inn døra og ${v[2]} over ein ${v[3]}. ${v[5]} lo ${v[4]} og prøvde å ${v[6]} tilbake. Då sette dinosauren seg på den ${v[7]} matta og sovna.`
+  },
+  {
+    tittel: 'Fotballkampen som gjekk skeis',
+    humortype: '5klasse',
+    felt: [
+      {id:'ml0', lbl:'Eit substantiv (ting)', ph:'t.d. sokk'},
+      {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. slimete'},
+      {id:'ml2', lbl:'Eit verb i preteritum', ph:'t.d. føyk'},
+      {id:'ml3', lbl:'Eit substantiv (person)', ph:'t.d. vaktmeisteren'},
+      {id:'ml4', lbl:'Eit adverb', ph:'t.d. dramatisk'},
+      {id:'ml5', lbl:'Eit tal', ph:'t.d. 11'},
+      {id:'ml6', lbl:'Eit verb i infinitiv', ph:'t.d. juble'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. forfjamsa'},
+    ],
+    mal: (v)=>`Under finalen vart ballen bytt ut med ein ${v[1]} ${v[0]}. Han ${v[2]} rett i panna på ${v[3]}, som ${v[4]} blåste av kampen etter ${v[5]} sekund. Publikum byrja å ${v[6]}, medan dommaren såg heilt ${v[7]} ut.`
+  },
+  {
+    tittel: 'Den rare vikaren',
+    humortype: '5klasse',
+    felt: [
+      {id:'ml0', lbl:'Eit namn', ph:'t.d. Sofie'},
+      {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. mystisk'},
+      {id:'ml2', lbl:'Eit substantiv (ting)', ph:'t.d. banjo'},
+      {id:'ml3', lbl:'Eit verb i preteritum', ph:'t.d. kvein'},
+      {id:'ml4', lbl:'Eit adverb', ph:'t.d. høfleg'},
+      {id:'ml5', lbl:'Eit substantiv (dyr)', ph:'t.d. hamster'},
+      {id:'ml6', lbl:'Eit verb i infinitiv', ph:'t.d. rappe'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. blank'},
+    ],
+    mal: (v)=>`Vikaren presenterte seg som ${v[0]} den ${v[1]} og sette ein ${v[2]} på kateteret. Så ${v[3]} ho at alle måtte sitje ${v[4]} og sjå på medan ein ${v[5]} lærte klassa å ${v[6]}. På tavla stod det berre eitt ord med ${v[7]} tusj: «Kvifor?»`
+  },
+  {
+    tittel: 'Skuleavslutninga',
+    humortype: '5klasse',
+    felt: [
+      {id:'ml0', lbl:'Eit substantiv (mat)', ph:'t.d. muffins'},
+      {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. skeiv'},
+      {id:'ml2', lbl:'Eit verb i preteritum', ph:'t.d. velta'},
+      {id:'ml3', lbl:'Eit substantiv (ting)', ph:'t.d. mikrofon'},
+      {id:'ml4', lbl:'Eit adverb', ph:'t.d. pinleg'},
+      {id:'ml5', lbl:'Eit tal', ph:'t.d. 28'},
+      {id:'ml6', lbl:'Eit verb i infinitiv', ph:'t.d. viske'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. skjelven'},
+    ],
+    mal: (v)=>`På skuleavslutninga skulle alle få ${v[0]}, men bordet ${v[2]} idet rektor tok opp ein ${v[1]} ${v[3]}. Etter ${v[5]} sekund vart det ${v[4]} stille, før heile klassa byrja å ${v[6]}. Rektoren stod igjen med eit ${v[7]} smil.`
+  },
+  {
+    tittel: 'Kantinemysteriet',
+    humortype: 'ungdomsskule',
+    felt: [
+      {id:'ml0', lbl:'Eit adjektiv', ph:'t.d. mistenkeleg'},
+      {id:'ml1', lbl:'Eit substantiv (mat)', ph:'t.d. toast'},
+      {id:'ml2', lbl:'Eit verb i preteritum', ph:'t.d. forsvann'},
+      {id:'ml3', lbl:'Eit substantiv (person)', ph:'t.d. elevrådsleiaren'},
+      {id:'ml4', lbl:'Eit adverb', ph:'t.d. diskret'},
+      {id:'ml5', lbl:'Eit verb i infinitiv', ph:'t.d. skulde'},
+      {id:'ml6', lbl:'Eit substantiv (ting)', ph:'t.d. hettegenser'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. suspekt'},
+    ],
+    mal: (v)=>`Kvar dag klokka 11.12 ${v[2]} ein ${v[0]} ${v[1]} frå kantina. Til slutt byrja ${v[3]} ${v[4]} å ${v[5]} alle som gjekk med ${v[6]}. Det gjorde stemninga ganske ${v[7]}.`
+  },
+  {
+    tittel: 'Klasseturen med drama',
+    humortype: 'ungdomsskule',
+    felt: [
+      {id:'ml0', lbl:'Eit substantiv (stad)', ph:'t.d. ferja'},
+      {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. klein'},
+      {id:'ml2', lbl:'Eit verb i preteritum', ph:'t.d. sklei'},
+      {id:'ml3', lbl:'Eit substantiv (ting)', ph:'t.d. energidrikk'},
+      {id:'ml4', lbl:'Eit adverb', ph:'t.d. overdrivent'},
+      {id:'ml5', lbl:'Eit verb i infinitiv', ph:'t.d. forklare'},
+      {id:'ml6', lbl:'Eit substantiv (person)', ph:'t.d. kontaktlæraren'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. flau'},
+    ],
+    mal: (v)=>`På klasseturen til ${v[0]} gjekk alt fint heilt til nokon ${v[2]} i ein ${v[1]} sølepytt med ein ${v[3]} i handa. Alle lo ${v[4]}, medan ${v[6]} prøvde å ${v[5]} at dette eigentleg var heilt normalt. Det var ingen som trudde på det, særleg ikkje den mest ${v[7]} eleven i klassa.`
+  },
+  {
+    tittel: 'Den forheksa klassechatten',
+    humortype: 'ungdomsskule',
+    felt: [
+      {id:'ml0', lbl:'Eit adjektiv', ph:'t.d. hektisk'},
+      {id:'ml1', lbl:'Eit substantiv (dyr)', ph:'t.d. geit'},
+      {id:'ml2', lbl:'Eit verb i preteritum', ph:'t.d. dukka opp'},
+      {id:'ml3', lbl:'Eit substantiv (ting)', ph:'t.d. caps'},
+      {id:'ml4', lbl:'Eit adverb', ph:'t.d. desperat'},
+      {id:'ml5', lbl:'Eit verb i infinitiv', ph:'t.d. slette'},
+      {id:'ml6', lbl:'Eit substantiv (person)', ph:'t.d. norsklæraren'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. kaotisk'},
+    ],
+    mal: (v)=>`Klassechatten vart plutseleg ${v[0]} då eit bilete av ein ${v[1]} med ${v[3]} ${v[2]} i kvar einaste tråd. Alle prøvde ${v[4]} å ${v[5]} det, men så skreiv ${v[6]} berre: «Kven eig denne?» Etter det vart alt heilt ${v[7]}.`
+  },
+  {
+    tittel: 'Munnleg framføring gone wrong',
+    humortype: 'ungdomsskule',
+    felt: [
+      {id:'ml0', lbl:'Eit substantiv (ting)', ph:'t.d. klikker'},
+      {id:'ml1', lbl:'Eit adjektiv', ph:'t.d. desperat'},
+      {id:'ml2', lbl:'Eit verb i preteritum', ph:'t.d. pep'},
+      {id:'ml3', lbl:'Eit substantiv (dyr)', ph:'t.d. måke'},
+      {id:'ml4', lbl:'Eit adverb', ph:'t.d. kunstig'},
+      {id:'ml5', lbl:'Eit verb i infinitiv', ph:'t.d. imponere'},
+      {id:'ml6', lbl:'Eit substantiv (person)', ph:'t.d. sensor'},
+      {id:'ml7', lbl:'Eit adjektiv', ph:'t.d. mislukka'},
+    ],
+    mal: (v)=>`Då framføringa starta, nekta ${v[0]} å virke, prosjektoren ${v[2]}, og første lysbiletet viste ein ${v[1]} ${v[3]}. Presentatøren prøvde ${v[4]} å ${v[5]} ${v[6]}, men heile opplegget fekk ein ganske ${v[7]} avslutning.`
   }
 ];
 
 let _mlIdx = 0;
+let _mlHumortype = 'ungdomsskule';
+
+function mlGetHistorierForHumortype(){
+  if(_mlHumortype === 'alle') return ML_HISTORIER;
+  return ML_HISTORIER.filter(function(h){ return h.humortype === _mlHumortype; });
+}
+
+function mlGetAktivHistorie(){
+  const historier = mlGetHistorierForHumortype();
+  if(!historier.length) return null;
+  if(!historier[_mlIdx]) _mlIdx = 0;
+  return historier[_mlIdx];
+}
+
+function mlOppdaterMeta(h){
+  const meta = ML_HUMORTYPAR[h.humortype] || { label: h.humortype, alder: '' };
+  const formMeta = document.getElementById('ml-current-meta');
+  const resultMeta = document.getElementById('ml-result-meta');
+  const heading = document.getElementById('ml-result-heading');
+  const tekst = '<strong>'+h.tittel+'</strong><br>Humortype: '+meta.label+' · Passar best for '+meta.alder;
+  if(formMeta) formMeta.innerHTML = tekst;
+  if(resultMeta) resultMeta.innerHTML = tekst;
+  if(heading) heading.textContent = 'Her er historia di: ' + h.tittel;
+  const sel = document.getElementById('ml-humortype');
+  if(sel && _mlHumortype !== 'alle') sel.value = h.humortype;
+}
 
 function mlInit(){
-  const h = ML_HISTORIER[_mlIdx % ML_HISTORIER.length];
+  const h = mlGetAktivHistorie();
   const inp = document.getElementById('ml-inputs');
-  if(!inp) return;
+  if(!inp || !h) return;
+  mlOppdaterMeta(h);
   inp.innerHTML = h.felt.map(f=>`
     <label style="display:flex;flex-direction:column;gap:4px;font-size:13px;color:#4a4a46;font-weight:500">
       ${f.lbl}
@@ -309,20 +626,37 @@ function mlInit(){
 }
 
 function mlLag(){
-  const h = ML_HISTORIER[_mlIdx];
+  const h = mlGetAktivHistorie();
+  if(!h) return;
   const vals = h.felt.map(f=>{
     const el=document.getElementById(f.id);
-    return el&&el.value.trim() ? el.value.trim() : '[????]';
+    return el&&el.value.trim() ? el.value.trim() : '';
   });
-  const story = h.mal(vals);
-  // highlight filled-in words
-  let storyHtml = story;
-  vals.forEach(v=>{
-    if(v!=='[????]') storyHtml = storyHtml.replace(v,`<strong style="color:#1a56db;text-decoration:underline;text-decoration-style:dotted">${v}</strong>`);
+
+  const esc = function(s){
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  };
+
+  const markorar = h.felt.map(function(_, i){ return '__ML_'+i+'__'; });
+  const story = h.mal(markorar);
+  let storyHtml = esc(story);
+  markorar.forEach(function(m, i){
+    const v = vals[i];
+    const repl = v
+      ? `<strong style="color:#1a56db;text-decoration:underline;text-decoration-style:dotted">${esc(v)}</strong>`
+      : '<span style="color:#8a8a88;border-bottom:1px dotted #b9b9b6">____</span>';
+    storyHtml = storyHtml.split(m).join(repl);
   });
+
   document.getElementById('ml-story').innerHTML = storyHtml;
   document.getElementById('ml-form').style.display='none';
   document.getElementById('ml-result').style.display='block';
+  mlOppdaterMeta(h);
 }
 
 function mlReset(){
@@ -330,13 +664,27 @@ function mlReset(){
 }
 
 function mlNyHistorie(){
+  const historier = mlGetHistorierForHumortype();
+  if(!historier.length) return;
   let next;
-  do { next = Math.floor(Math.random() * ML_HISTORIER.length); } while(next === _mlIdx && ML_HISTORIER.length > 1);
+  do { next = Math.floor(Math.random() * historier.length); } while(next === _mlIdx && historier.length > 1);
   _mlIdx = next;
   mlInit();
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{ _mlIdx=Math.floor(Math.random()*ML_HISTORIER.length); mlInit(); });
+function mlSetHumortype(value){
+  _mlHumortype = value;
+  _mlIdx = 0;
+  mlNyHistorie();
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const sel = document.getElementById('ml-humortype');
+  if(sel && sel.value) _mlHumortype = sel.value;
+  const historier = mlGetHistorierForHumortype();
+  _mlIdx = historier.length ? Math.floor(Math.random() * historier.length) : 0;
+  mlInit();
+});
 
 /* ── Nav dropdown ── */
 function navToggle(id){
