@@ -56,23 +56,26 @@
 
     function initNovelleFullscreen() {
       var carousel = document.getElementById('novelle-karussel');
+      var slidesWrap = document.getElementById('nov-slides');
       if (!carousel || document.getElementById('nov-fs-btn')) return;
-      if (getComputedStyle(carousel).position === 'static') {
-        carousel.style.position = 'relative';
+      if (slidesWrap && getComputedStyle(slidesWrap).position === 'static') {
+        slidesWrap.style.position = 'relative';
       }
 
       function calcZoom() {
-        var baseW = 1366;
-        var baseH = 820;
+        var baseW = 1280;
+        var baseH = 800;
         var z = Math.min(window.innerWidth / baseW, window.innerHeight / baseH);
-        return Math.max(0.95, Math.min(1.55, z));
+        return Math.max(0.95, Math.min(1.65, z));
       }
 
       function applyZoom() {
-        if (document.fullscreenElement === carousel) {
-          carousel.style.zoom = calcZoom().toFixed(2);
-        } else {
-          carousel.style.zoom = '';
+        var activeCard = document.querySelector('.nov-slide[style*="display:block"] .card');
+        document.querySelectorAll('#nov-slides .nov-slide .card').forEach(function(card) {
+          card.style.zoom = '';
+        });
+        if (document.fullscreenElement === carousel && activeCard) {
+          activeCard.style.zoom = calcZoom().toFixed(2);
         }
       }
 
@@ -87,7 +90,7 @@
         e.stopPropagation();
         fsToggle(carousel);
       });
-      carousel.appendChild(btn);
+      (slidesWrap || carousel).appendChild(btn);
 
       document.addEventListener('fullscreenchange', function() {
         btn.textContent = document.fullscreenElement === carousel ? '✕ Lukk fullskjerm' : '⛶ Fullskjerm';
@@ -95,6 +98,12 @@
       });
 
       window.addEventListener('resize', applyZoom);
+
+      var prevRender = render;
+      render = function() {
+        prevRender();
+        applyZoom();
+      };
     }
 
     render();
