@@ -56,11 +56,7 @@
 
     function initNovelleFullscreen() {
       var carousel = document.getElementById('novelle-karussel');
-      var slidesWrap = document.getElementById('nov-slides');
       if (!carousel || document.getElementById('nov-fs-btn')) return;
-      if (slidesWrap && getComputedStyle(slidesWrap).position === 'static') {
-        slidesWrap.style.position = 'relative';
-      }
 
       function calcZoom() {
         var baseW = 1280;
@@ -79,9 +75,20 @@
         }
       }
 
+      function mountButton() {
+        var activeCard = document.querySelector('.nov-slide[style*="display:block"] .card');
+        if (!activeCard) return;
+        if (getComputedStyle(activeCard).position === 'static') {
+          activeCard.style.position = 'relative';
+        }
+        if (btn.parentElement !== activeCard) {
+          activeCard.appendChild(btn);
+        }
+      }
+
       var btn = document.createElement('button');
       btn.id = 'nov-fs-btn';
-      btn.className = 'fs-btn fs-btn-carousel';
+      btn.className = 'fs-btn fs-btn-card';
       btn.type = 'button';
       btn.textContent = '⛶ Fullskjerm';
       btn.setAttribute('aria-label', 'Vis novelle-karusell i fullskjerm');
@@ -90,10 +97,11 @@
         e.stopPropagation();
         fsToggle(carousel);
       });
-      (slidesWrap || carousel).appendChild(btn);
+      mountButton();
 
       document.addEventListener('fullscreenchange', function() {
         btn.textContent = document.fullscreenElement === carousel ? '✕ Lukk fullskjerm' : '⛶ Fullskjerm';
+        mountButton();
         applyZoom();
       });
 
@@ -102,6 +110,7 @@
       var prevRender = render;
       render = function() {
         prevRender();
+        mountButton();
         applyZoom();
       };
     }
