@@ -256,29 +256,31 @@ textarea.practice::placeholder { color: var(--ink3); }
   font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 500;
-  padding: 5px 10px;
+  padding: 6px 11px;
   border-radius: 999px;
   border: 1px solid var(--line);
   background: #ffffffd9;
   color: var(--ink2);
   cursor: pointer;
   backdrop-filter: blur(2px);
-  transition: background 0.15s, filter 0.15s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.15s, filter 0.15s, box-shadow 0.15s;
 }
 .fs-btn:hover {
   background: #fff;
   filter: brightness(0.96);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
 }
 .fs-btn-card {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 12px;
+  right: 12px;
   z-index: 6;
 }
 .fs-btn-carousel {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 12px;
+  right: 12px;
   z-index: 8;
 }
 

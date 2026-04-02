@@ -61,6 +61,21 @@
         carousel.style.position = 'relative';
       }
 
+      function calcZoom() {
+        var baseW = 1366;
+        var baseH = 820;
+        var z = Math.min(window.innerWidth / baseW, window.innerHeight / baseH);
+        return Math.max(0.95, Math.min(1.55, z));
+      }
+
+      function applyZoom() {
+        if (document.fullscreenElement === carousel) {
+          carousel.style.zoom = calcZoom().toFixed(2);
+        } else {
+          carousel.style.zoom = '';
+        }
+      }
+
       var btn = document.createElement('button');
       btn.id = 'nov-fs-btn';
       btn.className = 'fs-btn fs-btn-carousel';
@@ -76,7 +91,10 @@
 
       document.addEventListener('fullscreenchange', function() {
         btn.textContent = document.fullscreenElement === carousel ? '✕ Lukk fullskjerm' : '⛶ Fullskjerm';
+        applyZoom();
       });
+
+      window.addEventListener('resize', applyZoom);
     }
 
     render();
