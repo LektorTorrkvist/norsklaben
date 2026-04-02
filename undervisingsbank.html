@@ -427,6 +427,48 @@
   render();
 })();
 
+(function(){
+  var cards = document.querySelectorAll('#ub-slides .ub-slide .card');
+  if(!cards.length) return;
+
+  function fsToggle(target){
+    if(!target) return;
+    if(document.fullscreenElement === target){
+      document.exitFullscreen();
+      return;
+    }
+    if(document.fullscreenElement && document.fullscreenElement !== target){
+      document.exitFullscreen().then(function(){ target.requestFullscreen(); });
+      return;
+    }
+    target.requestFullscreen();
+  }
+
+  cards.forEach(function(card){
+    if(card.querySelector('.ub-fs-btn')) return;
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'fs-btn fs-btn-card ub-fs-btn';
+    btn.textContent = '⛶ Fullskjerm';
+    btn.setAttribute('aria-label', 'Vis undervisingsopplegg i fullskjerm');
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      fsToggle(card);
+    });
+    card.appendChild(btn);
+  });
+
+  document.addEventListener('fullscreenchange', function(){
+    var active = document.fullscreenElement;
+    cards.forEach(function(card){
+      var btn = card.querySelector('.ub-fs-btn');
+      if(!btn) return;
+      btn.textContent = active === card ? '✕ Lukk fullskjerm' : '⛶ Fullskjerm';
+    });
+  });
+})();
+
 fetch('https://api.github.com/repos/LektorTorrkvist/norsklaben/commits?path=undervisingsbank.html&per_page=1')
   .then(function(r){ return r.json(); })
   .then(function(data){

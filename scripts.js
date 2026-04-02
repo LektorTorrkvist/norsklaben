@@ -39,7 +39,48 @@
       }, { passive: true });
     }
 
+    function fsToggle(target) {
+      if (!target) return;
+      if (document.fullscreenElement === target) {
+        document.exitFullscreen();
+        return;
+      }
+      if (document.fullscreenElement && document.fullscreenElement !== target) {
+        document.exitFullscreen().then(function() {
+          target.requestFullscreen();
+        });
+        return;
+      }
+      target.requestFullscreen();
+    }
+
+    function initNovelleFullscreen() {
+      var carousel = document.getElementById('novelle-karussel');
+      if (!carousel || document.getElementById('nov-fs-btn')) return;
+      if (getComputedStyle(carousel).position === 'static') {
+        carousel.style.position = 'relative';
+      }
+
+      var btn = document.createElement('button');
+      btn.id = 'nov-fs-btn';
+      btn.className = 'fs-btn fs-btn-carousel';
+      btn.type = 'button';
+      btn.textContent = '⛶ Fullskjerm';
+      btn.setAttribute('aria-label', 'Vis novelle-karusell i fullskjerm');
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        fsToggle(carousel);
+      });
+      carousel.appendChild(btn);
+
+      document.addEventListener('fullscreenchange', function() {
+        btn.textContent = document.fullscreenElement === carousel ? '✕ Lukk fullskjerm' : '⛶ Fullskjerm';
+      });
+    }
+
     render();
+    initNovelleFullscreen();
   
 /* ── Krimnovelle klikk-og-marker ── */
 const NOV_KM_SETNINGAR = [

@@ -251,6 +251,60 @@ textarea.practice::placeholder { color: var(--ink3); }
 }
 .tip strong { font-weight: 500; }
 
+/* ── FULLSKJERM-KNAPPAR ── */
+.fs-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #ffffffd9;
+  color: var(--ink2);
+  cursor: pointer;
+  backdrop-filter: blur(2px);
+  transition: background 0.15s, filter 0.15s;
+}
+.fs-btn:hover {
+  background: #fff;
+  filter: brightness(0.96);
+}
+.fs-btn-card {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 6;
+}
+.fs-btn-carousel {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 8;
+}
+
+.card:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  border-radius: 0;
+  overflow: auto;
+  padding: 1.2rem 1.4rem 2rem;
+  background: var(--card);
+}
+
+#novelle-karussel:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 1rem 1rem 1.5rem;
+  background: var(--bg);
+  overflow: auto;
+}
+#novelle-karussel:fullscreen #nov-slides {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
 /* ── BEFORE/AFTER ── */
 .before-after {
   display: grid;
