@@ -373,7 +373,8 @@
 
 <footer>
   <p>Norsklaben · Undervisingsbank 8.trinn &nbsp;·&nbsp; <a href="index.html" style="color:var(--ink3)">← Tilbake til Norsklaben</a></p>
-  Norsklaben &bull; av Lektor Tørrkvist &bull; 2026
+  av Lektor Tørrkvist &bull; 2026
+  <br><span id="ub-sist-oppdatert" style="font-size:12px;opacity:0.6">Sist oppdatert: laster…</span>
 </footer>
 
 <script>
@@ -425,6 +426,19 @@
 
   render();
 })();
+
+fetch('https://api.github.com/repos/LektorTorrkvist/norsklaben/commits?path=undervisingsbank.html&per_page=1')
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    var el = document.getElementById('ub-sist-oppdatert');
+    if(!el || !data[0]) return;
+    var d = new Date(data[0].commit.author.date);
+    var tz = 'Europe/Oslo';
+    var dateStr = d.toLocaleDateString('nb-NO', { timeZone: tz, day: 'numeric', month: 'long', year: 'numeric' });
+    var timeStr = d.toLocaleTimeString('nb-NO', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false });
+    el.textContent = 'Sist oppdatert: ' + dateStr + ' kl. ' + timeStr;
+  })
+  .catch(function(){});
 </script>
 
 </body>

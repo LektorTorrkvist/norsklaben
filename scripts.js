@@ -4271,9 +4271,9 @@ function kmSjekk(){
       var el = document.getElementById('sist-oppdatert');
       if(!el || !data || !data[0]) return;
       var d = new Date(data[0].commit.committer.date);
-      var maanader = ['januar','februar','mars','april','mai','juni','juli','august','september','oktober','november','desember'];
-      var dato = d.getDate() + '. ' + maanader[d.getMonth()] + ' ' + d.getFullYear();
-      var tid = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+      var tz = 'Europe/Oslo';
+      var dato = d.toLocaleDateString('nb-NO', { timeZone: tz, day: 'numeric', month: 'long', year: 'numeric' });
+      var tid = d.toLocaleTimeString('nb-NO', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false });
       el.textContent = 'Sist oppdatert ' + dato + ' kl. ' + tid;
     })
     .catch(function(){});
