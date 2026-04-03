@@ -4737,6 +4737,65 @@ function ffReset(){
   });
   const fb=document.getElementById('mt-feedback');
   if(fb) fb.style.display='none';
+  const nw=document.getElementById('mt-next-wrap');
+  if(nw) nw.style.display='none';
+}
+
+function ffSjekk(){
+  if(MTS.answered) return;
+  MTS.answered=true;
+
+  const t=MTS.tasks[MTS.idx];
+  if(!t || !Array.isArray(t.fasit_feil)) return;
+
+  const fasitSet=new Set(t.fasit_feil.map(function(w){ return String(w).toLowerCase(); }));
+  const selected=[...document.querySelectorAll('.ff-word.ff-selected')];
+  const selectedSet=new Set(selected.map(function(s){ return String(s.dataset.clean || '').toLowerCase(); }));
+
+  let ok=0, wrong=0, missed=0;
+  document.querySelectorAll('.ff-word').forEach(function(span){
+    const w=String(span.dataset.clean || '').toLowerCase();
+    const inFasit=fasitSet.has(w);
+    const inSel=selectedSet.has(w);
+
+    if(inFasit && inSel){
+      ok++;
+      span.style.background='#e8f6f0';
+      span.style.borderColor='#82c9a8';
+      span.style.textDecoration='underline wavy #1a7a50';
+    } else if(inFasit && !inSel){
+      missed++;
+      span.style.background='#fff3cd';
+      span.style.borderColor='#f5d878';
+      span.style.textDecoration='underline wavy #d4a017';
+    } else if(!inFasit && inSel){
+      wrong++;
+      span.style.background='#fff0ed';
+      span.style.borderColor='#f0a090';
+      span.style.textDecoration='underline wavy #d45a2f';
+    }
+  });
+
+  const total=fasitSet.size;
+  const allRight=ok===total && wrong===0;
+  if(allRight) MTS.score++;
+  MTS.history[MTS.idx]=allRight;
+  mtUpdateProgress();
+
+  const fb=$mt('mt-feedback');
+  if(fb){
+    fb.style.display='block';
+    fb.style.background=allRight?'#e8f6f0':'#fff8f0';
+    fb.style.border='1px solid '+(allRight?'#82c9a8':'#f5c282');
+    fb.style.color=allRight?'#14532d':'#6b3800';
+    fb.innerHTML='<strong>'+(allRight?'✓ Perfekt!':'Treff: '+ok+' av '+total)+'</strong>'
+      +(missed>0?'<div style="font-size:13px;margin-top:4px">🟡 '+missed+' ord du ikkje markerte (gul)</div>':'')
+      +(wrong>0?'<div style="font-size:13px;margin-top:4px">✗ '+wrong+' ord du markerte feil (raud)</div>':'')
+      +(t.regel?'<div style="margin-top:0.4rem;font-size:13px;opacity:0.85"><strong>Regel:</strong> '+mtEsc(t.regel)+'</div>':'');
+  }
+
+  const nw=$mt('mt-next-wrap');
+  if(nw) nw.style.display='block';
 }
 
 /* ══════════════════════════════════════════════════════
