@@ -495,6 +495,90 @@
     </div>
   </div>
 
+  <div class="tip" style="margin-top:1.2rem"><strong>Teiknsetting – hovudreglar:</strong> Set punktum når ein tanke er ferdig. Set komma mellom ledd i ei oppramsing (men ikkje rett før siste «og»). Set komma framfor «men» mellom to heilsetningar. Unngå å starte setningar med «og då» i fagtekstar.</div>
+
+  <!-- ─────── OPPGÅVE 3F: Punktum-sveisen ─────── -->
+  <div class="exercise-box" style="margin-top:1.2rem">
+    <div class="exercise-box-header">Oppgåve 3F – Punktum-sveisen ✂️</div>
+    <div class="task-text">
+      <strong>Steg 1:</strong> Klikk på kvart <span style="background:#fde68a;color:#92400e;font-weight:700;border-radius:3px;padding:1px 5px">og</span> for å kutte setninga og setje inn punktum.<br>
+      <strong>Steg 2:</strong> Klikk på den <span style="background:#bfdbfe;color:#1e40af;font-weight:700;border-radius:3px;padding:1px 4px">utheva bokstaven</span> i kvar ny setning for å gjere han stor.
+    </div>
+    <div id="pvs-sentence" style="padding:1rem 1.2rem;font-size:14.5px;line-height:2.6;font-family:'Fraunces',serif;font-style:italic;color:var(--ink2);word-break:break-word"></div>
+    <div id="pvs-step2" style="display:none;padding:0.55rem 1.2rem;font-size:13px;color:#1a5c42;background:#e8f6ee;border-top:1px solid #6abf8a">
+      ✅ Bra! Alle «og»-kutt er gjort. Klikk no på den <strong>første bokstaven</strong> i kvar ny setning for å gjere han stor.
+    </div>
+    <div id="pvs-done" style="display:none;padding:0.75rem 1.2rem;font-size:13.5px;color:#1a3c2e;background:#e8f6ee;border-top:1px solid #6abf8a;font-weight:500">
+      🎉 Perfekt! Setninga er delt opp og alle nye setningar startar med stor bokstav.
+    </div>
+    <div style="padding:0.5rem 1rem;border-top:1px solid var(--line);display:flex;align-items:center;gap:12px">
+      <span id="pvs-status" style="font-size:12px;color:var(--ink3);flex:1"></span>
+      <button onclick="pvsReset()" style="font-family:'DM Sans',sans-serif;font-size:13px;padding:7px 14px;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink3)">Start på nytt</button>
+    </div>
+  </div>
+
+  <!-- ─────── OPPGÅVE 3G: Bindeords-puslespel (ny serie) ─────── -->
+  <div class="exercise-box" style="margin-top:1.2rem">
+    <div class="exercise-box-header">Oppgåve 3G – Bindeords-puslespel: presise samanknytingar</div>
+    <div class="task-text" style="padding-bottom:0">
+      Dra rett bindeord til riktig plass. Desse orda seier noko meir presist enn «og» eller «men».
+    </div>
+    <div style="padding:1rem 1.2rem 0.2rem">
+      <div class="drag-zone" id="drag-zone-4">
+        <div class="drag-tokens" id="drag-bank-4">
+          <div class="drag-token" draggable="true" ondragstart="dragStart(event,'dermed')" ondragend="dragEnd(event)" id="tok4-dermed" data-word="dermed">dermed</div>
+          <div class="drag-token" draggable="true" ondragstart="dragStart(event,'likevel')" ondragend="dragEnd(event)" id="tok4-likevel" data-word="likevel">likevel</div>
+          <div class="drag-token" draggable="true" ondragstart="dragStart(event,'difor')" ondragend="dragEnd(event)" id="tok4-difor" data-word="difor">difor</div>
+          <div class="drag-token" draggable="true" ondragstart="dragStart(event,'i tillegg')" ondragend="dragEnd(event)" id="tok4-itillegg" data-word="i tillegg">i tillegg</div>
+        </div>
+        <div class="drag-sentence">1. Ho øvde hardt kvar dag; <span class="drag-gap" id="dg4-1" data-fasit="dermed" ondragover="allowDrop(event)" ondrop="drop(event,'dg4-1','4')" onclick="clearGap('dg4-1','4')"></span> vann ho konkurransen.</div>
+        <div class="drag-sentence">2. Sosiale medium gir oss mange moglegheiter; <span class="drag-gap" id="dg4-2" data-fasit="likevel" ondragover="allowDrop(event)" ondrop="drop(event,'dg4-2','4')" onclick="clearGap('dg4-2','4')"></span> må vi vere kritiske til innhaldet.</div>
+        <div class="drag-sentence">3. Plastforureining øydelegg dyreliv; <span class="drag-gap" id="dg4-3" data-fasit="difor" ondragover="allowDrop(event)" ondrop="drop(event,'dg4-3','4')" onclick="clearGap('dg4-3','4')"></span> er det eit pressande problem å løyse.</div>
+        <div class="drag-sentence">4. Fagartikkelen forklarte årsaker til klimaendringar; han gav <span class="drag-gap" id="dg4-4" data-fasit="i tillegg" ondragover="allowDrop(event)" ondrop="drop(event,'dg4-4','4')" onclick="clearGap('dg4-4','4')"></span> råd om kva kvar enkelt kan gjere.</div>
+        <div style="display:flex;gap:8px;margin-top:0.6rem">
+          <button class="drag-check-btn" onclick="checkDrag('4',['dermed','likevel','difor','i tillegg'])">Sjekk svar</button>
+          <button class="drag-reset-btn" onclick="resetDrag('4',['dermed','likevel','difor','i tillegg'],4)">Start på nytt</button>
+        </div>
+        <div class="drag-feedback" id="drag-fb-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────── OPPGÅVE 3H: Komma-mysteriet ─────── -->
+  <div class="exercise-box" style="margin-top:1.2rem">
+    <div class="exercise-box-header">Oppgåve 3H – Komma-mysteriet 🔍</div>
+    <div class="task-text">
+      Klikk mellom orda der det skal vere komma. Klikk igjen for å fjerne eit komma du angrar på.
+    </div>
+    <div id="km-alt-wrap" style="padding:0.8rem 1.2rem 0.2rem"></div>
+    <div id="km-alt-feedback" style="display:none;padding:0.7rem 1.2rem;font-size:13px;border-top:1px solid var(--line)"></div>
+    <div style="padding:0.5rem 1rem;border-top:1px solid var(--line);display:flex;gap:8px">
+      <button onclick="kmaltSjekk()" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:7px 18px;border-radius:8px;cursor:pointer;border:none;background:var(--c3l);color:var(--c3)">Sjekk svar →</button>
+      <button onclick="kmaltReset()" style="font-family:'DM Sans',sans-serif;font-size:13px;padding:7px 14px;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink3)">Start på nytt</button>
+    </div>
+  </div>
+
+  <!-- ─────── OPPGÅVE 3I: Setningslengde-alarmen ─────── -->
+  <div class="exercise-box" style="margin-top:1.2rem">
+    <div class="exercise-box-header">Oppgåve 3I – Setningslengde-alarmen 🚨</div>
+    <div class="task-text">
+      Skriv inn ei eller fleire setningar. Overskriv du 20 ord utan teiknsetting, blinkar alarmen. Hald setningane korte og presise.
+    </div>
+    <div style="padding:0.8rem 1.2rem">
+      <textarea id="sla-input" oninput="slaCheck()" placeholder="Skriv setninga di her…" style="width:100%;min-height:80px;font-family:'Fraunces',serif;font-size:14px;line-height:1.8;color:var(--ink2);background:#faf8f4;border:2px solid var(--line);border-radius:8px;padding:0.6rem 0.8rem;resize:vertical;outline:none;box-sizing:border-box;transition:border-color 0.25s,box-shadow 0.25s"></textarea>
+      <div id="sla-feedback" style="margin-top:0.45rem;font-size:13px;padding:0.4rem 0.7rem;border-radius:7px;line-height:1.55;min-height:1.8rem;transition:background 0.2s,color 0.2s"></div>
+    </div>
+  </div>
+
+  <!-- ─────── OPPGÅVE 3J: Fiks «og då»-fella ─────── -->
+  <div class="exercise-box" style="margin-top:1.2rem">
+    <div class="exercise-box-header">Oppgåve 3J – Fiks «og då»-fella 🪤</div>
+    <div class="task-text">
+      Setningane under startar med «og då» – eit munnleg uttrykk som ikkje høyrer heime i fagtekstar. Vel ei betre innleiing frå lista for kvar setning.
+    </div>
+    <div id="ogda-wrap" style="padding:0.5rem 1.2rem 1rem"></div>
+  </div>
+
 
 </section>
 

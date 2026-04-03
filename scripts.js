@@ -4249,6 +4249,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') eggLukk();
     shuffleBank('drag-bank-1');
     shuffleBank('drag-bank-2');
     shuffleBank('drag-bank-3');
+    shuffleBank('drag-bank-4');
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
@@ -4485,3 +4486,271 @@ function ffReset(){
   const fb=document.getElementById('mt-feedback');
   if(fb) fb.style.display='none';
 }
+
+/* ══════════════════════════════════════════════════════
+   PUNKTUM-SVEISEN (pvs) – Oppgåve 3F
+══════════════════════════════════════════════════════ */
+(function(){
+  var SEGS=[
+    {t:'tx',v:'Han gjekk til skulen '},
+    {t:'og',i:0},
+    {t:'cp',i:0,lo:'h',rest:'an møtte vennane sine '},
+    {t:'og',i:1},
+    {t:'cp',i:1,lo:'d',rest:'ei gjekk i kantina '},
+    {t:'og',i:2},
+    {t:'cp',i:2,lo:'d',rest:'ei spiste lunsj '},
+    {t:'og',i:3},
+    {t:'cp',i:3,lo:'d',rest:'ei snakka lenge '},
+    {t:'og',i:4},
+    {t:'cp',i:4,lo:'d',rest:'ei gløymde nesten å gå til timen.'}
+  ];
+  var CUT=[false,false,false,false,false];
+  var CAP=[false,false,false,false,false];
+
+  function render(){
+    var el=document.getElementById('pvs-sentence');
+    if(!el) return;
+    var h='';
+    for(var k=0;k<SEGS.length;k++){
+      var s=SEGS[k];
+      if(s.t==='tx'){
+        h+=s.v;
+      } else if(s.t==='og'){
+        if(CUT[s.i]){
+          h+='<span style="color:#1a7a50;font-style:normal;font-weight:700">. </span>';
+        } else {
+          h+='<span style="background:#fde68a;color:#92400e;font-weight:700;font-style:normal;border-radius:3px;padding:1px 5px;cursor:pointer" onclick="pvsCutOg('+s.i+')" title="Klikk for å kutte">og</span> ';
+        }
+      } else if(s.t==='cp'){
+        if(!CUT[s.i]){
+          h+=s.lo+s.rest;
+        } else if(!CAP[s.i]){
+          h+='<span style="background:#bfdbfe;color:#1e40af;font-weight:700;font-style:normal;border-radius:3px;padding:1px 4px;cursor:pointer;text-decoration:underline dotted" onclick="pvsCapLetter('+s.i+')" title="Klikk: gjer til stor bokstav">'+s.lo+'</span>'+s.rest;
+        } else {
+          h+='<span style="color:#1a7a50;font-weight:700;font-style:normal">'+s.lo.toUpperCase()+'</span>'+s.rest;
+        }
+      }
+    }
+    el.innerHTML=h;
+    var allCut=CUT.every(Boolean);
+    var allCap=CAP.every(Boolean);
+    var st=document.getElementById('pvs-status');
+    var s2=document.getElementById('pvs-step2');
+    var dn=document.getElementById('pvs-done');
+    if(!allCut){
+      var rem=CUT.filter(function(x){return !x;}).length;
+      if(st) st.textContent=rem+' «og» att å kutte.';
+      if(s2) s2.style.display='none';
+      if(dn) dn.style.display='none';
+    } else if(!allCap){
+      var remC=CAP.filter(function(x){return !x;}).length;
+      if(st) st.textContent=remC+' bokstav(ar) att å gjere store.';
+      if(s2) s2.style.display='block';
+      if(dn) dn.style.display='none';
+    } else {
+      if(st) st.textContent='';
+      if(s2) s2.style.display='none';
+      if(dn) dn.style.display='block';
+    }
+  }
+
+  window.pvsCutOg=function(i){ if(CUT[i]) return; CUT[i]=true; render(); };
+  window.pvsCapLetter=function(i){ if(CAP[i]) return; CAP[i]=true; render(); };
+  window.pvsReset=function(){
+    CUT=[false,false,false,false,false];
+    CAP=[false,false,false,false,false];
+    render();
+  };
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',render);
+  } else { render(); }
+})();
+
+/* ══════════════════════════════════════════════════════
+   KOMMA-MYSTERIET (kmalt) – Oppgåve 3H
+══════════════════════════════════════════════════════ */
+(function(){
+  var SENTS=[
+    {id:'kms1',
+     words:['Ho','kjøpte','eple','pærer','bananer','og','druer','på','butikken.'],
+     ok:[2,3,4],
+     rule:'I ei oppramsing set du komma mellom kvart ledd, men ikkje rett før det siste «og»-leddet.'},
+    {id:'kms2',
+     words:['Han','ville','gjerne','hjelpe','men','han','hadde','dessverre','ikkje','tid.'],
+     ok:[3],
+     rule:'Set komma framfor «men» når det bind saman to sjølvstendige setningar.'},
+    {id:'kms3',
+     words:['Etter','skulen','gjekk','ho','heim','laga','mat','spiste','og','sov.'],
+     ok:[4,6],
+     rule:'Fleire verb i rad (oppramsing av handlingar) vert skilt med komma, men ikkje rett før «og» (siste handlinga).'}
+  ];
+  var placed={};
+  SENTS.forEach(function(s){ placed[s.id]={}; });
+
+  function render(){
+    var wrap=document.getElementById('km-alt-wrap');
+    if(!wrap) return;
+    var h='';
+    SENTS.forEach(function(s){
+      h+='<div style="margin:0.5rem 0 0.9rem;font-family:\'Fraunces\',serif;font-style:italic;font-size:14.5px;line-height:3;color:var(--ink2)">';
+      for(var i=0;i<s.words.length;i++){
+        h+='<span>'+s.words[i]+'</span>';
+        if(i<s.words.length-1){
+          var has=placed[s.id][i];
+          h+='<span data-sid="'+s.id+'" data-idx="'+i+'" onclick="kmaltToggle(\''+s.id+'\','+i+')" style="display:inline-block;width:18px;text-align:center;cursor:pointer;font-style:normal;font-weight:700;color:'+(has?'#e5822a':'rgba(0,0,0,0.13)')+';font-size:17px;vertical-align:middle;user-select:none;transition:color 0.15s" title="Klikk for komma">'+(has?',':'·')+'</span>';
+        }
+      }
+      h+='</div>';
+    });
+    wrap.innerHTML=h;
+  }
+
+  window.kmaltToggle=function(sid,idx){
+    var fb=document.getElementById('km-alt-feedback');
+    if(fb) fb.style.display='none';
+    placed[sid][idx]=!placed[sid][idx];
+    render();
+  };
+
+  window.kmaltSjekk=function(){
+    var msgs=[];
+    var allOk=true;
+    SENTS.forEach(function(s){
+      var userKeys=Object.keys(placed[s.id]).filter(function(k){ return placed[s.id][k]; }).map(Number);
+      var okSet=new Set(s.ok);
+      var uSet=new Set(userKeys);
+      var correct=s.ok.every(function(i){ return uSet.has(i); });
+      var noExtra=userKeys.every(function(i){ return okSet.has(i); });
+      if(!(correct&&noExtra)){
+        allOk=false;
+        var miss=s.ok.filter(function(i){ return !uSet.has(i); }).length;
+        var extra=userKeys.filter(function(i){ return !okSet.has(i); }).length;
+        var msg='';
+        if(miss>0) msg+='Du mangla '+miss+' komma. ';
+        if(extra>0) msg+='Du sette '+extra+' komma på feil stad. ';
+        msgs.push(msg+'💡 '+s.rule);
+      }
+    });
+    var fb=document.getElementById('km-alt-feedback');
+    if(!fb) return;
+    if(allOk){
+      fb.innerHTML='<span style="color:#1a5c42;font-weight:600">✅ Alle komma rett plasserte!</span><div style="font-size:12.5px;color:var(--ink3);margin-top:0.25rem">Komma i oppramsing mellom kvart ledd (ikkje rett før siste «og»), og komma framfor «men» mellom to heilsetningar.</div>';
+    } else {
+      fb.innerHTML='<div style="color:#7f1d1d">'+msgs.map(function(m){ return '<div style="margin-bottom:0.35rem">✗ '+m+'</div>'; }).join('')+'</div>';
+    }
+    fb.style.display='block';
+  };
+
+  window.kmaltReset=function(){
+    SENTS.forEach(function(s){ placed[s.id]={}; });
+    var fb=document.getElementById('km-alt-feedback');
+    if(fb) fb.style.display='none';
+    render();
+  };
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',render);
+  } else { render(); }
+})();
+
+/* ══════════════════════════════════════════════════════
+   SETNINGSLENGDE-ALARMEN (sla) – Oppgåve 3I
+══════════════════════════════════════════════════════ */
+function slaCheck(){
+  var ta=document.getElementById('sla-input');
+  var fb=document.getElementById('sla-feedback');
+  if(!ta||!fb) return;
+  var segs=ta.value.split(/[.!?;]/);
+  var last=(segs[segs.length-1]||'').trim();
+  var words=last?last.split(/\s+/).filter(function(w){ return w.length>0; }):[];
+  var n=words.length;
+  if(n>20){
+    ta.style.borderColor='#ef4444';
+    ta.style.boxShadow='0 0 0 3px rgba(239,68,68,0.25)';
+    fb.innerHTML='🚨 <strong>Trekk pusten! Set punktum!</strong> Setninga er '+n+' ord lang utan teiknsetting.';
+    fb.style.background='#fee2e2';
+    fb.style.color='#991b1b';
+  } else if(n>14){
+    ta.style.borderColor='#f59e0b';
+    ta.style.boxShadow='0 0 0 3px rgba(245,158,11,0.15)';
+    fb.innerHTML='🟡 '+n+' ord – setninga er i lengste laget. Vurder å kutte ho i to.';
+    fb.style.background='#fef9c3';
+    fb.style.color='#78350f';
+  } else if(n>0){
+    ta.style.borderColor='#6abf8a';
+    ta.style.boxShadow='';
+    fb.innerHTML='✅ '+n+' ord. God setningslengde!';
+    fb.style.background='#f0fdf4';
+    fb.style.color='#14532d';
+  } else {
+    ta.style.borderColor='var(--line)';
+    ta.style.boxShadow='';
+    fb.innerHTML='';
+    fb.style.background='transparent';
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   FIKS «OG DÅ»-FELLA (ogda) – Oppgåve 3J
+══════════════════════════════════════════════════════ */
+(function(){
+  var ITEMS=[
+    {id:'ogd1',
+     bad:'Og då gjekk ho til skulen og møtte vennane sine.',
+     opts:['Deretter gjekk ho til skulen og møtte vennane sine.','Ho gjekk deretter til skulen og møtte vennane sine.','Og etter det gjekk ho til skulen.'],
+     ok:[0,1],
+     hint:'«Og då» er eit munnleg uttrykk. Bruk «deretter», «etter dette» eller start med subjekt + verb.'},
+    {id:'ogd2',
+     bad:'Og då hadde han gløymt å levere oppgåva.',
+     opts:['Som eit resultat hadde han gløymt å levere oppgåva.','Han hadde difor gløymt å levere oppgåva.','Og likevel hadde han gløymt det.'],
+     ok:[0,1],
+     hint:'«Og då» gir ikkje tydeleg logikk. «Som resultat» eller «difor» viser samanhengen tydelegare.'},
+    {id:'ogd3',
+     bad:'Og då begynte klimaet å endre seg.',
+     opts:['Og snart blei klimaet endra.','I løpet av fleire tiår begynte klimaet å endre seg.','Over tid begynte klimaet gradvis å endre seg.'],
+     ok:[1,2],
+     hint:'«Og då» er utydeleg i tid. Bruk «i løpet av», «over tid» eller «gradvis» for å presisere tidsrommet.'},
+    {id:'ogd4',
+     bad:'Og då er det viktig å bruke kjelder.',
+     opts:['Difor er det viktig å bruke kjelder.','Det er av den grunn viktig å bruke kjelder.','Og kanskje er kjelder viktige.'],
+     ok:[0,1],
+     hint:'«Og då» viser ikkje logisk samanheng. «Difor» eller «av den grunn» markerer konklusjonen tydeleg.'}
+  ];
+  var chosen={};
+  ITEMS.forEach(function(it){ chosen[it.id]=null; });
+
+  function render(){
+    var wrap=document.getElementById('ogda-wrap');
+    if(!wrap) return;
+    var h='';
+    ITEMS.forEach(function(it){
+      h+='<div style="margin-bottom:1.1rem;border:1px solid var(--line);border-radius:10px;overflow:hidden">';
+      h+='<div style="background:#fff0ed;padding:0.5rem 1rem;font-size:13.5px;font-family:\'Fraunces\',serif;font-style:italic;color:#7f1d1d"><span style="font-style:normal;font-size:10.5px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#d45a2f;margin-right:6px">Feil innleiing:</span>«'+it.bad+'»</div>';
+      h+='<div style="padding:0.5rem 0.75rem;background:#fafaf9">';
+      it.opts.forEach(function(opt,idx){
+        var sel=chosen[it.id]===idx;
+        var isOk=it.ok.indexOf(idx)!==-1;
+        var bg=sel?(isOk?'#e8f6ee':'#fff0ed'):'';
+        var col=sel?(isOk?'#14532d':'#7f1d1d'):'#1a1a18';
+        var brd=sel?(isOk?'1px solid #6abf8a':'1px solid #f0a090'):'1px solid var(--line)';
+        var ico=sel?(isOk?'✅ ':'✗ '):'';
+        h+='<button onclick="ogdaChoose(\''+it.id+'\','+idx+')" style="display:block;width:100%;text-align:left;background:'+bg+';color:'+col+';border:'+brd+';border-radius:7px;padding:0.45rem 0.75rem;margin-bottom:0.3rem;font-family:\'DM Sans\',sans-serif;font-size:13px;cursor:pointer;transition:background 0.15s,border-color 0.15s">'+ico+opt+'</button>';
+      });
+      if(chosen[it.id]!==null){
+        h+='<div style="font-size:12px;color:var(--ink3);padding:0.25rem 0.1rem 0.1rem">💡 '+it.hint+'</div>';
+      }
+      h+='</div></div>';
+    });
+    wrap.innerHTML=h;
+  }
+
+  window.ogdaChoose=function(id,idx){
+    chosen[id]=(chosen[id]===idx?null:idx);
+    render();
+  };
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',render);
+  } else { render(); }
+})();
