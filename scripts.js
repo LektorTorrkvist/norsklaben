@@ -3218,6 +3218,80 @@ const MT_BANK = [
  fasit:'At dei skal velje berre éin kjelde',
  regel:'«Ein av kjeldene» er ei eksplisitt avgrensing. Mange skriv om alle kjeldene fordi dei les for fort. Marker alltid talord i oppgåva som ein del av sjekkbokslista di.',
  eks:'«Ein av» = berre éi kjelde. «Minst to» = minimum to. Talord i oppgåva avgrensar omfanget.'},
+
+/* ── TEKSTSTRUKTUR: Sorter burgeren, Linjeskift-kuttaren, Overskrifts-ruletten ── */
+{kat:'tekststruktur',kat_label:'Tekststruktur',type:'burger_sort',vanske:'lett',
+ q:'Sorter burgeren! Dra kvart avsnitt til rett lag: Topp-brød (Innleiing), Kjøt (Hovuddel) eller Botn-brød (Avslutning).',
+ lag:['🍞 Topp-brød · Innleiing','🥩 Kjøt · Hovuddel','🍞 Botn-brød · Avslutning'],
+ avsnitt:[
+  {tekst:'Plast i havet er eit aukande problem som påverkar dyr og natur over heile verda.',fasit:0},
+  {tekst:'Éi løysing er å innføre strengare regulering av eingongsplast i alle EU-land.',fasit:1},
+  {tekst:'I tillegg kan produsentar påleggjast å bruke meir resirkulert materiale.',fasit:1},
+  {tekst:'Kjeldesortering og betre infrastruktur i fattigare land kan òg redusere problemet.',fasit:1},
+  {tekst:'Alt i alt viser dette at løysinga på plastforureining krev samarbeid på tvers av landegrenser.',fasit:2}
+ ],
+ regel:'Innleiinga presenterer temaet, hovuddelen utdjupar argumenta, og avsluttinga summerer eller konkluderer.',
+ eks:'Innleiing → presentasjon · Hovuddel → argument/analyse · Avslutning → konklusjon'},
+
+{kat:'tekststruktur',kat_label:'Tekststruktur',type:'burger_sort',vanske:'medium',
+ q:'Sorter burgeren! Dra kvart avsnitt til rett lag i ein fagartikkel om sosiale medium.',
+ lag:['🍞 Topp-brød · Innleiing','🥩 Kjøt · Hovuddel','🍞 Botn-brød · Avslutning'],
+ avsnitt:[
+  {tekst:'Sosiale medium brukar algoritmane sine til å vise oss innhald vi allereie er einige i.',fasit:1},
+  {tekst:'Kva konsekvensar har den eksploderande veksten i sosiale medium for ungdommen si psykiske helse?',fasit:0},
+  {tekst:'Samla sett er det tydeleg at bruken av sosiale medium krev medvit, grenser og digital folkeskikk.',fasit:2},
+  {tekst:'Studiar frå fleire land viser at mykje tid på sosiale medium heng saman med auka angst.',fasit:1}
+ ],
+ regel:'Innleiinga stiller gjerne eit spørsmål eller presenterer problemet. Hovuddelen analyserer med fakta og argument. Avsluttinga konkluderer.',
+ eks:'Spørsmål/problem → analyse → konklusjon = god fagartikkelstruktur'},
+
+{kat:'tekststruktur',kat_label:'Tekststruktur',type:'avsnitt_klikk',vanske:'lett',
+ q:'Linjeskift-kuttaren: Klikk på det første ordet i kvart avsnitt for å lage eit nytt avsnittsskifte.',
+ segments:[
+  {id:'s0',tekst:'Klimaendringar er eit av dei største problema me står overfor i dag.'},
+  {id:'s1',tekst:'Gjennomsnittstemperaturen på jorda har stige med over 1,1 grad sidan den industrielle revolusjonen.',first_word:'Gjennomsnittstemperaturen',break_before:true},
+  {id:'s2',tekst:'For å stoppe oppvarminga må verdssamfunnet redusere utslepp dramatisk.',first_word:'For',break_before:true},
+  {id:'s3',tekst:'Mange land har allereie innført lover og avgrensingar på karbonutslepp.',first_word:'Mange',break_before:false}
+ ],
+ fasit_breaks:['s1','s2'],
+ regel:'Nytt avsnitt = ny tanke eller nytt poeng. Ikkje kvart punkt på ny linje, men logiske steg i resonnementet.',
+ eks:'Innleiing (problem) → Fakta avsnittet → Løysing-avsnittet'},
+
+{kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'lett',
+ q:'Overskrifts-ruletten: Kva er den mest presise og faglege overskrifta for ein fagartikkel om klimaendringar og ungdom?',
+ alt:[
+  'Klimaendringar: kva ungdom kan gjere',
+  'Det er veldig viktig å redde planeten vår no!!!',
+  'Ein liten tekst om klima og sånne ting',
+  'Klimakrisa forklarert av meg sjølv'
+ ],
+ fasit:'Klimaendringar: kva ungdom kan gjere',
+ regel:'Ein god fagleg overskrift er presis, nøytral i tone og lovar lesaren kva teksten handlar om. Unngå utropsteikn, skrivefeil og vage formuleringar.',
+ eks:'GOD: «Sosiale medium og psykisk helse hos ungdom». DÅRLEG: «Sosiale medium er kjempeskadelege!!!»'},
+
+{kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'medium',
+ q:'Overskrifts-ruletten: Kva er den mest faglege overskrifta for ein analyse av to dikt om einsemd?',
+ alt:[
+  'Einsemd i lys av to dikt: ei samanliknande analyse',
+  'To dikt som handlar om einsemd og trist stemning osv.',
+  'EINSEMD I DIKT (veldig interessant tekst!!!)',
+  'Eg synest desse dikta er kjempefine'
+ ],
+ fasit:'Einsemd i lys av to dikt: ei samanliknande analyse',
+ regel:'Ein fagleg tittel namngjev teksttype (analyse), emne (einsemd) og metoden (samanliknande). Unngå subjektive meiningar og overdrivne teikn.',
+ eks:'Format: [Emne]: ei [sjanger/metode] – t.d. «Klimakrisa: ei drøfting av tiltak og ansvar»'},
+
+{kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'vanskeleg',
+ q:'Overskrifts-ruletten: Kva overskrift er best for eit drøftande debattinnlegg om skjermtid hos born?',
+ alt:[
+  'Skjermtid og born: ei drøfting av grenser og ansvar',
+  'Bør born bruke mobil? Ja eller nei?',
+  'Eg meiner at born ikkje bør bruke skjerm for mykje',
+  'Skjerm, born, foreldre og problem – ei utgreiing'
+ ],
+ fasit:'Skjermtid og born: ei drøfting av grenser og ansvar',
+ regel:'Overskrifta presiserer emnet (skjermtid + born), sjangeren (drøfting) og kva aspekt som vert handsama (grenser + ansvar). Unngå slagord, ja/nei-spørsmål og lange oppramsingar.',
+ eks:'Godt format: «[Emne]: ei [sjanger/metode] av [aspekt(ar)]»'},
 ]; // end MT_BANK
 
 /* ══════════════════════════════════════════════════════
@@ -3357,6 +3431,51 @@ function mtRenderTask(){
         </div>
       </div>
       <button onclick="mtkSjekk()" style="margin-top:10px;background:#e5822a;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:8px 18px;cursor:pointer">Sjekk svar</button>
+    </div>`;
+  } else if(t.type==='burger_sort'){
+    // Three-bucket drag: Innleiing / Hovuddel / Avslutning
+    const shuffledAv = mtShuffle(t.avsnitt.map((a,i)=>({...a,_i:i})));
+    const lagColors = [
+      {bg:'#fff3e0',border:'#f5c282',lbl:'#6b3800',card:'#fdf5e8'},
+      {bg:'#e8f6f0',border:'#82c9a8',lbl:'#1a5c42',card:'#f0fdf4'},
+      {bg:'#fdf0eb',border:'#f0a090',lbl:'#7f1d1d',card:'#fff5f3'}
+    ];
+    const buckets = t.lag.map((lbl,li)=>{
+      const c=lagColors[li];
+      return `<div id="mtbs-bucket-${li}" data-lagidx="${li}" style="flex:1;min-width:120px;background:${c.bg};border:2px dashed ${c.border};border-radius:10px;padding:0.5rem;min-height:70px" ondragover="event.preventDefault()" ondrop="mtbsDrop(event,${li})">
+        <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:${c.lbl};margin-bottom:5px">${mtEsc(lbl)}</div>
+        <div id="mtbs-placed-${li}" style="display:flex;flex-direction:column;gap:5px"></div>
+      </div>`;
+    }).join('');
+    const tokens = shuffledAv.map(a=>{
+      return `<div class="mtbs-token" draggable="true" data-i="${a._i}" data-placed="-1"
+        ondragstart="mtbsDragStart(event,${a._i})" onclick="mtbsClick(this)"
+        style="background:#fff;border:1px solid #d5d2cb;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;padding:7px 12px;cursor:grab;line-height:1.5;touch-action:manipulation">
+        ${mtEsc(a.tekst)}
+      </div>`;
+    }).join('');
+    inputHTML=`<div style="margin-top:0.8rem">
+      <div id="mtbs-bank" style="display:flex;flex-direction:column;gap:6px;padding:0.6rem;background:#f8f7f4;border-radius:8px;margin-bottom:0.8rem">${tokens}</div>
+      <div id="mtbs-buckets" style="display:flex;gap:8px;flex-wrap:wrap">${buckets}</div>
+      <button onclick="mtbsSjekk()" style="margin-top:10px;background:#e5822a;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:8px 18px;cursor:pointer">Sjekk svar</button>
+      <button onclick="mtbsReset()" style="margin-top:10px;margin-left:8px;background:transparent;border:1px solid #d5d2cb;color:#4a4a46;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 14px;cursor:pointer">Nullstill ↺</button>
+    </div>`;
+  } else if(t.type==='avsnitt_klikk'){
+    // Click first word to insert paragraph break
+    const segs=t.segments;
+    const items=segs.map(seg=>{
+      const first=seg.first_word;
+      if(!first){
+        return `<span data-sid="" style="font-family:'Fraunces',serif;font-size:14px;line-height:1.9">${mtEsc(seg.tekst)} </span>`;
+      }
+      const rest=seg.tekst.slice(first.length);
+      return `<span data-sid="${seg.id}" class="ak-break" onclick="akToggle(this,'${seg.id}')" style="font-family:'Fraunces',serif;font-size:14px;line-height:1.9;cursor:pointer;border-bottom:2px dotted #c5c2bb;transition:color 0.15s" title="Klikk for avsnittsskifte">${mtEsc(first)}</span><span data-sid-rest="${seg.id}" style="font-family:'Fraunces',serif;font-size:14px;line-height:1.9">${mtEsc(rest)} </span>`;
+    }).join('');
+    inputHTML=`<div style="margin-top:0.8rem">
+      <p style="font-size:12px;color:#8a8a84;margin-bottom:0.5rem">Klikk på det <strong>første ordet</strong> i kvar setning der du vil starte eit nytt avsnitt. Klikk igjen for å fjerne.</p>
+      <div id="ak-text" style="background:#f8f7f4;border-radius:8px;padding:0.8rem 1rem 0.8rem;line-height:2.2">${items}</div>
+      <button onclick="akSjekk()" style="margin-top:10px;background:#e5822a;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:8px 18px;cursor:pointer">Sjekk avsnitt</button>
+      <button onclick="akReset()" style="margin-top:10px;margin-left:8px;background:transparent;border:1px solid #d5d2cb;color:#4a4a46;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 14px;cursor:pointer">Nullstill ↺</button>
     </div>`;
   } else if(t.type==='drag_ord'){
     // Sett ord i rett rekkjefølge
@@ -4754,3 +4873,244 @@ function slaCheck(){
     document.addEventListener('DOMContentLoaded',render);
   } else { render(); }
 })();
+
+/* ══════════════════════════════════════════════════════
+   BURGER SORT – MT-type 'burger_sort'
+══════════════════════════════════════════════════════ */
+var _mtbsDragging = -1;
+
+function mtbsDragStart(e, idx){
+  _mtbsDragging = idx;
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function mtbsDrop(e, lagIdx){
+  e.preventDefault();
+  if(_mtbsDragging === -1) return;
+  mtbsMoveToBucket(_mtbsDragging, lagIdx);
+  _mtbsDragging = -1;
+}
+
+function mtbsClick(btn){
+  if(MTS.answered) return;
+  const idx = parseInt(btn.dataset.i);
+  const placed = parseInt(btn.dataset.placed);
+  // Sykl: bank → lag 0 → lag 1 → lag 2 → bank
+  const next = placed < 2 ? placed + 1 : -1;
+  if(next === -1){
+    mtbsMoveToBank(idx);
+  } else {
+    mtbsMoveToBucket(idx, next);
+  }
+}
+
+function mtbsMoveToBucket(idx, lagIdx){
+  if(MTS.answered) return;
+  const btn = document.querySelector('.mtbs-token[data-i="'+idx+'"]');
+  if(!btn) return;
+  const old = parseInt(btn.dataset.placed);
+  if(old >= 0){
+    const oldSlot = document.getElementById('mtbs-placed-'+old);
+    if(oldSlot && oldSlot.contains(btn)) oldSlot.removeChild(btn);
+  } else {
+    const bank = document.getElementById('mtbs-bank');
+    if(bank && bank.contains(btn)) bank.removeChild(btn);
+  }
+  btn.dataset.placed = String(lagIdx);
+  btn.style.cursor = 'grab';
+  const slot = document.getElementById('mtbs-placed-'+lagIdx);
+  if(slot) slot.appendChild(btn);
+}
+
+function mtbsMoveToBank(idx){
+  if(MTS.answered) return;
+  const btn = document.querySelector('.mtbs-token[data-i="'+idx+'"]');
+  if(!btn) return;
+  const old = parseInt(btn.dataset.placed);
+  if(old >= 0){
+    const oldSlot = document.getElementById('mtbs-placed-'+old);
+    if(oldSlot && oldSlot.contains(btn)) oldSlot.removeChild(btn);
+  }
+  btn.dataset.placed = '-1';
+  const bank = document.getElementById('mtbs-bank');
+  if(bank) bank.appendChild(btn);
+}
+
+function mtbsSjekk(){
+  if(MTS.answered) return;
+  const t = MTS.tasks[MTS.idx];
+  const tokens = document.querySelectorAll('.mtbs-token');
+  let allPlaced = true;
+  tokens.forEach(function(btn){
+    if(parseInt(btn.dataset.placed) === -1) allPlaced = false;
+  });
+  if(!allPlaced){
+    const fb = document.getElementById('mt-feedback');
+    if(fb){
+      fb.style.display='block';
+      fb.style.background='#fffbe8';
+      fb.style.border='1px solid #f5d878';
+      fb.style.color='#6b4a00';
+      fb.innerHTML='Plasser alle avsnitt i eit lag før du sjekkar.';
+    }
+    return;
+  }
+  MTS.answered = true;
+  let correct = 0;
+  tokens.forEach(function(btn){
+    const placed = parseInt(btn.dataset.placed);
+    const fasit = t.avsnitt[parseInt(btn.dataset.i)].fasit;
+    const ok = placed === fasit;
+    if(ok){ correct++; btn.style.background='#e8f6f0'; btn.style.borderColor='#82c9a8'; btn.style.color='#14532d'; }
+    else { btn.style.background='#fff0ed'; btn.style.borderColor='#f0a090'; btn.style.color='#7f1d1d'; }
+  });
+  const total = t.avsnitt.length;
+  const allRight = correct === total;
+  if(allRight) MTS.score++;
+  MTS.history[MTS.idx] = allRight;
+  mtUpdateProgress();
+  const fb = document.getElementById('mt-feedback');
+  if(fb){
+    fb.style.display='block';
+    fb.style.background = allRight ? '#e8f6f0' : '#fff8f0';
+    fb.style.border = 'supporting solid '+(allRight?'#82c9a8':'#f5c282');
+    fb.style.border = '1px solid '+(allRight?'#82c9a8':'#f5c282');
+    fb.style.color = allRight ? '#14532d' : '#6b3800';
+    fb.innerHTML = '<strong>'+(allRight ? '✓ Alle avsnitt på rett plass!' : correct+' av '+total+' rett plasserte')+
+      '</strong>'+(t.regel ? '<div style="margin-top:0.4rem;font-size:13px;opacity:0.85"><strong>Regel:</strong> '+mtEsc(t.regel)+'</div>' : '');
+  }
+  const nw = document.getElementById('mt-next-wrap');
+  if(nw) nw.style.display = 'block';
+}
+
+function mtbsReset(){
+  MTS.answered = false;
+  const tokens = document.querySelectorAll('.mtbs-token');
+  const bank = document.getElementById('mtbs-bank');
+  tokens.forEach(function(btn){
+    btn.dataset.placed = '-1';
+    btn.style.background = '';
+    btn.style.borderColor = '';
+    btn.style.color = '';
+    if(bank) bank.appendChild(btn);
+  });
+  const fb = document.getElementById('mt-feedback');
+  if(fb) fb.style.display = 'none';
+  const nw = document.getElementById('mt-next-wrap');
+  if(nw) nw.style.display = 'none';
+}
+
+/* Touch support for burger sort */
+(function(){
+  var _tid = -1;
+  document.addEventListener('touchstart', function(e){
+    var btn = e.target.closest('.mtbs-token');
+    if(!btn || MTS.answered) return;
+    _tid = parseInt(btn.dataset.i);
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if(_tid === -1) return;
+    var touch = e.changedTouches[0];
+    var el = document.elementFromPoint(touch.clientX, touch.clientY);
+    var bucket = el && el.closest('[id^="mtbs-bucket-"]');
+    if(bucket){
+      var lagIdx = parseInt(bucket.dataset.lagidx);
+      mtbsMoveToBucket(_tid, lagIdx);
+    }
+    _tid = -1;
+  }, {passive:true});
+})();
+
+/* ══════════════════════════════════════════════════════
+   AVSNITT-KLIKK – MT-type 'avsnitt_klikk'
+══════════════════════════════════════════════════════ */
+var _akBreaks = {};
+
+function akToggle(span, sid){
+  if(MTS.answered) return;
+  var on = _akBreaks[sid];
+  _akBreaks[sid] = !on;
+  _akApply();
+}
+
+function _akApply(){
+  document.querySelectorAll('.ak-break').forEach(function(span){
+    var sid = span.getAttribute('data-sid');
+    if(!sid) return;
+    var active = _akBreaks[sid];
+    // Insert / remove visual paragraph break before this span
+    var prev = span.previousSibling;
+    if(active){
+      span.style.background = '#bfdbfe';
+      span.style.color = '#1e40af';
+      span.style.borderRadius = '4px';
+      span.style.padding = '1px 4px';
+      // Insert <br> marker if not present
+      if(!prev || prev.nodeType !== 1 || !prev.classList.contains('ak-br')){
+        var br = document.createElement('div');
+        br.className = 'ak-br';
+        br.style.cssText = 'display:block;height:0.7em;width:100%';
+        span.parentNode.insertBefore(br, span);
+      }
+    } else {
+      span.style.background = '';
+      span.style.color = '';
+      span.style.borderRadius = '';
+      span.style.padding = '';
+      if(prev && prev.nodeType === 1 && prev.classList.contains('ak-br')){
+        prev.parentNode.removeChild(prev);
+      }
+    }
+  });
+}
+
+function akSjekk(){
+  if(MTS.answered) return;
+  const t = MTS.tasks[MTS.idx];
+  MTS.answered = true;
+  const fasit = new Set(t.fasit_breaks);
+  const user  = new Set(Object.keys(_akBreaks).filter(function(k){ return _akBreaks[k]; }));
+  let ok=0, wrong=0, missed=0;
+  document.querySelectorAll('.ak-break').forEach(function(span){
+    const sid = span.getAttribute('data-sid');
+    if(!sid) return;
+    const inF = fasit.has(sid);
+    const inU = user.has(sid);
+    if(inF && inU){ ok++; span.style.background='#e8f6f0'; span.style.color='#1a5c42'; }
+    else if(!inF && inU){ wrong++; span.style.background='#fff0ed'; span.style.color='#7f1d1d'; }
+    else if(inF && !inU){ missed++; span.style.background='#fef9c3'; span.style.color='#78350f'; }
+  });
+  const total = t.fasit_breaks.length;
+  const allRight = ok===total && wrong===0;
+  if(allRight) MTS.score++;
+  MTS.history[MTS.idx] = allRight;
+  mtUpdateProgress();
+  const fb = document.getElementById('mt-feedback');
+  if(fb){
+    fb.style.display='block';
+    fb.style.background = allRight?'#e8f6f0':'#fff8f0';
+    fb.style.border = '1px solid '+(allRight?'#82c9a8':'#f5c282');
+    fb.style.color = allRight?'#14532d':'#6b3800';
+    let html = '<strong>'+(allRight ? '✓ Alle avsnittsskifte er på rett plass!' : ok+' av '+total+' rette')+' </strong>';
+    if(missed > 0) html += '<div style="font-size:13px;margin-top:4px">🟡 '+missed+' avsnittsskifte du ikkje markerte (gul)</div>';
+    if(wrong > 0)  html += '<div style="font-size:13px;margin-top:4px">✗ '+wrong+' ekstra skifte på feil stad (raud)</div>';
+    if(t.regel)    html += '<div style="margin-top:0.4rem;font-size:13px;opacity:0.85"><strong>Regel:</strong> '+mtEsc(t.regel)+'</div>';
+    fb.innerHTML = html;
+  }
+  const nw = document.getElementById('mt-next-wrap');
+  if(nw) nw.style.display = 'block';
+}
+
+function akReset(){
+  MTS.answered = false;
+  _akBreaks = {};
+  _akApply();
+  document.querySelectorAll('.ak-br').forEach(function(el){ el.parentNode.removeChild(el); });
+  document.querySelectorAll('.ak-break').forEach(function(span){
+    span.style.background=''; span.style.color=''; span.style.borderRadius=''; span.style.padding='';
+  });
+  const fb = document.getElementById('mt-feedback');
+  if(fb) fb.style.display='none';
+  const nw = document.getElementById('mt-next-wrap');
+  if(nw) nw.style.display='none';
+}
