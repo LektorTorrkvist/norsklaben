@@ -3869,20 +3869,33 @@ function mtRenderTask(){
   } else if(t.type==='drag_kolonne'){
     // Trekk ord til riktig kolonne
     const shuffled = mtShuffle([...t.ord]);
+    const c0 = String(t.kolonner?.[0]||'').toLowerCase();
+    const c1 = String(t.kolonner?.[1]||'').toLowerCase();
+    const c0Right = /\b(riktig|rett)\b/.test(c0);
+    const c1Right = /\b(riktig|rett)\b/.test(c1);
+    const c0Wrong = /\b(feil|gal)\b/.test(c0);
+    const c1Wrong = /\b(feil|gal)\b/.test(c1);
+    const isRightWrong = (c0Right && c1Wrong) || (c1Right && c0Wrong);
+    const col0Bg = isRightWrong ? '#e8f6f0' : '#f8f7f4';
+    const col0Border = isRightWrong ? '#82c9a8' : '#d5d2cb';
+    const col0Label = isRightWrong ? '#1a5c42' : '#4a4a46';
+    const col1Bg = isRightWrong ? '#fff0ed' : '#f8f7f4';
+    const col1Border = isRightWrong ? '#f0a090' : '#d5d2cb';
+    const col1Label = isRightWrong ? '#7f1d1d' : '#4a4a46';
     const k0 = mtEsc(t.kolonner[0]);
     const k1 = mtEsc(t.kolonner[1]);
     inputHTML=`<div style="margin-top:0.8rem">
       <div id="mtdk-bank" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem;padding:0.6rem;background:#f8f7f4;border-radius:8px;min-height:40px" ondragover="event.preventDefault()" ondrop="mtkDropBank(event)">
-        ${shuffled.map((o,i)=>`<div class="mtdk-token" draggable="true" data-i="${i}" data-fasit="${o.fasit}" data-placed="-1" onclick="mtkMove(this)" ondragstart="mtkDragStart(event,${i})"
-          style="background:#fff;border:1px solid #d5d2cb;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;padding:6px 14px;cursor:grab;user-select:none;transition:background 0.12s">${mtEsc(o.tekst)}</div>`).join('')}
+        ${shuffled.map((o,i)=>`<div class="mtdk-token" draggable="true" data-i="${i}" data-fasit="${o.fasit}" data-placed="-1" onclick="mtkMove(this)" ondragstart="mtkDragStart(event,${i})" ontouchstart="mtkTouchStart(event,${i})" ontouchend="mtkTouchEnd(event)"
+          style="background:#fff;border:1px solid #d5d2cb;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;padding:6px 14px;cursor:grab;user-select:none;touch-action:none;transition:background 0.12s">${mtEsc(o.tekst)}</div>`).join('')}
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div id="mtdk-col-0" style="background:#e8f6f0;border:2px dashed #82c9a8;border-radius:8px;min-height:80px;padding:0.6rem;font-size:13px" ondragover="event.preventDefault()" ondrop="mtkDropCol(event,0)">
-          <div style="font-weight:600;color:#1a5c42;margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:0.05em">${k0}</div>
+        <div id="mtdk-col-0" style="background:${col0Bg};border:2px dashed ${col0Border};border-radius:8px;min-height:80px;padding:0.6rem;font-size:13px" ondragover="event.preventDefault()" ondrop="mtkDropCol(event,0)">
+          <div style="font-weight:600;color:${col0Label};margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:0.05em">${k0}</div>
           <div id="mtdk-placed-0" style="display:flex;flex-wrap:wrap;gap:6px"></div>
         </div>
-        <div id="mtdk-col-1" style="background:#fff0ed;border:2px dashed #f0a090;border-radius:8px;min-height:80px;padding:0.6rem;font-size:13px" ondragover="event.preventDefault()" ondrop="mtkDropCol(event,1)">
-          <div style="font-weight:600;color:#7f1d1d;margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:0.05em">${k1}</div>
+        <div id="mtdk-col-1" style="background:${col1Bg};border:2px dashed ${col1Border};border-radius:8px;min-height:80px;padding:0.6rem;font-size:13px" ondragover="event.preventDefault()" ondrop="mtkDropCol(event,1)">
+          <div style="font-weight:600;color:${col1Label};margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:0.05em">${k1}</div>
           <div id="mtdk-placed-1" style="display:flex;flex-wrap:wrap;gap:6px"></div>
         </div>
       </div>
@@ -4835,10 +4848,41 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') eggLukk();
 
 /* ── Drag-kolonne (mtdk) ── */
 var _mtkDragging = -1;
+var _mtkTouchDragging = -1;
 
 function mtkDragStart(e, idx){
   _mtkDragging = idx;
   e.dataTransfer.effectAllowed = 'move';
+}
+
+function mtkTouchStart(e, idx){
+  if(MTS.answered) return;
+  _mtkTouchDragging = idx;
+}
+
+function mtkTouchEnd(e){
+  if(MTS.answered) return;
+  if(_mtkTouchDragging === -1) return;
+
+  const t = e.changedTouches?.[0];
+  const btn = document.querySelector('.mtdk-token[data-i="'+_mtkTouchDragging+'"]');
+  _mtkTouchDragging = -1;
+  if(!t || !btn) return;
+
+  const target = document.elementFromPoint(t.clientX, t.clientY);
+  if(!target) return;
+
+  if(target.closest('#mtdk-col-0')){
+    mtkSetCol(btn, 0);
+  } else if(target.closest('#mtdk-col-1')){
+    mtkSetCol(btn, 1);
+  } else if(target.closest('#mtdk-bank')){
+    btn.dataset.placed = '-1';
+    document.getElementById('mtdk-bank')?.appendChild(btn);
+  }
+
+  // Stop synthetic click from firing after touch drop.
+  e.preventDefault();
 }
 
 function mtkDropCol(e, col){
