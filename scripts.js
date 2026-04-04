@@ -3697,8 +3697,8 @@ function mtRenderTask(){
     const k1 = mtEsc(t.kolonner[1]);
     inputHTML=`<div style="margin-top:0.8rem">
       <div id="mtdk-bank" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem;padding:0.6rem;background:#f8f7f4;border-radius:8px;min-height:40px" ondragover="event.preventDefault()" ondrop="mtkDropBank(event)">
-        ${shuffled.map((o,i)=>`<button class="mtdk-token" draggable="true" data-i="${i}" data-fasit="${o.fasit}" data-placed="-1" onclick="mtkMove(this)" ondragstart="mtkDragStart(event,${i})"
-          style="background:#fff;border:1px solid #d5d2cb;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;padding:6px 14px;cursor:pointer;transition:background 0.12s">${mtEsc(o.tekst)}</button>`).join('')}
+        ${shuffled.map((o,i)=>`<div class="mtdk-token" draggable="true" data-i="${i}" data-fasit="${o.fasit}" data-placed="-1" onclick="mtkMove(this)" ondragstart="mtkDragStart(event,${i})"
+          style="background:#fff;border:1px solid #d5d2cb;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;padding:6px 14px;cursor:grab;user-select:none;transition:background 0.12s">${mtEsc(o.tekst)}</div>`).join('')}
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <div id="mtdk-col-0" style="background:#e8f6f0;border:2px dashed #82c9a8;border-radius:8px;min-height:80px;padding:0.6rem;font-size:13px" ondragover="event.preventDefault()" ondrop="mtkDropCol(event,0)">
