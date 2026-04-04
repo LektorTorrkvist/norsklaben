@@ -3016,7 +3016,7 @@ const MT_BANK = [
 
 
 
-/* ── ORDKLASSAR (5 oppgåver) ── */
+/* ── ORDKLASSAR (20 oppgåver) ── */
 {kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'lett',
  q:'Kva ordklasse høyrer «rask» til i setninga «Han er ein rask løpar»?',
  alt:['Adjektiv','Substantiv','Verb','Adverb'],fasit:'Adjektiv',
@@ -3046,6 +3046,118 @@ const MT_BANK = [
  alt:['Preposisjon','Adverb','Konjunksjon','Adjektiv'],fasit:'Preposisjon',
  regel:'Preposisjonar viser tilhøve (tid, stad, retting) mellom ledd i setninga. «Etter» viser her tidsforhold.',
  eks:'etter, før, på, i, med, til, frå, over'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'lett',
+ q:'Kva ordklasse er «vakker» i «Ho er ei vakker jente»?',
+ alt:['Adjektiv','Substantiv','Verb','Adverb'],fasit:'Adjektiv',
+ regel:'Adjektiv skildrar eit substantiv og svarar på spørsmålet «korleis er det?». «Vakker» skildrar her substantivet «jente».',
+ eks:'ei vakker jente · ein høg gut · eit roleg hus'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'lett',
+ q:'Kva ordklasse er «ho» i «Ho les ei bok»?',
+ alt:['Pronomen','Substantiv','Adjektiv','Verb'],fasit:'Pronomen',
+ regel:'Pronomen erstattar eller peiker på eit substantiv. «Ho» viser til ei bestemt person og erstattar eit eigennamn.',
+ eks:'ho, han, dei, eg, du, vi, det, sin, seg'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'medium',
+ q:'Kva ordklasse er «og» i «Eg ete og drikk»?',
+ alt:['Konjunksjon','Preposisjon','Adverb','Pronomen'],fasit:'Konjunksjon',
+ regel:'Konjunksjonar bind saman setningar eller setningsledd av same type. «Og» bind her to verb saman.',
+ eks:'og, men, for, eller, samt, men · binder ledd av same grammatisk rang'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'medium',
+ q:'Kva ordklasse er «aldri» i «Han kjem aldri»?',
+ alt:['Adverb','Adjektiv','Konjunksjon','Preposisjon'],fasit:'Adverb',
+ regel:'Adverb seier noko om tid, stad, måte eller grad. «Aldri» er eit tidsadverb som nektar handlinga.',
+ eks:'aldri, alltid, ofte, sjeldnare, svært, nesten, nett no'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'vanskeleg',
+ q:'Kva ordklasse er «fordi» i «Ho gjekk heim fordi ho var trøytt»?',
+ alt:['Subjunksjon','Konjunksjon','Adverb','Preposisjon'],fasit:'Subjunksjon',
+ regel:'Subjunksjonar innleier leddsetningar og bind dei til hovudsetningen. «Fordi» innleier ei årsaks-leddsetning. Til skilnad frå konjunksjonar bind subjunksjonar aldri to jamstilte setningar.',
+ eks:'fordi, at, når, om, sjølv om, medan, sidan, dersom'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'vanskeleg',
+ q:'Kva ordklasse er «eigen» i «Ho har si eiga meining»?',
+ alt:['Adjektiv','Pronomen','Adverb','Substantiv'],fasit:'Adjektiv',
+ regel:'«Eigen/si eiga» er eit possessivt adjektiv. Det bøyast etter substantivet det skildrar (eige/eigen/eiga/eigne) og viser tilhøyrsle.',
+ eks:'sin eigen draum, si eiga bok, sitt eige val, sine eigne ord'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'cloze',vanske:'lett',
+ q:'«raskt» i «Han sprang raskt» er eit ___.',
+ hint:'Ordet seier noko om korleis han sprang. Det endrar eit verb.',
+ fasit:'adverb',fasit_v:['adverb','adverb (måtesadverb)'],
+ regel:'Adverb modifiserer verb, adjektiv eller andre adverb. Her modifiserer «raskt» verbet «sprang» og seier noko om korleis.',
+ eks:'Han sprang raskt · Ho song vakkert · Dei jobba hardt'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'cloze',vanske:'lett',
+ q:'«glad» i «Eg er glad» er eit ___.',
+ hint:'Ordet skildrar korleis eg er. Det svarar på spørsmålet «korleis er eg?».',
+ fasit:'adjektiv',fasit_v:['adjektiv','predikativt adjektiv'],
+ regel:'Adjektiv skildrar substantiv eller pronomen. Her skildrar «glad» pronomenet «eg» som predikativ.',
+ eks:'Eg er glad · Ho er trøytt · Dei er nøgde'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'cloze',vanske:'medium',
+ q:'«på» i «Boka ligg på bordet» er ei ___.',
+ hint:'Ordet viser ein romleg relasjon, der noko er plassert i høve til noko anna.',
+ fasit:'preposisjon',fasit_v:['preposisjon'],
+ regel:'Preposisjonar uttrykker tilhøve (stad, tid, retting) mellom ledd i setninga. Dei kjem alltid framfor eit substantiv eller pronomen.',
+ eks:'på bordet · i huset · til skulen · frå byen · over brua'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'drag_kolonne',vanske:'lett',
+ q:'Ordklasse-sorteraren: Dra kvart ord til rett boks – Substantiv eller Verb.',
+ kolonner:['Substantiv','Verb'],
+ ord:[
+  {tekst:'bok',fasit:0},{tekst:'spring',fasit:1},{tekst:'hund',fasit:0},
+  {tekst:'søv',fasit:1},{tekst:'skulen',fasit:0},{tekst:'skriv',fasit:1},
+  {tekst:'glede',fasit:0},{tekst:'hoppar',fasit:1}
+ ],
+ regel:'Substantiv er namn på ting, personar, stader og omgrep. Verb seier noko om kva nokon gjer, tenkjer eller er.',
+ eks:'Substantiv: bok, hund, skulen, glede · Verb: spring, søv, skriv, hoppar'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'drag_kolonne',vanske:'medium',
+ q:'Ordklasse-sorteraren: Dra kvart ord til rett boks – Adjektiv eller Adverb.',
+ kolonner:['Adjektiv','Adverb'],
+ ord:[
+  {tekst:'rask',fasit:0},{tekst:'raskt',fasit:1},{tekst:'vakker',fasit:0},
+  {tekst:'alltid',fasit:1},{tekst:'stille (stille hus)',fasit:0},{tekst:'stille (sit stille)',fasit:1},
+  {tekst:'glad',fasit:0},{tekst:'svært',fasit:1}
+ ],
+ regel:'Adjektiv skildrar substantiv og bøyast etter dei. Adverb modifiserer verb, adjektiv eller andre adverb og bøyast ikkje.',
+ eks:'rask gut (adjektiv) · spring raskt (adverb) · glad (adj) · alltid (adv)'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'drag_kolonne',vanske:'vanskeleg',
+ q:'Ordklasse-sorteraren: Dra kvart ord til rett boks – Pronomen eller Konjunksjon.',
+ kolonner:['Pronomen','Konjunksjon'],
+ ord:[
+  {tekst:'ho',fasit:0},{tekst:'og',fasit:1},{tekst:'dei',fasit:0},
+  {tekst:'men',fasit:1},{tekst:'seg',fasit:0},{tekst:'eller',fasit:1},
+  {tekst:'sin',fasit:0},{tekst:'for (=for at)',fasit:1}
+ ],
+ regel:'Pronomen erstattar eller peiker på substantiv. Konjunksjonar bind saman setningar eller setningsledd av same type.',
+ eks:'Pronomen: ho, dei, seg, sin · Konjunksjon: og, men, eller, for'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'finn_feil',vanske:'medium',
+ q:'Ordklasse-spottaren: Klikk på kvart ord som er eit VERB i setninga nedanfor.',
+ tekst:'Hunden spring fort og bjeffer høgt når naboen kjem.',
+ fasit_feil:['spring','bjeffer','kjem'],
+ regel:'Verb seier noko om kva nokon gjer, tenkjer eller er. I denne setninga: «spring», «bjeffer» og «kjem» er handlings- og tilstandsverb.',
+ eks:'Finittverb bøyast etter tid og person: spring (presens), sprang (preteritum)'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'finn_feil',vanske:'medium',
+ q:'Ordklasse-spottaren: Klikk på kvart ord som er eit SUBSTANTIV i setninga nedanfor.',
+ tekst:'Læraren skreiv ei lang oppgåve på tavla kvar dag.',
+ fasit_feil:['læraren','oppgåve','tavla'],
+ regel:'Substantiv er namn på personar, ting, stader og omgrep. Her: «læraren» (person), «oppgåve» (ting/abstrakt), «tavla» (ting/stad).',
+ eks:'«dag» er òg substantiv her – «kvar dag» (adverbial). Merk: tidsuttrykk kan vere substantiv i adverbiell bruk.'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'drag_ord',vanske:'medium',
+ q:'Kjernerekkjefølge: Trykk orda inn i rett rekkjefølge – adjektivet MÅ kome rett FØR substantivet det skildrar.',
+ ord:['blå','Ein','himmel','klår','og'],
+ fasit:'Ein blå og klår himmel',
+ regel:'Adjektiv kjem normalt direkte FØR substantivet dei skildrar. Fleire adjektiv i rad bindast med «og». Rekkjefølge: [artikkel] + [adj] + [og] + [adj] + [subst].',
+ eks:'ein stor og gamal mann · eit blått og stille hav'},
+
 /* ── KJELDEKRITIKK (10 nye oppgåver i kjeldebruk) ── */
 {kat:'kjeldebruk',kat_label:'Kjeldebruk',type:'mc',vanske:'lett',
  q:'Kva er den viktigaste grunnen til å sjekke kjelda før du brukar ho?',
@@ -3117,7 +3229,7 @@ const MT_BANK = [
  regel:'Truverdig nettside: klar forfatter, fagleg bakgrunn, kjeldar oppgitt, dato, organisasjon bak oppgitt.',
  eks:'Forskning.no: forfattar oppgjeven, fagleg redaksjon, kjeldar lenka.'},
 
-/* ── OPPGÅVETOLKING (14) ── */
+/* ── OPPGÅVETOLKING (20) ── */
 {kat:'oppgavetolking',kat_label:'Oppgåvetolking',type:'mc',vanske:'lett',
  q:'Kva er eit «bestillingsord» i ei oppgåveformulering?',
  alt:['Ord som handlar om bestilling av varer','Verba som fortel kva du faktisk skal gjere i oppgåva','Dei lengste orda i teksten','Ord som definerer emnet du skal skrive om'],
@@ -3218,6 +3330,70 @@ const MT_BANK = [
  fasit:'At dei skal velje berre éin kjelde',
  regel:'«Ein av kjeldene» er ei eksplisitt avgrensing. Mange skriv om alle kjeldene fordi dei les for fort. Marker alltid talord i oppgåva som ein del av sjekkbokslista di.',
  eks:'«Ein av» = berre éi kjelde. «Minst to» = minimum to. Talord i oppgåva avgrensar omfanget.'},
+
+{kat:'oppgavetolking',kat_label:'Oppgåvetolking',type:'drag_kolonne',vanske:'lett',
+ q:'Oppgåva er: «Drøft om skulen bør innføre mobilforbod.» Sorter kvart kort: passar formuleringane til oppgåva, eller passar dei IKKJE?',
+ kolonner:['Passar til oppgåva','Passar IKKJE til oppgåva'],
+ ord:[
+  {tekst:'Argument for mobilforbod',fasit:0},
+  {tekst:'Argument mot mobilforbod',fasit:0},
+  {tekst:'Konklusjon/eiga vurdering',fasit:0},
+  {tekst:'Personleg forteljing om mobiltjuveri',fasit:1},
+  {tekst:'Historia til mobiltelefonen (1973–i dag)',fasit:1},
+  {tekst:'Korleis ein lagar ein mobiltelefon',fasit:1}
+ ],
+ regel:'«Drøft» = presenter argument for og mot + konklusjon. Personlege forteljingar og historiske utgreidingar høyrer ikkje heime utan tydeleg kopling til sjølve drøftingsspørsmålet.',
+ eks:'HØYRER HEIME: «Forsking viser at mobilbruk i undervisninga reduserer konsentrasjonen» · HØYRER IKKJE HEIME: «I 1973 skapte Martin Cooper den første mobilen»'},
+
+{kat:'oppgavetolking',kat_label:'Oppgåvetolking',type:'drag_kolonne',vanske:'medium',
+ q:'Oppgåva er: «Analyser korleis forfattaren brukar naturskildringar i novella.» Sorter kva som høyrer heime i svaret ditt.',
+ kolonner:['Høyrer heime i svaret','Høyrer IKKJE heime i svaret'],
+ ord:[
+  {tekst:'Kva funksjon har naturskildringa i teksten?',fasit:0},
+  {tekst:'Korleis skapar naturskildringa stemning?',fasit:0},
+  {tekst:'Kva litterære verkemiddel brukar forfattaren?',fasit:0},
+  {tekst:'Handlingsreferat: kva skjer i novella?',fasit:1},
+  {tekst:'Eiga meining om naturskildringane er fine',fasit:1},
+  {tekst:'Forfattarens biografi og liv',fasit:1}
+ ],
+ regel:'«Analyser» = undersøk systematisk korleis noko er bygd opp og kva funksjon det har. Handlingsreferat og eigne meiningar utan fagleg grunngjeving er ikkje analyse.',
+ eks:'Analyse = verkemiddel + funksjon. IKKJE = «eg synest dette er fint» eller «i novella skjer det at...»'},
+
+{kat:'oppgavetolking',kat_label:'Oppgåvetolking',type:'drag_kolonne',vanske:'vanskeleg',
+ q:'Oppgåva er: «Samanlikn to tekstar frå pensum med omsyn til tema og forteljarperspektiv.» Sorter kvart framlegg.',
+ kolonner:['Svarar på oppgåva','Svarar IKKJE på oppgåva'],
+ ord:[
+  {tekst:'Likskapar og skilnader i tema mellom tekstane',fasit:0},
+  {tekst:'Kven er forteljaren i kvar tekst og kva effekt gir det?',fasit:0},
+  {tekst:'Samanliknande analyse med konklusjon',fasit:0},
+  {tekst:'Grundig analyse av berre éin tekst',fasit:1},
+  {tekst:'Generell utgreiing om forteljarteori',fasit:1},
+  {tekst:'Personleg lesarrespons utan tekstbelegg',fasit:1}
+ ],
+ regel:'«Samanlikn» = likskapar + skilnader, begge tekstane, same fokus (tema + forteljarper­spektiv). Å analysere berre éin tekst svarer ikkje på oppgåva.',
+ eks:'Samanlikning krev: tekst A og tekst B analysert langs same dimensjonar → konklusjon om likskapar/skilnader'},
+
+{kat:'oppgavetolking',kat_label:'Oppgåvetolking',type:'mc',vanske:'lett',
+ q:'Kva tyder bestillingsord «presenter» i ei oppgåve?',
+ alt:['Ta stilling for og mot emnet','Gje ei kortfatta, informativ framstilling av emnet','Skriv ein kreativ tekst om emnet','Diskuter emnet med ein medelev'],
+ fasit:'Gje ei kortfatta, informativ framstilling av emnet',
+ regel:'«Presenter» = gi eit oversyn, introduser emnet på ein klar og ordna måte. Du treng ikkje ta stilling. Det er ofte første del av ei lengre oppgåve.',
+ eks:'«Presenter hovudkaraktaren» = namn, eigenskapar, rolle i handlinga. Ikkje analyse, ikkje meiningar.'},
+
+{kat:'oppgavetolking',kat_label:'Oppgåvetolking',type:'cloze',vanske:'medium',
+ q:'Oppgåva seier «analyser». Det tyder at du skal undersøke ___ teksten er bygd opp og kva effekt dei ulike grepa har.',
+ hint:'Analyse er ikkje å meine noko om teksten – det er å undersøke ein bestemt ting: strukturen.',
+ fasit:'korleis',fasit_v:['korleis','korleis/kvifor'],
+ regel:'Analyse = systematisk undersøking av korleis noko er laga og kva det gjer med lesaren. Spørsmålet «korleis» er nøkkelen.',
+ eks:'«Korleis brukar forfattaren metaforar?» · «Korleis skapar forteljarstemma nærleik?»'},
+
+{kat:'oppgavetolking',kat_label:'Oppgåvetolking',type:'open',vanske:'vanskeleg',
+ q:'Les oppgåva og skriv ein to-setnings plan: Kva gjer du FØRST, og kva gjer du ETTERPÅ?\n\n«Grei ut om årsaker til einsemd blant unge, og drøft kva samfunnet kan gjere for å motverke dette.»',
+ hint:'Finn kor mange bestillingsord oppgåva har. Kva kjem i kva rekkjefølge?',
+ eksempel_svak:'Eg skriv om einsemd. (Seier ingenting om struktur eller rekkjefølge.)',
+ eksempel_god:'FØRST: Grei ut om årsaker til einsemd (forklarande del – fakta og samanhengar). ETTERPÅ: Drøft tiltak (argumenterande del – for og mot moglege løysingar).',
+ regel:'Ei oppgåve med fleire bestillingsord krev ein plan som handsamar kvart krav i rett rekkjefølge. «Grei ut» kjem alltid FØR «drøft» – du må forstå problemet før du kan diskutere løysingar.',
+ eks:'Oppgåva = to delar: 1) utgreiing (kva er problemet?) + 2) drøfting (kva gjer vi?)'},
 
 /* ── TEKSTSTRUKTUR: Sorter burgeren, Linjeskift-kuttaren, Overskrifts-ruletten ── */
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'burger_sort',vanske:'lett',
