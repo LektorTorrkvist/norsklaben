@@ -3890,12 +3890,40 @@ function mtShuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j
 function $mt(id){ return document.getElementById(id); }
 function mtEsc(s){ if(!s)return''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\n/g,'<br>'); }
 
+function mtToggleKat(el){
+  const sel = el.dataset.sel === '1';
+  if(sel){
+    el.dataset.sel='0';
+    el.style.background='#f3f0ea'; el.style.borderColor='#e5e2db';
+    el.style.color='#4a4a46'; el.style.fontWeight='400';
+  } else {
+    el.dataset.sel='1';
+    el.style.background='#fff3e0'; el.style.borderColor='#e5822a';
+    el.style.color='#7a3800'; el.style.fontWeight='600';
+  }
+}
+function mtVelAlle(){
+  document.querySelectorAll('.mt-kat-btn').forEach(el=>{
+    el.dataset.sel='1';
+    el.style.background='#fff3e0'; el.style.borderColor='#e5822a';
+    el.style.color='#7a3800'; el.style.fontWeight='600';
+  });
+}
+function mtFjernAlle(){
+  document.querySelectorAll('.mt-kat-btn').forEach(el=>{
+    el.dataset.sel='0';
+    el.style.background='#f3f0ea'; el.style.borderColor='#e5e2db';
+    el.style.color='#4a4a46'; el.style.fontWeight='400';
+  });
+}
+
 function mtStart(){
-  const kat    = $mt('mt-kat').value;
+  const valgte = [...document.querySelectorAll('.mt-kat-btn[data-sel="1"]')].map(b=>b.dataset.kat);
+  if(!valgte.length){ alert('Vel minst éin kategori for å starte.'); return; }
   const vanske = $mt('mt-vanske').value;
   const antal  = Math.min(15, Math.max(3, parseInt($mt('mt-antal').value)||8));
 
-  let pool = kat==='blanda' ? [...MT_BANK] : MT_BANK.filter(t=>t.kat===kat);
+  let pool = MT_BANK.filter(t=>valgte.includes(t.kat));
   if(vanske!=='adaptiv') pool = pool.filter(t=>t.vanske===vanske);
   pool = mtShuffle(pool).slice(0, antal);
   if(vanske==='adaptiv'){ const o={lett:0,medium:1,vanskeleg:2}; pool.sort((a,b)=>o[a.vanske]-o[b.vanske]); }
