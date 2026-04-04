@@ -3293,7 +3293,7 @@ const MT_BANK = [
  regel:'Overskrifta presiserer emnet (skjermtid + born), sjangeren (drøfting) og kva aspekt som vert handsama (grenser + ansvar). Unngå slagord, ja/nei-spørsmål og lange oppramsingar.',
  eks:'Godt format: «[Emne]: ei [sjanger/metode] av [aspekt(ar)]»'},
 
-/* ── SPRÅK OG STIL (18) ── */
+/* ── SPRÅK OG STIL (23) ── */
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'finn_feil',vanske:'lett',
  q:'Kjensle-kuttaren: Klikk på kvart ord i teksten som er for subjektivt eller uformelt til å høyre heime i ein fagartikkel.',
  tekst:'Sosiale medium er jo heilt avhengigheitsskapande, og eg meiner utvilsamt at dette er skikkeleg skadeleg.',
@@ -3444,12 +3444,60 @@ const MT_BANK = [
  eks:'UNNGÅ munnlege fyllord · VEL presise faglege uttrykk'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'cloze',vanske:'medium',
- q:'Fyll inn eit formelt overgangsord: «___ tyder funna på at tiltaket har effekt.»',
- hint:'Vel eit ord som oppsummerer fleire punkt og bind saman argumenta.',
+ q:'Fyll inn eit formelt overgangsord i denne setninga frå ei drøfting om skulehelsetenesta:\n«Forsking viser at tidleg intervensjon reduserer fråfall, og fleire skular har allereie sett gode resultat. ___ tyder funna på at tiltaket har effekt.»',
+ hint:'Vel eit ord eller uttrykk som knyter saman dei føregåande argumenta og trekkjer ein konklusjon.',
  fasit:'Samla sett',
- fasit_v:['Samla sett','Alt i alt'],
- regel:'Overgangsord som oppsummerer argument gjer teksten strammare og meir fagleg.',
- eks:'«Samla sett» er ofte betre enn munnlege overgangar som «uansett» i fagtekst.'},
+ fasit_v:['Samla sett','Alt i alt','Dermed','Difor','Såleis','På bakgrunn av dette','Dette tyder på at'],
+ regel:'Overgangsord som oppsummerer argument held teksten stram og fagleg. «Samla sett», «Alt i alt» og «Såleis» signaliserer konklusjon, medan «Dermed» og «Difor» viser årsakssamanheng.',
+ eks:'«Samla sett tyder funna på…» · «Difor kan ein hevde at…» · «Såleis stadfester undersøkinga…»'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'finn_feil',vanske:'vanskeleg',
+ q:'Tekstlegen 🩺 Pasienten er sjuk! Analysen nedanfor er nesten fagleg – men 5 uformelle symptom har sneikt seg inn. Klikk på kvart sjukt ord og redd innleveringa!',
+ tekst:'Analysen av diktet er jo veldig interessant, fordi forfattaren brukar skikkeleg mange bilete som eigentleg gjer teksten djupare – men dette er liksom ikkje alltid tydeleg.',
+ fasit_feil:['jo','veldig','skikkeleg','eigentleg','liksom'],
+ regel:'Interjeksjonar (jo), forsterkingsord (veldig, skikkeleg) og munnlege fyllord (eigentleg, liksom) bryt det faglege registeret. Kvar av dei svekker truverdet til analysen.',
+ eks:'«jo» → fjern · «veldig» → «svært» · «skikkeleg» → «særleg» · «eigentleg» → fjern · «liksom» → fjern'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'mc',vanske:'medium',
+ q:'Agenten si dekke 🕵️ Du er hemmeleg agent og MÅ kome deg inn på ein akademisk konferanse. Vaktane slepper berre inn dei som snakkar fagleg. Kva setning er agentsvaret ditt?',
+ alt:[
+  'Dette er jo heilt sjukt viktig for oss som verkeleg bryr oss om dette!',
+  'Funna indikerer ein mogleg samanheng, men ytterlegare forsking er nødvendig for å stadfeste dette.',
+  'Eg meiner forskarane eigentleg er ganske einige, sjølv om media seier noko anna.',
+  'Det er jo tydelegvis bevist at dette alltid stemmer – alle veit jo det!'
+ ],
+ fasit:'Funna indikerer ein mogleg samanheng, men ytterlegare forsking er nødvendig for å stadfeste dette.',
+ regel:'Det akademiske registeret brukar forsiktige påstandar («indikerer», «mogleg samanheng»), erkjenner uvisse («ytterlegare forsking er nødvendig») og unngår skråsikkerheit («alltid stemmer», «alle veit»).',
+ eks:'AGENTSVAR: «indikere», «mogleg», «nødvendig forsking» · AVSLØRTE: «jo», «eigentleg», «tydelegvis», «alltid»'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'drag_kolonne',vanske:'medium',
+ q:'Oppgraderingsportalen 🔒 Fagleg publisering krev godkjenning. Sorter kvar formulering: vert ho blokkert av portalen, eller passerer ho?',
+ kolonner:['Blokkert – for absolutt og skråsikker','Passerer portalen – nøyansert og fagleg'],
+ ord:[
+  {tekst:'Dette beviser definitivt at tiltaket verkar.',fasit:0},
+  {tekst:'Funna tyder på at tiltaket kan ha effekt.',fasit:1},
+  {tekst:'Alle forskarar er einige om dette.',fasit:0},
+  {tekst:'Fleire studiar indikerer ein mogleg samanheng.',fasit:1},
+  {tekst:'Det er eit faktum at skulen sviktar ungdom.',fasit:0},
+  {tekst:'Ein kan argumentere for at skulen treng meir ressursar.',fasit:1}
+ ],
+ regel:'Fagleg skriving uttrykker berre det ein kan dokumentere. «Beviser definitivt» og «alle er einige» er for absolutte. «Tyder på», «indikere» og «kan argumentere for» viser fagleg nøyaktigheit.',
+ eks:'BLOKKERT: «beviser» → PASSERER: «tyder på» · BLOKKERT: «alle er einige» → PASSERER: «fleire studiar indikerer»'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'drag_ord',vanske:'medium',
+ q:'Setningssmeden 🔨 Smi ei fagleg avslutningssetning ved å trykke orda inn i rett rekkjefølge. Berre éi rekkjefølge er fagleg korrekt og logisk.',
+ ord:['Det','er','difor','viktig','å','tilpasse','registeret','til','mottakaren','.'],
+ fasit:'Det er difor viktig å tilpasse registeret til mottakaren .',
+ regel:'«Difor» viser årsakssamanheng og er eit typisk formelt overgangsord i avsluttinga. «Registeret» og «mottakaren» er faglege termar som høyrer heime i ei fagleg oppsummering.',
+ eks:'Mønster for fagleg avslutning: [Difor/Samla sett] + [er det viktig å] + [fagleg handling] + [fagleg mål]'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'cloze',vanske:'lett',
+ q:'Stiloppgraderaren 🎮 Teksten er NESTEN fagleg – men eitt uformelt ord øydelegg heilskapen. Skriv eit formelt erstatningsord for «kjempeviktig» i setninga nedanfor:\n\n«Tiltaket var kjempeviktig for å redusere fråfall i skulen.»',
+ hint:'Formelt og presist – ikkje «kjempe-» eller «super-». Kva adjektiv beskriv noko som er absolutt nødvendig og av stor verknad?',
+ fasit:'avgjerande',
+ fasit_v:['avgjerande','kritisk','vesentleg','sentral','nødvendig','særleg viktig'],
+ regel:'Uformelle forsterkarar som «kjempe-», «super-» og «skikkeleg» erstattas med presise adjektiv: «avgjerande», «kritisk», «vesentleg» eller «sentral».',
+ eks:'«kjempeviktig» → «avgjerande» · «superbra» → «særleg vellykka» · «skikkeleg vanskeleg» → «krevjande»'},
 
 /* ── TEKSTSTRUKTUR – tillegg (4) ── */
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'medium',
@@ -3648,16 +3696,16 @@ function mtRenderTask(){
     const k0 = mtEsc(t.kolonner[0]);
     const k1 = mtEsc(t.kolonner[1]);
     inputHTML=`<div style="margin-top:0.8rem">
-      <div id="mtdk-bank" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem;padding:0.6rem;background:#f8f7f4;border-radius:8px;min-height:40px">
-        ${shuffled.map((o,i)=>`<button class="mtdk-token" data-i="${i}" data-fasit="${o.fasit}" data-placed="-1" onclick="mtkMove(this)"
+      <div id="mtdk-bank" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem;padding:0.6rem;background:#f8f7f4;border-radius:8px;min-height:40px" ondragover="event.preventDefault()" ondrop="mtkDropBank(event)">
+        ${shuffled.map((o,i)=>`<button class="mtdk-token" draggable="true" data-i="${i}" data-fasit="${o.fasit}" data-placed="-1" onclick="mtkMove(this)" ondragstart="mtkDragStart(event,${i})"
           style="background:#fff;border:1px solid #d5d2cb;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;padding:6px 14px;cursor:pointer;transition:background 0.12s">${mtEsc(o.tekst)}</button>`).join('')}
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div id="mtdk-col-0" style="background:#e8f6f0;border:2px dashed #82c9a8;border-radius:8px;min-height:80px;padding:0.6rem;font-size:13px">
+        <div id="mtdk-col-0" style="background:#e8f6f0;border:2px dashed #82c9a8;border-radius:8px;min-height:80px;padding:0.6rem;font-size:13px" ondragover="event.preventDefault()" ondrop="mtkDropCol(event,0)">
           <div style="font-weight:600;color:#1a5c42;margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:0.05em">${k0}</div>
           <div id="mtdk-placed-0" style="display:flex;flex-wrap:wrap;gap:6px"></div>
         </div>
-        <div id="mtdk-col-1" style="background:#fff0ed;border:2px dashed #f0a090;border-radius:8px;min-height:80px;padding:0.6rem;font-size:13px">
+        <div id="mtdk-col-1" style="background:#fff0ed;border:2px dashed #f0a090;border-radius:8px;min-height:80px;padding:0.6rem;font-size:13px" ondragover="event.preventDefault()" ondrop="mtkDropCol(event,1)">
           <div style="font-weight:600;color:#7f1d1d;margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:0.05em">${k1}</div>
           <div id="mtdk-placed-1" style="display:flex;flex-wrap:wrap;gap:6px"></div>
         </div>
@@ -4610,6 +4658,34 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') eggLukk();
 })();
 
 /* ── Drag-kolonne (mtdk) ── */
+var _mtkDragging = -1;
+
+function mtkDragStart(e, idx){
+  _mtkDragging = idx;
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function mtkDropCol(e, col){
+  e.preventDefault();
+  if(MTS.answered) return;
+  if(_mtkDragging === -1) return;
+  const btn = document.querySelector('.mtdk-token[data-i="'+_mtkDragging+'"]');
+  if(!btn) return;
+  mtkSetCol(btn, col);
+  _mtkDragging = -1;
+}
+
+function mtkDropBank(e){
+  e.preventDefault();
+  if(MTS.answered) return;
+  if(_mtkDragging === -1) return;
+  const btn = document.querySelector('.mtdk-token[data-i="'+_mtkDragging+'"]');
+  if(!btn) return;
+  btn.dataset.placed = '-1';
+  document.getElementById('mtdk-bank').appendChild(btn);
+  _mtkDragging = -1;
+}
+
 function mtkMove(btn){
   if(MTS.answered) return;
   const placed = parseInt(btn.dataset.placed);
