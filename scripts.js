@@ -3921,6 +3921,38 @@ function mtFjernAlle(){
     el.style.background='#f3f0ea'; el.style.borderColor='#e5e2db';
     el.style.color='#4a4a46'; el.style.fontWeight='400';
   });
+  mtUpdateAntalMeta();
+}
+
+function mtGetTilgjengelegeOppgaver(){
+  const valgte=[...document.querySelectorAll('.mt-kat-btn[data-sel="1"]')].map(b=>b.dataset.kat);
+  if(!valgte.length) return 0;
+  const vanskeEl=$mt('mt-vanske');
+  const vanske=vanskeEl?vanskeEl.value:'adaptiv';
+  let pool=MT_BANK.filter(t=>valgte.includes(t.kat));
+  if(vanske!=='adaptiv') pool=pool.filter(t=>t.vanske===vanske);
+  return pool.length;
+}
+
+function mtUpdateAntalMeta(){
+  const inp=$mt('mt-antal');
+  const hint=$mt('mt-antal-hint');
+  if(!inp) return;
+
+  const tilgjengeleg=mtGetTilgjengelegeOppgaver();
+  const maks=Math.min(25, tilgjengeleg||25);
+  inp.max=String(maks);
+
+  const val=parseInt(inp.value,10);
+  if(Number.isFinite(val) && val>maks) inp.value=String(maks);
+
+  if(hint){
+    if(tilgjengeleg===0){
+      hint.textContent='Vel minst éin kategori for å sjå kor mange oppgåver som er tilgjengelege.';
+    } else {
+      hint.textContent=`Tilgjengelege med vala dine: ${tilgjengeleg}. Du kan starte med opptil ${maks}.`;
+    }
+  }
 }
 
 function mtInitKategoriVeljar(){
@@ -3929,13 +3961,24 @@ function mtInitKategoriVeljar(){
   root.dataset.mtKategoriInit='1';
 
   root.querySelectorAll('.mt-kat-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>mtToggleKat(btn));
+    btn.addEventListener('click', ()=>{
+      mtToggleKat(btn);
+      mtUpdateAntalMeta();
+    });
   });
 
   const velAlleBtn=root.querySelector('[data-mt-action="vel-alle"]');
   const fjernAlleBtn=root.querySelector('[data-mt-action="fjern-alle"]');
   if(velAlleBtn) velAlleBtn.addEventListener('click', mtVelAlle);
   if(fjernAlleBtn) fjernAlleBtn.addEventListener('click', mtFjernAlle);
+
+  const vanskeEl=$mt('mt-vanske');
+  if(vanskeEl) vanskeEl.addEventListener('change', mtUpdateAntalMeta);
+
+  const antalEl=$mt('mt-antal');
+  if(antalEl) antalEl.addEventListener('input', mtUpdateAntalMeta);
+
+  mtUpdateAntalMeta();
 }
 
 if(document.readyState==='loading'){
@@ -3959,10 +4002,18 @@ function mtStart(){
   const valgte = [...document.querySelectorAll('.mt-kat-btn[data-sel="1"]')].map(b=>b.dataset.kat);
   if(!valgte.length){ alert('Vel minst éin kategori for å starte.'); return; }
   const vanske = $mt('mt-vanske').value;
-  const antal  = Math.min(15, Math.max(3, parseInt($mt('mt-antal').value)||8));
+  const onskja = parseInt($mt('mt-antal').value,10);
+  const grunnTal = Number.isFinite(onskja) ? onskja : 8;
 
   let pool = MT_BANK.filter(t=>valgte.includes(t.kat));
   if(vanske!=='adaptiv') pool = pool.filter(t=>t.vanske===vanske);
+  const maksTillate = Math.min(25, pool.length);
+  const antal = Math.min(maksTillate, Math.max(3, grunnTal));
+
+  if(pool.length && grunnTal>maksTillate){
+    alert(`Du bad om ${grunnTal} oppgåver, men med desse vala er maks ${maksTillate}. Startar med ${maksTillate}.`);
+  }
+
   pool = mtShuffle(pool).slice(0, antal);
   if(vanske==='adaptiv'){
     const lett = mtShuffle(pool.filter(t=>t.vanske==='lett'));
