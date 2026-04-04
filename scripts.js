@@ -3887,6 +3887,12 @@ const MT_BANK = [
 const MTS = { tasks:[], idx:0, score:0, answered:false, config:{}, streak:0, history:[] };
 
 function mtShuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function mtShuffleBank(){
+  for(let i=MT_BANK.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [MT_BANK[i],MT_BANK[j]]=[MT_BANK[j],MT_BANK[i]];
+  }
+}
 function $mt(id){ return document.getElementById(id); }
 function mtEsc(s){ if(!s)return''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\n/g,'<br>'); }
 
@@ -3933,8 +3939,12 @@ function mtInitKategoriVeljar(){
 }
 
 if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded', mtInitKategoriVeljar);
+  document.addEventListener('DOMContentLoaded', ()=>{
+    mtShuffleBank();
+    mtInitKategoriVeljar();
+  });
 } else {
+  mtShuffleBank();
   mtInitKategoriVeljar();
 }
 
@@ -3944,6 +3954,8 @@ window.mtVelAlle=mtVelAlle;
 window.mtFjernAlle=mtFjernAlle;
 
 function mtStart(){
+  // Fresh shuffle for each new session to avoid repeated task order/selection.
+  mtShuffleBank();
   const valgte = [...document.querySelectorAll('.mt-kat-btn[data-sel="1"]')].map(b=>b.dataset.kat);
   if(!valgte.length){ alert('Vel minst éin kategori for å starte.'); return; }
   const vanske = $mt('mt-vanske').value;
@@ -3952,7 +3964,12 @@ function mtStart(){
   let pool = MT_BANK.filter(t=>valgte.includes(t.kat));
   if(vanske!=='adaptiv') pool = pool.filter(t=>t.vanske===vanske);
   pool = mtShuffle(pool).slice(0, antal);
-  if(vanske==='adaptiv'){ const o={lett:0,medium:1,vanskeleg:2}; pool.sort((a,b)=>o[a.vanske]-o[b.vanske]); }
+  if(vanske==='adaptiv'){
+    const lett = mtShuffle(pool.filter(t=>t.vanske==='lett'));
+    const medium = mtShuffle(pool.filter(t=>t.vanske==='medium'));
+    const vanskeleg = mtShuffle(pool.filter(t=>t.vanske==='vanskeleg'));
+    pool = [...lett, ...medium, ...vanskeleg];
+  }
 
   if(!pool.length){ alert('Ingen oppgåver passar desse vala. Prøv ein annan kombinasjon.'); return; }
 
