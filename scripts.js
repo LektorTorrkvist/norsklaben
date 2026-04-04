@@ -3917,6 +3917,32 @@ function mtFjernAlle(){
   });
 }
 
+function mtInitKategoriVeljar(){
+  const root=document.getElementById('mengdetrening');
+  if(!root || root.dataset.mtKategoriInit==='1') return;
+  root.dataset.mtKategoriInit='1';
+
+  root.querySelectorAll('.mt-kat-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>mtToggleKat(btn));
+  });
+
+  const velAlleBtn=root.querySelector('[data-mt-action="vel-alle"]');
+  const fjernAlleBtn=root.querySelector('[data-mt-action="fjern-alle"]');
+  if(velAlleBtn) velAlleBtn.addEventListener('click', mtVelAlle);
+  if(fjernAlleBtn) fjernAlleBtn.addEventListener('click', mtFjernAlle);
+}
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', mtInitKategoriVeljar);
+} else {
+  mtInitKategoriVeljar();
+}
+
+// Keep functions available for any existing inline hooks.
+window.mtToggleKat=mtToggleKat;
+window.mtVelAlle=mtVelAlle;
+window.mtFjernAlle=mtFjernAlle;
+
 function mtStart(){
   const valgte = [...document.querySelectorAll('.mt-kat-btn[data-sel="1"]')].map(b=>b.dataset.kat);
   if(!valgte.length){ alert('Vel minst éin kategori for å starte.'); return; }
