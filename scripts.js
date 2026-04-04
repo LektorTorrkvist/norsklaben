@@ -3293,7 +3293,7 @@ const MT_BANK = [
  regel:'Overskrifta presiserer emnet (skjermtid + born), sjangeren (drøfting) og kva aspekt som vert handsama (grenser + ansvar). Unngå slagord, ja/nei-spørsmål og lange oppramsingar.',
  eks:'Godt format: «[Emne]: ei [sjanger/metode] av [aspekt(ar)]»'},
 
-/* ── SPRÅK OG STIL (8) ── */
+/* ── SPRÅK OG STIL (18) ── */
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'finn_feil',vanske:'lett',
  q:'Kjensle-kuttaren: Klikk på kvart ord i teksten som er for subjektivt eller uformelt til å høyre heime i ein fagartikkel.',
  tekst:'Sosiale medium er jo heilt avhengigheitsskapande, og eg meiner utvilsamt at dette er skikkeleg skadeleg.',
@@ -3351,6 +3351,105 @@ const MT_BANK = [
  fasit:'Jorda er trua av aukande utslepp av klimagassar.',
  regel:'Emojiar og forkortingar som «pga.» bør erstattast med fullstendige, presise formuleringar. Fagleg skriving identifiserer subjektet klart («Jorda» i staden for 🌍).',
  eks:'🌍 → «Jorda» · pga. → «på grunn av» · 😢 → «alvorleg», «kritisk»'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'finn_feil',vanske:'medium',
+ q:'Trykk på dei overflødige eller upassande orda: Klikk på alle ord som gjer setninga uformell eller unødvendig subjektiv.',
+ tekst:'Eg synest eigentleg at forskinga er heilt superviktig, og at vi berre må ta oss saman no.',
+ fasit_feil:['eg','synest','eigentleg','heilt','berre'],
+ regel:'I fagleg stil tonar du ned personlege meiningar og forsterkarord. Skriv nøytralt og presist.',
+ eks:'UNNGÅ: «Eg synest dette er heilt superviktig» · SKRIV: «Forskinga peikar på at temaet er viktig.»'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'finn_feil',vanske:'medium',
+ q:'Trykk på dei overflødige eller upassande orda: Marker ord som ikkje høyrer heime i ein sakleg fagtekst.',
+ tekst:'Dette tiltaket er jo ganske smart, men det funkar liksom ikkje skikkeleg i praksis.',
+ fasit_feil:['jo','ganske','liksom','skikkeleg'],
+ regel:'Fyllord og munnlege markørar («jo», «liksom») svekkjer presisjon og truverd i fagtekst.',
+ eks:'UNNGÅ: «det funkar liksom ikkje» · SKRIV: «tiltaket har avgrensa effekt i praksis»'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'finn_feil',vanske:'vanskeleg',
+ q:'Trykk på dei overflødige eller upassande orda: Klikk på ord som gjer argumentasjonen for kjensleladd i staden for fagleg.',
+ tekst:'Kjeldene viser tydeleg at dette er ekstremt farleg, og alle skjønar jo at vi må handle straks.',
+ fasit_feil:['tydeleg','ekstremt','alle','skjønar','jo','straks'],
+ regel:'Absolutte og kjensleladde ord («alle», «ekstremt») bør bytast ut med nøytrale, etterprøvbare formuleringar.',
+ eks:'UNNGÅ: «alle skjønar jo dette» · SKRIV: «fleire studiar peikar i same retning»'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'open',vanske:'medium',
+ q:'Skriv omformuleringa: Gjer setninga sakleg og fagleg utan å miste innhaldet.\n\n«Eg trur eigentleg at skjermbruk er ganske dårleg for unge, for dei blir jo heilt oppslukte.»',
+ hint:'Fjern «eg trur», «eigentleg», «ganske», «jo» og «heilt». Bruk ein nøytral formulering med presis verknad.',
+ eksempel_svak:'Skjermbruk er dårleg for unge fordi dei blir oppslukte. (Mindre munnleg, men framleis lite presist.)',
+ eksempel_god:'Høg skjermbruk kan redusere konsentrasjon og søvnkvalitet hos unge.',
+ regel:'I fagtekst bør du prioritere nøytral ordbruk, konkret verknad og etterprøvbare påstandar.',
+ eks:'«Eg trur» → «studiar tyder på» · «heilt oppslukte» → «redusert konsentrasjon»'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'open',vanske:'vanskeleg',
+ q:'Skriv omformuleringa: Omskriv til formell stil med same meining.\n\n«Plast i havet er skikkeleg krise, og dyra slit skikkeleg mykje fordi folk berre kastar ting overalt.»',
+ hint:'Byt ut «skikkeleg» og «berre». Bruk faglege ord som «forureining», «konsekvensar» og «avfallshandtering».',
+ eksempel_svak:'Plast i havet er krise, og dyra slit mykje fordi folk kastar ting. (Ryddigare, men ikkje heilt formell.)',
+ eksempel_god:'Plastforureining i havet har alvorlege konsekvensar for dyrelivet, særleg der avfallshandtering er utilstrekkeleg.',
+ regel:'Formell stil krev presise fagord og mindre munnleg uttrykk.',
+ eks:'«skikkeleg krise» → «alvorlege konsekvensar» · «kastar ting overalt» → «mangelfull avfallshandtering»'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'drag_kolonne',vanske:'lett',
+ q:'Dra orda til riktig side: Sorter uttrykka i «Uformelle formuleringar» eller «Formelle formuleringar».',
+ kolonner:['Uformelle formuleringar','Formelle formuleringar'],
+ ord:[
+  {tekst:'liksom',fasit:0},
+  {tekst:'jo',fasit:0},
+  {tekst:'heilt sjukt',fasit:0},
+  {tekst:'eg meiner',fasit:0},
+  {tekst:'det tyder på at',fasit:1},
+  {tekst:'forsking viser at',fasit:1},
+  {tekst:'dokumenterte funn',fasit:1},
+  {tekst:'i eit fagleg perspektiv',fasit:1}
+ ],
+ regel:'Uformelle ord er munnlege og personlege. Formelle uttrykk er presise, nøytrale og eigna i fagtekst.',
+ eks:'«jo/liksom» = uformelt · «forsking viser at» = formelt'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'drag_kolonne',vanske:'medium',
+ q:'Dra orda til riktig side: Kva høyrer til uformell stil, og kva høyrer til formell stil?',
+ kolonner:['Uformelle formuleringar','Formelle formuleringar'],
+ ord:[
+  {tekst:'kjempeviktig',fasit:0},
+  {tekst:'superbra',fasit:0},
+  {tekst:'folk flest skjønar',fasit:0},
+  {tekst:'på grunn av dette',fasit:1},
+  {tekst:'ein mogleg konsekvens er',fasit:1},
+  {tekst:'samla sett',fasit:1},
+  {tekst:'det finst indikasjonar på',fasit:1}
+ ],
+ regel:'Formelle formuleringar brukar faglege overgangar og nyanserte vurderingar i staden for overdriving.',
+ eks:'«kjempeviktig» → «særleg viktig» · «superbra» → «føremålstenleg»'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'drag_kolonne',vanske:'vanskeleg',
+ q:'Dra orda til riktig side: Sorter uttrykka etter språkregister.',
+ kolonner:['Uformelle formuleringar','Formelle formuleringar'],
+ ord:[
+  {tekst:'det er jo klart',fasit:0},
+  {tekst:'eg føler at',fasit:0},
+  {tekst:'masse problem',fasit:0},
+  {tekst:'truleg samanheng',fasit:1},
+  {tekst:'empirisk grunnlag',fasit:1},
+  {tekst:'kan indikere',fasit:1},
+  {tekst:'fagleg avgrensing',fasit:1},
+  {tekst:'metodisk svakheit',fasit:1}
+ ],
+ regel:'Formell stil nyttar analytiske faguttrykk og forsiktige konklusjonar, ikkje personlege kjensler eller skråsikre utrop.',
+ eks:'«eg føler at» = uformelt · «kan indikere» = formelt og fagleg'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'mc',vanske:'lett',
+ q:'Kva setning har best språkleg presisjon i ein fagartikkel?',
+ alt:['Dette er jo ganske ille, liksom.','Dette framstår som ei alvorleg utfordring.','Det er heilt sjukt kor gale det er.','Eg synest dette er veldig dårleg.'],
+ fasit:'Dette framstår som ei alvorleg utfordring.',
+ regel:'Presis, nøytral ordbruk gjer argumentasjonen meir truverdig.',
+ eks:'UNNGÅ munnlege fyllord · VEL presise faglege uttrykk'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'cloze',vanske:'medium',
+ q:'Fyll inn eit formelt overgangsord: «___ tyder funna på at tiltaket har effekt.»',
+ hint:'Vel eit ord som oppsummerer fleire punkt og bind saman argumenta.',
+ fasit:'Samla sett',
+ fasit_v:['Samla sett','Alt i alt'],
+ regel:'Overgangsord som oppsummerer argument gjer teksten strammare og meir fagleg.',
+ eks:'«Samla sett» er ofte betre enn munnlege overgangar som «uansett» i fagtekst.'},
 
 /* ── TEKSTSTRUKTUR – tillegg (4) ── */
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'medium',
