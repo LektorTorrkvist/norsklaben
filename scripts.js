@@ -2134,6 +2134,137 @@ const MT_BANK = [
  regel:'Modalverb (ville) og adjektiv (gøy) styrer infinitiv med «å». Berre det midtre «og» (mellom hjelpe og lære) er eit bindeord.',
  eks:'Eg ville å hjelpe og å lære, og det var gøy å gjere.'},
 
+/* ── OG / Å – ekstra 15 (finn_feil · klikk_marker · drag_ord · drag_kolonne · open · mc · cloze) ── */
+
+/* — finn_feil: ny type for og_aa — */
+{kat:'og_aa',kat_label:'Og / å',type:'finn_feil',vanske:'lett',
+ q:'Finn feilen: Klikk på det eine ordet som er FEIL brukt i setninga.',
+ tekst:'Læraren bad elevane og tenke over spørsmålet.',
+ fasit_feil:['og'],
+ regel:'Etter «bad» kjem infinitiv → infinitivsmerket er «å», ikkje «og»: «bad elevane å tenke».',
+ eks:'«bad nokon å gjere noko» – alltid «å + infinitiv» etter «be» eller «bad».'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'finn_feil',vanske:'medium',
+ q:'Finn feila: To ord er feil brukte. Klikk på begge.',
+ tekst:'Ho hadde lyst og synge, å alle i klassen ville høyre henne.',
+ fasit_feil:['og','å'],
+ regel:'«Hadde lyst og synge» → feil; rett er «lyst TIL å synge». «Å alle» → «å» er ikkje bindeord; rett er «og alle».',
+ eks:'RETT: «Ho hadde lyst til å synge, og alle i klassen ville høyre henne.»'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'finn_feil',vanske:'vanskeleg',
+ q:'Finn feila: To ord er feil brukte. Klikk på begge.',
+ tekst:'Eg trur det er svært viktig og forstå grammatikk, å eg øver derfor kvar dag.',
+ fasit_feil:['og','å'],
+ regel:'«Viktig og forstå» → «viktig Å forstå» (infinitiv). «Å eg øver» → «OG eg øver» (bindeord mellom to heilsetningar).',
+ eks:'RETT: «Det er viktig å forstå grammatikk, og eg øver kvar dag.»'},
+
+/* — klikk_marker: heilt ny type i heile banken — */
+{kat:'og_aa',kat_label:'Og / å',type:'klikk_marker',vanske:'lett',
+ q:'Klikk på det eine ordet i teksten som er eit infinitivsmerke («å»).',
+ tekst:'Ho og venninna tok bussen og gjekk inn i butikken for å handle.',
+ maalordklasse:'å (infinitivsmerke)',
+ fasit_ord:['å'],
+ regel:'«For å handle» = infinitivsmerket «å» + verbet «handle» i infinitiv. Dei andre «og»-ane er bindeord som bind saman ledd.',
+ eks:'«for å handle, til å hjelpe, nok til å forstå» = infinitiv. «Ho og venninna, bussen og gjekk» = bindeord.'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'klikk_marker',vanske:'medium',
+ q:'Klikk på det eine ordet i teksten som er eit BINDEORD («og»).',
+ tekst:'Ho prøvde å rydde, å skrive og å forstå alt på éin gong.',
+ maalordklasse:'og (bindeord)',
+ fasit_ord:['og'],
+ regel:'«Og» bind saman dei tre infinitivane: «å rydde, å skrive og å forstå». Dei tre «å»-ane er infinitivsmerke framfor kvart verb.',
+ eks:'Listeform: å rydde, å skrive og å forstå • Kortform (normert): å rydde, skrive og forstå'},
+
+/* — drag_ord: ny type for og_aa — */
+{kat:'og_aa',kat_label:'Og / å',type:'drag_ord',vanske:'lett',
+ q:'Trykk orda inn i rett rekkjefølge – kvar høyrer «å» og «og» heime?',
+ ord:['Ho','likar','å','lese','og','skrive'],
+ fasit:'Ho likar å lese og skrive',
+ regel:'«Likar å lese» = infinitiv etter «likar». «Og skrive» = koordinert infinitiv utan nytt «å» (normert kortform).',
+ eks:'«Ho likar å lese og (å) skrive» – begge variantar er rette.'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'drag_ord',vanske:'medium',
+ q:'Trykk orda inn i rett rekkjefølge – set «å» og «og» på rett plass.',
+ ord:['Det','er','viktig','å','sove','nok,','og','det','veit','dei','fleste'],
+ fasit:'Det er viktig å sove nok, og det veit dei fleste',
+ regel:'«Viktig å sove» = infinitiv etter adjektiv. «Og det veit dei fleste» = ny heilsetning bunden saman med bindeordet «og».',
+ eks:'[Adjektiv] + å + [infinitiv]. Ny setning etter komma → og + [setning].'},
+
+/* — drag_kolonne: ny type for og_aa — */
+{kat:'og_aa',kat_label:'Og / å',type:'drag_kolonne',vanske:'lett',
+ q:'Sorter: Kva setning brukar «å» som infinitivsmerke, og kva brukar «og» som bindeord?',
+ kolonner:['Bruker «å» (infinitivsmerke)','Bruker «og» (bindeord)'],
+ ord:[
+   {tekst:'Ho likar å danse.',fasit:0},
+   {tekst:'Katten og hunden leikar.',fasit:1},
+   {tekst:'Det er gøy å svømme.',fasit:0},
+   {tekst:'Han er sterk og modig.',fasit:1},
+   {tekst:'Eg prøver å lese.',fasit:0},
+   {tekst:'Ho syng og ler.',fasit:1},
+ ],
+ regel:'«Å» kjem framfor eit verb i infinitiv. «Og» bind saman ord, ledd eller setningar.',
+ eks:'å danse = infinitiv. katten og hunden = koordinasjon av subjekt.'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'drag_kolonne',vanske:'medium',
+ q:'Sorter: Brukar uttrykket «å» (infinitivsmerke) eller «og» (bindeord)?',
+ kolonner:['Bruker «å» (infinitivsmerke)','Bruker «og» (bindeord)'],
+ ord:[
+   {tekst:'Ho hadde lyst til å hjelpe.',fasit:0},
+   {tekst:'både mat og drikke',fasit:1},
+   {tekst:'Det er dumt å lyge.',fasit:0},
+   {tekst:'sterk, klok og snill',fasit:1},
+   {tekst:'nøye nok til å bestå',fasit:0},
+   {tekst:'brød og smør',fasit:1},
+   {tekst:'Ho lærte seg å symje.',fasit:0},
+   {tekst:'sol og regn om kvarandre',fasit:1},
+ ],
+ regel:'«Til å + infinitiv» og «nok til å + infinitiv» er faste infinitivskonstruksjonar. «Og» mellom substantiv og adjektiv er bindeord.',
+ eks:'lyst til å hjelpe • nøye nok til å bestå • mat og drikke • sterk og klok'},
+
+/* — open: refleksjonsoppgåve — */
+{kat:'og_aa',kat_label:'Og / å',type:'open',vanske:'medium',
+ q:'Skriv TO eigne setningar: éi der «å» er brukt som infinitivsmerke, og éi der «og» er brukt som bindeord. Merk kva funksjon kvart ord har.',
+ fasit:'Døme: «Eg prøver å forstå reglane.» (å = infinitivsmerke) og «Katten og hunden leikar saman.» (og = bindeord mellom subjekt)',
+ regel:'«Å» + infinitiv: å lese, å skrive, å forstå. «Og» bind saman: ord (mat og drikke), ledd (syng og dansar), setningar (ho kom, og han gjekk).',
+ eks:'å danse, å hjelpe, å lære • han og ho, lese og skrive, kom og gjekk'},
+
+/* — mc: nye scenario inkl. modalverb-regel — */
+{kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'lett',
+ q:'Vel rett ord: «Vi reiste ___ oppleve noko nytt.»',
+ alt:['for å','for og','å','og'],
+ fasit:'for å',
+ regel:'«For å + infinitiv» tyder «med det formålet å». «For og» finst ikkje som konstruksjon.',
+ eks:'Vi reiste for å oppleve noko nytt. Ho sparer for å kjøpe sykkel.'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'medium',
+ q:'Kva er rett? «Han ___ hjelpe til.»',
+ alt:['vil å hjelpe','vil hjelpe','og hjelpe','ynskjer å ikkje hjelpe'],
+ fasit:'vil hjelpe',
+ regel:'Etter modalverba «vil», «kan», «skal», «bør», «må» kjem infinitiv UTAN «å»: «vil hjelpe», «kan gå», «skal kome».',
+ eks:'FEIL: «kan å kome» / RETT: «kan kome». Samanlikn: «ynskjer å kome» – «ynskjer» er ikkje modalverb → bruker «å».'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'vanskeleg',
+ q:'Kva er FEIL?',
+ alt:['Ho kan ikkje å kome i morgon.','Ho kan ikkje kome i morgon.','Ho klarer ikkje å kome i morgon.','Ho er ikkje i stand til å kome i morgon.'],
+ fasit:'Ho kan ikkje å kome i morgon.',
+ regel:'«Kan» er modalverb → bare infinitiv UTAN «å»: «kan kome». «Klarer» og «er i stand til» er ikkje modalverb → dei styrer «å + infinitiv».',
+ eks:'FEIL: «kan å + infinitiv». RETT: «kan + infinitiv». «klarer å», «prøver å», «ynskjer å» = correct med «å».'},
+
+/* — cloze: nye kontekstar — */
+{kat:'og_aa',kat_label:'Og / å',type:'cloze',vanske:'medium',
+ q:'Fyll inn rett ord: «Vi bestemte oss for ___ reise til fjells i helga.»',
+ hint:'«Bestemte seg for» vert alltid følgt av «å + infinitiv».',
+ fasit:'å',fasit_v:['å'],
+ regel:'«Bestemte seg for å + infinitiv» er ein fast konstruksjon. «For» er ikkje bindeord her – det er ein del av verbet «bestemme seg for».',
+ eks:'bestemme seg for å gjere noko • planlegge å gjere noko • beslutte å gjere noko'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'cloze',vanske:'vanskeleg',
+ q:'Fyll inn rett ord: «Han er den første ___ klare denne oppgåva på under to minutt.»',
+ hint:'Er det ein relativ-setning («som»), eller ein infinitivskonstruksjon? Kva er blanket?',
+ fasit:'til å',fasit_v:['til å','å'],
+ regel:'«Den første til å + infinitiv» er ein fast superlativkonstruksjon med infinitiv. «Til» inngår i konstruksjonen og kan ikkje utelatast.',
+ eks:'den første til å klatre opp • den siste til å kome • alternativt: den første som klarte'},
+
 /* ── SAMANSETTE ORD (10) ── */
 {kat:'samansett',kat_label:'Samansette ord',type:'mc',vanske:'lett',
  q:'Kva er rett skrivemåte?',
