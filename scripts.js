@@ -3914,6 +3914,7 @@ function mtVelAlle(){
     el.style.background='#fff3e0'; el.style.borderColor='#e5822a';
     el.style.color='#7a3800'; el.style.fontWeight='600';
   });
+  mtUpdateAntalMeta();
 }
 function mtFjernAlle(){
   document.querySelectorAll('.mt-kat-btn').forEach(el=>{
