@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="nn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nynorsklab – Norsklaben</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Norsk<span>laben</span></a>
+  <nav>
+    <a href="skrivelab.html">Skrivelab</a>
+    <a href="nynorsklab.html" class="active">Nynorsklab</a>
+    <a href="verktoyskasse.html">Verktøykasse</a>
+    <a href="undervisingsbank.html">Undervisingsbank</a>
+    <div class="nav-dropdown">
+      <button class="nav-dropbtn" type="button" aria-expanded="false">Leikekassa</button>
+      <div class="nav-dropmenu">
+        <a href="mad-libs.html">Mad Libs</a>
+        <a href="vurderingslab.html">Vurderingslab</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="hero nynorsklab-hero">
+  <div class="htag">Importert frå V1</div>
+  <h1>Nynorsklab</h1>
+  <p>Adaptiv øving i nynorsk grammatikk med emneval, vanskegrad og automatisk progresjon.</p>
+  <div class="hero-stats">
+    <div><div class="stat-n">9</div><div class="stat-l">Kategoriar</div></div>
+    <div><div class="stat-n">30+</div><div class="stat-l">Oppgåver</div></div>
+    <div><div class="stat-n">Adaptiv</div><div class="stat-l">Løype</div></div>
+  </div>
+</div>
+
+<section id="grammatikk">
+  <div class="gram-inner">
+    <h2 class="gram-heading">Nynorsklab<br><em style="font-style:italic;opacity:0.6">— adaptiv øving</em></h2>
+    <p class="gram-sub">Vel emne, tal på oppgåver og vanskegrad. Systemet tilpassar seg svara dine undervegs.</p>
+
+    <div class="gram-config">
+      <label>Emne
+        <select id="gc-emne">
+          <option value="blanda">Blanda (alle emne)</option>
+          <option value="substantiv">Substantiv – kjønn og bøying</option>
+          <option value="verb">Verb – presens og preteritum</option>
+          <option value="pronomen">Pronomen</option>
+          <option value="adjektiv">Adjektiv – samsvarsbøying</option>
+          <option value="ordstilling">Ordstilling (V2-regelen)</option>
+          <option value="eigedomsord">Eigedomsord (min/mi/mitt)</option>
+          <option value="spørjeord">Spørjeord</option>
+          <option value="typiske_ord">Typiske ord (nynorsk vs. bokmål)</option>
+        </select>
+      </label>
+      <label>Oppgåvetypar
+        <select id="gc-type">
+          <option value="blanda">Blanda</option>
+          <option value="multiple_choice">Fleirval</option>
+          <option value="cloze">Fyll inn</option>
+        </select>
+      </label>
+      <label>Antal oppgåver
+        <input type="number" id="gc-antal" min="3" max="15" value="8">
+      </label>
+      <label>Vanskegrad
+        <select id="gc-vanske">
+          <option value="adaptiv">Adaptiv (automatisk)</option>
+          <option value="lett">Lett</option>
+          <option value="medium">Medium</option>
+          <option value="vanskeleg">Vanskeleg</option>
+        </select>
+      </label>
+      <label>Kontrast til bokmål
+        <select id="gc-kontrast">
+          <option value="true">Ja – vis bokmålsforskjell</option>
+          <option value="false">Nei</option>
+        </select>
+      </label>
+    </div>
+
+    <button class="gram-start-btn" id="gram-start-btn" onclick="gramStart()">
+      <span>Start øving</span>
+      <span>→</span>
+    </button>
+
+    <div id="gram-quiz-area">
+      <div id="gram-progress-wrap" class="gram-progress-wrap" style="display:none">
+        <div class="gram-progress-bar"><div class="gram-progress-fill" id="gram-progress-fill" style="width:0%"></div></div>
+        <span class="gram-progress-label" id="gram-progress-label">0 / 0</span>
+      </div>
+      <div id="gram-score-badge" class="gram-score-badge" style="display:none">
+        Poeng: <strong id="gram-score-txt">0</strong>
+      </div>
+
+      <div id="gram-task-wrap"></div>
+
+      <div class="gram-summary" id="gram-summary">
+        <div class="sum-score" id="sum-score-txt">0/0</div>
+        <div class="sum-label">poeng</div>
+        <div class="sum-breakdown">
+          <div class="sum-stat"><strong id="sum-rett">0</strong>Rette svar</div>
+          <div class="sum-stat"><strong id="sum-feil">0</strong>Feil svar</div>
+          <div class="sum-stat"><strong id="sum-pct">0 %</strong>Meistring</div>
+        </div>
+        <div id="sum-msg" style="font-size:15px;color:rgba(255,255,255,0.7);margin-bottom:1.5rem;font-family:'Playfair Display',serif;font-style:italic;"></div>
+        <div id="sum-history" style="margin-bottom:1.5rem"></div>
+        <button class="gram-btn primary" onclick="gramReset()">Prøv igjen</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Norsklaben • av Lektor Tørrkvist • 2026</p>
+  <p id="nl-sist-oppdatert">Sist oppdatert: lastar...</p>
+</footer>
+
+<script src="nav.js"></script>
+<script src="nynorsklab.js"></script>
+</body>
+</html>
