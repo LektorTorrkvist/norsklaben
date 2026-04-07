@@ -1946,18 +1946,21 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: .7rem 0; }
   text-transform: uppercase;
   letter-spacing: .05em;
   margin-bottom: .3rem;
+  cursor: pointer;
 }
 .sort-bucket-drop {
-  min-height: 3.2rem;
+  min-height: 5.2rem;
   background: var(--bg);
   border: 2px dashed var(--border);
   border-radius: var(--rs);
-  padding: .4rem .45rem;
+  padding: .55rem .55rem .9rem;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
+  align-content: flex-start;
   gap: .35rem;
   transition: all .15s;
+  touch-action: manipulation;
 }
 .sort-bucket-drop.drag-over { border-color: var(--mid); background: var(--plight); }
 
@@ -2035,22 +2038,31 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: .7rem 0; }
   text-transform: uppercase;
   letter-spacing: .05em;
   margin-bottom: .35rem;
+  cursor: pointer;
 }
 .burger-bucket-drop {
-  min-height: 6.4rem;
+  min-height: 8rem;
   background: #fff8ef;
   border: 2px dashed #f3cfaa;
   border-radius: calc(var(--rs) - 2px);
-  padding: .45rem;
+  padding: .6rem .55rem 1rem;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
+  align-content: flex-start;
   gap: .35rem;
   transition: all .15s;
+  touch-action: manipulation;
 }
 .burger-bucket-drop.drag-over {
   border-color: #b05a00;
   background: #ffedd5;
+}
+
+.touch-drag-ghost {
+  z-index: 9999;
+  opacity: .94;
+  box-shadow: 0 8px 18px rgba(0,0,0,.22);
 }
 
 /* ─── TABELL (nynorsklab) ─── */

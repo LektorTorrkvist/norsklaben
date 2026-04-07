@@ -1599,6 +1599,153 @@ var _sd = null;
 var _sp = null;
 var _bd = null;
 var _bp = null;
+var _td = null;
+
+function nlTouchPoint(ev) {
+  if (!ev) return null;
+  var t = (ev.touches && ev.touches[0]) || (ev.changedTouches && ev.changedTouches[0]);
+  if (!t) return null;
+  return { x: t.clientX, y: t.clientY };
+}
+
+function nlTouchDropSelector(kind) {
+  return kind === 'burger'
+    ? '.burger-bucket-drop, .burger-bank'
+    : '.sort-bucket-drop, .sort-bank';
+}
+
+function nlTouchCreateGhost(chip, p) {
+  var g = chip.cloneNode(true);
+  g.classList.add('touch-drag-ghost');
+  g.style.position = 'fixed';
+  g.style.left = p.x + 'px';
+  g.style.top = p.y + 'px';
+  g.style.transform = 'translate(-50%, -50%)';
+  g.style.pointerEvents = 'none';
+  document.body.appendChild(g);
+  return g;
+}
+
+function nlTouchApplyTarget(kind, chip, target) {
+  if (!target) return false;
+  if (kind === 'burger') {
+    if (target.matches('.burger-bucket-drop') || target.matches('.burger-bank')) {
+      chip.classList.remove('picked');
+      target.appendChild(chip);
+      if (_bp === chip) _bp = null;
+      return true;
+    }
+    return false;
+  }
+
+  if (target.matches('.sort-bucket-drop') || target.matches('.sort-bank')) {
+    chip.classList.remove('picked');
+    target.appendChild(chip);
+    if (_sp === chip) _sp = null;
+    return true;
+  }
+  return false;
+}
+
+function nlTouchClearDrag() {
+  if (!_td) return;
+  if (_td.target) _td.target.classList.remove('drag-over');
+  if (_td.ghost && _td.ghost.parentNode) _td.ghost.parentNode.removeChild(_td.ghost);
+  if (_td.chip) _td.chip.classList.remove('dragging');
+  _td = null;
+}
+
+function nlAttachTouchDrag(chip, kind) {
+  if (!chip) return;
+
+  chip.addEventListener('touchstart', function(ev) {
+    var p = nlTouchPoint(ev);
+    if (!p) return;
+    _td = {
+      kind: kind,
+      chip: chip,
+      startX: p.x,
+      startY: p.y,
+      active: false,
+      ghost: null,
+      target: null,
+      moved: false
+    };
+  }, { passive: true });
+
+  chip.addEventListener('touchmove', function(ev) {
+    if (!_td || _td.chip !== chip) return;
+    var p = nlTouchPoint(ev);
+    if (!p) return;
+
+    var dx = p.x - _td.startX;
+    var dy = p.y - _td.startY;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (!_td.active && dist < 8) return;
+
+    if (!_td.active) {
+      _td.active = true;
+      _td.moved = true;
+      chip.classList.add('dragging');
+      _td.ghost = nlTouchCreateGhost(chip, p);
+    }
+
+    ev.preventDefault();
+    if (_td.ghost) {
+      _td.ghost.style.left = p.x + 'px';
+      _td.ghost.style.top = p.y + 'px';
+    }
+
+    var el = document.elementFromPoint(p.x, p.y);
+    var target = el ? el.closest(nlTouchDropSelector(kind)) : null;
+    if (target !== _td.target) {
+      if (_td.target) _td.target.classList.remove('drag-over');
+      _td.target = target;
+      if (_td.target && _td.target.matches('.sort-bucket-drop, .burger-bucket-drop')) {
+        _td.target.classList.add('drag-over');
+      }
+    }
+  }, { passive: false });
+
+  chip.addEventListener('touchend', function(ev) {
+    if (!_td || _td.chip !== chip) return;
+    var wasActive = _td.active;
+    var target = _td.target;
+
+    if (wasActive) {
+      ev.preventDefault();
+      if (!target) {
+        var p = nlTouchPoint(ev);
+        var el = p ? document.elementFromPoint(p.x, p.y) : null;
+        target = el ? el.closest(nlTouchDropSelector(kind)) : null;
+      }
+      nlTouchApplyTarget(kind, chip, target);
+      chip.dataset.nlTouchDragged = '1';
+      setTimeout(function() { chip.dataset.nlTouchDragged = ''; }, 50);
+    }
+
+    nlTouchClearDrag();
+  }, { passive: false });
+
+  chip.addEventListener('touchcancel', function() {
+    if (_td && _td.chip === chip) nlTouchClearDrag();
+  }, { passive: true });
+}
+
+function nlSortPlacePicked(target) {
+  if (!_sp || !target) return;
+  _sp.classList.remove('picked');
+  target.appendChild(_sp);
+  _sp = null;
+}
+
+function nlBurgerPlacePicked(target) {
+  if (!_bp || !target) return;
+  _bp.classList.remove('picked');
+  target.appendChild(_bp);
+  _bp = null;
+}
 
 function nlBuildSort(eid) {
   var ex = document.getElementById(eid);
@@ -1630,10 +1777,7 @@ function nlBuildSort(eid) {
   });
   bank.addEventListener('click', function(e) {
     if (e.target.closest('.sort-chip')) return;
-    if (!_sp) return;
-    _sp.classList.remove('picked');
-    bank.appendChild(_sp);
-    _sp = null;
+    nlSortPlacePicked(bank);
   });
   ex.appendChild(bank);
   // Buckets grid
@@ -1661,11 +1805,16 @@ function nlBuildSort(eid) {
       _sd = null;
     });
     drop.addEventListener('click', function(e) {
-      if (e.target.closest('.sort-chip')) return;
+      if (e.target.closest('.sort-chip') && !_sp) return;
+      nlSortPlacePicked(drop);
+    });
+    bucket.addEventListener('click', function(e) {
       if (!_sp) return;
-      _sp.classList.remove('picked');
-      drop.appendChild(_sp);
-      _sp = null;
+      if (e.target.closest('.sort-chip')) return;
+      nlSortPlacePicked(drop);
+    });
+    bl.addEventListener('click', function() {
+      nlSortPlacePicked(drop);
     });
     bucket.appendChild(bl);
     bucket.appendChild(drop);
@@ -1688,7 +1837,17 @@ function nlMakeSortChip(word) {
     chip.classList.remove('dragging'); _sd = null;
   });
   chip.addEventListener('click', function(e) {
+    if (chip.dataset.nlTouchDragged === '1') {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
     e.stopPropagation();
+    var targetDrop = chip.closest('.sort-bucket-drop');
+    if (_sp && _sp !== chip && targetDrop) {
+      nlSortPlacePicked(targetDrop);
+      return;
+    }
     chip.classList.remove('chip-ok', 'chip-err');
     if (_sp === chip) {
       chip.classList.remove('picked'); _sp = null;
@@ -1697,6 +1856,7 @@ function nlMakeSortChip(word) {
       _sp = chip; chip.classList.add('picked');
     }
   });
+  nlAttachTouchDrag(chip, 'sort');
   return chip;
 }
 
@@ -1757,10 +1917,7 @@ function nlBuildBurger(eid) {
   });
   bank.addEventListener('click', function(e) {
     if (e.target.closest('.burger-chip')) return;
-    if (!_bp) return;
-    _bp.classList.remove('picked');
-    bank.appendChild(_bp);
-    _bp = null;
+    nlBurgerPlacePicked(bank);
   });
   ex.appendChild(bank);
 
@@ -1793,11 +1950,16 @@ function nlBuildBurger(eid) {
       _bd = null;
     });
     drop.addEventListener('click', function(e) {
-      if (e.target.closest('.burger-chip')) return;
+      if (e.target.closest('.burger-chip') && !_bp) return;
+      nlBurgerPlacePicked(drop);
+    });
+    bucket.addEventListener('click', function(e) {
       if (!_bp) return;
-      _bp.classList.remove('picked');
-      drop.appendChild(_bp);
-      _bp = null;
+      if (e.target.closest('.burger-chip')) return;
+      nlBurgerPlacePicked(drop);
+    });
+    label.addEventListener('click', function() {
+      nlBurgerPlacePicked(drop);
     });
 
     bucket.appendChild(label);
@@ -1824,7 +1986,17 @@ function nlMakeBurgerChip(text) {
     _bd = null;
   });
   chip.addEventListener('click', function(e) {
+    if (chip.dataset.nlTouchDragged === '1') {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
     e.stopPropagation();
+    var targetDrop = chip.closest('.burger-bucket-drop');
+    if (_bp && _bp !== chip && targetDrop) {
+      nlBurgerPlacePicked(targetDrop);
+      return;
+    }
     chip.classList.remove('burger-ok', 'burger-err');
     if (_bp === chip) {
       chip.classList.remove('picked');
@@ -1835,6 +2007,8 @@ function nlMakeBurgerChip(text) {
       chip.classList.add('picked');
     }
   });
+
+  nlAttachTouchDrag(chip, 'burger');
 
   return chip;
 }
