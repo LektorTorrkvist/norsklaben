@@ -2098,7 +2098,9 @@ function nlFilter(q, op) {
     var opNeedles = [String(op || '').toLowerCase()];
     if (opNeedles[0] === 'rangere') opNeedles.push('sortering');
     if (opNeedles[0] === 'fylloppgave') opNeedles.push('fyllopp\u00E5ve');
+    if (opNeedles[0] === 'fyllopp\u00E5ve') opNeedles.push('fylloppgave');
     if (opNeedles[0] === 'bygge') opNeedles.push('byggje');
+    if (opNeedles[0] === 'byggje') opNeedles.push('bygge');
     var mo = op === 'alle' || [].some.call(card.querySelectorAll('.ei'), function(ei) {
       return [].some.call(ei.querySelectorAll('.b'), function(b) {
         var bt = b.textContent.toLowerCase();
