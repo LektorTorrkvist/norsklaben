@@ -2563,50 +2563,14 @@ tr:nth-child(even) td { background: var(--bg); }
 .gram-summary {
   display: none;
   margin-top: .9rem;
-  border-radius: var(--r);
-  background: #1b1f28;
-  color: #fff;
-  padding: 1rem;
 }
 
 .gram-summary.show {
   display: block;
 }
 
-.sum-score {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.1rem;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.sum-label {
-  color: rgba(255,255,255,.65);
-  font-size: .8rem;
-  margin-bottom: .8rem;
-}
-
-.sum-breakdown {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(100px, 1fr));
-  gap: .55rem;
-  margin-bottom: .8rem;
-}
-
-.sum-stat {
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 8px;
-  padding: .45rem .55rem;
-  font-size: .78rem;
-}
-
-.sum-stat strong {
-  display: block;
-  font-family: 'Playfair Display', serif;
-  font-size: 1.15rem;
-  color: #fff;
-  margin-bottom: .1rem;
+.gram-summary.adp-summary .adp-summary-actions {
+  justify-content: flex-end;
 }
 
 /* ─── FOOTER ─── */

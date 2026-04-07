@@ -976,6 +976,14 @@ function updateProgress(){
   if(label)label.textContent=`${GS.idx} / ${total}`;
 }
 
+function gramMasteryData(pct){
+  if(pct>=90)return{medal:'🏆',heading:'Meisterleg!',comment:'Framifrå arbeid. Du viser svært trygg nynorsk meistring.'};
+  if(pct>=75)return{medal:'🥇',heading:'Svært godt!',comment:'Solid økt. Du har god kontroll på det meste.'};
+  if(pct>=60)return{medal:'🥈',heading:'God framgang!',comment:'Bra jobba. Litt meir øving vil løfte deg vidare.'};
+  if(pct>=40)return{medal:'🥉',heading:'På rett veg',comment:'Du er i gang. Fokuser på dei vanlegaste feila og prøv igjen.'};
+  return{medal:'📘',heading:'Nytt forsøk',comment:'God start. Øving steg for steg gir rask framgang.'};
+}
+
 function showSummary(){
   $('gram-task-wrap').innerHTML='';
   $('gram-progress-wrap').style.display='none';
@@ -983,48 +991,68 @@ function showSummary(){
 
   const total=GS.tasks.length;
   const pct=total>0?Math.round((GS.score/total)*100):0;
+  const mastery=gramMasteryData(pct);
+  const circumference=2*Math.PI*42;
+
+  const medalEl=$('gram-sum-medal');
+  const headingEl=$('gram-sum-heading');
+  const ringEl=$('gram-sum-ring');
+
+  if(medalEl)medalEl.textContent=mastery.medal;
+  if(headingEl)headingEl.textContent=mastery.heading;
+  if(ringEl){
+    ringEl.style.strokeDashoffset=String(circumference);
+    setTimeout(function(){
+      const offset=circumference-(circumference*pct/100);
+      ringEl.style.strokeDashoffset=String(offset);
+    },80);
+  }
+
   $('sum-score-txt').textContent=`${GS.score}/${total}`;
   $('sum-rett').textContent=GS.score;
   $('sum-feil').textContent=total-GS.score;
-  $('sum-pct').textContent=pct+' %';
+  $('sum-pct').textContent=pct+'%';
+  $('sum-msg').textContent=mastery.comment;
 
-  const msgs=[[90,'Framifrå! Du meistrar nynorsk grammatikk svært godt.'],[70,'Bra jobba! Du har solid forståing – hald fram slik.'],[50,'Greitt! Nokre emne kan det vere lurt å øve meir på.'],[0,'Ikkje gi opp! Grammatikk krev øving – prøv igjen.']];
-  $('sum-msg').textContent=(msgs.find(([t])=>pct>=t)||msgs[msgs.length-1])[1];
+  const byTopic={};
+  GS.history.forEach(function(h){
+    const k=h.emne_label||'Blanda';
+    if(!byTopic[k])byTopic[k]={ok:0,fail:0};
+    if(h.correct)byTopic[k].ok++; else byTopic[k].fail++;
+  });
 
-  /* ── Oppgåveoversikt ── */
-  const histEl=$('sum-history');
-  if(histEl&&GS.history.length){
-    const vLbl={lett:'Lett',medium:'Medium',vanskeleg:'Vanskeleg'};
-    let rows='';
-    GS.history.forEach((h,i)=>{
-      const icon=h.correct?'OK':'X';
-      const iconCol=h.correct?'#6ee7b7':'#fca5a5';
-      const rowBg=h.correct?'rgba(110,231,183,0.07)':'rgba(252,165,165,0.07)';
-      const border=h.correct?'rgba(110,231,183,0.2)':'rgba(252,165,165,0.2)';
-      // Spørsmål: viss setning, vis den med blank markert, elles vis spørsmål
-      let qTxt = h.setning
-        ? h.setning.replace('___', `<span style="text-decoration:underline;color:rgba(255,255,255,0.5)">___</span>`)
-        : escH(h.sporsmal);
-      const fasitTxt=escH(h.fasit);
-      const chosenTxt=escH(h.chosen||'-');
-      rows+=`
-        <div style="display:grid;grid-template-columns:28px 1fr auto;align-items:start;gap:8px;background:${rowBg};border:1px solid ${border};border-radius:10px;padding:0.65rem 0.9rem;margin-bottom:6px">
-          <div style="font-size:16px;font-weight:700;color:${iconCol};line-height:1.4">${icon}</div>
-          <div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:2px">${escH(h.emne_label)} - ${vLbl[h.vanske]||h.vanske}</div>
-            <div style="font-size:13px;color:rgba(255,255,255,0.75);line-height:1.55">${qTxt}</div>
-            ${!h.correct?`<div style="margin-top:4px;font-size:12.5px">
-              <span style="color:#fca5a5">Svaret ditt: "${chosenTxt}"</span>
-              <span style="color:rgba(255,255,255,0.3);margin:0 5px">-></span>
-              <span style="color:#6ee7b7">Rett: "${fasitTxt}"</span>
-            </div>`:''}
-          </div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.3);white-space:nowrap;padding-top:2px">${i+1}</div>
-        </div>`;
-    });
-    histEl.innerHTML=`
-          <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:0.6rem;font-weight:500">Gjennomgang - alle oppgåver</div>
-      ${rows}`;
+  const strengthsEl=$('sum-strengths');
+  if(strengthsEl){
+    const strengths=Object.keys(byTopic).filter(function(k){
+      const t=byTopic[k],n=t.ok+t.fail;
+      return n>0 && Math.round((t.ok/n)*100)>=75;
+    }).slice(0,3);
+    if(!strengths.length){
+      strengthsEl.innerHTML='';
+      strengthsEl.style.display='none';
+    }else{
+      let html='<h5>Dette fekk du til</h5>';
+      strengths.forEach(function(k){
+        const t=byTopic[k],n=t.ok+t.fail,p=Math.round((t.ok/n)*100);
+        html+='<div class="adp-summary-row ok"><strong>'+escH(k)+'</strong><span>'+p+'% treff</span></div>';
+      });
+      strengthsEl.innerHTML=html;
+      strengthsEl.style.display='';
+    }
+  }
+
+  const corrEl=$('sum-corrections');
+  if(corrEl){
+    const weak=Object.keys(byTopic).filter(function(k){ return byTopic[k].fail>0; });
+    if(!weak.length){
+      corrEl.innerHTML='<div class="adp-summary-row ok"><strong>Null feil!</strong><span>Du svara rett på alle oppgåvene.</span></div>';
+    }else{
+      let html='<h5>Øv på desse igjen</h5>';
+      weak.forEach(function(k){
+        html+='<div class="adp-summary-row"><strong>'+escH(k)+'</strong><span>'+byTopic[k].fail+' feil</span></div>';
+      });
+      corrEl.innerHTML=html;
+    }
   }
 
   $('gram-summary').classList.add('show');

@@ -98,18 +98,42 @@
 
       <div id="gram-task-wrap"></div>
 
-      <div class="gram-summary" id="gram-summary">
-        <div class="sum-score" id="sum-score-txt">0/0</div>
-        <div class="sum-label">poeng</div>
-        <div class="sum-breakdown">
-          <div class="sum-stat"><strong id="sum-rett">0</strong>Rette svar</div>
-          <div class="sum-stat"><strong id="sum-feil">0</strong>Feil svar</div>
-          <div class="sum-stat"><strong id="sum-pct">0 %</strong>Meistring</div>
+      <section class="gram-summary adp-summary" id="gram-summary" aria-live="polite">
+        <div class="adp-summary-medal" id="gram-sum-medal"></div>
+        <h4 id="gram-sum-heading">Økt fullført!</h4>
+
+        <div class="adp-summary-ring">
+          <svg viewBox="0 0 100 100">
+            <circle class="adp-ring-bg" cx="50" cy="50" r="42"></circle>
+            <circle class="adp-ring-fill" id="gram-sum-ring" cx="50" cy="50" r="42" stroke-dasharray="263.9" stroke-dashoffset="263.9"></circle>
+            <text class="adp-ring-text" x="50" y="50" id="sum-pct">0%</text>
+          </svg>
         </div>
-        <div id="sum-msg" style="font-size:15px;color:rgba(255,255,255,0.7);margin-bottom:1.5rem;font-family:'Playfair Display',serif;font-style:italic;"></div>
-        <div id="sum-history" style="margin-bottom:1.5rem"></div>
-        <button class="gram-btn primary" onclick="gramReset()">Prøv igjen</button>
-      </div>
+
+        <div class="adp-summary-comment" id="sum-msg"></div>
+
+        <div class="adp-summary-grid">
+          <div class="adp-summary-kpi">
+            <span class="adp-summary-lbl">Poeng</span>
+            <strong id="sum-score-txt">0/0</strong>
+          </div>
+          <div class="adp-summary-kpi kpi-ok">
+            <span class="adp-summary-lbl">Rette</span>
+            <strong id="sum-rett">0</strong>
+          </div>
+          <div class="adp-summary-kpi kpi-err">
+            <span class="adp-summary-lbl">Feil</span>
+            <strong id="sum-feil">0</strong>
+          </div>
+        </div>
+
+        <div class="adp-summary-strengths" id="sum-strengths"></div>
+        <div class="adp-summary-corrections" id="sum-corrections"></div>
+
+        <div class="adp-summary-actions">
+          <button class="gram-btn primary" onclick="gramReset()">Prøv igjen</button>
+        </div>
+      </section>
     </div>
   </div>
 </section>

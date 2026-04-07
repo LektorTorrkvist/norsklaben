@@ -493,6 +493,38 @@ function nlMtDifficultyBadge(vanske) {
   return '<span class="b da">Vidarekomande</span>';
 }
 
+function nlMtOperationMeta(task) {
+  var raw = String((task && (task.op || task.operasjon || task.operation)) || '').toLowerCase();
+  raw = raw.replace(/[\s_-]+/g, '');
+  var explicit = {
+    korrigere: { cls: 'ok', label: 'Korrigere' },
+    fylloppgave: { cls: 'of', label: 'Fylloppgåve' },
+    'fyllopp\u00E5ve': { cls: 'of', label: 'Fylloppgåve' },
+    identifisere: { cls: 'oi', label: 'Identifisere' },
+    omskrive: { cls: 'oo', label: 'Omskrive' },
+    byggje: { cls: 'ob', label: 'Byggje' },
+    bygge: { cls: 'ob', label: 'Byggje' },
+    analysere: { cls: 'oa', label: 'Analysere' },
+    rangere: { cls: 'or', label: 'Rangere' },
+    sortering: { cls: 'or', label: 'Rangere' }
+  };
+  if (explicit[raw]) return explicit[raw];
+
+  var type = String(task && task.type || '').toLowerCase();
+  if (type === 'finn_feil') return { cls: 'ok', label: 'Korrigere' };
+  if (type === 'cloze') return { cls: 'of', label: 'Fylloppgåve' };
+  if (type === 'klikk_marker' || type === 'mc') return { cls: 'oi', label: 'Identifisere' };
+  if (type === 'drag_ord') return { cls: 'ob', label: 'Byggje' };
+  if (type === 'drag_kolonne' || type === 'burger_sort' || type === 'avsnitt_klikk') return { cls: 'or', label: 'Rangere' };
+  if (type === 'open') return { cls: 'oo', label: 'Omskrive' };
+  return { cls: 'oa', label: 'Analysere' };
+}
+
+function nlMtOperationBadge(task) {
+  var meta = nlMtOperationMeta(task);
+  return '<span class="b ' + meta.cls + '">' + meta.label + '</span>';
+}
+
 function nlMtResolveCard(kat) {
   var map = {
     og_aa: 'og-aa',
@@ -528,7 +560,7 @@ function nlMtBuildExercise(task, i, localIx) {
   var header =
     '<button class="etog" type="button">' +
     '<span class="etit">' + q + '</span>' +
-    '<span class="tags">' + nlMtDifficultyBadge(task && task.vanske) + '</span>' +
+    '<span class="tags">' + nlMtOperationBadge(task) + nlMtDifficultyBadge(task && task.vanske) + '</span>' +
     '</button>';
   var promptBoxHtml = '<div class="ibox"><div class="box"><p>' + q + '</p></div></div>';
 
@@ -2061,9 +2093,14 @@ function nlFilter(q, op) {
     var tits = [].map.call(card.querySelectorAll('.etit'), function(e) { return e.textContent; }).join(' ');
     var text = (cn + ' ' + cd + ' ' + tits).toLowerCase();
     var ms = !q || text.indexOf(q) !== -1;
+    var opNeedles = [String(op || '').toLowerCase()];
+    if (opNeedles[0] === 'rangere') opNeedles.push('sortering');
+    if (opNeedles[0] === 'fyllopp\u00E5ve') opNeedles.push('fylloppgave');
+    if (opNeedles[0] === 'byggje') opNeedles.push('bygge');
     var mo = op === 'alle' || [].some.call(card.querySelectorAll('.ei'), function(ei) {
       return [].some.call(ei.querySelectorAll('.b'), function(b) {
-        return b.textContent.toLowerCase().indexOf(op) !== -1;
+        var bt = b.textContent.toLowerCase();
+        return opNeedles.some(function(needle) { return bt.indexOf(needle) !== -1; });
       });
     });
     card.classList.toggle('hidden', !(ms && mo));
@@ -2094,6 +2131,13 @@ function nlRefreshCounts() {
     var gc = grp.querySelector('.gcnt');
     if (!gc) return;
     gc.textContent = c + ' kategori' + (c === 1 ? '' : 'ar');
+  });
+
+  document.querySelectorAll('.card').forEach(function(card) {
+    var exc = card.querySelector('.exc');
+    if (!exc) return;
+    var count = card.querySelectorAll('.ei').length;
+    exc.textContent = count + ' oppg.';
   });
 }
 
