@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
   const dropdowns = Array.from(document.querySelectorAll('.nav-dropdown'));
+  const header = document.querySelector('header');
+  const nav = header ? header.querySelector('nav') : null;
   const logo = document.querySelector('.logo');
   const footer = document.querySelector('footer');
+  let navToggle = null;
 
   function formatLastUpdated() {
     const raw = document.lastModified;
@@ -107,6 +110,48 @@ document.addEventListener('DOMContentLoaded', function () {
 
   renderSharedFooter();
 
+  function closeMobileNav() {
+    if (!header || !navToggle) return;
+    header.classList.remove('nl-nav-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }
+
+  function ensureMobileNavToggle() {
+    if (!header || !nav) return;
+    if (header.querySelector('.nav-hamburger')) {
+      navToggle = header.querySelector('.nav-hamburger');
+      return;
+    }
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'nav-hamburger';
+    btn.setAttribute('aria-label', 'Opne meny');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', 'nl-main-nav');
+    btn.innerHTML = '<span></span><span></span><span></span>';
+
+    if (!nav.id) nav.id = 'nl-main-nav';
+    header.insertBefore(btn, nav);
+
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      const willOpen = !header.classList.contains('nl-nav-open');
+      header.classList.toggle('nl-nav-open', willOpen);
+      btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    });
+
+    nav.addEventListener('click', function (e) {
+      if (!header.classList.contains('nl-nav-open')) return;
+      const target = e.target.closest('a');
+      if (target) closeMobileNav();
+    });
+
+    navToggle = btn;
+  }
+
+  ensureMobileNavToggle();
+
   if (footer) {
     footer.style.cursor = 'pointer';
     footer.addEventListener('click', function () {
@@ -148,9 +193,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.addEventListener('click', function (e) {
     if (!e.target.closest('.nav-dropdown')) closeAll();
+    if (header && header.classList.contains('nl-nav-open') && !e.target.closest('header')) {
+      closeMobileNav();
+    }
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeAll();
+    if (e.key === 'Escape') {
+      closeAll();
+      closeMobileNav();
+    }
   });
 });
