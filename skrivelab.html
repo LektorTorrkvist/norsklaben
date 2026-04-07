@@ -567,9 +567,9 @@
   <div class="ec">
     <p class="inst"><strong>Dra kvar setning til rett ordklasse for det [markerte] ordet.</strong></p>
     <div class="sort-ex" id="sort-18"
-         data-words='["a) Vi gjekk ein [lang] tur.","b) Bussen er [lang] forseinka.","c) Dei [raske] elevane vann.","d) Ho sprang [raskt] heim."]'
+         data-words='["a) Vi gjekk ein [lang] tur.","b) Bussen er [lenge] forseinka.","c) Dei [raske] elevane vann.","d) Ho sprang [raskt] heim."]'
          data-buckets='[{"id":"adjektiv","label":"Adjektiv"},{"id":"adverb","label":"Adverb"}]'
-         data-answers='{"a) Vi gjekk ein [lang] tur.":"adjektiv","b) Bussen er [lang] forseinka.":"adverb","c) Dei [raske] elevane vann.":"adjektiv","d) Ho sprang [raskt] heim.":"adverb"}'></div>
+         data-answers='{"a) Vi gjekk ein [lang] tur.":"adjektiv","b) Bussen er [lenge] forseinka.":"adverb","c) Dei [raske] elevane vann.":"adjektiv","d) Ho sprang [raskt] heim.":"adverb"}'></div>
     <p class="subinst">Tenk: Beskriv ordet eit substantiv (adjektiv), eller eit verb/adjektiv (adverb)?</p>
     <div class="ex-controls">
       <button class="btn-check" data-check="sort" data-target="sort-18" data-score="score-18">Sjekk svar</button>
@@ -772,18 +772,15 @@
 </div><div class="ei">
   <button class="etog"><span class="etit">Rytmeanalyse: Kva versjon er best?</span><span class="b oi">Identifisere</span><span class="b da">Vidarekomande</span><svg class="earr" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
   <div class="ec">
-    <p class="inst"><strong>Les begge versjonane høgt – kva har betre rytme og flyt?</strong></p>
-    <div class="ibox"><div class="cols">
-      <div><h4>Versjon A</h4><p>Plast er eit problem. Plast er overalt. Plast drep dyr. Vi må stoppe plasten. Plast er farleg.</p></div>
-      <div><h4>Versjon B</h4><p>Plast finst overalt – frå fjelltopper til havbotn. Det bryt ned til mikropartiklar, set seg i magen på dyr og trugar heile næringskjeda. Vi kan ikkje vente lenger.</p></div>
+    <p class="inst"><strong>Les begge versjonane høgt – klikk på den som har betre rytme og flyt.</strong></p>
+    <div class="ibox"><div class="cols" id="rhythm-25">
+      <div class="rhythm-pick" data-val="0" onclick="rhythmPick(this,25)" style="cursor:pointer;border:2px solid transparent;border-radius:10px;padding:0.8rem;transition:border-color .2s,background .2s"><h4>Versjon A</h4><p>Plast er eit problem. Plast er overalt. Plast drep dyr. Vi må stoppe plasten. Plast er farleg.</p></div>
+      <div class="rhythm-pick" data-val="1" onclick="rhythmPick(this,25)" style="cursor:pointer;border:2px solid transparent;border-radius:10px;padding:0.8rem;transition:border-color .2s,background .2s"><h4>Versjon B</h4><p>Plast finst overalt – frå fjelltopper til havbotn. Det bryt ned til mikropartiklar, set seg i magen på dyr og trugar heile næringskjeda. Vi kan ikkje vente lenger.</p></div>
     </div></div>
-    <div class="mcq-area" id="mc-25" data-score="score-25" data-answer="1">
-      <label class="mcq-opt"><input type="radio" name="mc-25" value="0"> Versjon A har betre rytme og flyt.</label>
-      <label class="mcq-opt"><input type="radio" name="mc-25" value="1"> Versjon B har betre rytme og flyt.</label>
-    </div>
+    <input type="hidden" id="rhythm-val-25" value="">
     <div class="ex-controls">
-      <button class="btn-check" data-check="mc" data-target="mc-25" data-score="score-25">Sjekk svar</button>
-      <button class="btn-reset" data-reset="mc" data-target="mc-25" data-score="score-25">Start på nytt</button>
+      <button class="btn-check" onclick="rhythmCheck(25,1)">Sjekk svar</button>
+      <button class="btn-reset" onclick="rhythmReset(25)">Start på nytt</button>
       <span class="ex-score" id="score-25"></span>
       <button class="btn-fasit" data-fasit="fasit-25">Vis rettleiing</button>
     </div>
@@ -962,10 +959,10 @@
   <div class="ec">
     <p class="inst"><strong>Klikk på avsnittet som ikkje høyrer heime.</strong></p>
     <div class="mark-area" id="mark-37" data-score="score-37" data-answers='["s3"]'>
-      <span class="mark-item" data-key="s1">[1] KI er teknologi som let maskinar utføre oppgåver som tidlegare kravde menneskeleg intelligens.</span>
-      <span class="mark-item" data-key="s2">[2] Sjølvkøyrande bilar er eit godt eksempel – Waymo rapporterer at bilane er dobbelt så trygge som menneskelege sjåførar.</span>
-      <span class="mark-item" data-key="s3">[3] Brettspel som Monopol er populære over heile verda.</span>
-      <span class="mark-item" data-key="s4">[4] Likevel er KI omdiskutert: deepfakes og avhengigheit er mellom dei negative sidene.</span>
+      <span class="mark-item" data-key="s1">KI er teknologi som let maskinar utføre oppgåver som tidlegare kravde menneskeleg intelligens.</span>
+      <span class="mark-item" data-key="s2">Sjølvkøyrande bilar er eit godt eksempel – Waymo rapporterer at bilane er dobbelt så trygge som menneskelege sjåførar.</span>
+      <span class="mark-item" data-key="s3">Brettspel som Monopol er populære over heile verda.</span>
+      <span class="mark-item" data-key="s4">Likevel er KI omdiskutert: deepfakes og avhengigheit er mellom dei negative sidene.</span>
     </div>
     <div class="ex-controls">
       <button class="btn-check" data-check="mark" data-target="mark-37" data-score="score-37">Sjekk svar</button>
@@ -1832,7 +1829,7 @@
       <p>B: «Ifølgje FN kan plastmengda i havet bli tre gonger så stor i løpet av dei neste 15 åra, om ein ikkje set inn tiltak.»</p>
       <p>C: «FN meiner at plast i havet allereie er tredobla sidan 2000.»</p>
     </div></div>
-    <div class="sort-ex" id="sort-62"
+    <div class="sort-ex" id="sort-62" data-noshuffle
          data-words='["A","B","C"]'
          data-buckets='[{"id":"for-lik","label":"For lik originalen"},{"id":"korrekt","label":"Korrekt parafrase"},{"id":"feil","label":"Feil meining"}]'
          data-answers='{"A":"for-lik","B":"korrekt","C":"feil"}'></div>
@@ -2583,6 +2580,40 @@
       setTimeout(nlFallbackBoot, 200);
     }
   })();
+
+  /* ─── Rhythm pick helpers ─── */
+  function rhythmPick(el, id) {
+    var wrap = document.getElementById('rhythm-' + id);
+    if (!wrap) return;
+    wrap.querySelectorAll('.rhythm-pick').forEach(function(p) {
+      p.style.borderColor = 'transparent';
+      p.style.background = '';
+    });
+    el.style.borderColor = 'var(--mid)';
+    el.style.background = 'var(--plight)';
+    var h = document.getElementById('rhythm-val-' + id);
+    if (h) h.value = el.getAttribute('data-val');
+  }
+  function rhythmCheck(id, answer) {
+    var h = document.getElementById('rhythm-val-' + id);
+    var sc = document.getElementById('score-' + id);
+    if (!h || h.value === '') { if (sc) sc.textContent = 'Vel ein versjon først.'; return; }
+    if (h.value === String(answer)) {
+      if (sc) { sc.textContent = '✔ Rett!'; sc.style.color = '#1a7a50'; }
+    } else {
+      if (sc) { sc.textContent = '✘ Prøv igjen.'; sc.style.color = '#c0392b'; }
+    }
+  }
+  function rhythmReset(id) {
+    var wrap = document.getElementById('rhythm-' + id);
+    if (wrap) wrap.querySelectorAll('.rhythm-pick').forEach(function(p) {
+      p.style.borderColor = 'transparent'; p.style.background = '';
+    });
+    var h = document.getElementById('rhythm-val-' + id);
+    if (h) h.value = '';
+    var sc = document.getElementById('score-' + id);
+    if (sc) { sc.textContent = ''; sc.style.color = ''; }
+  }
   </script>
 
 </body>

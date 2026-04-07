@@ -151,6 +151,14 @@ nav a.active { font-weight: 700; }
   padding: .35rem;
   display: none;
 }
+.nav-dropmenu::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+}
 
 .nav-dropdown.open .nav-dropmenu {
   display: block;

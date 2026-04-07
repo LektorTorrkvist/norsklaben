@@ -59,9 +59,10 @@ header {
   top: 0;
   z-index: 100;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
+  min-height: 60px;
   box-shadow: 0 2px 12px rgba(0,0,0,.18);
 }
 
@@ -122,6 +123,14 @@ nav a.active { font-weight: 700; }
   padding: .35rem;
   display: none;
   z-index: 200;
+}
+.nav-dropmenu::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
 }
 .nav-dropmenu a {
   display: block;
@@ -658,6 +667,25 @@ footer strong { color: rgba(255,255,255,.8); }
 /* ─── UTILITIES ─── */
 .hidden { display: none !important; }
 
+/* ─── HAMBURGER ─── */
+.nav-hamburger {
+  display: none;
+  width: 40px; height: 40px;
+  border: 1px solid rgba(255,255,255,.24);
+  background: rgba(255,255,255,.06);
+  border-radius: var(--rs);
+  cursor: pointer;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 4px;
+}
+.nav-hamburger span {
+  width: 18px; height: 2px; border-radius: 2px;
+  background: #fff; transition: transform .18s ease, opacity .18s ease;
+}
+header.nl-nav-open .nav-hamburger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+header.nl-nav-open .nav-hamburger span:nth-child(2) { opacity: 0; }
+header.nl-nav-open .nav-hamburger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
 /* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
   header { padding: 0 1.25rem; }
@@ -673,6 +701,19 @@ footer strong { color: rgba(255,255,255,.8); }
   .cols { grid-template-columns: 1fr; }
   .lab-cards { padding: 2rem 1.25rem; }
   .how { padding: 2rem 1.25rem; }
+  .nav-hamburger { display: inline-flex; margin-left: auto; }
+  nav {
+    width: 100%; display: none; flex-direction: column;
+    align-items: stretch; gap: .35rem; padding: .3rem 0 .2rem;
+  }
+  header.nl-nav-open nav { display: flex; }
+  nav a { width: 100%; padding: .55rem .7rem; }
+  .nav-dropdown { width: 100%; }
+  .nav-dropbtn { width: 100%; text-align: left; padding: .55rem .7rem; font-size: .9rem; }
+  .nav-dropmenu {
+    position: static; right: auto; margin-top: .2rem;
+    min-width: 0; box-shadow: none; border-radius: var(--rs);
+  }
 }
 
 
@@ -1027,6 +1068,7 @@ textarea.practice:focus { background:#fff; }
 #novelle-karussel:-webkit-full-screen .nov-slide .card {
   max-width:980px;
   margin:0 auto;
+  padding:2rem 2.5rem;
 }
 #novelle-karussel:fullscreen #nov-dots,
 #novelle-karussel:-webkit-full-screen #nov-dots {
@@ -1337,11 +1379,17 @@ textarea.practice:focus { background:#fff; }
 
 <!-- Quick-nav -->
 <div style="background:var(--card);border-bottom:1px solid var(--border);padding:.75rem 2rem;position:sticky;top:60px;z-index:89;overflow-x:auto;white-space:nowrap">
-  <div style="display:inline-flex;gap:.5rem;max-width:100%">
-    <a href="#trend1"      style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:var(--c1l);color:var(--c1)">1 · Kjeldebruk</a>
-    <a href="#trend2"      style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:var(--c2l);color:var(--c2)">2 · Utdjuping</a>
-    <a href="#trend3"      style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:var(--c3l);color:var(--c3)">3 · Tekststruktur</a>
-    <a href="#trend5"      style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:var(--c5l);color:var(--c5)">5 · Sjangerkompetanse</a>
+  <div style="display:inline-flex;gap:.5rem;max-width:100%;align-items:center">
+    <div class="qnav-drop" style="position:relative;display:inline-block">
+      <button type="button" class="qnav-drop-btn" onclick="var m=this.nextElementSibling;m.style.display=m.style.display==='block'?'none':'block'" style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;background:var(--primary);color:#fff;border:none;cursor:pointer;font-family:inherit">Temaoversikt ▾</button>
+      <div class="qnav-drop-menu" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid var(--border);border-radius:var(--rs);box-shadow:0 10px 24px rgba(0,0,0,.14);padding:.45rem;z-index:200;white-space:nowrap">
+        <a href="#trend1" style="display:block;padding:.4rem .65rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;color:var(--c1)">1 · Kjeldebruk</a>
+        <a href="#trend2" style="display:block;padding:.4rem .65rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;color:var(--c2)">2 · Utdjuping</a>
+        <a href="#trend3" style="display:block;padding:.4rem .65rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;color:var(--c3)">3 · Tekststruktur</a>
+        <a href="#trend4" style="display:block;padding:.4rem .65rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;color:var(--c4)">4 · Setningsstruktur</a>
+        <a href="#trend5" style="display:block;padding:.4rem .65rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;color:var(--c5)">5 · Sjangerkompetanse</a>
+      </div>
+    </div>
     <a href="#novelle"     style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:var(--c5l);color:var(--c5)">Novelle</a>
     <a href="#fagartikkel" style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:#e8f6f0;color:#1a5c42">Fagartikkel ✦</a>
     <a href="#debattinnlegg" style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:#eaf3fd;color:#1a3a8a">Debattinnlegg ✦</a>
@@ -1542,6 +1590,64 @@ textarea.practice:focus { background:#fff; }
   </div>
 
   <br>
+
+  <div class="card">
+    <p class="card-label">Avsnittsinndeling – kvifor og korleis</p>
+    <p>Eit avsnitt handlar om <strong>éit tema eller éit poeng</strong>. Ny tanke = nytt avsnitt. Start kvart avsnitt litt inn frå margen (innrykk) eller hopp over ei linje.</p>
+    <ul style="margin-top:0.5rem">
+      <li>Éi temasetning øvst som seier kva avsnittet handlar om</li>
+      <li>Ikkje bland to ulike poeng i same avsnitt</li>
+      <li>Tomrom mellom avsnitt gjer teksten lettare å lese</li>
+    </ul>
+  </div>
+
+  <br>
+  <div class="exercise-box">
+    <div class="exercise-box-header">Oppgåve 3A – Finn avsnittsskifta</div>
+    <div class="task-text">
+      Teksten under manglar avsnittsinndeling. Trykk på det første ordet i kvart avsnitt for å markere eit avsnittsskifte. Kvar bør du dele teksten inn i nye avsnitt?
+    </div>
+    <div id="avsnitt-tekst" style="padding:1rem 1.2rem;font-size:14px;line-height:2;color:var(--ink2);font-family:'Playfair Display',serif;font-style:italic;cursor:pointer;user-select:none"></div>
+    <div id="avsnitt-feedback" style="display:none;padding:0.8rem 1.2rem;font-size:13px;background:#f0f6ff;border-top:1px solid var(--line);color:var(--ink3)"></div>
+    <div style="padding:0.6rem 1rem;border-top:1px solid var(--line);display:flex;gap:8px">
+      <button onclick="avsnittSjekk()" style="font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:500;padding:7px 18px;border-radius:8px;cursor:pointer;border:none;background:var(--c3l);color:var(--c3)">Sjekk svaret →</button>
+      <button onclick="avsnittReset()" style="font-family:'Source Sans 3',sans-serif;font-size:13px;padding:7px 14px;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink3)">Start på nytt</button>
+    </div>
+  </div>
+
+  <div class="tip"><strong>Huskeregel:</strong> Éin tanke per avsnitt. Kvart avsnitt bør starte med ei temasetning som fortel kva det handlar om.</div>
+</section>
+
+<hr class="divider">
+
+<!-- ════════════════════════════════════════════ -->
+<!-- TREND 4: SETNINGSSTRUKTUR                   -->
+<!-- ════════════════════════════════════════════ -->
+
+<hr class="vk-divider">
+<section class="trend t4" id="trend4">
+  <div class="trend-header">
+    <div class="trend-number">4</div>
+    <div class="trend-title">
+      <span class="pill-count">Setningsnivå · mange elevar</span>
+      <h2>God setningsstruktur</h2>
+      <p>Sjølv ein godt strukturert tekst fell saman om setningane er lange, uklare eller fulle av gjentakingar. Her lærer du å byggje tydelege setningar med rett teiknsetting og gode bindeord.</p>
+    </div>
+  </div>
+
+  <div style="background:#f8f7f4;border:1px solid var(--line);border-radius:12px;padding:1.2rem 1.5rem;max-width:760px">
+    <p style="font-size:13px;line-height:1.8;color:var(--ink2)">
+      <strong>Kva er god setningsstruktur?</strong> Ei god setning formidlar éin tanke klart og fullstendig. Ho har eit subjekt (kven/kva), eit verbal (gjer kva) og gjerne eit objekt eller utfylling. Når setningane er tydelege, vert teksten lettare å lese – og bodskapen når fram.
+    </p>
+    <p style="font-size:13px;line-height:1.8;color:var(--ink2);margin-top:0.7rem">
+      <strong>Tre grunnprinsipp:</strong><br>
+      <strong>1. Éin tanke per setning.</strong> Unngå å lenke mange idear saman med «og» og «som» og «men». Set heller punktum og start ei ny setning.<br>
+      <strong>2. Varier setningsstarten.</strong> Ikkje start kvar setning med same ord. Prøv å starte med tid, stad, årsak eller eit bindeord.<br>
+      <strong>3. Bruk teiknsetting medvite.</strong> Punktum avsluttar ein tanke. Komma skil ledd. Semikolon knyter saman to nært relaterte heilsetningar.
+    </p>
+  </div>
+
+  <br>
   
   <div class="cards">
     <div class="card">
@@ -1632,7 +1738,7 @@ textarea.practice:focus { background:#fff; }
 
   <br>
   <div class="exercise-box">
-    <div class="exercise-box-header">Oppgåve 3A – Del opp og presiser</div>
+    <div class="exercise-box-header">Oppgåve 4A – Del opp og presiser</div>
     <div class="bad-text">
       «Sosiale medium har hatt ein stor påverknad på korleis unge skriv og snakkar og det er mange som brukar ord frå engelsk og det er difor mange vaksne synest det er vanskeleg å forstå og det er noko me bør tenkje på.»
     </div>
@@ -1640,7 +1746,7 @@ textarea.practice:focus { background:#fff; }
   </div>
 
   <div class="exercise-box">
-    <div class="exercise-box-header">Oppgåve 3B – Fjern gjentakingane</div>
+    <div class="exercise-box-header">Oppgåve 4B – Fjern gjentakingane</div>
     <div class="bad-text">
       «Brettspel er bra fordi brettspel samlar folk. Når folk spelar brettspel saman lærer folk å samarbeide. Brettspel er dessutan billegare enn mange andre aktivitetar. Difor bør folk spele meir brettspel.»
     </div>
@@ -1648,7 +1754,7 @@ textarea.practice:focus { background:#fff; }
   </div>
 
   <div class="exercise-box" style="margin-top:1.2rem">
-    <div class="exercise-box-header">Oppgåve 3D – Dra-og-slepp: sett inn bindeord</div>
+    <div class="exercise-box-header">Oppgåve 4C – Dra-og-slepp: sett inn bindeord</div>
     <div class="task-text" style="padding-bottom:0">
       Dra rett bindeord til riktig plass i kvar setning. Du kan sleppe eit ord du allereie har plassert for å byte det ut.
     </div>
@@ -1702,7 +1808,7 @@ textarea.practice:focus { background:#fff; }
   </div>
 
   <div class="exercise-box" style="margin-top:1.2rem">
-    <div class="exercise-box-header">Oppgåve 3E – Bindeord i fagtekst</div>
+    <div class="exercise-box-header">Oppgåve 4D – Bindeord i fagtekst</div>
     <div class="task-text" style="padding-bottom:0">
       Meir øving med bindeord som høyrer heime i fagtekstar og debattinnlegg.
     </div>
@@ -1736,9 +1842,9 @@ textarea.practice:focus { background:#fff; }
 
   <div class="tip" style="margin-top:1.2rem"><strong>Teiknsetting – hovudreglar:</strong> Set punktum når ein tanke er ferdig. Set komma mellom ledd i ei oppramsing (men ikkje rett før siste «og»). Set komma framfor «men» mellom to heilsetningar. Unngå å starte setningar med «og då» i fagtekstar.</div>
 
-  <!-- ─────── OPPGÅVE 3F: Punktum-sveisen ─────── -->
+  <!-- ─────── OPPGÅVE 4E: Punktum-sveisen ─────── -->
   <div class="exercise-box" style="margin-top:1.2rem">
-    <div class="exercise-box-header">Oppgåve 3F – Punktum-sveisen ✂️</div>
+    <div class="exercise-box-header">Oppgåve 4E – Punktum-sveisen ✂️</div>
     <div class="task-text">
       <strong>Steg 1:</strong> Klikk på kvart <span style="background:#fde68a;color:#92400e;font-weight:700;border-radius:3px;padding:1px 5px">og</span> for å kutte setninga og setje inn punktum.<br>
       <strong>Steg 2:</strong> Klikk på den <span style="background:#bfdbfe;color:#1e40af;font-weight:700;border-radius:3px;padding:1px 4px">utheva bokstaven</span> i kvar ny setning for å gjere han stor.
@@ -1756,9 +1862,9 @@ textarea.practice:focus { background:#fff; }
     </div>
   </div>
 
-  <!-- ─────── OPPGÅVE 3G: Bindeords-puslespel (ny serie) ─────── -->
+  <!-- ─────── OPPGÅVE 4F: Bindeords-puslespel ─────── -->
   <div class="exercise-box" style="margin-top:1.2rem">
-    <div class="exercise-box-header">Oppgåve 3G – Bindeords-puslespel: presise samanknytingar</div>
+    <div class="exercise-box-header">Oppgåve 4F – Bindeords-puslespel: presise samanknytingar</div>
     <div class="task-text" style="padding-bottom:0">
       Dra rett bindeord til riktig plass. Desse orda seier noko meir presist enn «og» eller «men».
     </div>
@@ -1784,9 +1890,9 @@ textarea.practice:focus { background:#fff; }
     </div>
   </div>
 
-  <!-- ─────── OPPGÅVE 3H: Komma-mysteriet ─────── -->
+  <!-- ─────── OPPGÅVE 4G: Komma-mysteriet ─────── -->
   <div class="exercise-box" style="margin-top:1.2rem">
-    <div class="exercise-box-header">Oppgåve 3H – Komma-mysteriet 🔍</div>
+    <div class="exercise-box-header">Oppgåve 4G – Komma-mysteriet 🔍</div>
     <div class="task-text">
       Klikk mellom orda der det skal vere komma. Klikk igjen for å fjerne eit komma du angrar på.
     </div>
@@ -1798,9 +1904,9 @@ textarea.practice:focus { background:#fff; }
     </div>
   </div>
 
-  <!-- ─────── OPPGÅVE 3I: Setningslengde-alarmen ─────── -->
+  <!-- ─────── OPPGÅVE 4H: Setningslengde-alarmen ─────── -->
   <div class="exercise-box" style="margin-top:1.2rem">
-    <div class="exercise-box-header">Oppgåve 3I – Setningslengde-alarmen 🚨</div>
+    <div class="exercise-box-header">Oppgåve 4H – Setningslengde-alarmen 🚨</div>
     <div class="task-text">
       Skriv inn ei eller fleire setningar. Overskriv du 20 ord utan teiknsetting, blinkar alarmen. Hald setningane korte og presise.
     </div>
@@ -1810,38 +1916,13 @@ textarea.practice:focus { background:#fff; }
     </div>
   </div>
 
-  <!-- ─────── OPPGÅVE 3J: Fiks «og då»-fella ─────── -->
+  <!-- ─────── OPPGÅVE 4I: Fiks «og då»-fella ─────── -->
   <div class="exercise-box" style="margin-top:1.2rem">
-    <div class="exercise-box-header">Oppgåve 3J – Fiks «og då»-fella 🪤</div>
+    <div class="exercise-box-header">Oppgåve 4I – Fiks «og då»-fella 🪤</div>
     <div class="task-text">
       Setningane under startar med «og då» – eit munnleg uttrykk som ikkje høyrer heime i fagtekstar. Vel ei betre innleiing frå lista for kvar setning.
     </div>
     <div id="ogda-wrap" style="padding:0.5rem 1.2rem 1rem"></div>
-  </div>
-
-
-  <div class="card" style="margin-top:0">
-    <p class="card-label">Avsnittsinndeling – kvifor og korleis</p>
-    <p>Eit avsnitt handlar om <strong>éit tema eller éit poeng</strong>. Ny tanke = nytt avsnitt. Start kvart avsnitt litt inn frå margen (innrykk) eller hopp over ei linje.</p>
-    <ul style="margin-top:0.5rem">
-      <li>Éi temasetning øvst som seier kva avsnittet handlar om</li>
-      <li>Ikkje bland to ulike poeng i same avsnitt</li>
-      <li>Tomrom mellom avsnitt gjer teksten lettare å lese</li>
-    </ul>
-  </div>
-
-  <br>
-  <div class="exercise-box">
-    <div class="exercise-box-header">Oppgåve 3C – Finn avsnittsskifta</div>
-    <div class="task-text">
-      Teksten under manglar avsnittsinndeling. Trykk på det første ordet i kvart avsnitt for å markere eit avsnittsskifte. Kvar bør du dele teksten inn i nye avsnitt?
-    </div>
-    <div id="avsnitt-tekst" style="padding:1rem 1.2rem;font-size:14px;line-height:2;color:var(--ink2);font-family:'Playfair Display',serif;font-style:italic;cursor:pointer;user-select:none"></div>
-    <div id="avsnitt-feedback" style="display:none;padding:0.8rem 1.2rem;font-size:13px;background:#f0f6ff;border-top:1px solid var(--line);color:var(--ink3)"></div>
-    <div style="padding:0.6rem 1rem;border-top:1px solid var(--line);display:flex;gap:8px">
-      <button onclick="avsnittSjekk()" style="font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:500;padding:7px 18px;border-radius:8px;cursor:pointer;border:none;background:var(--c3l);color:var(--c3)">Sjekk svaret →</button>
-      <button onclick="avsnittReset()" style="font-family:'Source Sans 3',sans-serif;font-size:13px;padding:7px 14px;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink3)">Start på nytt</button>
-    </div>
   </div>
 
   <div class="tip"><strong>Huskeregel:</strong> Ein tanke per setning. Sett punktum oftare enn du trur du bør. Vurder alltid om du kan kutte halvparten av orda og framleis seie det same.</div>
@@ -3899,6 +3980,13 @@ window.slaCheck = function(){
   else setTimeout(renderOgda, 0);
 })();
 
+</script>
+<script>
+document.addEventListener('click', function(e) {
+  document.querySelectorAll('.qnav-drop-menu').forEach(function(m) {
+    if (!m.parentElement.contains(e.target)) m.style.display = 'none';
+  });
+});
 </script>
 </body>
 </html>

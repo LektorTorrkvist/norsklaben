@@ -164,7 +164,7 @@ const BANK = [
  regel:'«Å skrive» er eit sterkt verb: skriv → skreiv → skrive.',
  eksempel:'å skrive → skreiv, å drive → dreiv',kontrast_bm:'skrev'},
 {emne:'verb',emne_label:'Verb – preteritum',type:'cloze',vanske:'medium',
- sporsmal:'Skriv «å skrive» i fortid (preteritum).',setning:'Dei ___ ein lang brev til kvarandre.',
+ sporsmal:'Skriv «å skrive» i fortid (preteritum).',setning:'Dei ___ eit langt brev til kvarandre.',
  fasit:'skreiv',fasit_variant:['skreiv'],
  regel:'Sterkt verb: å skrive → skreiv (vokalveksling i-ei).',
  eksempel:'skrive → skreiv, drive → dreiv',kontrast_bm:'skrev'},
@@ -1039,7 +1039,8 @@ function showSummary(){
 
   const byTopic={};
   GS.history.forEach(function(h){
-    const k=h.emne_label||'Blanda';
+    const raw=h.emne_label||'Blanda';
+    const k=raw.split(' \u2013 ')[0].split(' – ')[0];
     if(!byTopic[k])byTopic[k]={ok:0,fail:0};
     if(h.correct)byTopic[k].ok++; else byTopic[k].fail++;
   });

@@ -1382,11 +1382,10 @@ const MT_BANK = [
  regel:'«Drøft» ber om en resonnerende tekst, ikke ei personlig forteljing. Innleiinga skal signalisere at du vil vurdere ulike sider av saka.',
  eks:'BOMSKOT: starte som ei novelle. RETT: presentere saka og varsle om at du vil drøfte hun.'},
 
-{kat:'oppgavetolking',kat_label:'Oppgåvetolking',type:'cloze',vanske:'medium',
- q:'Oppgåva sier «reflekter». Det betyr at du skal ___ emnet med egne argument og innsikter.',
- hint:'«Reflekter» er mer enn å beskrive – du skal tenke over og vurdere.',
- fasit:'vurdere og tenke kritisk over',
- fasit_v:['vurdere','tenke kritisk','reflektere over','drøfte'],
+{kat:'oppgavetolking',kat_label:'Oppgåvetolking',type:'mc',vanske:'medium',
+ q:'Oppgåva sier «reflekter». Hva betyr det?',
+ alt:['Gjenfortel hendelsane i rekkjefølge','Vurder emnet kritisk med eigne tankar og innsikter','Skriv ei kort oppsummering av fakta','Beskriv emnet so objektivt som mogleg'],
+ fasit:'Vurder emnet kritisk med eigne tankar og innsikter',
  regel:'«Reflekter» = se tilbake, tenke over, vurdere med eget perspektiv. Bruk gjerne «jeg»-stemma kombinert med faglig grunngjeving.',
  eks:'«Reflekter over hvordan reklame påverkar deg.» = hva ser du, hvorfor skjer det, hva mener du om det.'},
 

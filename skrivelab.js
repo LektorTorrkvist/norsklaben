@@ -1785,10 +1785,12 @@ function nlBuildSort(eid) {
   var words = [], buckets = [];
   try { words   = JSON.parse(ex.dataset.words   || '[]'); } catch(e) {}
   try { buckets = JSON.parse(ex.dataset.buckets || '[]'); } catch(e) {}
-  // Shuffle
-  for (var i = words.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var tmp = words[i]; words[i] = words[j]; words[j] = tmp;
+  // Shuffle (skip if data-noshuffle)
+  if (!ex.hasAttribute('data-noshuffle')) {
+    for (var i = words.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = words[i]; words[i] = words[j]; words[j] = tmp;
+    }
   }
   ex.innerHTML = '';
   // Word bank

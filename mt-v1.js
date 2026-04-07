@@ -222,9 +222,9 @@ const MT_BANK = [
 {kat:'samansett',kat_label:'Samansette ord',type:'cloze',vanske:'lett',
  q:'Skriv rett (eitt ord): «Han spelar på ___» (fotball + bane)',
  hint:'Slå saman dei to delane til eitt ord – ingen mellomrom.',
- fasit:'fotballbane',fasit_v:['fotballbane'],
- regel:'«Fotball» + «bane» = «fotballbane» – eitt ord.',
- eks:'fotballbane, basketballbane, sandvolleyballbane'},
+ fasit:'fotballbana',fasit_v:['fotballbana','fotballbane'],
+ regel:'«Fotball» + «bane» = «fotballbane/fotballbana» – eitt ord. «Bane» er hokjønn på nynorsk, difor «bana» i bunden form.',
+ eks:'fotballbana, basketballbane, sandvolleyballbane'},
 
 {kat:'samansett',kat_label:'Samansette ord',type:'mc',vanske:'lett',
  q:'Kva skjer viss du skriv «lamme lår» i staden for «lammelår»?',
@@ -1382,11 +1382,10 @@ const MT_BANK = [
  regel:'«Drøft» ber om ein resonnerande tekst, ikkje ei personleg forteljing. Innleiinga skal signalisere at du vil vurdere ulike sider av saka.',
  eks:'BOMSKOT: starte som ei novelle. RETT: presentere saka og varsle om at du vil drøfte ho.'},
 
-{kat:'oppgavetolking',kat_label:'Oppgåvetolking',type:'cloze',vanske:'medium',
- q:'Oppgåva seier «reflekter». Det betyr at du skal ___ emnet med eigne argument og innsikter.',
- hint:'«Reflekter» er meir enn å beskrive – du skal tenke over og vurdere.',
- fasit:'vurdere og tenke kritisk over',
- fasit_v:['vurdere','tenke kritisk','reflektere over','drøfte'],
+{kat:'oppgavetolking',kat_label:'Oppgåvetolking',type:'mc',vanske:'medium',
+ q:'Oppgåva seier «reflekter». Kva betyr det?',
+ alt:['Gjenfortel hendingane i rekkjefølgje','Vurder emnet kritisk med eigne tankar og innsikter','Skriv ei kort oppsummering av fakta','Skildra emnet så objektivt som mogleg'],
+ fasit:'Vurder emnet kritisk med eigne tankar og innsikter',
  regel:'«Reflekter» = sjå tilbake, tenke over, vurdere med eige perspektiv. Bruk gjerne «eg»-stemma kombinert med fagleg grunngjeving.',
  eks:'«Reflekter over korleis reklame påverkar deg.» = kva ser du, kvifor skjer det, kva meiner du om det.'},
 
