@@ -58,12 +58,7 @@ const MT_BANK = [
  regel:'Etter «likar» kjem infinitiv med «å». «Og lese» er feil – det skal vere «å lese». Merk: Begge «Eg likar å lese og skrive» og «Eg likar å lese og å skrive» er rette.',
  eks:'FEIL: «og lese» / RETT: «å lese». Begge «å lese og skrive» og «å lese og å skrive» er normerte.'},
 
-{kat:'og_aa',kat_label:'Og / å',type:'cloze',vanske:'vanskeleg',
- q:'Fyll inn BERRE første blank: «Ola prøvde ___ synge, og det høyrdest litt rart ut.»',
- hint:'Kva kjem etter «prøvde»? Eit verb i infinitiv. Kva ord markerer infinitiv?',
- fasit:'å',fasit_v:['å'],
- regel:'«Prøvde å synge» (infinitiv). «Og det høyrdest» (bindeord mellom setningar).',
- eks:'Han prøvde å synge, og det høyrdest rart ut.'},
+
 
 {kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'vanskeleg',
  q:'Kva er ALLE feila i: «Eg ville og hjelpe, og lære, og det var gøy og gjere.»?',
@@ -204,12 +199,6 @@ const MT_BANK = [
  regel:'«Bestemte seg for å + infinitiv» er ein fast konstruksjon. «For» er ikkje bindeord her – det er ein del av verbet «bestemme seg for».',
  eks:'bestemme seg for å gjere noko • planlegge å gjere noko • beslutte å gjere noko'},
 
-{kat:'og_aa',kat_label:'Og / å',type:'cloze',vanske:'vanskeleg',
- q:'Fyll inn rett ord: «Han er den første ___ klare denne oppgåva på under to minutt.»',
- hint:'Er det ein relativ-setning («som»), eller ein infinitivskonstruksjon? Kva er blanket?',
- fasit:'til å',fasit_v:['til å','å'],
- regel:'«Den første til å + infinitiv» er ein fast superlativkonstruksjon med infinitiv. «Til» inngår i konstruksjonen og kan ikkje utelatast.',
- eks:'den første til å klatre opp • den siste til å kome • alternativt: den første som klarte'},
 
 /* ── SAMANSETTE ORD (10) ── */
 {kat:'samansett',kat_label:'Samansette ord',type:'mc',vanske:'lett',
@@ -412,12 +401,7 @@ const MT_BANK = [
  regel:'Fagartikkel: nøytral, informativ. Debattinnlegg: tek tydeleg standpunkt frå første avsnitt.',
  eks:'FA: «Plastforureining er eit stort problem.» DI: «Eg meiner plastposen bør forbydast no!»'},
 
-{kat:'tekststruktur',kat_label:'Tekststruktur',type:'cloze',vanske:'medium',
- q:'Debattinnlegget sin avslutting bør ha ein tydeleg ___ til lesaren.',
- hint:'Kva kallar vi det når ein oppmodar nokon til å endre meining eller handle? Byrjar på «a».',
- fasit:'appell',fasit_v:['appell','oppmoding','handlingsoppmoding','oppfordring'],
- regel:'I debattinnlegg avsluttar ein gjerne med ein appell – ei oppmoding om handling eller haldningsendring.',
- eks:'«Det er på tide at vi alle tek ansvar – start i dag!»'},
+
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'medium',
  q:'Kor høyrer eit motargument heime i eit debattinnlegg?',
@@ -764,12 +748,7 @@ const MT_BANK = [
  regel:'«Stille» (roleg) har dobbel l etter kort i.',
  eks:'Det er stille i rommet. Ei stille natt.'},
 
-{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'cloze',vanske:'medium',
- q:'Fyll inn: «Ho er ei ___ jente» (stille, adjektiv)',
- fasit:'stille',fasit_v:['stille'],
- hint:'Adjektivet «stille» – skriv det med dobbel konsonant.',
- regel:'«Stille» (roleg) har alltid dobbel l.',
- eks:'ei stille natt, ein stille dag'},
+
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'medium',
  q:'Kvifor skriv ein «mat» men «matte»?',
@@ -820,11 +799,7 @@ const MT_BANK = [
  regel:'«Katt» (kort a → dobbel t), «katter» (fleirtalsform, dobbel t bevart).',
  eks:'ein katt, fleire katter'},
 
-{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'vanskeleg',
- q:'Kva ord HAR dobbel konsonant?',
- alt:['bate (å ha nytte)','bile (å køyre bil)','kake (ei søt mat)','hake (ein hakk)'],fasit:'bate (å ha nytte)',
- regel:'«Å bate» (= å nytte) SKAL ha dobbel t: «batte». Utan dobbel t endrar det tyding.',
- eks:'Det batta ikkje å prøve.'},
+
 
 
 /* ── DOBBEL KONSONANT – ekstra (8 nye) ── */
@@ -1179,12 +1154,7 @@ const MT_BANK = [
  regel:'Adverb modifiserer verb, adjektiv eller andre adverb. Her modifiserer «raskt» verbet «sprang» og seier noko om korleis.',
  eks:'Han sprang raskt · Ho song vakkert · Dei jobba hardt'},
 
-{kat:'ordklassar',kat_label:'Ordklassar',type:'cloze',vanske:'lett',
- q:'«glad» i «Eg er glad» er eit ___.',
- hint:'Ordet skildrar korleis eg er. Det svarar på spørsmålet «korleis er eg?».',
- fasit:'adjektiv',fasit_v:['adjektiv','predikativt adjektiv'],
- regel:'Adjektiv skildrar substantiv eller pronomen. Her skildrar «glad» pronomenet «eg» som predikativ.',
- eks:'Eg er glad · Ho er trøytt · Dei er nøgde'},
+
 
 {kat:'ordklassar',kat_label:'Ordklassar',type:'cloze',vanske:'medium',
  q:'«på» i «Boka ligg på bordet» er ei ___.',
