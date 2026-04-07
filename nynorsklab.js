@@ -802,17 +802,22 @@ function renderTask(){
   /* Question HTML */
   let questionHTML='';
   if(t.type==='cloze'&&t.setning){
-    const setningTxt=String(t.setning||'');
-    const parts=(setningTxt.indexOf('___')===-1?(setningTxt+' ___'):setningTxt).split('___');
+    let setningTxt=String(t.setning||'');
+    if(setningTxt.indexOf('___')!==-1){
+      const firstIx=setningTxt.indexOf('___');
+      const before=setningTxt.substring(0,firstIx);
+      const after=setningTxt.substring(firstIx+3).replace(/___/g,'');
+      setningTxt=before+' ___ '+after;
+    }else{
+      setningTxt=setningTxt+' ___';
+    }
+    const parts=setningTxt.split('___');
     // Vis instruksjon (sporsmal) over sjølve setninga
     questionHTML=`<p class="gram-task-instr">${escH(t.sporsmal)}</p>`;
     questionHTML+=`<p class="gram-task-q">`;
-    parts.forEach((part,i)=>{
-      questionHTML+=escH(part);
-      if(i<parts.length-1){
-        questionHTML+=`<input type="text" class="gram-blank" id="gram-blank-${i}" placeholder="…" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')gramCheck()">`;
-      }
-    });
+    questionHTML+=escH(parts[0]||'');
+    questionHTML+=`<input type="text" class="gram-blank" id="gram-blank-0" placeholder="…" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')gramCheck()">`;
+    questionHTML+=escH(parts.slice(1).join('')||'');
     questionHTML+=`</p>`;
   } else {
     questionHTML=`<p class="gram-task-q">${escH(t.sporsmal)}</p>`;
@@ -840,6 +845,8 @@ function renderTask(){
       inputHTML+=`<button class="gram-choice-btn" data-val="${escH(alt)}" onclick="gramChoose(this)">${escH(alt)}</button>`;
     });
     inputHTML+=`</div>`;
+  } else if(t.type==='cloze' && t.setning){
+    inputHTML=`<div id="gram-actions-cloze"><button class="gram-btn primary" onclick="gramCheck()">Sjekk svar</button></div>`;
   } else if(t.type==='cloze'){
     inputHTML=`<div style="margin-top:0.6rem">
       <input type="text" class="gram-blank" id="gram-blank-0" placeholder="Skriv svar her…" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')gramCheck()">
@@ -993,7 +1000,7 @@ function updateProgress(){
 }
 
 function gramMasteryData(pct){
-  if(pct>=90)return{medal:'🏆',heading:'Meisterleg!',comment:'Framifrå arbeid. Du viser svært trygg nynorsk meistring.'};
+  if(pct>=90)return{medal:'🏆',heading:'Meisterleg!',comment:'Framifrå arbeid. Du viser særs god nynorsk meistring.'};
   if(pct>=75)return{medal:'🥇',heading:'Svært godt!',comment:'Solid økt. Du har god kontroll på det meste.'};
   if(pct>=60)return{medal:'🥈',heading:'God framgang!',comment:'Bra jobba. Litt meir øving vil løfte deg vidare.'};
   if(pct>=40)return{medal:'🥉',heading:'På rett veg',comment:'Du er i gang. Fokuser på dei vanlegaste feila og prøv igjen.'};

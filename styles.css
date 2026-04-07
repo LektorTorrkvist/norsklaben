@@ -1043,6 +1043,14 @@ nav a.active { font-weight: 700; }
   color: #2e6b4f;
 }
 
+#sum-strengths .adp-summary-row.ok strong {
+  color: #1a6b46;
+}
+
+#sum-strengths .adp-summary-row.ok span {
+  color: #2e6b4f;
+}
+
 #nl-ad-sum-retting .adp-summary-row {
   border-color: #ecd5a1;
   background: #fff9eb;
@@ -1054,6 +1062,32 @@ nav a.active { font-weight: 700; }
 
 #nl-ad-sum-retting .adp-summary-row span {
   color: #6b5837;
+}
+
+#sum-corrections .adp-summary-row {
+  border-color: #ecd5a1;
+  background: #fff9eb;
+}
+
+#sum-corrections .adp-summary-row strong {
+  color: #5f451b;
+}
+
+#sum-corrections .adp-summary-row span {
+  color: #6b5837;
+}
+
+#sum-corrections .adp-summary-row.ok {
+  border-color: #beddc9;
+  background: #f2fbf5;
+}
+
+#sum-corrections .adp-summary-row.ok strong {
+  color: #1a6b46;
+}
+
+#sum-corrections .adp-summary-row.ok span {
+  color: #2e6b4f;
 }
 
 .adp-summary-rule {
