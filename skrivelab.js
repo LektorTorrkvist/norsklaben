@@ -597,7 +597,10 @@ function nlMtBuildExercise(task, i, localIx) {
     var ansRaw = task && task.fasit_v != null ? task.fasit_v : task && task.fasit;
     var accepted = Array.isArray(ansRaw) ? ansRaw : [ansRaw];
     var ansJson = nlMtEscHtml(JSON.stringify(accepted.filter(function(v){ return v != null && String(v).trim(); })));
-    var prompt = nlMtEscHtml(parts[0] || '') + '<input class="blank-input" data-ans="' + ansJson + '" style="min-width:160px">' + nlMtEscHtml(parts.slice(1).join(' ___ '));
+    var hintText = task && task.hint ? String(task.hint).trim() : '';
+    var inputPlaceholder = hintText ? 'Hint i feltet' : 'Skriv svar';
+    var inputTitle = hintText ? ' title="' + nlMtEscHtml(hintText) + '"' : '';
+    var prompt = nlMtEscHtml(parts[0] || '') + '<input class="blank-input" data-ans="' + ansJson + '" placeholder="' + inputPlaceholder + '" aria-label="Skriv inn manglande ord"' + inputTitle + ' style="min-width:160px">' + nlMtEscHtml(parts.slice(1).join(' ___ '));
 
     return '<article class="ei">' + header +
       '<div class="ec">' +
@@ -3183,7 +3186,7 @@ function nlAdSetFeedback(text, isCorrect, ruleText, eksText) {
   }
 
   var icon = isCorrect === true ? '&#10003; ' : (isCorrect === false ? '&#10007; ' : '');
-  var heading = isCorrect === true ? 'Rett svar!' : (isCorrect === false ? 'Forklaring med fasit' : 'Kommentar');
+  var heading = isCorrect === true ? 'Rett svar!' : (isCorrect === false ? 'Feil' : 'Kommentar');
   text = nlAdCleanFeedbackText(text, isCorrect);
 
   // Build pedagogical encouragement based on result
