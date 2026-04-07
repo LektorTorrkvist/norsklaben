@@ -790,7 +790,8 @@ function renderTask(){
   /* Question HTML */
   let questionHTML='';
   if(t.type==='cloze'&&t.setning){
-    const parts=t.setning.split('___');
+    const setningTxt=String(t.setning||'');
+    const parts=(setningTxt.indexOf('___')===-1?(setningTxt+' ___'):setningTxt).split('___');
     // Vis instruksjon (sporsmal) over sjølve setninga
     questionHTML=`<p class="gram-task-instr">${escH(t.sporsmal)}</p>`;
     questionHTML+=`<p class="gram-task-q">`;
@@ -828,7 +829,10 @@ function renderTask(){
     });
     inputHTML+=`</div>`;
   } else if(t.type==='cloze'){
-    inputHTML=`<div id="gram-actions-cloze"><button class="gram-btn primary" onclick="gramCheck()">Sjekk svar</button></div>`;
+    inputHTML=`<div style="margin-top:0.6rem">
+      <input type="text" class="gram-blank" id="gram-blank-0" placeholder="Skriv svar her…" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')gramCheck()">
+      <div id="gram-actions-cloze" style="margin-top:0.55rem"><button class="gram-btn primary" onclick="gramCheck()">Sjekk svar</button></div>
+    </div>`;
   }
 
   $('gram-task-wrap').innerHTML=`
