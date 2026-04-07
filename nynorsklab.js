@@ -7,6 +7,11 @@
   }
 }
 
+/* ── Utility helpers ── */
+function $(id){ return document.getElementById(id); }
+function shuffle(arr){ var a=[].concat(arr); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var tmp=a[i]; a[i]=a[j]; a[j]=tmp; } return a; }
+function repairMojibakeText(s){ return String(s||''); }
+
 let _dragWord = '';
 let _dragTokenId = '';
 
@@ -838,7 +843,7 @@ function renderTask(){
     </div>
     <div class="gram-actions" id="gram-main-actions" style="display:none">
       <button class="gram-btn primary" onclick="gramNext()">
-        ${GS.idx+1<GS.tasks.length?'Neste oppg�ve ?':'Sj� resultat ?'}
+        ${GS.idx+1<GS.tasks.length?'Neste oppgåve \u2192':'Sjå resultat \u2192'}
       </button>
     </div>`;
 
@@ -901,7 +906,7 @@ function finishAnswer(correct,chosen,t){
   if(t.regel) html+=`<div class="fb-regel"><strong>Regel:</strong> ${escH(t.regel)}</div>`;
   if(t.eksempel) html+=`<div class="fb-regel"><em>Eks.: ${escH(t.eksempel)}</em></div>`;
   if(t.kontrast_bm&&GS.config.kontrast)
-    html+=`<div class="fb-kontrast">Bokm�l: "${escH(t.kontrast_bm)}" -> Nynorsk: "${escH(t.fasit)}"</div>`;
+    html+=`<div class="fb-kontrast">Bokmål: "${escH(t.kontrast_bm)}" \u2192 Nynorsk: "${escH(t.fasit)}"</div>`;
   fb.innerHTML=html;
 
   $('gram-main-actions').style.display='flex';
@@ -996,7 +1001,7 @@ function showSummary(){
       const iconCol=h.correct?'#6ee7b7':'#fca5a5';
       const rowBg=h.correct?'rgba(110,231,183,0.07)':'rgba(252,165,165,0.07)';
       const border=h.correct?'rgba(110,231,183,0.2)':'rgba(252,165,165,0.2)';
-      // Sp�rsm�l: viss setning, vis den med blank markert, elles vis sp�rsm�l
+      // Spørsmål: viss setning, vis den med blank markert, elles vis spørsmål
       let qTxt = h.setning
         ? h.setning.replace('___', `<span style="text-decoration:underline;color:rgba(255,255,255,0.5)">___</span>`)
         : escH(h.sporsmal);
@@ -1018,7 +1023,7 @@ function showSummary(){
         </div>`;
     });
     histEl.innerHTML=`
-          <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:0.6rem;font-weight:500">Gjennomgang - alle oppg�ver</div>
+          <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:0.6rem;font-weight:500">Gjennomgang - alle oppgåver</div>
       ${rows}`;
   }
 
