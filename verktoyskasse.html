@@ -1338,8 +1338,38 @@ textarea.practice:focus { background:#fff; }
 /* ─── Section divider ─── */
 .vk-divider { border:none; border-top:2px solid var(--bcard); margin:1rem 0; }
 
+/* ─── Verktøykasse quick-nav ─── */
+.quick-nav {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: .75rem 2rem;
+  position: sticky;
+  top: 60px;
+  z-index: 89;
+  overflow: visible;
+}
+.quick-nav-row {
+  display: flex;
+  gap: .5rem;
+  max-width: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+  white-space: normal;
+  min-width: 0;
+}
+.quick-nav-row > a,
+.quick-nav .qnav-drop-btn {
+  white-space: normal;
+}
+.quick-nav .qnav-drop {
+  position: relative;
+  display: inline-block;
+}
+
 /* ─── Mobile ─── */
 @media (max-width:600px) {
+  .quick-nav { padding: .7rem 1.25rem; }
+  .quick-nav-row { gap: .4rem; }
   .before-after { grid-template-columns:1fr; }
   .sjekk-ex-row { grid-template-columns:1fr; }
   .sj-dots { gap:4px; }
@@ -1379,9 +1409,9 @@ textarea.practice:focus { background:#fff; }
 </div>
 
 <!-- Quick-nav -->
-<div style="background:var(--card);border-bottom:1px solid var(--border);padding:.75rem 2rem;position:sticky;top:60px;z-index:89">
-  <div style="display:flex;gap:.5rem;max-width:100%;align-items:center;flex-wrap:wrap">
-    <div class="qnav-drop" style="position:relative;display:inline-block">
+<div class="quick-nav">
+  <div class="quick-nav-row">
+    <div class="qnav-drop">
       <button type="button" class="qnav-drop-btn" onclick="var m=this.nextElementSibling;m.style.display=m.style.display==='block'?'none':'block'" style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;background:var(--primary);color:#fff;border:none;cursor:pointer;font-family:inherit">Temaoversikt ▾</button>
       <div class="qnav-drop-menu" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid var(--border);border-radius:var(--rs);box-shadow:0 10px 24px rgba(0,0,0,.14);padding:.45rem;z-index:200;white-space:nowrap">
         <a href="#typiske-feil" style="display:block;padding:.4rem .65rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;color:#6f58b6">Typiske feil ✦</a>
