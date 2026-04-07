@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="nn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mad Libs – Norsklaben</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Norsk<span>laben</span></a>
+  <nav>
+    <a href="skrivelab.html">Skrivelab</a>
+    <a href="nynorsklab.html">Nynorsklab</a>
+    <a href="verktoyskasse.html">Verktøykasse</a>
+    <a href="undervisingsbank.html">Undervisingsbank</a>
+    <div class="nav-dropdown">
+      <button class="nav-dropbtn active" type="button" aria-expanded="false">Leikekassa</button>
+      <div class="nav-dropmenu">
+        <a href="mad-libs.html" class="active">Mad Libs</a>
+        <a href="vurderingslab.html">Vurderingslab</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="htag">Leikekassa</div>
+  <h1>Mad Libs</h1>
+  <p>Fyll inn ordklassar utan å lese historia først, og sjå kva slags vill tekst som dukkar opp.</p>
+</div>
+
+<main class="play-main">
+  <section class="play-intro">
+    <h2>Gale historier</h2>
+    <p>Vel humortype og fyll inn ordklassane utan å lese historia først. Trykk «Lag historia» for å sjå resultatet.</p>
+  </section>
+
+  <section class="ml-shell">
+    <div id="ml-form" style="background:#fff;border:1px solid #d8e3f0;border-radius:14px;padding:1.5rem;margin-bottom:1.5rem">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start;margin-bottom:1rem">
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:13px;color:#4a4a46;font-weight:600;text-transform:uppercase;letter-spacing:0.06em">Humortype
+          <select id="ml-humortype" onchange="mlSetHumortype(this.value)" style="border:1px solid #d0d8df;border-radius:8px;padding:9px 12px;font-size:14px;font-family:'Source Sans 3',sans-serif;color:#1a1a18;background:#fff;outline:none;font-weight:400;text-transform:none;letter-spacing:0">
+            <option value="barnehage">Barnehage (3–6 år)</option>
+            <option value="1klasse">1. klasse (6 år)</option>
+            <option value="5klasse">5. klasse (10 år)</option>
+            <option value="ungdomsskule" selected>Ungdomsskule (13–16 år)</option>
+          </select>
+        </label>
+        <div id="ml-current-meta" style="font-size:13px;color:#1a3a8a;line-height:1.6;background:#f6f9ff;border:1px solid #dce8ff;border-radius:10px;padding:0.75rem 0.9rem;align-self:end"></div>
+      </div>
+      <button onclick="mlPrøvLykken()" style="margin-bottom:1.2rem;background:transparent;border:1px solid #1a56db;color:#1a56db;border-radius:99px;font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:500;padding:7px 18px;cursor:pointer;transition:background 0.15s">🎲 Prøv lykken – tilfeldig historie</button>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px" id="ml-inputs"></div>
+      <button onclick="mlLag()" style="margin-top:1.4rem;background:#1a56db;color:#fff;border:none;border-radius:99px;font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:500;padding:11px 30px;cursor:pointer;transition:background 0.15s">Lag historia →</button>
+    </div>
+
+    <div id="ml-result" style="display:none;background:#fff;border:1px solid #d8e3f0;border-radius:14px;padding:1.5rem">
+      <h3 id="ml-result-heading" style="font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:600;margin-bottom:0.4rem;color:#1a1a18">Her er historia di:</h3>
+      <div id="ml-result-meta" style="font-size:13px;color:#1a3a8a;line-height:1.6;margin-bottom:1.2rem"></div>
+      <div id="ml-story" style="font-size:15px;line-height:1.9;color:#1a1a18;font-family:'Playfair Display',serif;font-style:italic;background:#faf8f4;border-radius:10px;padding:1.1rem 1.3rem"></div>
+      <div style="margin-top:1.3rem;display:flex;gap:10px;flex-wrap:wrap">
+        <button onclick="mlReset()" style="background:#1a56db;color:#fff;border:none;border-radius:99px;font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:500;padding:10px 24px;cursor:pointer">Prøv igjen</button>
+        <button onclick="mlNyHistorie()" style="background:transparent;border:1px solid #1a56db;color:#1a56db;border-radius:99px;font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:500;padding:10px 24px;cursor:pointer">Ny tilfeldig historie</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Norsklaben • av Lektor Tørrkvist • 2026</p>
+  <p id="nl-sist-oppdatert">Sist oppdatert: lastar...</p>
+</footer>
+
+<script src="nav.js"></script>
+<script src="mad-libs.js"></script>
+</body>
+</html>

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="nn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undervisingsbank – 8.trinn · Norsklaben</title>
+<meta name="description" content="10 konkrete undervisingsopplegg for 8.trinn i norsk – klare til bruk i 1–2 undervisningstimar, fordelt på årsplanens tema.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .ub-slide .card {
+    padding: 1.05rem 1.15rem !important;
+  }
+
+  .ub-slide h3 {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.26rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .ub-slide p,
+  .ub-slide li,
+  .ub-slide span,
+  .ub-slide div {
+    font-family: 'Source Sans 3', sans-serif;
+  }
+
+  .ub-slide p,
+  .ub-slide li {
+    font-size: 0.96rem !important;
+    line-height: 1.62 !important;
+  }
+
+  .ub-slide .tip,
+  .ub-slide [style*='L�ringsm�l'],
+  .ub-slide [style*='Du treng'] {
+    border-radius: 9px !important;
+  }
+
+  button[onclick^='ubHopp('],
+  button[onclick^='ubNav('] {
+    font-family: 'Source Sans 3', sans-serif !important;
+    font-weight: 600 !important;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Norsk<span>laben</span></a>
+  <nav>
+    <a href="skrivelab.html">Skrivelab</a>
+    <a href="nynorsklab.html">Nynorsklab</a>
+    <a href="verktoyskasse.html">Verktøykasse</a>
+    <a href="undervisingsbank.html" class="active">Undervisingsbank</a>
+    <div class="nav-dropdown">
+      <button class="nav-dropbtn" type="button" aria-expanded="false">Leikekassa</button>
+      <div class="nav-dropmenu">
+        <a href="mad-libs.html">Mad Libs</a>
+        <a href="vurderingslab.html">Vurderingslab</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="hero skrivelab-hero" style="padding-bottom:2rem">
+  <div class="htag">Undervisingsopplegg</div>
+  <h1>Undervisingsbank</h1>
+  <p>10 konkrete undervisingsopplegg for 8. trinn i norsk, fordelt på tema i årsplanen.</p>
+  <div class="hero-stats">
+    <div><div class="stat-n">10</div><div class="stat-l">Opplegg</div></div>
+    <div><div class="stat-n">6</div><div class="stat-l">Tema</div></div>
+    <div><div class="stat-n">1-2</div><div class="stat-l">Skuletimar</div></div>
+  </div>
+</div>
+
+<div style="background:var(--card);border-bottom:1px solid var(--border);padding:.75rem 2rem;position:sticky;top:60px;z-index:89;overflow-x:auto;white-space:nowrap">
+  <div style="display:flex;justify-content:center;gap:.5rem;max-width:760px;margin:0 auto">
+    <button onclick="ubHopp(0)" style="background:#f4eef8;color:#8b5a9e;border:none;cursor:pointer;font-size:13px;font-weight:500;padding:6px 14px;border-radius:99px;font-family:'Source Sans 3',sans-serif;transition:filter 0.15s" onmouseover="this.style.filter='brightness(0.93)'" onmouseout="this.style.filter=''">Utanfor</button>
+    <button onclick="ubHopp(2)" style="background:#eaf3fd;color:#2f7ec7;border:none;cursor:pointer;font-size:13px;font-weight:500;padding:6px 14px;border-radius:99px;font-family:'Source Sans 3',sans-serif;transition:filter 0.15s" onmouseover="this.style.filter='brightness(0.93)'" onmouseout="this.style.filter=''">Retorikk</button>
+    <button onclick="ubHopp(5)" style="background:#fdf0eb;color:#d45a2f;border:none;cursor:pointer;font-size:13px;font-weight:500;padding:6px 14px;border-radius:99px;font-family:'Source Sans 3',sans-serif;transition:filter 0.15s" onmouseover="this.style.filter='brightness(0.93)'" onmouseout="this.style.filter=''">Samansette tekstar</button>
+    <button onclick="ubHopp(6)" style="background:#e8f6f0;color:#2e8b6a;border:none;cursor:pointer;font-size:13px;font-weight:500;padding:6px 14px;border-radius:99px;font-family:'Source Sans 3',sans-serif;transition:filter 0.15s" onmouseover="this.style.filter='brightness(0.93)'" onmouseout="this.style.filter=''">Fagartikkel</button>
+    <button onclick="ubHopp(7)" style="background:#fdf5e8;color:#c7922e;border:none;cursor:pointer;font-size:13px;font-weight:500;padding:6px 14px;border-radius:99px;font-family:'Source Sans 3',sans-serif;transition:filter 0.15s" onmouseover="this.style.filter='brightness(0.93)'" onmouseout="this.style.filter=''">Tegneserieanalyse</button>
+    <button onclick="ubHopp(9)" style="background:#f0f6ff;color:#1a56db;border:none;cursor:pointer;font-size:13px;font-weight:500;padding:6px 14px;border-radius:99px;font-family:'Source Sans 3',sans-serif;transition:filter 0.15s" onmouseover="this.style.filter='brightness(0.93)'" onmouseout="this.style.filter=''">Noveller</button>
+  </div>
+</div>
+
+<main>
+
+<!-- Intro-boks -->
+<div style="background:#f0f6ff;border:1px solid #c3d3fd;border-radius:12px;padding:1.2rem 1.5rem;margin:0 auto 2rem;max-width:760px">
+  <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#1a3a8a;font-weight:600;margin-bottom:0.5rem">Undervisingsbanken · 8.trinn</p>
+  <p style="font-size:14px;color:#1a2a5e;line-height:1.75;margin-bottom:0.5rem">Her finn du 10 konkrete undervisingsopplegg for 8.trinn, fordelt på årsplanens tema. Kvart opplegg er klart til bruk i 1–2 undervisningstimar à 45 min, og inneheld læringsmål, materiell og steg-for-steg-instruksjonar.</p>
+  <p style="font-size:13px;color:#1a3a8a;line-height:1.7;margin:0"><strong>Tema i årsplanen:</strong> Utanfor (2) &nbsp;·&nbsp; Retorikk (3) &nbsp;·&nbsp; Samansette tekstar (1) &nbsp;·&nbsp; Fagartikkel (1) &nbsp;·&nbsp; Tegneserieanalyse (2) &nbsp;·&nbsp; Noveller og tolkning (1)</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- KARRUSSEL                                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="ub-karussel" style="position:relative;overflow:hidden;max-width:760px;margin:0 auto">
+
+  <!-- Punkt-indikator -->
+  <div id="ub-dots" style="display:flex;justify-content:center;gap:7px;margin-bottom:0.9rem;flex-wrap:wrap"></div>
+
+  <!-- Slide-container -->
+  <div id="ub-slides">
+
+    <!-- ════════════════════════ OPPLEGG 1 ════════════════════════ -->
+    <div class="ub-slide" data-idx="0">
+      <div class="card" style="border-left:4px solid #8b5a9e">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.8rem;flex-wrap:wrap">
+          <span style="background:#f4eef8;color:#8b5a9e;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px">Utanfor · Lyrikk og samtale</span>
+          <span style="font-size:11px;color:var(--ink3)">1 skuletime · 45 min</span>
+        </div>
+        <h3 style="font-size:1.2rem;font-family:'Playfair Display',serif;font-weight:600;margin-bottom:0.8rem">«Einsamflygar» – dikt som spegel</h3>
+        <div style="background:#e8f6ee;border:1px solid #6abf8a;border-radius:8px;padding:0.6rem 1rem;margin-bottom:0.7rem">
+          <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#1a5c42;margin-bottom:0.3rem">🎯 Læringsmål</p>
+          <p style="font-size:13.5px;color:#1a3c2e;line-height:1.65;margin:0">Etter denne timen kan du finne og forklare korleis diktet «Einsamflygar» brukar biletspråk og kontrast for å skildre utenforskap, og du kan knytte tematikken til eigne erfaringar. <em>(Kompetansemål: lese og reflektere over skjønnlitteratur; meningsskaping i lyrikk)</em></p>
+        </div>
+        <div style="background:#fffbe8;border:1px solid #f5d878;border-radius:8px;padding:0.5rem 1rem;margin-bottom:0.8rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#6b4a00">Du treng:</span>
+          <span style="font-size:13px;color:#6b4a00">📖 «Einsamflygar» (Synopsis lesebok)</span>
+          <span style="color:#c9a800">·</span>
+          <span style="font-size:13px;color:#6b4a00">📓 Skrivebok</span>
+          <span style="color:#c9a800">·</span>
+          <span style="font-size:13px;color:#6b4a00">✏️ Blyant/penn</span>
+        </div>
+        <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.5rem">Slik gjer du det:</p>
+        <ol style="font-size:13.5px;color:var(--ink2);line-height:1.9;padding-left:1.4rem;margin:0 0 0.8rem">
+          <li>Læraren les diktet høgt éin gong. Elevane lukkar augo og berre lyttar.</li>
+          <li>Elevane les stille sjølv ein gong til. Ring inn eitt ord eller éi linje som treffer deg.</li>
+          <li>Skriv åleine i skriveboka (5 min): <em>Kva kjensle skapar diktet? Kva bilete brukar det for å vise einsemd?</em></li>
+          <li>Samtale i par: Del det du ringa inn og forklar kvifor du valde nettopp det.</li>
+          <li>Klassediskusjon: Handlar diktet berre om tristheit – eller fins det noko frigjerande i å «flyge åleine»?</li>
+        </ol>
+        <div class="tip">💡 <strong>Tips til læraren:</strong> «Einsamflygar» fungerer særleg godt som opningstekst på perioden – det set ord på noko mange elevar kjenner, utan å vere konfronterande. Forvent ulike tolkingar og la useinigheita leve i klasserommet.</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ OPPLEGG 2 ════════════════════════ -->
+    <div class="ub-slide" data-idx="1" style="display:none">
+      <div class="card" style="border-left:4px solid #8b5a9e">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.8rem;flex-wrap:wrap">
+          <span style="background:#f4eef8;color:#8b5a9e;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px">Utanfor · Filmprosjekt</span>
+          <span style="font-size:11px;color:var(--ink3)">2 skuletimar · 90 min</span>
+        </div>
+        <h3 style="font-size:1.2rem;font-family:'Playfair Display',serif;font-weight:600;margin-bottom:0.8rem">Frå dikt til kortfilm – planlegg og vis «einsemd»</h3>
+        <div style="background:#e8f6ee;border:1px solid #6abf8a;border-radius:8px;padding:0.6rem 1rem;margin-bottom:0.7rem">
+          <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#1a5c42;margin-bottom:0.3rem">🎯 Læringsmål</p>
+          <p style="font-size:13.5px;color:#1a3c2e;line-height:1.65;margin:0">Etter desse timane kan du planleggje og storyboarde ein kortfilm med utgangspunkt i diktet «Einsamflygar», og grunngi kvifor de har valt bestemte bilete og lydar for å vise «einsemd». <em>(Kompetansemål: lage sammensatte tekster; bevisste val av uttrykksformer)</em></p>
+        </div>
+        <div style="background:#fffbe8;border:1px solid #f5d878;border-radius:8px;padding:0.5rem 1rem;margin-bottom:0.8rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#6b4a00">Du treng:</span>
+          <span style="font-size:13px;color:#6b4a00">📖 Diktet «Einsamflygar»</span>
+          <span style="color:#c9a800">·</span>
+          <span style="font-size:13px;color:#6b4a00">📄 A3-ark (folda til 6 ruter = storyboard)</span>
+          <span style="color:#c9a800">·</span>
+          <span style="font-size:13px;color:#6b4a00">📱 Nettbrett eller telefon</span>
+        </div>
+        <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.5rem">Slik gjer du det:</p>
+        <ol style="font-size:13.5px;color:var(--ink2);line-height:1.9;padding-left:1.4rem;margin:0 0 0.8rem">
+          <li>Raskt om storyboard (5 min): kva er det, og kvifor brukar filmskaparar det?</li>
+          <li>Gruppa (3–4 elevar) bestemmer kva side av «einsemd» de vil vise: det triste, det frigjerande, eller begge.</li>
+          <li>Lag eit storyboard med minst 6 scener: kva skjer, kva lyd/musikk, kva kamera-perspektiv.</li>
+          <li>Presenter storybordet for ei anna gruppe – kjem bodskapen fram?</li>
+          <li>Produser filmen dersom tid og utstyr fins; elles er storybordet det ferdige produktet.</li>
+        </ol>
+        <div class="tip">💡 <strong>Tips til læraren:</strong> Minn elevane på at «einsemd» skal <em>visast</em> gjennom bilete – ikkje forklarast. Eit tomt klasserom, eit einsamt lys, berre hendene til ein person. Sterkare enn ei stemme som seier «eg er einsam».</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ OPPLEGG 3 ════════════════════════ -->
+    <div class="ub-slide" data-idx="2" style="display:none">
+      <div class="card" style="border-left:4px solid #2f7ec7">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.8rem;flex-wrap:wrap">
+          <span style="background:#eaf3fd;color:#2f7ec7;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px">Retorikk · Analyse</span>
+          <span style="font-size:11px;color:var(--ink3)">1 skuletime · 45 min</span>
+        </div>
+        <h3 style="font-size:1.2rem;font-family:'Playfair Display',serif;font-weight:600;margin-bottom:0.8rem">Appellformene på reklamejakt</h3>
+        <div style="background:#e8f6ee;border:1px solid #6abf8a;border-radius:8px;padding:0.6rem 1rem;margin-bottom:0.7rem">
+          <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#1a5c42;margin-bottom:0.3rem">🎯 Læringsmål</p>
+          <p style="font-size:13.5px;color:#1a3c2e;line-height:1.65;margin:0">Etter denne timen kan du identifisere ethos, pathos og logos i minst to reklamefilmar, og forklare korleis reklamemakaren brukar appellformene for å overbevise sjåaren. <em>(Kompetansemål: reflektere over mediepåvirkning og retorisk argumentasjon)</em></p>
+        </div>
+        <div style="background:#fffbe8;border:1px solid #f5d878;border-radius:8px;padding:0.5rem 1rem;margin-bottom:0.8rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#6b4a00">Du treng:</span>
+          <span style="font-size:13px;color:#6b4a00">💻 Projektor + to reklamefilmar (YouTube)</span>
+          <span style="color:#c9a800">·</span>
+          <span style="font-size:13px;color:#6b4a00">🟡🟢🔴 Tre fargelapper per elev (gul / grøn / raud)</span>
+        </div>
+        <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.5rem">Slik gjer du det:</p>
+        <ol style="font-size:13.5px;color:var(--ink2);line-height:1.9;padding-left:1.4rem;margin:0 0 0.8rem">
+          <li>Gå raskt gjennom appellformene (5 min): gul = logos, grøn = pathos, raud = ethos.</li>
+          <li>Sjå reklame 1 saman. Kvar elev held opp éin lapp: Kva appellform dominerer?</li>
+          <li>Drøft i klassen: Kvifor valde de ulike lappar? Kva grep brukar reklamemakaren?</li>
+          <li>Sjå reklame 2 åleine. Skriv: <em>«Appellform: ___. Slik brukar dei ho: ___»</em></li>
+          <li>Par-arbeid: Kva er den viktigaste skilnaden mellom dei to reklamane?</li>
+          <li>Klassen oppsummerer: Kva appellform er vanlegast i norsk reklame – og kvifor?</li>
+        </ol>
+        <div class="tip">💡 <strong>Tips til læraren:</strong> Gode kandidatar: beredskapskampanje (logos/ethos), sjokolade- eller parfymereklame (pathos), politikar-ad (ethos). Kontrasten gir elevane noko konkret å diskutere.</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ OPPLEGG 4 ════════════════════════ -->
+    <div class="ub-slide" data-idx="3" style="display:none">
+      <div class="card" style="border-left:4px solid #2f7ec7">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.8rem;flex-wrap:wrap">
+          <span style="background:#eaf3fd;color:#2f7ec7;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px">Retorikk · Munnleg aktivitet</span>
+          <span style="font-size:11px;color:var(--ink3)">2 skuletimar · 90 min</span>
+        </div>
+        <h3 style="font-size:1.2rem;font-family:'Playfair Display',serif;font-weight:600;margin-bottom:0.8rem">Strukturert klassedebatt</h3>
+        <div style="background:#e8f6ee;border:1px solid #6abf8a;border-radius:8px;padding:0.6rem 1rem;margin-bottom:0.7rem">
+          <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#1a5c42;margin-bottom:0.3rem">🎯 Læringsmål</p>
+          <p style="font-size:13.5px;color:#1a3c2e;line-height:1.65;margin:0">Etter desse timane kan du argumentere munnleg med tydeleg påstand og grunngiving, bruke mottilsvar og peike på kva appellform du brukte bevisst. <em>(Kompetansemål: argumentere muntlig med motargumenter; bruke retoriske virkemidler)</em></p>
+        </div>
+        <div style="background:#fffbe8;border:1px solid #f5d878;border-radius:8px;padding:0.5rem 1rem;margin-bottom:0.8rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#6b4a00">Du treng:</span>
+          <span style="font-size:13px;color:#6b4a00">📋 Påstandsark (laga av læraren)</span>
+          <span style="color:#c9a800">·</span>
+          <span style="font-size:13px;color:#6b4a00">📓 Skrivebok til førebuing</span>
+        </div>
+        <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.5rem">Slik gjer du det:</p>
+        <ol style="font-size:13.5px;color:var(--ink2);line-height:1.9;padding-left:1.4rem;margin:0 0 0.8rem">
+          <li>Del klassen i tre grupper: FOR, MOT, DOMMARPANEL.</li>
+          <li>Kvar gruppe førebur minst tre argument med grunngiving – 10 min.</li>
+          <li>Debatt (15 min): FOR argumenterer, MOT svarar, begge kan stille spørsmål.</li>
+          <li>Dommarpanelet avgjer kven som overtydde best – og forklarer kvifor med faglege omgrep.</li>
+          <li>Bytt påstand og roller. Gjenta.</li>
+          <li>Refleksjon: Skriv éi setning: <em>«Det som fungerte best retorisk i dag, var ___»</em></li>
+        </ol>
+        <div class="tip">💡 <strong>Tips til læraren:</strong> Gode påstandar for 8.trinn: «Skulen bør ha fullstendig mobilforbod» · «Det er urealistisk å be ungdom om å redde klimaet» · «Karakterar på ungdomsskulen gjer meir skade enn nytte».</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ OPPLEGG 5 ════════════════════════ -->
+    <div class="ub-slide" data-idx="4" style="display:none">
+      <div class="card" style="border-left:4px solid #2f7ec7">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.8rem;flex-wrap:wrap">
+          <span style="background:#eaf3fd;color:#2f7ec7;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px">Retorikk · Skriving</span>
+          <span style="font-size:11px;color:var(--ink3)">2 skuletimar · 90 min</span>
+        </div>
+        <h3 style="font-size:1.2rem;font-family:'Playfair Display',serif;font-weight:600;margin-bottom:0.8rem">Skriv debattinnlegg – frå modelltekst til eige utkast</h3>
+        <div style="background:#e8f6ee;border:1px solid #6abf8a;border-radius:8px;padding:0.6rem 1rem;margin-bottom:0.7rem">
+          <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#1a5c42;margin-bottom:0.3rem">🎯 Læringsmål</p>
+          <p style="font-size:13.5px;color:#1a3c2e;line-height:1.65;margin:0">Etter desse timane kan du skrive eit debattinnlegg med tydeleg påstand, minst to velgrunngivne argument og ein bevisst bruk av éin appellform. <em>(Kompetansemål: skrive argumenterende tekster; anvende retoriske virkemidler)</em></p>
+        </div>
+        <div style="background:#fffbe8;border:1px solid #f5d878;border-radius:8px;padding:0.5rem 1rem;margin-bottom:0.8rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#6b4a00">Du treng:</span>
+          <span style="font-size:13px;color:#6b4a00">📰 Modelltekst (debattinnlegg, utdelt)</span>
+          <span style="color:#c9a800">·</span>
+          <span style="font-size:13px;color:#6b4a00">📓 Skrivebok</span>
+          <span style="color:#c9a800">·</span>
+          <span style="font-size:13px;color:#6b4a00">🖊️ Fargepennar</span>
+        </div>
+        <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.5rem">Slik gjer du det:</p>
+        <ol style="font-size:13.5px;color:var(--ink2);line-height:1.9;padding-left:1.4rem;margin:0 0 0.8rem">
+          <li>Les modellteksten saman. Lag ei felles «ingrediensliste» på tavla: tittel, påstand, argument, appellform, avslutning.</li>
+          <li>Eleven vel éiga sak – eller vel frå ei liste læraren har laga.</li>
+          <li>Utkast (25 min): start med påstanden, to–tre godt grunngivne argument, sterk avslutning med appell.</li>
+          <li>Byt med sidemannen: «To stjerner og eitt ønske» – kva fungerte, kva kan bli betre?</li>
+          <li>Revider teksten (10 min) basert på tilbakemeldinga frå sidemannen.</li>
+        </ol>
+        <div class="tip">💡 <strong>Tips til læraren:</strong> Minn elevane på at eit godt debattinnlegg ikkje prøver å seie alt – det vel éin klar påstand og forsvarer han effektivt. Kortare er ofte sterkare. Sjå gjerne på Norsklaben sin debattinnlegg-guide for stegvise råd.</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ OPPLEGG 6 ════════════════════════ -->
+    <div class="ub-slide" data-idx="5" style="display:none">
+      <div class="card" style="border-left:4px solid #d45a2f">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.8rem;flex-wrap:wrap">
+          <span style="background:#fdf0eb;color:#d45a2f;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px">Samansette tekstar · Analyse</span>
+          <span style="font-size:11px;color:var(--ink3)">1 skuletime · 45 min</span>
+        </div>
+        <h3 style="font-size:1.2rem;font-family:'Playfair Display',serif;font-weight:600;margin-bottom:0.8rem">Multimodal analyse – dekonstruér ein forside</h3>
+        <div style="background:#e8f6ee;border:1px solid #6abf8a;border-radius:8px;padding:0.6rem 1rem;margin-bottom:0.7rem">
+          <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#1a5c42;margin-bottom:0.3rem">🎯 Læringsmål</p>
+          <p style="font-size:13.5px;color:#1a3c2e;line-height:1.65;margin:0">Etter denne timen kan du forklare korleis tekst, bilete, farge og layout samarbeider i ein samansett tekst, og du kan bruke eit fagleg omgrepsapparat korrekt. <em>(Kompetansemål: analysere sammensatte tekster med fagbegreper)</em></p>
+        </div>
+        <div style="background:#fffbe8;border:1px solid #f5d878;border-radius:8px;padding:0.5rem 1rem;margin-bottom:0.8rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#6b4a00">Du treng:</span>
+          <span style="font-size:13px;color:#6b4a00">📰 3–4 ulike framsider (avis, vekeblad, reklame)</span>
+          <span style="color:#c9a800">·</span>
+          <span style="font-size:13px;color:#6b4a00">🖊️ Fargepennar</span>
+        </div>
+        <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.5rem">Slik gjer du det:</p>
+        <ol style="font-size:13.5px;color:var(--ink2);line-height:1.9;padding-left:1.4rem;margin:0 0 0.8rem">
+          <li>Introduser fire omgrep: <em>verbaltekst, ikonisk teikn (bilete), layout/komposisjon, fargesymbolikk</em>.</li>
+          <li>Kvar elev vel éin forside og skriv: <em>«Det første eg ser er ___. Det kan vere fordi ___»</em></li>
+          <li>Analyser: Kva fortel berre biletet? Kva berre teksten? Kva treng du begge for å forstå?</li>
+          <li>Par-samanlikning: Er to framsider frå same sjanger like i korleis dei kombinerer modalitetar?</li>
+          <li>Klassen oppsummerer: Kvifor er det ein fordel å kombinere ulike modalitetar i ein tekst?</li>
+        </ol>
+        <div class="tip">💡 <strong>Tips til læraren:</strong> Ei avisforside, eit motemagazin og ei reklameplakat gir svært tydelege kontrastar. Elevane ser raskt at medium og sjanger formar bodskapen – sjølv når innhaldet er likt.</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ OPPLEGG 7 ════════════════════════ -->
+    <div class="ub-slide" data-idx="6" style="display:none">
+      <div class="card" style="border-left:4px solid #2e8b6a">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.8rem;flex-wrap:wrap">
+          <span style="background:#e8f6f0;color:#2e8b6a;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px">Fagartikkel · Lesing og analyse</span>
+          <span style="font-size:11px;color:var(--ink3)">1 skuletime · 45 min</span>
+        </div>
+        <h3 style="font-size:1.2rem;font-family:'Playfair Display',serif;font-weight:600;margin-bottom:0.8rem">Dissekér ein fagartikkel – frå tittel til kjeldeliste</h3>
+        <div style="background:#e8f6ee;border:1px solid #6abf8a;border-radius:8px;padding:0.6rem 1rem;margin-bottom:0.7rem">
+          <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#1a5c42;margin-bottom:0.3rem">🎯 Læringsmål</p>
+          <p style="font-size:13.5px;color:#1a3c2e;line-height:1.65;margin:0">Etter denne timen kan du identifisere alle obligatoriske delar av ein fagartikkel og forklare kva funksjon kvar del har. <em>(Kompetansemål: lese og analysere faglege tekstar; vurdere tekststruktur og kjeldebruk)</em></p>
+        </div>
+        <div style="background:#fffbe8;border:1px solid #f5d878;border-radius:8px;padding:0.5rem 1rem;margin-bottom:0.8rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#6b4a00">Du treng:</span>
+          <span style="font-size:13px;color:#6b4a00">📄 Ein fagartikkel (utdelt av læraren)</span>
+          <span style="color:#c9a800">·</span>
+          <span style="font-size:13px;color:#6b4a00">🖊️ Tre fargepennar: gul · oransje · grøn</span>
+        </div>
+        <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.5rem">Slik gjer du det:</p>
+        <ol style="font-size:13.5px;color:var(--ink2);line-height:1.9;padding-left:1.4rem;margin:0 0 0.8rem">
+          <li>Læraren modellerer strukturen på tavla: <em>innleiing → hovuddel (tema-avsnitt) → avslutning → kjeldeliste</em>.</li>
+          <li>Eleven les og markererar: 🟡 gul = innleiing, 🟠 oransje = kvart nytt hovudpoeng, 🟢 grøn = avslutning.</li>
+          <li>Skriv: <em>«Fagartikkelen startar med ___, fordi ___»</em> og <em>«Han sluttar med ___, fordi ___»</em></li>
+          <li>Ring inn éin påstand. Finn kjelda som støttar han.</li>
+          <li>Klassen drøftar: Er fagartikkelen nøytral, eller har han eit synspunkt? Kva skil han frå eit debattinnlegg?</li>
+        </ol>
+        <div class="tip">💡 <strong>Tips til læraren:</strong> Vel ein fagartikkel med eit tema elevane kjenner – ungdomskultur, teknologi, natur. Då kan dei vurdere om forklaringane er gode nok og om kjeldene er truverdige.</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ OPPLEGG 8 ════════════════════════ -->
+    <div class="ub-slide" data-idx="7" style="display:none">
+      <div class="card" style="border-left:4px solid #c7922e">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.8rem;flex-wrap:wrap">
+          <span style="background:#fdf5e8;color:#c7922e;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px">Tegneserieanalyse · Visuell analyse</span>
+          <span style="font-size:11px;color:var(--ink3)">1 skuletime · 45 min</span>
+        </div>
+        <h3 style="font-size:1.2rem;font-family:'Playfair Display',serif;font-weight:600;margin-bottom:0.8rem">Biletspråk og verkemiddel i tegneserien</h3>
+        <div style="background:#e8f6ee;border:1px solid #6abf8a;border-radius:8px;padding:0.6rem 1rem;margin-bottom:0.7rem">
+          <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#1a5c42;margin-bottom:0.3rem">🎯 Læringsmål</p>
+          <p style="font-size:13.5px;color:#1a3c2e;line-height:1.65;margin:0">Etter denne timen kan du namngje og forklare minst tre verkemiddel i ein tegneseriestripe: panelstorleik, perspektiv, lydord (onomatopoesi), snakkeboble-type og strekstil. <em>(Kompetansemål: analysere sammensatte tekster med fagleg omgrepsapparat)</em></p>
+        </div>
+        <div style="background:#fffbe8;border:1px solid #f5d878;border-radius:8px;padding:0.5rem 1rem;margin-bottom:0.8rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#6b4a00">Du treng:</span>
+          <span style="font-size:13px;color:#6b4a00">🎨 Ei side frå grafisk roman eller tegneseriestripe</span>
+          <span style="color:#c9a800">·</span>
+          <span style="font-size:13px;color:#6b4a00">🖊️ Fargepennar</span>
+        </div>
+        <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.5rem">Slik gjer du det:</p>
+        <ol style="font-size:13.5px;color:var(--ink2);line-height:1.9;padding-left:1.4rem;margin:0 0 0.8rem">
+          <li>Læraren modellerer analyse av éit panel: <em>«Panelet er lite og mørkt – det skapar kjensle av trengsel og angst.»</em></li>
+          <li>Eleven vel eit panel og skriv: Kva ser du? Kva kjensle skapar det? Kva grep brukar teiknaren?</li>
+          <li>Sjå på heile sida: Korleis leder panelstorleikane augat gjennom sida? Er tempoet raskt eller sakte?</li>
+          <li>Finn eit lydord (onomatopoesi). Kva ville vore annleis utan det?</li>
+          <li>Samanlikn med ein medelev: Analyserte de same panelet likt? Kvar er de ueinige – og kvifor?</li>
+        </ol>
+        <div class="tip">💡 <strong>Tips til læraren:</strong> <em>Persepolis</em> (Satrapi) og <em>Maus</em> (Spiegelman) eignar seg særleg godt for analyse av tematikk og form i eitt. Tintin og Pondus er gode innfallsportar for dei meir nølande lesarane.</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ OPPLEGG 9 ════════════════════════ -->
+    <div class="ub-slide" data-idx="8" style="display:none">
+      <div class="card" style="border-left:4px solid #c7922e">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.8rem;flex-wrap:wrap">
+          <span style="background:#fdf5e8;color:#c7922e;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px">Tegneserieanalyse · Munnleg aktivitet</span>
+          <span style="font-size:11px;color:var(--ink3)">2 skuletimar · 90 min</span>
+        </div>
+        <h3 style="font-size:1.2rem;font-family:'Playfair Display',serif;font-weight:600;margin-bottom:0.8rem">Munnleg analyse av sjølvvald tegneserie</h3>
+        <div style="background:#e8f6ee;border:1px solid #6abf8a;border-radius:8px;padding:0.6rem 1rem;margin-bottom:0.7rem">
+          <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#1a5c42;margin-bottom:0.3rem">🎯 Læringsmål</p>
+          <p style="font-size:13.5px;color:#1a3c2e;line-height:1.65;margin:0">Etter desse timane kan du halde ei strukturert munnleg analyse av ein sjølvvald tegneseriestripe med bruk av minst fire fagomgrep og ei grunngjeven eiga tolkning. <em>(Kompetansemål: presentere fagleg innhald munnleg med relevant fagspråk)</em></p>
+        </div>
+        <div style="background:#fffbe8;border:1px solid #f5d878;border-radius:8px;padding:0.5rem 1rem;margin-bottom:0.8rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#6b4a00">Du treng:</span>
+          <span style="font-size:13px;color:#6b4a00">🎨 Sjølvvald tegneseriestripe (skulebibliotek/nett)</span>
+          <span style="color:#c9a800">·</span>
+          <span style="font-size:13px;color:#6b4a00">📓 Skrivebok til notat</span>
+        </div>
+        <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.5rem">Slik gjer du det:</p>
+        <ol style="font-size:13.5px;color:var(--ink2);line-height:1.9;padding-left:1.4rem;margin:0 0 0.8rem">
+          <li>Kvar elev vel ei stripesamling eller grafisk roman dei er interesserte i.</li>
+          <li>Vel éi side til grundig næranalyse og grunngiv valet skriftleg.</li>
+          <li>Førebu ein presentasjon på 3–4 minutt: tematikk, verkemiddel, eiga tolkning. Bruk minst fire fagomgrep.</li>
+          <li>Presenter for klassen eller i grupper av tre.</li>
+          <li>Etter kvar presentasjon: éi positiv tilbakemelding og eitt spørsmål frå klassen.</li>
+        </ol>
+        <div class="tip">💡 <strong>Tips til læraren:</strong> Gi elevane ei startfrase: <em>«I dette panelet ser ein at ___, noko som forsterkar bodskapen om ___»</em> – den løftar kvaliteten på analysen umiddelbart.</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ OPPLEGG 10 ════════════════════════ -->
+    <div class="ub-slide" data-idx="9" style="display:none">
+      <div class="card" style="border-left:4px solid #1a56db">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.8rem;flex-wrap:wrap">
+          <span style="background:#1a56db;color:#fff;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px">Noveller og tolkning · Lesing og diskusjon</span>
+          <span style="font-size:11px;color:var(--ink3)">1–2 skuletimar · 45–90 min</span>
+        </div>
+        <h3 style="font-size:1.2rem;font-family:'Playfair Display',serif;font-weight:600;margin-bottom:0.8rem">Les, samtal og tolke – novella som samtalerom</h3>
+        <div style="background:#e8f6ee;border:1px solid #6abf8a;border-radius:8px;padding:0.6rem 1rem;margin-bottom:0.7rem">
+          <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#1a5c42;margin-bottom:0.3rem">🎯 Læringsmål</p>
+          <p style="font-size:13.5px;color:#1a3c2e;line-height:1.65;margin:0">Etter desse timane kan du drøfte ei novelles form og innhald med fagomgrep, reflektere over ulike tolkingar og forklare kvifor same tekst kan tolkast ulikt. <em>(Kompetansemål: lese skjønnlitteratur; reflektere over innhald, form og tolkning)</em></p>
+        </div>
+        <div style="background:#fffbe8;border:1px solid #f5d878;border-radius:8px;padding:0.5rem 1rem;margin-bottom:0.8rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#6b4a00">Du treng:</span>
+          <span style="font-size:13px;color:#6b4a00">📖 Ei kortnovelle (utdelt eller frå Synopsis lesebok)</span>
+          <span style="color:#c9a800">·</span>
+          <span style="font-size:13px;color:#6b4a00">📓 Skrivebok</span>
+        </div>
+        <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.5rem">Slik gjer du det:</p>
+        <ol style="font-size:13.5px;color:var(--ink2);line-height:1.9;padding-left:1.4rem;margin:0 0 0.8rem">
+          <li>Elevane les novella stille heilt gjennom (10 min). Ingen notat enno.</li>
+          <li>Skriv åleine (5 min): <em>«Denne novella handlar om ___ på overflata – men djupare sett kanskje om ___»</em></li>
+          <li>Samtale i grupper på 3–4: Kvar ligg vendepunktet? Er hovudpersonen sympatisk? Kvifor/kvifor ikkje?</li>
+          <li>Kvar gruppe deler si mest interessante ueinigheit med klassen.</li>
+          <li>Klassen drøftar: Kan to ulike tolkingar begge vere «rette»? Kva avgjer kva tolkning er betre?</li>
+        </ol>
+        <div class="tip">💡 <strong>Tips til læraren:</strong> Vel ei novelle med ope sluttinntrykk – det skapar automatisk diskusjon om tolkning og gjer at elevane opplever at eiga meining er verdt noko i det faglege samtalerommet.</div>
+      </div>
+    </div>
+
+  </div><!-- /#ub-slides -->
+
+  <!-- Navigasjon nede -->
+  <div style="display:flex;justify-content:space-between;align-items:center;margin:1.2rem auto 0;max-width:760px">
+    <button onclick="ubNav(-1)" style="font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:500;padding:9px 20px;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink2);transition:background 0.15s" onmouseover="this.style.background='#f5f3ee'" onmouseout="this.style.background='#fff'">← Førre</button>
+    <span id="ub-count" style="font-size:13px;color:var(--ink3);font-weight:500">Opplegg 1 av 10</span>
+    <button onclick="ubNav(1)" style="font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:500;padding:9px 20px;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink2);transition:background 0.15s" onmouseover="this.style.background='#f5f3ee'" onmouseout="this.style.background='#fff'">Neste →</button>
+  </div>
+
+</div><!-- /#ub-karussel -->
+
+</main>
+
+<footer>
+  <p>Norsklaben • av Lektor Tørrkvist • 2026</p>
+  <p id="nl-sist-oppdatert">Sist oppdatert: lastar...</p>
+</footer>
+
+<script src="nav.js"></script>
+<script>
+(function(){
+  var slides = document.querySelectorAll('.ub-slide');
+  var N = slides.length;
+  var cur = 0;
+  var dotsEl = document.getElementById('ub-dots');
+  var countEl = document.getElementById('ub-count');
+
+  for(var i = 0; i < N; i++){
+    var d = document.createElement('button');
+    d.style.cssText = 'width:10px;height:10px;border-radius:50%;border:none;cursor:pointer;padding:0;transition:background 0.18s;flex-shrink:0';
+    (function(idx){ d.addEventListener('click', function(){ cur = idx; render(); }); })(i);
+    dotsEl.appendChild(d);
+  }
+
+  window.ubNav = function(dir){
+    cur = (cur + dir + N) % N;
+    render();
+  };
+
+  window.ubHopp = function(idx){
+    cur = idx;
+    render();
+    document.getElementById('ub-karussel').scrollIntoView({behavior:'smooth', block:'start'});
+  };
+
+  /* Sveip-støtte */
+  var startX = null;
+  var el = document.getElementById('ub-slides');
+  el.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, {passive:true});
+  el.addEventListener('touchend', function(e){
+    if(startX === null) return;
+    var dx = e.changedTouches[0].clientX - startX;
+    if(Math.abs(dx) > 40) ubNav(dx < 0 ? 1 : -1);
+    startX = null;
+  }, {passive:true});
+
+  function render(){
+    slides.forEach(function(s, i){
+      s.style.display = i === cur ? 'block' : 'none';
+    });
+    if(countEl) countEl.textContent = 'Opplegg ' + (cur + 1) + ' av ' + N;
+    dotsEl.querySelectorAll('button').forEach(function(d, i){
+      d.style.background = i === cur ? '#1a56db' : '#d1cdc4';
+    });
+  }
+
+  render();
+})();
+
+(function(){
+  var cards = document.querySelectorAll('#ub-slides .ub-slide .card');
+  if(!cards.length) return;
+  var mobileActive = null;
+
+  function calcZoom(){
+    var baseW = 1280;
+    var baseH = 800;
+    var z = Math.min(window.innerWidth / baseW, window.innerHeight / baseH);
+    return Math.max(0.95, Math.min(1.65, z));
+  }
+
+  function applyZoom(){
+    var active = document.fullscreenElement || mobileActive;
+    cards.forEach(function(card){
+      card.style.zoom = active === card ? calcZoom().toFixed(2) : '';
+    });
+  }
+
+  function syncButtons(){
+    var active = document.fullscreenElement || mobileActive;
+    cards.forEach(function(card){
+      var btn = card.querySelector('.ub-fs-btn');
+      if(!btn) return;
+      btn.textContent = active === card ? '✕ Lukk fullskjerm' : '⛶ Fullskjerm';
+    });
+  }
+
+  function exitMobileFullscreen(){
+    if(!mobileActive) return;
+    mobileActive.classList.remove('fs-mobile');
+    document.body.classList.remove('fs-lock');
+    mobileActive = null;
+  }
+
+  function enterMobileFullscreen(target){
+    exitMobileFullscreen();
+    mobileActive = target;
+    target.classList.add('fs-mobile');
+    document.body.classList.add('fs-lock');
+  }
+
+  function fsToggle(target){
+    if(!target) return;
+    if(document.fullscreenElement === target){
+      document.exitFullscreen();
+      return;
+    }
+    if(mobileActive === target){
+      exitMobileFullscreen();
+      syncButtons();
+      applyZoom();
+      return;
+    }
+    if(!target.requestFullscreen){
+      enterMobileFullscreen(target);
+      syncButtons();
+      applyZoom();
+      return;
+    }
+    if(document.fullscreenElement && document.fullscreenElement !== target){
+      document.exitFullscreen().then(function(){ target.requestFullscreen(); });
+      return;
+    }
+    target.requestFullscreen().catch(function(){
+      enterMobileFullscreen(target);
+      syncButtons();
+      applyZoom();
+    });
+  }
+
+  cards.forEach(function(card){
+    if(card.querySelector('.ub-fs-btn')) return;
+    if(getComputedStyle(card).position === 'static') {
+      card.style.position = 'relative';
+    }
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'fs-btn fs-btn-card ub-fs-btn';
+    btn.style.cssText = [
+      'position:absolute',
+      'top:.7rem',
+      'right:.7rem',
+      'z-index:10',
+      'border:none',
+      'border-radius:6px',
+      'background:rgba(0,0,0,.55)',
+      'color:#fff',
+      'font-family:inherit',
+      'font-size:.8rem',
+      'font-weight:600',
+      'padding:.3rem .7rem',
+      'cursor:pointer',
+      'transition:background .15s'
+    ].join(';');
+    btn.addEventListener('mouseover', function(){ btn.style.background = 'rgba(0,0,0,.8)'; });
+    btn.addEventListener('mouseout', function(){ btn.style.background = 'rgba(0,0,0,.55)'; });
+    btn.textContent = '⛶ Fullskjerm';
+    btn.setAttribute('aria-label', 'Vis undervisingsopplegg i fullskjerm');
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      fsToggle(card);
+    });
+    card.appendChild(btn);
+  });
+
+  document.addEventListener('fullscreenchange', function(){
+    syncButtons();
+    applyZoom();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && mobileActive){
+      exitMobileFullscreen();
+      syncButtons();
+      applyZoom();
+    }
+  });
+
+  window.addEventListener('resize', applyZoom);
+})();
+
+</script>
+
+</body>
+</html>
+
