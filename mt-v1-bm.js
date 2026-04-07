@@ -62,8 +62,8 @@ const MT_BANK = [
 
 {kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'vanskelig',
  q:'Hva er ALLE feila i: «Jeg ville og hjelpe, og lære, og det var gøy og gjøre.»?',
- alt:['«og hjelpe», «og lære» og «og gjøre» skal alle være «å»','Bare «og hjelpe» er feil','«og det» er feil','Setninga er rett'],
- fasit:'«og hjelpe», «og lære» og «og gjøre» skal alle være «å»',
+ alt:['Alle tre skal være «å»','Bare «og hjelpe» er feil','«og det» er feil','Setningen er rett'],
+ fasit:'Alle tre skal være «å»',
  regel:'Modalverb (ville) og adjektiv (gøy) styrer infinitiv med «å». Bare det midtre «og» (mellom hjelpe og lære) er et bindeord.',
  eks:'Jeg ville å hjelpe og å lære, og det var gøy å gjøre.'},
 
@@ -396,8 +396,8 @@ const MT_BANK = [
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'medium',
  q:'Hva skil strukturen i et debattinnlegg fra en fagartikkel?',
- alt:['Debattinnlegget presenterer påstand/mening tidlig; fagartikkelen er nøytral','Fagartikkelen har alltid flere avsnitt','Debattinnlegget trenger ikke innledning','Fagartikkelen bruker aldri kjelder'],
- fasit:'Debattinnlegget presenterer påstand/mening tidlig; fagartikkelen er nøytral',
+ alt:['Debattinnlegg: påstand tidlig. Fagartikkel: nøytral','Fagartikkelen har alltid flere avsnitt','Debattinnlegget trenger ikke innledning','Fagartikkelen bruker aldri kilder'],
+ fasit:'Debattinnlegg: påstand tidlig. Fagartikkel: nøytral',
  regel:'Fagartikkel: nøytral, informativ. Debattinnlegg: tar tydelig standpunkt fra første avsnitt.',
  eks:'FA: «Plastforurensning er et stort problem.» DI: «Jeg mener plastposen bør forbydast no!»'},
 

@@ -598,7 +598,7 @@ function nlMtBuildExercise(task, i, localIx) {
     var accepted = Array.isArray(ansRaw) ? ansRaw : [ansRaw];
     var ansJson = nlMtEscHtml(JSON.stringify(accepted.filter(function(v){ return v != null && String(v).trim(); })));
     var hintText = task && task.hint ? String(task.hint).trim() : '';
-    var inputPlaceholder = hintText ? 'Hint i feltet' : 'Skriv svar';
+    var inputPlaceholder = hintText ? hintText : 'Skriv svar';
     var inputTitle = hintText ? ' title="' + nlMtEscHtml(hintText) + '"' : '';
     var prompt = nlMtEscHtml(parts[0] || '') + '<input class="blank-input" data-ans="' + ansJson + '" placeholder="' + inputPlaceholder + '" aria-label="Skriv inn manglande ord"' + inputTitle + ' style="min-width:160px">' + nlMtEscHtml(parts.slice(1).join(' ___ '));
 

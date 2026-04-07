@@ -62,8 +62,8 @@ const MT_BANK = [
 
 {kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'vanskeleg',
  q:'Kva er ALLE feila i: «Eg ville og hjelpe, og lære, og det var gøy og gjere.»?',
- alt:['«og hjelpe», «og lære» og «og gjere» skal alle vere «å»','Berre «og hjelpe» er feil','«og det» er feil','Setninga er rett'],
- fasit:'«og hjelpe», «og lære» og «og gjere» skal alle vere «å»',
+ alt:['Alle tre skal vere «å»','Berre «og hjelpe» er feil','«og det» er feil','Setninga er rett'],
+ fasit:'Alle tre skal vere «å»',
  regel:'Modalverb (ville) og adjektiv (gøy) styrer infinitiv med «å». Berre det midtre «og» (mellom hjelpe og lære) er eit bindeord.',
  eks:'Eg ville å hjelpe og å lære, og det var gøy å gjere.'},
 
@@ -396,15 +396,15 @@ const MT_BANK = [
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'medium',
  q:'Kva skil strukturen i eit debattinnlegg frå ein fagartikkel?',
- alt:['Debattinnlegget presenterer påstand/meining tidleg; fagartikkelen er nøytral','Fagartikkelen har alltid fleire avsnitt','Debattinnlegget treng ikkje innleiing','Fagartikkelen brukar aldri kjelder'],
- fasit:'Debattinnlegget presenterer påstand/meining tidleg; fagartikkelen er nøytral',
+ alt:['Debattinnlegg: påstand tidleg. Fagartikkel: nøytral','Fagartikkelen har alltid fleire avsnitt','Debattinnlegget treng ikkje innleiing','Fagartikkelen brukar aldri kjelder'],
+ fasit:'Debattinnlegg: påstand tidleg. Fagartikkel: nøytral',
  regel:'Fagartikkel: nøytral, informativ. Debattinnlegg: tek tydeleg standpunkt frå første avsnitt.',
  eks:'FA: «Plastforureining er eit stort problem.» DI: «Eg meiner plastposen bør forbydast no!»'},
 
 
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'medium',
- q:'Kor høyrer eit motargument heime i eit debattinnlegg?',
+ q:'Kvar høyrer eit motargument heime i eit debattinnlegg?',
  alt:['I hovuddelen, der det blir presentert og tilbakevist','Berre i avslutninga','I innleiinga','Motargument skal ikkje takast med'],
  fasit:'I hovuddelen, der det blir presentert og tilbakevist',
  regel:'Å nemne og tilbakevise motargument styrkjer truverdet ditt. Det viser at du kjenner saka frå fleire sider.',
