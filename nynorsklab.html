@@ -82,10 +82,13 @@
       </label>
     </div>
 
-    <button class="gram-start-btn" id="gram-start-btn" onclick="gramStart()">
-      <span>Start øving</span>
-      <span>→</span>
-    </button>
+    <div class="gram-top-actions">
+      <button class="gram-start-btn" id="gram-start-btn" onclick="gramStart()">
+        <span>Start øving</span>
+        <span>→</span>
+      </button>
+      <button class="gram-btn" id="gram-reset-btn" onclick="gramReset()" disabled>Nullstill</button>
+    </div>
 
     <div id="gram-quiz-area">
       <div id="gram-progress-wrap" class="gram-progress-wrap" style="display:none">

@@ -2377,6 +2377,18 @@ tr:nth-child(even) td { background: var(--bg); }
   background: var(--mid);
 }
 
+.gram-top-actions {
+  margin-top: .95rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex-wrap: wrap;
+}
+
+.gram-top-actions .gram-start-btn {
+  margin-top: 0;
+}
+
 #gram-quiz-area {
   margin-top: 1.1rem;
 }

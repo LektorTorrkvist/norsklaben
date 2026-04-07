@@ -757,6 +757,7 @@ function gramStart(){
   GS.tasks = pool;
 
   $('gram-start-btn').disabled=true;
+  if($('gram-reset-btn')) $('gram-reset-btn').disabled=false;
   $('gram-quiz-area').classList.add('active');
   $('gram-summary').classList.remove('show');
   $('gram-task-wrap').innerHTML='';
@@ -768,12 +769,23 @@ function gramStart(){
 }
 
 function gramReset(){
+  GS.tasks=[];
+  GS.idx=0;
+  GS.score=0;
+  GS.answered=false;
+  GS.streak=0;
+  GS.history=[];
+
   $('gram-start-btn').disabled=false;
+  if($('gram-reset-btn')) $('gram-reset-btn').disabled=true;
   $('gram-quiz-area').classList.remove('active');
   $('gram-summary').classList.remove('show');
   $('gram-task-wrap').innerHTML='';
   $('gram-progress-wrap').style.display='none';
   $('gram-score-badge').style.display='none';
+  if($('gram-score-txt')) $('gram-score-txt').textContent='0';
+  if($('gram-progress-fill')) $('gram-progress-fill').style.width='0%';
+  if($('gram-progress-label')) $('gram-progress-label').textContent='0 / 0';
 }
 
 /* ══════════════════════════════════════════════════════
