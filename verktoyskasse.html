@@ -2479,7 +2479,7 @@ textarea.practice:focus { background:#fff; }
       function updateFsLabels() {
         var isFs = document.fullscreenElement === carousel;
         document.querySelectorAll('.nov-fs-btn').forEach(function(b){
-          b.textContent = isFs ? '✕ Lukk fullskjerm' : '⛶ Fullskjerm';
+          b.textContent = isFs ? '✕' : '⛶';
         });
       }
 
@@ -2497,7 +2497,7 @@ textarea.practice:focus { background:#fff; }
         btn.textContent = label;
         clearTimeout(btn._copyTimer);
         btn._copyTimer = setTimeout(function() {
-          btn.textContent = '📋 Kopier kort';
+          btn.textContent = '📋';
         }, 1600);
       }
 
@@ -2514,16 +2514,16 @@ textarea.practice:focus { background:#fff; }
             'text/plain': new Blob([payload.text], { type: 'text/plain' })
           });
           navigator.clipboard.write([item]).then(function() {
-            setCopyState(btn, 'Kopiert!');
+            setCopyState(btn, '✓');
           }).catch(function() {
             if (navigator.clipboard && navigator.clipboard.writeText) {
               navigator.clipboard.writeText(payload.text).then(function() {
-                setCopyState(btn, 'Kopiert!');
+                setCopyState(btn, '✓');
               }).catch(function() {
-                setCopyState(btn, 'Feila');
+                setCopyState(btn, '!');
               });
             } else {
-              setCopyState(btn, 'Feila');
+              setCopyState(btn, '!');
             }
           });
           return;
@@ -2531,14 +2531,14 @@ textarea.practice:focus { background:#fff; }
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(payload.text).then(function() {
-            setCopyState(btn, 'Kopiert!');
+            setCopyState(btn, '✓');
           }).catch(function() {
-            setCopyState(btn, 'Feila');
+            setCopyState(btn, '!');
           });
           return;
         }
 
-        setCopyState(btn, 'Feila');
+        setCopyState(btn, '!');
       }
 
       function ensureButtons() {
@@ -2548,8 +2548,10 @@ textarea.practice:focus { background:#fff; }
             var copyBtn = document.createElement('button');
             copyBtn.className = 'fs-btn fs-btn-card nov-copy-btn';
             copyBtn.type = 'button';
-            copyBtn.style.top = '3.05rem';
-            copyBtn.textContent = '📋 Kopier kort';
+            copyBtn.style.top = '2.35rem';
+            copyBtn.textContent = '📋';
+            copyBtn.style.fontSize = '.72rem';
+            copyBtn.style.padding = '.22rem .5rem';
             copyBtn.setAttribute('aria-label', 'Kopier novellekort til utklippstavla');
             copyBtn.addEventListener('click', function(e) {
               e.preventDefault();
@@ -2562,7 +2564,9 @@ textarea.practice:focus { background:#fff; }
           var btn = document.createElement('button');
           btn.className = 'fs-btn fs-btn-card nov-fs-btn';
           btn.type = 'button';
-          btn.textContent = '⛶ Fullskjerm';
+          btn.textContent = '⛶';
+          btn.style.fontSize = '.72rem';
+          btn.style.padding = '.22rem .5rem';
           btn.setAttribute('aria-label', 'Vis novelle-karusell i fullskjerm');
           btn.addEventListener('click', function(e) {
             e.preventDefault();

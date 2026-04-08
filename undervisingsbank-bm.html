@@ -662,7 +662,7 @@
     cards.forEach(function(card){
       var btn = card.querySelector('.ub-fs-btn');
       if(!btn) return;
-      btn.textContent = active === card ? '✕ Lukk fullskjerm' : '⛶ Fullskjerm';
+      btn.textContent = active === card ? '✕' : '⛶';
     });
   }
 
@@ -680,7 +680,7 @@
     btn.textContent = label;
     clearTimeout(btn._copyTimer);
     btn._copyTimer = setTimeout(function(){
-      btn.textContent = '📋 Kopier kort';
+      btn.textContent = '📋';
     }, 1600);
   }
 
@@ -697,16 +697,16 @@
         'text/plain': new Blob([payload.text], { type: 'text/plain' })
       });
       navigator.clipboard.write([item]).then(function(){
-        setCopyState(btn, 'Kopiert!');
+        setCopyState(btn, '✓');
       }).catch(function(){
         if(navigator.clipboard && navigator.clipboard.writeText){
           navigator.clipboard.writeText(payload.text).then(function(){
-            setCopyState(btn, 'Kopiert!');
+              setCopyState(btn, '✓');
           }).catch(function(){
-            setCopyState(btn, 'Feilet');
+              setCopyState(btn, '!');
           });
         } else {
-          setCopyState(btn, 'Feilet');
+            setCopyState(btn, '!');
         }
       });
       return;
@@ -714,14 +714,14 @@
 
     if(navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(payload.text).then(function(){
-        setCopyState(btn, 'Kopiert!');
+          setCopyState(btn, '✓');
       }).catch(function(){
-        setCopyState(btn, 'Feilet');
+          setCopyState(btn, '!');
       });
       return;
     }
 
-    setCopyState(btn, 'Feilet');
+      setCopyState(btn, '!');
   }
 
   function exitMobileFullscreen(){
@@ -777,23 +777,23 @@
     copyBtn.className = 'fs-btn fs-btn-card ub-copy-btn';
     copyBtn.style.cssText = [
       'position:absolute',
-      'top:3.05rem',
-      'right:.7rem',
+      'top:2.55rem',
+      'right:.55rem',
       'z-index:10',
       'border:none',
       'border-radius:6px',
       'background:rgba(0,0,0,.55)',
       'color:#fff',
       'font-family:inherit',
-      'font-size:.8rem',
+      'font-size:.72rem',
       'font-weight:600',
-      'padding:.3rem .7rem',
+      'padding:.22rem .5rem',
       'cursor:pointer',
       'transition:background .15s'
     ].join(';');
     copyBtn.addEventListener('mouseover', function(){ copyBtn.style.background = 'rgba(0,0,0,.8)'; });
     copyBtn.addEventListener('mouseout', function(){ copyBtn.style.background = 'rgba(0,0,0,.55)'; });
-    copyBtn.textContent = '📋 Kopier kort';
+    copyBtn.textContent = '📋';
     copyBtn.setAttribute('aria-label', 'Kopier undervisningsopplegg til utklippstavlen');
     copyBtn.addEventListener('click', function(e){
       e.preventDefault();
@@ -807,23 +807,23 @@
     btn.className = 'fs-btn fs-btn-card ub-fs-btn';
     btn.style.cssText = [
       'position:absolute',
-      'top:.7rem',
-      'right:.7rem',
+      'top:.55rem',
+      'right:.55rem',
       'z-index:10',
       'border:none',
       'border-radius:6px',
       'background:rgba(0,0,0,.55)',
       'color:#fff',
       'font-family:inherit',
-      'font-size:.8rem',
+      'font-size:.72rem',
       'font-weight:600',
-      'padding:.3rem .7rem',
+      'padding:.22rem .5rem',
       'cursor:pointer',
       'transition:background .15s'
     ].join(';');
     btn.addEventListener('mouseover', function(){ btn.style.background = 'rgba(0,0,0,.8)'; });
     btn.addEventListener('mouseout', function(){ btn.style.background = 'rgba(0,0,0,.55)'; });
-    btn.textContent = '⛶ Fullskjerm';
+    btn.textContent = '⛶';
     btn.setAttribute('aria-label', 'Vis undervisningsopplegg i fullskjerm');
     btn.addEventListener('click', function(e){
       e.preventDefault();
