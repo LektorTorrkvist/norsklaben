@@ -51,6 +51,57 @@ body {
   line-height: 1.6;
 }
 
+/* ─── Dysleksivennleg karuselliste ─── */
+#nov-slides .nov-slide p,
+#nov-slides .nov-slide li {
+  font-size: 1.08rem !important;
+  line-height: 1.78 !important;
+}
+
+#nov-slides .nov-slide .dys-check-heading {
+  font-size: 0.92rem !important;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.55rem !important;
+}
+
+#nov-slides .nov-slide ol.dys-checklist {
+  list-style: none;
+  padding-left: 0 !important;
+  margin: 0 0 0.9rem !important;
+}
+
+#nov-slides .nov-slide ol.dys-checklist li {
+  margin: 0 0 0.62rem !important;
+}
+
+#nov-slides .nov-slide .dys-check-item {
+  display: grid;
+  grid-template-columns: 1.35rem 1fr;
+  gap: 0.72rem;
+  align-items: start;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 0.15rem 0.2rem;
+}
+
+#nov-slides .nov-slide .dys-check-item input[type='checkbox'] {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-top: 0.16rem;
+  accent-color: #1a56db;
+  cursor: pointer;
+}
+
+#nov-slides .nov-slide .dys-check-text {
+  line-height: 1.75;
+}
+
+#nov-slides .nov-slide li.is-done .dys-check-text {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  color: #6e6a61;
+}
+
 /* ─── HEADER ─── */
 header {
   background: var(--primary);
@@ -4010,6 +4061,78 @@ window.slaCheck = function(){
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', renderOgda);
   else setTimeout(renderOgda, 0);
+})();
+
+/* ── Sjekkboksar i "Slik gjer du det" (novellekarusell) ── */
+(function initDysChecklist(){
+  var checklistId = 0;
+
+  function simplifyStep(text){
+    if(!text) return '';
+    var out = text.replace(/\([^)]*\)/g, '');
+    out = text.replace(/\s+/g, ' ').trim();
+    out = out.replace(/\s*[\u2013\u2014-]\s*/g, ' ');
+
+    var sentenceCut = out.search(/[.!?]/);
+    if(sentenceCut > 20) {
+      out = out.slice(0, sentenceCut);
+    }
+
+    var clauseCut = out.search(/[:;]/);
+    if(clauseCut > 12) {
+      out = out.slice(0, clauseCut);
+    }
+
+    var words = out.split(' ').filter(Boolean);
+    if(words.length > 11) {
+      out = words.slice(0, 11).join(' ') + '...';
+    }
+
+    return out;
+  }
+
+  function setupChecklistIn(root){
+    if(!root) return;
+    var labels = root.querySelectorAll('p');
+    labels.forEach(function(label){
+      if(!/Slik gjer du det:/i.test(label.textContent || '')) return;
+      var list = label.nextElementSibling;
+      if(!list || list.tagName !== 'OL' || list.classList.contains('dys-checklist')) return;
+
+      label.classList.add('dys-check-heading');
+      list.classList.add('dys-checklist');
+
+      Array.prototype.forEach.call(list.children, function(li){
+        if(li.tagName !== 'LI') return;
+        var fullText = (li.textContent || '').replace(/\s+/g, ' ').trim();
+        var shortText = simplifyStep(fullText);
+        var boxId = 'vk-check-' + (checklistId++);
+
+        li.innerHTML = '' +
+          '<label class="dys-check-item" for="' + boxId + '" title="' + fullText.replace(/"/g, '&quot;') + '">' +
+            '<input id="' + boxId + '" type="checkbox" />' +
+            '<span class="dys-check-text">' + shortText + '</span>' +
+          '</label>';
+
+        var cb = li.querySelector('input[type="checkbox"]');
+        if(cb){
+          cb.addEventListener('change', function(){
+            li.classList.toggle('is-done', cb.checked);
+          });
+        }
+      });
+    });
+  }
+
+  function init(){
+    document.querySelectorAll('#nov-slides .nov-slide .card').forEach(setupChecklistIn);
+  }
+
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
 
 </script>
