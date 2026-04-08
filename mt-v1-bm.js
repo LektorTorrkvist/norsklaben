@@ -217,8 +217,8 @@ const MT_BANK = [
 
 {kat:'samansett',kat_label:'Samansette ord',type:'mc',vanske:'lett',
  q:'Hva skjer viss du skriver «lamme lår» i stedet for «lammelår»?',
- alt:['Det betyr lår fra lam (mat)','Det betyr lår som er lamme/paralyserte 😬','Det er samme mening begge vegar','Det er bare en stavefeil'],
- fasit:'Det betyr lår som er lamme/paralyserte 😬',
+ alt:['Det betyr lår fra lam (mat)','Det betyr lår som er lamme og kan trenge rullestol','Det er samme mening begge veier','Det betyr at lårene får lamunger'],
+ fasit:'Det betyr lår som er lamme og kan trenge rullestol',
  regel:'Særskriving kan gi helt feil mening. «Lammelår» = mat. «Lamme lår» = paralyserte lår.',
  eks:'lammelår vs. lamme lår, tunfiskbitar vs. tunfisk biter'},
 
