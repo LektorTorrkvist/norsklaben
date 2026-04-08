@@ -109,7 +109,7 @@ const MT_BANK = [
  eks:'Listeform: å rydde, å skrive og å forstå • Kortform (normert): å rydde, skrive og forstå'},
 
 /* — drag_ord: ny type for og_aa — */
-{kat:'og_aa',kat_label:'Og / å',type:'drag_ord',vanske:'lett',
+{kat:'og_aa',kat_label:'Og / å',type:'drag_ord',vanske:'middels',
  q:'Trykk ordene inn i rett rekkefølge – hvor hører «å» og «og» hjemme?',
  ord:['Hun','liker','å','lese','og','skrive'],
  fasit:'Hun liker å lese og skrive',
@@ -138,7 +138,7 @@ const MT_BANK = [
  regel:'«Å» kommer foran et verb i infinitiv. «Og» binder sammen ord, ledd eller setninger.',
  eks:'å danse = infinitiv. katten og hunden = koordinasjon av subjekt.'},
 
-{kat:'og_aa',kat_label:'Og / å',type:'drag_kolonne',vanske:'medium',
+{kat:'og_aa',kat_label:'Og / å',type:'drag_kolonne',vanske:'lett',
  q:'Sorter: Bruker uttrykket «å» (infinitivsmerke) eller «og» (bindeord)?',
  kolonner:['Bruker «å» (infinitivsmerke)','Bruker «og» (bindeord)'],
  ord:[
@@ -298,7 +298,7 @@ const MT_BANK = [
  regel:'Del opp der et nytt hovedpoeng starter. «Det var kaldt ute» = én setning. «Han ville ikke gå og ble hjemme» = én setning med to verb til samme subjekt.',
  eks:'Det var kaldt ute. Han ville ikke gå og ble hjemme.'},
 
-{kat:'setningsbygging',kat_label:'Setningsbygging',type:'mc',vanske:'medium',
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'mc',vanske:'lett',
  q:'Hva er et muntlig uttrykk som ikke hører hjemme i en fagartikkel?',
  alt:['og sånn','dessuten','til eksempel','imidlertid'],
  fasit:'og sånn',
@@ -324,7 +324,7 @@ const MT_BANK = [
  regel:'Slå sammen setninger med samme tema. Unngå å gjenta «Brettspill» flere ganger. Pronomen eller effektiv sammensetning gir bedre flyt.',
  eks:'Brettspill er sosialt og samler folk til felles aktivitet.'},
 
-{kat:'setningsbygging',kat_label:'Setningsbygging',type:'mc',vanske:'medium',
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'mc',vanske:'lett',
  q:'Hva setningsstarter UNNGÅR du helst å bruke to ganger på rad?',
  alt:['Samme åpningsord gjentar seg fra setning til setning','«Dessuten» er et bra bindeord å variere med','«Imidlertid» er et fint formelt alternativ','«Derfor» gir god kontrast mellom setninger'],
  fasit:'Samme åpningsord gjentar seg fra setning til setning',
@@ -497,7 +497,7 @@ const MT_BANK = [
 
 
 
-{kat:'setningsbygging',kat_label:'Setningsbygging',type:'drag_ord',vanske:'lett',
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'drag_ord',vanske:'middels',
  sporsmal:'Sett ordene i rett rekkefølge (vanlig rekkefølge):',
  ord:['Jenta','las','ei','bok','på','senga','.'],
  fasit:'Jenta las ei bok på senga .',
@@ -515,13 +515,13 @@ const MT_BANK = [
  fasit:'Her bur mange innvandrarar .',
  regel:'«Her» fremst → verb (bur) på plass 2 FØR subjektet.'},
 
-{kat:'setningsbygging',kat_label:'Setningsbygging',type:'drag_ord',vanske:'vanskelig',
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'drag_ord',vanske:'middels',
  sporsmal:'Sett ordene i rett rekkefølge (spørresetning):',
  ord:['Hvorfor','kom','du','ikke','i','går','?'],
  fasit:'Hvorfor kom du ikke i går ?',
  regel:'I spørresetninger: spørreord – verb – subjekt – resten.'},
 
-{kat:'setningsbygging',kat_label:'Setningsbygging',type:'drag_ord',vanske:'vanskelig',
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'drag_ord',vanske:'middels',
  sporsmal:'Sett ordene i rett rekkefølge (leddsetning etter «at»):',
  ord:['Hun','sier','at','han','ikke','kommer','.'],
  fasit:'Hun sier at han ikke kommer .',
@@ -625,7 +625,7 @@ const MT_BANK = [
  fasit:'Fordi hun øvde mye, vant hun.',
  regel:'Leddsetning med «fordi» som kommer først → komma + hovedsetning med rett V2-ordstilling. Ikke bruk «derfor» i tillegg.',
  eks:'Fordi hun øvde mye, vant hun. (ikke: ...derfor vant hun)'},
-{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'lett',
+{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'middels',
  sporsmal:'Sett ordene i rett rekkefølge: bindeordet kommer mellom de to setningene.',
  hint:'Hvilket bindeord hører hjemme her?',
  ord:['Hun ble','trøtt','derfor','gikk','hun hjem'],
@@ -678,13 +678,13 @@ const MT_BANK = [
  fasit:'Dessuten er det billigere å sykle .',
  regel:'V2 etter adverbial: Dessuten er det. Verbet kommer på plass 2.'},
 
-{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'vanskelig',
+{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'middels',
  sporsmal:'Sett ordene i rett rekkefølge (leddsetning med «fordi»):',
  ord:['Hun','vant','fordi','hun','øvde','mye','.'],
  fasit:'Hun vant fordi hun øvde mye .',
  regel:'«Fordi» innleder leddsetning. Subjektet kommer FØR verbet i leddsetning.'},
 
-{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'vanskelig',
+{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'middels',
  sporsmal:'Sett ordene i rett rekkefølge (kontrastsetning med «men»):',
  ord:['Han','prøvde','hardt',',','men','lykkast','ikke','.'],
  fasit:'Han prøvde hardt , men lykkast ikke .',

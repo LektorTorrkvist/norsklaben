@@ -489,7 +489,7 @@ function nlMtShuffle(arr) {
 function nlMtDifficultyBadge(vanske) {
   var v = String(vanske || '').toLowerCase();
   if (v === 'lett') return '<span class="b dg">Lett</span>';
-  if (v === 'middels') return '<span class="b dm">Middels</span>';
+  if (v === 'middels' || v === 'medium') return '<span class="b dm">Middels</span>';
   return '<span class="b da">Vidarekomande</span>';
 }
 
