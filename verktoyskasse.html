@@ -4070,7 +4070,7 @@ window.slaCheck = function(){
   function simplifyStep(text){
     if(!text) return '';
     var out = text.replace(/\([^)]*\)/g, '');
-    out = text.replace(/\s+/g, ' ').trim();
+    out = out.replace(/\s+/g, ' ').trim();
     out = out.replace(/\s*[\u2013\u2014-]\s*/g, ' ');
 
     var sentenceCut = out.search(/[.!?]/);
