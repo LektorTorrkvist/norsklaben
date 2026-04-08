@@ -1121,6 +1121,19 @@ textarea.practice:focus { background:#fff; }
   max-width:1040px;
   margin:0 auto;
   padding:2.4rem 3.2rem;
+  font-size:1.25rem;
+}
+#novelle-karussel:fullscreen .nov-slide .card h3,
+#novelle-karussel:-webkit-full-screen .nov-slide .card h3 {
+  font-size:2rem !important;
+  line-height:1.28 !important;
+}
+#novelle-karussel:fullscreen .nov-slide .card p,
+#novelle-karussel:fullscreen .nov-slide .card li,
+#novelle-karussel:-webkit-full-screen .nov-slide .card p,
+#novelle-karussel:-webkit-full-screen .nov-slide .card li {
+  font-size:1.34rem !important;
+  line-height:1.88 !important;
 }
 #novelle-karussel:fullscreen #nov-dots,
 #novelle-karussel:-webkit-full-screen #nov-dots {
@@ -1444,6 +1457,10 @@ textarea.practice:focus { background:#fff; }
         <a href="mad-libs.html">Mad Libs</a>
         <a href="vurderingslab.html">Vurderingslab</a>
       </div>
+    </div>
+    <div class="lang-toggle" aria-label="Vel målform">
+      <a href="verktoyskasse.html" class="active" title="Nynorsk">NN</a>
+      <a href="verktoyskasse-bm.html" title="Bokmål">BM</a>
     </div>
   </nav>
 </header>
@@ -2445,8 +2462,8 @@ textarea.practice:focus { background:#fff; }
       function calcZoom() {
         var w = window.innerWidth;
         var h = window.innerHeight;
-        var z = Math.min(w / 1280, h / 880);
-        return Math.max(1.02, Math.min(1.2, z));
+        var z = Math.min(w / 1140, h / 760);
+        return Math.max(1.08, Math.min(1.55, z));
       }
 
       function applyZoom() {
