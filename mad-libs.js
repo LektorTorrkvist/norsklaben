@@ -446,7 +446,7 @@ const ML_HISTORIER = [
       {id:'ml6', lbl:'Eit substantiv (ting)',            ph:'t.d. blomsterbukett'},
       {id:'ml7', lbl:'Eit adjektiv',                     ph:'t.d. gjennomskoda'},
     ],
-    mal: (v)=>`Eleven sat ${v[1]} utanfor kontoret til ${v[0]}, med ${v[3]} heimebakte ${v[2]} og ein ${v[6]} i sekken – eit forsøk på å ${v[5]} seg til betre karakter. ${v[0]} opna døra. Begge stirra ${v[4]} på kvarandre. Blikkene var like ${v[7]}.`
+    mal: (v)=>`Eleven sat ${v[1]} utanfor kontoret til ${v[0]}, med ${v[3]} heimebakte ${v[2]} og ein ${v[6]} i sekken – eit forsøk på å ${v[5]} seg til betre karakter. ${v[0]} opna døra. Begge stirra ${v[4]} på kvarandre. Blikka var like ${v[7]}.`
   },
 ];
 
