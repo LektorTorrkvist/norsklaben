@@ -74,6 +74,18 @@
     line-height: 1.75;
   }
 
+  .ub-slide .dys-check-sublist {
+    margin: 0.35rem 0 0;
+    padding-left: 1.05rem;
+    list-style: disc;
+  }
+
+  .ub-slide .dys-check-sublist li {
+    margin: 0.2rem 0 0 !important;
+    font-size: 0.98rem !important;
+    line-height: 1.6 !important;
+  }
+
   .ub-slide li.is-done .dys-check-text {
     text-decoration: line-through;
     text-decoration-thickness: 2px;
@@ -723,14 +735,39 @@
 
       Array.prototype.forEach.call(list.children, function(li){
         if(li.tagName !== 'LI') return;
+        var nestedList = li.querySelector('ul, ol');
+        var leadText = '';
+        var subItems = [];
+
+        if(nestedList){
+          Array.prototype.forEach.call(li.childNodes, function(node){
+            if(node.nodeType === 3) {
+              leadText += node.textContent || '';
+            } else if(node.nodeType === 1 && !/^(UL|OL)$/i.test(node.tagName)) {
+              leadText += ' ' + (node.textContent || '');
+            }
+          });
+          leadText = leadText.replace(/\s+/g, ' ').trim();
+          subItems = Array.prototype.map.call(nestedList.querySelectorAll(':scope > li'), function(sli){
+            return (sli.textContent || '').replace(/\s+/g, ' ').trim();
+          }).filter(Boolean);
+        }
+
         var fullText = (li.textContent || '').replace(/\s+/g, ' ').trim();
-        var shortText = simplifyStep(fullText);
+        var shortText = nestedList ? leadText : simplifyStep(fullText);
         var boxId = 'ub-check-' + (checklistId++);
+
+        var subListHtml = '';
+        if(subItems.length){
+          subListHtml = '<ul class="dys-check-sublist">' +
+            subItems.map(function(item){ return '<li>' + item + '</li>'; }).join('') +
+          '</ul>';
+        }
 
         li.innerHTML = '' +
           '<label class="dys-check-item" for="' + boxId + '" title="' + fullText.replace(/"/g, '&quot;') + '">' +
             '<input id="' + boxId + '" type="checkbox" />' +
-            '<span class="dys-check-text">' + shortText + '</span>' +
+            '<span class="dys-check-text">' + shortText + subListHtml + '</span>' +
           '</label>';
 
         var cb = li.querySelector('input[type="checkbox"]');
