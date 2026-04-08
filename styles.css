@@ -1558,6 +1558,52 @@ body.nl-js-collapsible .card.open .exlist { display: block; }
   color: #B05A00;
 }
 
+/* ─── INLINE MARK (finn_feil: inline flowing text) ─── */
+.mark-inline {
+  display: block;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--rs);
+  padding: .75rem .85rem;
+  line-height: 1.9;
+  font-size: .95rem;
+}
+.mark-inline .mark-item {
+  display: inline;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  padding: .08rem .12rem;
+  font-size: inherit;
+  cursor: pointer;
+  transition: background .15s;
+}
+.mark-inline .mark-item:hover {
+  background: rgba(91, 122, 171, .10);
+  color: inherit;
+  border: none;
+}
+.mark-inline .mark-item.sel {
+  background: rgba(91, 122, 171, .14);
+  border-bottom: 2px solid #5b7aab;
+  color: #2b4f85;
+}
+.mark-inline .mark-item.ok {
+  background: rgba(26, 122, 80, .12);
+  border-bottom: 2px solid #1A7A50;
+  color: #1A7A50;
+}
+.mark-inline .mark-item.err {
+  background: rgba(192, 57, 43, .12);
+  border-bottom: 2px solid #C0392B;
+  color: #C0392B;
+}
+.mark-inline .mark-item.missed {
+  background: rgba(176, 90, 0, .12);
+  border-bottom: 2px solid #B05A00;
+  color: #B05A00;
+}
+
 hr.sep { border: none; border-top: 1px solid var(--border); margin: .7rem 0; }
 
 /* ─── INPUTS / CHECK CONTROLS ─── */

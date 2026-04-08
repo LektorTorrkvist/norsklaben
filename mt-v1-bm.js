@@ -2069,17 +2069,18 @@ function mtRenderTask(){
       <button onclick="kmReset()" style="margin-left:8px;background:transparent;border:1px solid #d5d2cb;color:#4a4a46;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 14px;cursor:pointer">Nullstill ↺</button>
     </div>`;
   } else if(t.type==='finn_feil'){
-    // Samme as klikk_marker but marking errors
+    // Inline flowing text – student clicks on error words
     const tknWds = t.tekst.split(' ');
     const wdSpans = tknWds.map((w,i)=>{
       const clean = w.replace(/[.,!?;:«»"()]/g,'').toLowerCase();
       return `<span class="ff-word" data-i="${i}" data-clean="${clean}" onclick="ffClick(this)"
-        style="display:inline-block;margin:2px 3px;padding:3px 8px;border-radius:5px;cursor:pointer;border:1px solid transparent;transition:background 0.12s;font-size:15px;line-height:1.8">${mtEsc(w)}</span>`;
+        style="display:inline;padding:2px 3px;border-radius:3px;cursor:pointer;transition:background 0.15s;border-bottom:2px solid transparent">${mtEsc(w)}</span>`;
     }).join(' ');
+    const nFeil = Array.isArray(t.fasit_feil) ? t.fasit_feil.length : '?';
     inputHTML=`<div style="margin-top:0.8rem">
-      <p style="font-size:12px;color:#8a8a84;margin-bottom:0.5rem">Det er <strong>${t.fasit_feil.length} feil</strong> gøymt i teksten. Klikk på hvert ord du mener er feil skrive eller feil brukt.</p>
-      <div id="ff-tekst" style="background:#f8f7f4;border-radius:8px;padding:0.8rem 1rem;line-height:2;font-family:'Fraunces',serif;font-size:15px;margin-bottom:0.8rem">${wdSpans}</div>
-      <button onclick="ffSjekk()" style="background:#e5822a;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:8px 18px;cursor:pointer">Vis fasit</button>
+      <p style="font-size:12px;color:#8a8a84;margin-bottom:0.5rem">Finn <strong>${nFeil} feil</strong> i teksten. Klikk på hvert ord du mener er feil.</p>
+      <div id="ff-tekst" style="background:#fff;border:1.5px solid #e5e2db;border-radius:8px;padding:0.8rem 1rem;line-height:2;font-family:'Fraunces',serif;font-size:15px;margin-bottom:0.8rem">${wdSpans}</div>
+      <button onclick="ffSjekk()" style="background:#e5822a;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:8px 18px;cursor:pointer">Sjekk svar</button>
       <button onclick="ffReset()" style="margin-left:8px;background:transparent;border:1px solid #d5d2cb;color:#4a4a46;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 14px;cursor:pointer">Nullstill ↺</button>
     </div>`;
   } else if(t.type==='drag_kolonne'){
@@ -2281,6 +2282,88 @@ function mtCheckOpen(){
   if(nw) nw.style.display='block';
 }
 
+/* ── finn_feil: click / check / reset ── */
+function ffClick(el){
+  if(MTS.answered) return;
+  el.classList.toggle('ff-sel');
+  if(el.classList.contains('ff-sel')){
+    el.style.background='rgba(91,122,171,.14)';
+    el.style.borderBottom='2px solid #5b7aab';
+    el.style.color='#2b4f85';
+  } else {
+    el.style.background='';
+    el.style.borderBottom='2px solid transparent';
+    el.style.color='';
+  }
+}
+function ffSjekk(){
+  if(MTS.answered) return;
+  MTS.answered=true;
+  const t=MTS.tasks[MTS.idx];
+  const feil=(t.fasit_feil||[]).map(w=>w.replace(/[.,!?;:«»"()]/g,'').toLowerCase());
+  const words=document.querySelectorAll('.ff-word');
+  let hits=0, falsePos=0;
+  words.forEach(el=>{
+    const clean=el.dataset.clean;
+    const target=feil.includes(clean);
+    const sel=el.classList.contains('ff-sel');
+    if(target&&sel){ el.style.background='rgba(26,122,80,.14)'; el.style.borderBottom='2px solid #1A7A50'; el.style.color='#155f3e'; hits++; }
+    else if(target&&!sel){ el.style.background='rgba(176,90,0,.14)'; el.style.borderBottom='2px solid #B05A00'; el.style.color='#7a4800'; }
+    else if(!target&&sel){ el.style.background='rgba(192,57,43,.14)'; el.style.borderBottom='2px solid #C0392B'; el.style.color='#8a2319'; falsePos++; }
+    else { el.style.borderBottom='2px solid transparent'; }
+    el.style.cursor='default';
+  });
+  const correct=hits===feil.length&&falsePos===0;
+  if(!t.fasit) t.fasit=feil.join(', ');
+  mtFinish(correct,null,t);
+}
+function ffReset(){
+  if(MTS.answered) return;
+  document.querySelectorAll('.ff-word').forEach(el=>{
+    el.classList.remove('ff-sel');
+    el.style.background=''; el.style.borderBottom='2px solid transparent'; el.style.color='';
+  });
+}
+
+/* ── klikk_marker: click / check / reset ── */
+function kmClick(el){
+  if(MTS.answered) return;
+  el.classList.toggle('km-sel');
+  if(el.classList.contains('km-sel')){
+    el.style.background='#e8eef8'; el.style.borderColor='#5b7aab'; el.style.color='#2b4f85';
+  } else {
+    el.style.background=''; el.style.borderColor='transparent'; el.style.color='';
+  }
+}
+function kmSjekk(){
+  if(MTS.answered) return;
+  MTS.answered=true;
+  const t=MTS.tasks[MTS.idx];
+  const src=t.fasit_ord||t.fasit_v||t.fasit_feil||[];
+  const targets=(Array.isArray(src)?src:[src]).map(w=>String(w).replace(/[.,!?;:«»"()]/g,'').toLowerCase());
+  const words=document.querySelectorAll('.km-word');
+  let hits=0, falsePos=0;
+  words.forEach(el=>{
+    const clean=el.dataset.clean;
+    const target=targets.includes(clean);
+    const sel=el.classList.contains('km-sel');
+    if(target&&sel){ el.style.background='rgba(26,122,80,.14)'; el.style.borderColor='#1A7A50'; el.style.color='#155f3e'; hits++; }
+    else if(target&&!sel){ el.style.background='rgba(176,90,0,.14)'; el.style.borderColor='#B05A00'; el.style.color='#7a4800'; }
+    else if(!target&&sel){ el.style.background='rgba(192,57,43,.14)'; el.style.borderColor='#C0392B'; el.style.color='#8a2319'; falsePos++; }
+    el.style.cursor='default';
+  });
+  const correct=hits===targets.length&&falsePos===0;
+  if(!t.fasit) t.fasit=targets.join(', ');
+  mtFinish(correct,null,t);
+}
+function kmReset(){
+  if(MTS.answered) return;
+  document.querySelectorAll('.km-word').forEach(el=>{
+    el.classList.remove('km-sel');
+    el.style.background=''; el.style.borderColor='transparent'; el.style.color='';
+  });
+}
+
 function mtIsCorrect(val,t){
   const n=s=>s.trim().toLowerCase();
   const variants=Array.isArray(t.fasit_v)&&t.fasit_v.length?t.fasit_v:[t.fasit];
@@ -2325,6 +2408,12 @@ function mtNext(){
       } else if(t.type==='mc'){
         // Ingen val gjort – tel som feil og gå videre
         MTS.answered=true; MTS.history[MTS.idx]=false; mtUpdateProgress();
+      } else if(t.type==='finn_feil'){
+        if(document.querySelectorAll('.ff-word.ff-sel').length) ffSjekk();
+        else { MTS.answered=true; MTS.history[MTS.idx]=false; mtUpdateProgress(); }
+      } else if(t.type==='klikk_marker'){
+        if(document.querySelectorAll('.km-word.km-sel').length) kmSjekk();
+        else { MTS.answered=true; MTS.history[MTS.idx]=false; mtUpdateProgress(); }
       } else {
         MTS.answered=true; MTS.history[MTS.idx]=false;
       }
@@ -2345,6 +2434,12 @@ function mtNext(){
       } else if(t.type==='mc'){
         // Ingen val gjort – tel som feil og gå videre
         MTS.answered=true; MTS.history[MTS.idx]=false; mtUpdateProgress();
+      } else if(t.type==='finn_feil'){
+        if(document.querySelectorAll('.ff-word.ff-sel').length) ffSjekk();
+        else { MTS.answered=true; MTS.history[MTS.idx]=false; mtUpdateProgress(); }
+      } else if(t.type==='klikk_marker'){
+        if(document.querySelectorAll('.km-word.km-sel').length) kmSjekk();
+        else { MTS.answered=true; MTS.history[MTS.idx]=false; mtUpdateProgress(); }
       } else {
         MTS.answered=true; MTS.history[MTS.idx]=false;
       }

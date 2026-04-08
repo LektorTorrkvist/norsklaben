@@ -755,15 +755,16 @@ function nlMtBuildExercise(task, i, localIx) {
     var markId = 'mark-' + uniq;
     var scoreMarkId = 'score-' + uniq;
     var inst = type === 'finn_feil'
-      ? 'Klikk på feilen.'
+      ? 'Finn ' + answers.length + ' feil i teksten.'
       : 'Klikk på de rette ordene.';
+    var markCls = 'mark-area' + (type === 'finn_feil' ? ' mark-inline' : '');
 
     return '<article class="ei">' + header +
       '<div class="ec">' +
       promptBoxHtml +
       '<div class="inst">' + inst + '</div>' +
       guideHtml +
-      '<div id="' + markId + '" class="mark-area" data-score="' + scoreMarkId + '" data-answers="' + nlMtEscHtml(JSON.stringify(answers)) + '">' + markItems + '</div>' +
+      '<div id="' + markId + '" class="' + markCls + '" data-score="' + scoreMarkId + '" data-answers="' + nlMtEscHtml(JSON.stringify(answers)) + '">' + markItems + '</div>' +
       '<div class="ex-controls"><button class="btn-check" data-check="mark" data-target="' + markId + '" data-score="' + scoreMarkId + '">Sjekk svar</button><button class="btn-reset" data-reset="mark" data-target="' + markId + '" data-score="' + scoreMarkId + '">Start på nytt</button><span id="' + scoreMarkId + '" class="ex-score"></span></div>' +
       '<button class="btn-fasit" data-fasit="fb-' + uniq + '">' + revealLabel + '</button>' +
       '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">' + revealTitle + '</div><p class="fb-ans">' + revealBody + '</p>' + metaHtml + '</div></div>' +
