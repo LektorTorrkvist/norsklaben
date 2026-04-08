@@ -550,7 +550,8 @@ function nlMtResolveCard(kat) {
     bindeord: 'bindeord-overgangar',
     kjeldebruk: 'kjeldebruk',
     oppgavetolking: 'oppgaveforstaing',
-    spraak_stil: 'spraak-stil'
+    spraak_stil: 'spraak-stil',
+    kj_skj: 'kj-skj'
   };
   return map[kat] || '';
 }

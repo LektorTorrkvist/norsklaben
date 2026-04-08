@@ -1697,7 +1697,7 @@ const MT_BANK = [
  q:'Hva setning har best språklig presisjon i en fagartikkel?',
  alt:['Dette er jo ganske ille, liksom.','Dette framstår som ei alvorlig utfordring.','Det er helt sjukt hvor gale det er.','Jeg synes dette er veldig dårlig.'],
  fasit:'Dette framstår som ei alvorlig utfordring.',
- regel:'P'Presis, nøytral ordbruk gjør argumentasjonen mer troverdig.',
+ regel:'Presis, nøytral ordbruk gjør argumentasjonen mer troverdig.',
  eks:'UNNGÅ muntlige fyllord · VELG presise faglige uttrykk'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'cloze',vanske:'medium',
@@ -1848,9 +1848,9 @@ if(typeof globalThis!=='undefined') globalThis.MT_BANK = MT_BANK;
 ══════════════════════════════════════════════════════ */
 const MTS = { tasks:[], idx:0, score:0, answered:false, config:{}, streak:0, history:[] };
 
-function mtShuffle(arr){ const a=[...arr]; for(lar i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function mtShuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 function mtShuffleBank(){
-  for(lar i=MT_BANK.length-1;i>0;i--){
+  for(let i=MT_BANK.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
     [MT_BANK[i],MT_BANK[j]]=[MT_BANK[j],MT_BANK[i]];
   }
@@ -1892,7 +1892,7 @@ function mtGetTilgjengelegeOppgaver(){
   if(!valgte.length) return 0;
   const vanskeEl=$mt('mt-vanske');
   const vanske=vanskeEl?vanskeEl.value:'adaptiv';
-  lar pool=MT_BANK.filter(t=>valgte.includes(t.kat));
+  let pool=MT_BANK.filter(t=>valgte.includes(t.kat));
   if(vanske!=='adaptiv') pool=pool.filter(t=>t.vanske===vanske);
   return pool.length;
 }
@@ -1968,7 +1968,7 @@ function mtStart(){
   const onskja = parseInt($mt('mt-antal').value,10);
   const grunnTal = Number.isFinite(onskja) ? onskja : 8;
 
-  lar pool = MT_BANK.filter(t=>valgte.includes(t.kat));
+  let pool = MT_BANK.filter(t=>valgte.includes(t.kat));
   if(vanske!=='adaptiv') pool = pool.filter(t=>t.vanske===vanske);
   const maksTillate = Math.min(25, pool.length);
   const antal = Math.min(maksTillate, Math.max(3, grunnTal));
@@ -2039,7 +2039,7 @@ function mtRenderTask(){
     ? `<div style="background:#fffbe8;border:1px solid #f5d878;border-radius:8px;padding:0.55rem 1rem;margin-top:0.7rem;font-size:13px;color:#6b4a00">💡 Hint: ${mtEsc(t.hint)}</div>`
     : '';
 
-  lar inputHTML='';
+  let inputHTML='';
   if(t.type==='mc'){
     const alts=mtShuffle(t.alt);
     inputHTML='<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:0.8rem">';
@@ -2270,7 +2270,7 @@ function mtCheckOpen(){
   fb.style.border='1px solid #f5c282';
   fb.style.color='#6b3800';
 
-  lar html=`<strong>Takk for svaret! Her er et poeng for innsatsen. 📝</strong>`;
+  let html=`<strong>Takk for svaret! Her er et poeng for innsatsen. 📝</strong>`;
   html+=`<div style="margin-top:0.8rem;display:grid;grid-template-columns:1fr 1fr;gap:10px">`;
   if(t.eksempel_svak) html+=`<div style="background:#fff0ed;border-radius:8px;padding:0.7rem 0.9rem;font-size:13px;color:#7f1d1d"><strong style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:4px">Kan bli bedre 🟡</strong>${mtEsc(t.eksempel_svak)}</div>`;
   if(t.eksempel_god) html+=`<div style="background:#e8f6f0;border-radius:8px;padding:0.7rem 0.9rem;font-size:13px;color:#14532d"><strong style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:4px">Sterk formulering ✅</strong>${mtEsc(t.eksempel_god)}</div>`;
@@ -2382,7 +2382,7 @@ function mtFinish(correct, chosen, t){
   fb.style.border=`1px solid ${correct?'#82c9a8':'#f0a090'}`;
   fb.style.color=correct?'#14532d':'#7f1d1d';
 
-  lar html=`<strong>${correct?'✓ Rett!':'✗ Feil'}</strong>`;
+  let html=`<strong>${correct?'✓ Rett!':'✗ Feil'}</strong>`;
   if(!correct) html+=` Rett svar: <strong>${mtEsc(t.fasit)}</strong>`;
   if(t.regel) html+=`<div style="margin-top:0.4rem;font-size:13px;opacity:0.85"><strong>Regel:</strong> ${mtEsc(t.regel)}</div>`;
   if(t.eks)   html+=`<div style="margin-top:0.3rem;font-size:13px;opacity:0.75"><em>Eks.: ${mtEsc(t.eks)}</em></div>`;
@@ -2465,7 +2465,7 @@ function mtShowSummary(){
   // Oppgåveoversikt – vis hva som var rett og feil
   const hist = $mt('mt-sum-history');
   if(hist){
-    lar html='';
+    let html='';
     MTS.tasks.forEach((t,i)=>{
       const ok=MTS.history&&MTS.history[i];
       const icon=ok?'✓':'✗';

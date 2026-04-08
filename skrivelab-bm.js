@@ -552,7 +552,8 @@ function nlMtResolveCard(kat) {
     kjeldebruk: 'kjeldebruk',
     kildebruk: 'kjeldebruk',
     oppgavetolking: 'oppgaveforstaing',
-    spraak_stil: 'spraak-stil'
+    spraak_stil: 'spraak-stil',
+    kj_skj: 'kj-skj'
   };
   return map[kat] || '';
 }
