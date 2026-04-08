@@ -61,8 +61,28 @@ header {
   font-weight: 700;
   color: #fff;
   text-decoration: none;
+  position: relative;
 }
 .logo span { color: var(--alight); }
+.logo::after {
+  content: 'beta';
+  position: absolute;
+  top: -7px;
+  right: -30px;
+  background: linear-gradient(135deg, #7ec8e3, #4da8da);
+  color: #fff;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .52rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 1.5px 5px 1px;
+  border-radius: 3px;
+  line-height: 1.3;
+  box-shadow: 0 1px 4px rgba(77,168,218,.35);
+  transform: rotate(12deg);
+  pointer-events: none;
+}
 
 nav { display: flex; gap: .25rem; }
 

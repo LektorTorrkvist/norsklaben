@@ -1482,7 +1482,7 @@ textarea.practice:focus { background:#fff; }
     <div class="qnav-drop">
       <button type="button" class="qnav-drop-btn" onclick="var m=this.nextElementSibling;m.style.display=m.style.display==='block'?'none':'block'" style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;background:var(--primary);color:#fff;border:none;cursor:pointer;font-family:inherit">Temaoversikt ▾</button>
       <div class="qnav-drop-menu" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid var(--border);border-radius:var(--rs);box-shadow:0 10px 24px rgba(0,0,0,.14);padding:.45rem;z-index:200;white-space:nowrap">
-        <a href="#typiske-feil" style="display:block;padding:.4rem .65rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;color:#6f58b6">Typiske feil ✦</a>
+        <a href="#typiske-feil" style="display:block;padding:.4rem .65rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;color:#6f58b6">Typiske feil</a>
         <a href="#trend1" style="display:block;padding:.4rem .65rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;color:var(--c1)">1 · Kjeldebruk</a>
         <a href="#trend2" style="display:block;padding:.4rem .65rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;color:var(--c2)">2 · Utdjuping</a>
         <a href="#trend3" style="display:block;padding:.4rem .65rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;color:var(--c3)">3 · Tekststruktur</a>
@@ -1490,9 +1490,9 @@ textarea.practice:focus { background:#fff; }
         <a href="#trend5" style="display:block;padding:.4rem .65rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;color:var(--c5)">5 · Sjangerkompetanse</a>
       </div>
     </div>
-    <a href="#typiske-feil" style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:#2a2040;color:#c4a8f5">Typiske feil ✦</a>
-    <a href="#fagartikkel" style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:#e8f6f0;color:#1a5c42">Fagartikkel ✦</a>
-    <a href="#debattinnlegg" style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:#eaf3fd;color:#1a3a8a">Debattinnlegg ✦</a>
+    <a href="#typiske-feil" style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:#2a2040;color:#c4a8f5">Typiske feil</a>
+    <a href="#fagartikkel" style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:#e8f6f0;color:#1a5c42">Fagartikkel</a>
+    <a href="#debattinnlegg" style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:#eaf3fd;color:#1a3a8a">Debattinnlegg</a>
     <a href="#novelle"     style="display:inline-block;padding:.3rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;background:var(--c5l);color:var(--c5)">Novelle</a>
   </div>
 </div>
@@ -2548,7 +2548,8 @@ textarea.practice:focus { background:#fff; }
             var copyBtn = document.createElement('button');
             copyBtn.className = 'fs-btn fs-btn-card nov-copy-btn';
             copyBtn.type = 'button';
-            copyBtn.style.top = '2.35rem';
+            copyBtn.style.top = '.7rem';
+            copyBtn.style.right = '2.35rem';
             copyBtn.textContent = '📋';
             copyBtn.style.fontSize = '.72rem';
             copyBtn.style.padding = '.22rem .5rem';
