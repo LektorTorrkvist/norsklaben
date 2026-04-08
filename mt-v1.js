@@ -1460,7 +1460,7 @@ const MT_BANK = [
  regel:'Ei oppgåve med fleire bestillingsord krev ein plan som handsamar kvart krav i rett rekkjefølge. «Grei ut» kjem alltid FØR «drøft» – du må forstå problemet før du kan diskutere løysingar.',
  eks:'Bomskot: bytte om rekkjefølga. «Grei ut» kjem alltid FØRST – du kan ikkje drøfte løysingar på eit problem du ikkje har forklart.'},
 
-/* ── TEKSTSTRUKTUR: Sorter burgeren, Linjeskift-kuttaren, Overskrifts-ruletten ── */
+/* ── TEKSTSTRUKTUR: Sorter burgeren, Linjeskiftkuttaren, Overskriftsruletten ── */
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'drag_kolonne',vanske:'lett',
  q:'Tekstburgeren: Dra kvart avsnitt til rett del av teksten.',
  kolonner:['Innleiing','Hovuddel','Avslutning'],
@@ -1499,7 +1499,7 @@ const MT_BANK = [
  eks:'Innleiing (problem) → Fakta avsnittet → Løysing-avsnittet'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'lett',
- q:'Overskrifts-ruletten: Kva er den mest presise og faglege overskrifta for ein fagartikkel om klimaendringar og ungdom?',
+ q:'Overskriftsruletten: Kva er den mest presise og faglege overskrifta for ein fagartikkel om klimaendringar og ungdom?',
  alt:[
   'Klimaendringar: kva ungdom kan gjere',
   'Det er veldig viktig å redde planeten vår no!!!',
@@ -1511,7 +1511,7 @@ const MT_BANK = [
  eks:'GOD: «Sosiale medium og psykisk helse hos ungdom». DÅRLEG: «Sosiale medium er kjempeskadelege!!!»'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'medium',
- q:'Overskrifts-ruletten: Kva er den mest faglege overskrifta for ein analyse av to dikt om einsemd?',
+ q:'Overskriftsruletten: Kva er den mest faglege overskrifta for ein analyse av to dikt om einsemd?',
  alt:[
   'Einsemd i lys av to dikt: ei samanliknande analyse',
   'To dikt som handlar om einsemd og trist stemning osv.',
@@ -1523,7 +1523,7 @@ const MT_BANK = [
  eks:'Format: [Emne]: ei [sjanger/metode] – t.d. «Klimakrisa: ei drøfting av tiltak og ansvar»'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'vanskeleg',
- q:'Overskrifts-ruletten: Kva overskrift er best for eit drøftande debattinnlegg om skjermtid hos born?',
+ q:'Overskriftsruletten: Kva overskrift er best for eit drøftande debattinnlegg om skjermtid hos born?',
  alt:[
   'Skjermtid og born: ei drøfting av grenser og ansvar',
   'Bør born bruke mobil? Ja eller nei?',

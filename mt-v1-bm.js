@@ -1460,7 +1460,7 @@ const MT_BANK = [
  regel:'En oppgave med flere bestillingsord krever en plan som behandler hvert krav i rett rekkefølge. «Gjør rede for» kommer alltid FØR «drøft» – du må forstå problemet før du kan diskutere løsninger.',
  eks:'Bomskot: bytte om rekkjefølga. «Grei ut» kommer alltid FØRST – du kan ikke drøfte løsninger på et problem du ikke har forklart.'},
 
-/* ── TEKSTSTRUKTUR: Sorter burgeren, Linjeskift-kuttaren, Overskrifts-ruletten ── */
+/* ── TEKSTSTRUKTUR: Sorter burgeren, Linjeskift-kuttaren, Overskriftsruletten ── */
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'drag_kolonne',vanske:'lett',
  q:'Tekstburgeren: Dra hvert avsnitt til rett del av teksten.',
  kolonner:['Innledning','Hovuddel','Avslutning'],
@@ -1511,7 +1511,7 @@ const MT_BANK = [
  eks:'GOD: «Sosiale medier og psykisk helse hos ungdom». DÅRLEG: «Sosiale medier er kjempeskadelege!!!»'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'medium',
- q:'Overskrifts-ruletten: Hva er den mest faglige overskrifta for en analyse av to dikt om einsemd?',
+ q:'Overskriftsruletten: Hva er den mest faglige overskrifta for en analyse av to dikt om einsemd?',
  alt:[
   'Einsemd i lys av to dikt: ei samanliknande analyse',
   'To dikt som handler om einsemd og trist stemning osv.',
@@ -1523,7 +1523,7 @@ const MT_BANK = [
  eks:'Format: [Emne]: ei [sjanger/metode] – t.d. «Klimakrisa: ei drøfting av tiltak og ansvar»'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'vanskelig',
- q:'Overskrifts-ruletten: Hva overskrift er best for et drøftende debattinnlegg om skjermtid hos born?',
+ q:'Overskriftsruletten: Hva overskrift er best for et drøftende debattinnlegg om skjermtid hos born?',
  alt:[
   'Skjermtid og born: ei drøfting av grenser og ansvar',
   'Bør born bruke mobil? Ja eller nei?',
