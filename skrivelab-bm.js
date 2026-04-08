@@ -27,6 +27,7 @@ function nlBoot() {
 
   nlSafeInit('normalize-categories', nlNormalizeCategories);
   nlSafeInit('import-mt-bank', nlImportMTBankTasks);
+  nlSafeInit('normalize-types-and-titles', nlNormalizeExerciseMetaFromType);
 
   /* ── Card open/close + exercise modal (delegated for robustness) ── */
   document.addEventListener('click', function(e) {
@@ -390,6 +391,8 @@ function nlMtCleanPromptForTitle(prompt) {
     .replace(/^variasjon\s*:\s*/i, '')
     .trim();
 
+  text = nlStripTaskTypePrefix(text);
+
   return text || String(prompt).trim() || 'Oppgave';
 }
 
@@ -493,6 +496,12 @@ function nlMtDifficultyBadge(vanske) {
   return '<span class="b da">Viderekommende</span>';
 }
 
+function nlStripTaskTypePrefix(text) {
+  var out = String(text == null ? '' : text).trim();
+  if (!out) return out;
+  return out.replace(/^\s*(?:feilretting|fylloppg[aå]ve|fyll\s+inn\s+rett\s+ord|fyll\s+inn\s+riktig\s+ord|sorter(?:ing)?|rangere|rangering|identifisering|analyse|bygg(?:je|e)?(?:oppg[aå]ve)?|omskriving|korrigering|rekkef[øo]lgeoppgave)\s*:\s*/i, '').trim();
+}
+
 function nlMtOperationMeta(task) {
   var raw = String((task && (task.op || task.operasjon || task.operation)) || '').toLowerCase();
   raw = raw.replace(/[\s_-]+/g, '');
@@ -505,8 +514,9 @@ function nlMtOperationMeta(task) {
     byggje: { cls: 'ob', label: 'Bygge' },
     bygge: { cls: 'ob', label: 'Bygge' },
     analysere: { cls: 'oa', label: 'Analysere' },
-    rangere: { cls: 'or', label: 'Rangere' },
-    sortering: { cls: 'or', label: 'Rangere' }
+    rangere: { cls: 'or', label: 'Sortere' },
+    sortering: { cls: 'or', label: 'Sortere' },
+    sortere: { cls: 'or', label: 'Sortere' }
   };
   if (explicit[raw]) return explicit[raw];
 
@@ -515,7 +525,7 @@ function nlMtOperationMeta(task) {
   if (type === 'cloze') return { cls: 'of', label: 'Fylloppgave' };
   if (type === 'klikk_marker' || type === 'mc') return { cls: 'oi', label: 'Identifisere' };
   if (type === 'drag_ord') return { cls: 'ob', label: 'Bygge' };
-  if (type === 'drag_kolonne' || type === 'burger_sort' || type === 'avsnitt_klikk') return { cls: 'or', label: 'Rangere' };
+  if (type === 'drag_kolonne' || type === 'burger_sort' || type === 'avsnitt_klikk') return { cls: 'or', label: 'Sortere' };
   if (type === 'open') return { cls: 'oo', label: 'Omskrive' };
   return { cls: 'oa', label: 'Analysere' };
 }
@@ -2101,7 +2111,7 @@ function nlFilter(q, op) {
     var text = (cn + ' ' + cd + ' ' + tits).toLowerCase();
     var ms = !q || text.indexOf(q) !== -1;
     var opNeedles = [String(op || '').toLowerCase()];
-    if (opNeedles[0] === 'rangere') opNeedles.push('sortering');
+    if (opNeedles[0] === 'rangere' || opNeedles[0] === 'sortere') opNeedles.push('sortering', 'sortere', 'rangere');
     if (opNeedles[0] === 'fylloppgave') opNeedles.push('fyllopp\u00E5ve');
     if (opNeedles[0] === 'fyllopp\u00E5ve') opNeedles.push('fylloppgave');
     if (opNeedles[0] === 'bygge') opNeedles.push('byggje');
@@ -2117,6 +2127,34 @@ function nlFilter(q, op) {
   document.querySelectorAll('.grp').forEach(function(g) {
     var v = [].some.call(g.querySelectorAll('.card'), function(c) { return !c.classList.contains('hidden'); });
     g.style.display = v ? '' : 'none';
+  });
+}
+
+function nlTypeMetaFromCheckType(checkType) {
+  var t = String(checkType || '').toLowerCase();
+  if (t === 'fix') return { cls: 'ok', label: 'Korrigere' };
+  if (t === 'fill') return { cls: 'of', label: 'Fylloppgave' };
+  if (t === 'mark' || t === 'mc' || t === 'mcset') return { cls: 'oi', label: 'Identifisere' };
+  if (t === 'drag-ord') return { cls: 'ob', label: 'Bygge' };
+  if (t === 'rank' || t === 'sort' || t === 'burger') return { cls: 'or', label: 'Sortere' };
+  if (t === 'write') return { cls: 'oo', label: 'Omskrive' };
+  return { cls: 'oa', label: 'Analysere' };
+}
+
+function nlNormalizeExerciseMetaFromType() {
+  var rankChip = document.querySelector('.chip[data-op="rangere"]');
+  if (rankChip) rankChip.textContent = 'Sortere';
+
+  document.querySelectorAll('.ei').forEach(function(ei) {
+    var title = ei.querySelector('.etog .etit');
+    if (title) title.textContent = nlStripTaskTypePrefix(title.textContent || '');
+
+    var checkBtn = ei.querySelector('.btn-check[data-check]');
+    var meta = nlTypeMetaFromCheckType(checkBtn ? checkBtn.dataset.check : '');
+    var badge = ei.querySelector('.etog .b:not(.dg):not(.dm):not(.da)');
+    if (!badge) return;
+    badge.className = 'b ' + meta.cls;
+    badge.textContent = meta.label;
   });
 }
 
@@ -2930,9 +2968,7 @@ function nlAdTitleFromExercise(ei) {
   var title = ei.querySelector('.etit');
   if (!title) title = ei.querySelector('h4, h3, h2');
   var text = title ? title.textContent.trim() : 'Oppgave';
-  // Strip pedagogical type prefixes like "Holoppgåve: ", "Metatekst-støvsugaren: "
-  var m = text.match(/^[A-ZÆØÅ][^:]{3,35}:\s+(.+)$/);
-  if (m && m[1].length >= 5) text = m[1];
+  text = nlStripTaskTypePrefix(text);
   return text || 'Oppgave';
 }
 
