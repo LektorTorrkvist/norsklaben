@@ -94,6 +94,7 @@ function nlBoot() {
     if (t === 'burger') nlCheckBurger(tgt, sid);
     if (t === 'mc') nlCheckMc(tgt, sid);
     if (t === 'mcset') nlCheckMcSet(tgt, sid);
+    if (t === 'fillsel') nlCheckFillSel(tgt, sid);
     if (t === 'drag-ord') nlCheckDragOrd(tgt, sid);
     if (t === 'write') nlCheckWrite(tgt, sid);
   });
@@ -111,6 +112,7 @@ function nlBoot() {
     if (t === 'burger') nlResetBurger(tgt, sid);
     if (t === 'mc') nlResetMc(tgt, sid);
     if (t === 'mcset') nlResetMcSet(tgt, sid);
+    if (t === 'fillsel') nlResetFillSel(tgt, sid);
     if (t === 'drag-ord') nlResetDragOrd(tgt, sid);
   });
 
@@ -1032,6 +1034,43 @@ function nlResetMcSet(tid, sid) {
   container.querySelectorAll('.mcq-area').forEach(function(area) {
     area.querySelectorAll('input[type="radio"]').forEach(function(inp){ inp.checked = false; });
     area.querySelectorAll('.mcq-opt').forEach(function(opt){ opt.classList.remove('ok', 'err'); });
+  });
+  nlClearScore(sid);
+}
+
+/* ── INLINE SELECT FILL (fillsel) ── */
+function nlCheckFillSel(tid, sid) {
+  var container = document.getElementById(tid);
+  if (!container) return;
+  var selects = container.querySelectorAll('select.fill-select');
+  if (!selects.length) return;
+  var total = 0, correct = 0, unanswered = 0;
+  selects.forEach(function(sel) {
+    sel.classList.remove('sel-ok', 'sel-err');
+    var answer = sel.dataset.answer;
+    if (answer == null) return;
+    total++;
+    if (!sel.value) { unanswered++; return; }
+    if (sel.value === answer) {
+      sel.classList.add('sel-ok');
+      correct++;
+    } else {
+      sel.classList.add('sel-err');
+    }
+  });
+  if (unanswered > 0) {
+    nlSetScore(sid, 'Vel eitt alternativ i kvart felt.');
+    return;
+  }
+  nlSetScore(sid, correct + ' av ' + total + ' rette', correct === total ? 'ok' : 'err');
+}
+
+function nlResetFillSel(tid, sid) {
+  var container = document.getElementById(tid);
+  if (!container) return;
+  container.querySelectorAll('select.fill-select').forEach(function(sel) {
+    sel.selectedIndex = 0;
+    sel.classList.remove('sel-ok', 'sel-err');
   });
   nlClearScore(sid);
 }

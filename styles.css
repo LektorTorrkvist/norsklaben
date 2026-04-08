@@ -1663,6 +1663,41 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: .7rem 0; }
   background: rgba(192, 57, 43, .08);
 }
 
+/* ─── Inline select fill (fillsel) ─── */
+.fillsel-sentence {
+  font-size: .88rem;
+  line-height: 1.85;
+  color: var(--tdark);
+  margin-bottom: .35rem;
+}
+.fillsel-sentence:last-child { margin-bottom: 0; }
+.fill-select {
+  font: inherit;
+  font-size: .84rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: #fff;
+  border: 1.5px solid var(--mid);
+  border-radius: 6px;
+  padding: .18rem .45rem .18rem .3rem;
+  cursor: pointer;
+  transition: border-color .2s, background .2s, box-shadow .2s;
+  vertical-align: baseline;
+  outline: none;
+}
+.fill-select:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(26,61,46,.12); }
+.fill-select:hover { border-color: var(--primary); }
+.fill-select.sel-ok {
+  border-color: #1A7A50;
+  background: rgba(26, 122, 80, .10);
+  color: #1A7A50;
+}
+.fill-select.sel-err {
+  border-color: #C0392B;
+  background: rgba(192, 57, 43, .10);
+  color: #C0392B;
+}
+
 .mcq-area {
   display: grid;
   gap: .45rem;
