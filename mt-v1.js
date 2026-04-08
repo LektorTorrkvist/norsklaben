@@ -4,6 +4,24 @@
 const MT_BANK = [
 
 /* ── OG / Å (10) ── */
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'lett',
+ q:'Fem og/å-feil',
+ tekst:'Eg har alltid hatt lyst og reise til Italia. Broren min lovde og kome, men han gløymde å bestille billett. Det er vanleg og gløyme slike ting. Vi prøvde og finne ein billig pris, men det var vanskeleg å gjere. Til slutt bestemte vi oss og reise til Spania i staden.',
+ errors:{'lyst og reise':'lyst å reise','lovde og kome':'lovde å kome','vanleg og gløyme':'vanleg å gløyme','prøvde og finne':'prøvde å finne','oss og reise':'oss å reise'},
+ fasit:'«og reise» → å reise | «og kome» → å kome | «og gløyme» → å gløyme | «og finne» → å finne | «og reise» (siste) → å reise',
+ regel:'«Å» = infinitivsmerke (å gjere noko). «Og» = bindeord mellom ledd.'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'mcset',vanske:'lett',
+ q:'Vel og eller å',
+ questions:[
+  {q:'1. Kva setning er rett?',alt:['Det er viktig og ete sunt å sove godt.','Det er viktig å ete sunt og sove godt.','Det er viktig og ete sunt og sove godt.'],fasit:1},
+  {q:'2. Kva setning er rett?',alt:['Han prøvde og lese, men klarte og konsentrere seg.','Han prøvde å lese, men klarte å konsentrere seg.','Han prøvde å lese, men klarte og konsentrere seg.'],fasit:1},
+  {q:'3. Kva setning er rett?',alt:['Vi har lyst og gå på kino å ete pizza etterpå.','Vi har lyst å gå på kino å ete pizza etterpå.','Vi har lyst å gå på kino og ete pizza etterpå.'],fasit:2},
+  {q:'4. Kva setning er rett?',alt:['Det er lett å gløyme å sette strikk rundt hatten.','Det er lett og gløyme å sette strikk rundt hatten.','Det er lett og gløyme og sette strikk rundt hatten.'],fasit:0},
+  {q:'5. Kva setning er rett?',alt:['Læraren bad elevane og lese kapittel tre å fire.','Læraren bad elevane å lese kapittel tre og fire.','Læraren bad elevane å lese kapittel tre å fire.'],fasit:1}
+ ],
+ fasit:'1. å / og  2. å / å  3. å / og  4. å / å  5. å / og'},
+
 {kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'lett',
  q:'Vel rett ord: «Ho likar ___ danse.»',
  alt:['og','å'],fasit:'å',
@@ -705,6 +723,12 @@ const MT_BANK = [
 
 
 /* ── DOBBEL KONSONANT (20 oppgåver) ── */
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'lett',
+ q:'Fem feil i elevtekst',
+ tekst:'Mange unggdomar er optat av sosiale medium. Det er viktig at vi set grenser for kor lang tid vi brukar på mobilen. Familien bør samlast rundt midagsbordet og snakke saman om daagen. Prøv å leggje ned telefonen og sjå ut vinnduet i staden.',
+ errors:{'unggdomar':'ungdommar','optat':['opptekne','oppteken','opptatt','opptatte'],'midagsbordet':'middagsbordet','daagen':'dagen','vinnduet':'vinduet'},
+ fasit:'unggdomar\u2009\u2192\u2009ungdommar | optat\u2009\u2192\u2009opptekne | midags-\u2009\u2192\u2009middags- | daagen\u2009\u2192\u2009dagen | vinnduet\u2009\u2192\u2009vinduet'},
+
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'lett',
  q:'Kva er rett skrivemåte av verbet i infinitiv?',
  alt:['hoppe','hoppa','hoppet','hopp'],fasit:'hoppe',

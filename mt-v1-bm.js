@@ -4,6 +4,24 @@
 const MT_BANK = [
 
 /* ── OG / Å (10) ── */
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'lett',
+ q:'Fem og/å-feil',
+ tekst:'Jeg har alltid hatt lyst og reise til Italia. Broren min lovet og komme, men han glemte å bestille billett. Det er vanlig og glemme slike ting. Vi prøvde og finne en billig pris, men det var vanskelig å gjøre. Til slutt bestemte vi oss og reise til Spania i stedet.',
+ errors:{'lyst og reise':'lyst å reise','lovet og komme':'lovet å komme','vanlig og glemme':'vanlig å glemme','prøvde og finne':'prøvde å finne','oss og reise':'oss å reise'},
+ fasit:'«og reise» → å reise | «og komme» → å komme | «og glemme» → å glemme | «og finne» → å finne | «og reise» (siste) → å reise',
+ regel:'«Å» = infinitivsmerke (å gjøre noe). «Og» = bindeord mellom ledd.'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'mcset',vanske:'lett',
+ q:'Velg og eller å',
+ questions:[
+  {q:'1. Hvilken setning er rett?',alt:['Det er viktig og ete sunt å sove godt.','Det er viktig å ete sunt og sove godt.','Det er viktig og ete sunt og sove godt.'],fasit:1},
+  {q:'2. Hvilken setning er rett?',alt:['Han prøvde og lese, men klarte og konsentrere seg.','Han prøvde å lese, men klarte å konsentrere seg.','Han prøvde å lese, men klarte og konsentrere seg.'],fasit:1},
+  {q:'3. Hvilken setning er rett?',alt:['Vi har lyst og gå på kino å ete pizza etterpå.','Vi har lyst å gå på kino å ete pizza etterpå.','Vi har lyst å gå på kino og ete pizza etterpå.'],fasit:2},
+  {q:'4. Hvilken setning er rett?',alt:['Det er lett å glemme å sette strikk rundt hatten.','Det er lett og glemme å sette strikk rundt hatten.','Det er lett og glemme og sette strikk rundt hatten.'],fasit:0},
+  {q:'5. Hvilken setning er rett?',alt:['Læraren bad elevene og lese kapittel tre å fire.','Læraren bad elevene å lese kapittel tre og fire.','Læraren bad elevene å lese kapittel tre å fire.'],fasit:1}
+ ],
+ fasit:'1. å / og  2. å / å  3. å / og  4. å / å  5. å / og'},
+
 {kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'lett',
  q:'Velg rett ord: «Hun liker ___ danse.»',
  alt:['og','å'],fasit:'å',
@@ -705,6 +723,12 @@ const MT_BANK = [
 
 
 /* ── DOBBEL KONSONANT (20 oppgaver) ── */
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'lett',
+ q:'Fem feil i elevtekst',
+ tekst:'Mange unggdomar er optat av sosiale medier. Det er viktig at vi setter grenser for hvor lang tid vi bruker på mobilen. Familien bør samles rundt midagsbordet og snakke sammen om daagen. Prøv å legge ned telefonen og se ut vindduet i stedet.',
+ errors:{'unggdomar':'ungdommer','optat':['opptatt','oppteken','opptatt','opptatte'],'midagsbordet':'middagsbordet','daagen':'dagen','vindduet':'vinduet'},
+ fasit:'unggdomar\u2009\u2192\u2009ungdommer | optat\u2009\u2192\u2009opptatt | midags-\u2009\u2192\u2009middags- | daagen\u2009\u2192\u2009dagen | vindduet\u2009\u2192\u2009vinduet'},
+
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'lett',
  q:'Hva er rett skrivemåte av verbet i infinitiv?',
  alt:['hoppe','hoppa','hoppet','hopp'],fasit:'hoppe',

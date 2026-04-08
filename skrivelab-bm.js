@@ -772,6 +772,111 @@ function nlMtBuildExercise(task, i, localIx) {
       '</div></article>';
   }
 
+  if (type === 'fix') {
+    var fixTekst = String(task && (task.tekst || task.q || '') || '').trim();
+    if (!fixTekst) return '';
+    var fixErrors = task && task.errors || {};
+    var fixId = 'fix-' + uniq;
+    var scoreFixId = 'score-' + uniq;
+    return '<article class="ei">' + header +
+      '<div class="ec">' +
+      promptBoxHtml +
+      '<div class="inst">Rett feilene direkte i teksten.</div>' +
+      guideHtml +
+      '<div class="fix-area ibox" id="' + fixId + '" contenteditable="true" spellcheck="false" data-original="' + nlMtEscHtml(fixTekst) + '" data-errors="' + nlMtEscHtml(JSON.stringify(fixErrors)) + '">' + nlMtEscHtml(fixTekst) + '</div>' +
+      '<div class="ex-controls"><button class="btn-check" data-check="fix" data-target="' + fixId + '" data-score="' + scoreFixId + '">Sjekk svar</button><button class="btn-reset" data-reset="fix" data-target="' + fixId + '" data-score="' + scoreFixId + '">Start på nytt</button><span id="' + scoreFixId + '" class="ex-score"></span></div>' +
+      '<button class="btn-fasit" data-fasit="fb-' + uniq + '">' + revealLabel + '</button>' +
+      '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">' + revealTitle + '</div><p class="fb-ans">' + revealBody + '</p>' + metaHtml + '</div></div>' +
+      '</div></article>';
+  }
+
+  if (type === 'rank') {
+    var rankItems = Array.isArray(task && task.items) ? task.items : [];
+    var rankCorrect = Array.isArray(task && task.correct) ? task.correct : [];
+    if (!rankItems.length || !rankCorrect.length) return '';
+    var rankId = 'rank-' + uniq;
+    var scoreRankId = 'score-' + uniq;
+    return '<article class="ei">' + header +
+      '<div class="ec">' +
+      promptBoxHtml +
+      '<div class="inst">Dra elementene i riktig rekkefølge.</div>' +
+      guideHtml +
+      '<div class="rank-list" id="' + rankId + '" data-items="' + nlMtEscHtml(JSON.stringify(rankItems)) + '" data-correct="' + nlMtEscHtml(JSON.stringify(rankCorrect)) + '"></div>' +
+      '<div class="ex-controls"><button class="btn-check" data-check="rank" data-target="' + rankId + '" data-score="' + scoreRankId + '">Sjekk rekkefølge</button><button class="btn-reset" data-reset="rank" data-target="' + rankId + '" data-score="' + scoreRankId + '">Bland på nytt</button><span id="' + scoreRankId + '" class="ex-score"></span></div>' +
+      '<button class="btn-fasit" data-fasit="fb-' + uniq + '">' + revealLabel + '</button>' +
+      '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">' + revealTitle + '</div><p class="fb-ans">' + revealBody + '</p>' + metaHtml + '</div></div>' +
+      '</div></article>';
+  }
+
+  if (type === 'fillsel') {
+    var sentences = Array.isArray(task && task.sentences) ? task.sentences : [];
+    if (!sentences.length) return '';
+    var fillselId = 'fillsel-' + uniq;
+    var scoreFillselId = 'score-' + uniq;
+    var fillselHtml = sentences.map(function(s, si) {
+      var opts = (Array.isArray(s.options) ? s.options : []).map(function(o) {
+        return '<option value="' + nlMtEscHtml(o) + '">' + nlMtEscHtml(o) + '</option>';
+      }).join('');
+      return '<p class="fillsel-sentence">' + nlMtEscHtml(s.pre || '') +
+        '<select class="fill-select" data-answer="' + nlMtEscHtml(s.answer || '') + '"><option value="">– velg –</option>' + opts + '</select>' +
+        nlMtEscHtml(s.post || '') + '</p>';
+    }).join('');
+    return '<article class="ei">' + header +
+      '<div class="ec">' +
+      promptBoxHtml +
+      '<div class="inst">Velg riktig alternativ i hver rullegardin.</div>' +
+      guideHtml +
+      '<div class="ibox" id="' + fillselId + '">' + fillselHtml + '</div>' +
+      '<div class="ex-controls"><button class="btn-check" data-check="fillsel" data-target="' + fillselId + '" data-score="' + scoreFillselId + '">Sjekk svar</button><button class="btn-reset" data-reset="fillsel" data-target="' + fillselId + '" data-score="' + scoreFillselId + '">Start på nytt</button><span id="' + scoreFillselId + '" class="ex-score"></span></div>' +
+      '<button class="btn-fasit" data-fasit="fb-' + uniq + '">' + revealLabel + '</button>' +
+      '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">' + revealTitle + '</div><p class="fb-ans">' + revealBody + '</p>' + metaHtml + '</div></div>' +
+      '</div></article>';
+  }
+
+  if (type === 'mcset') {
+    var mcsetQs = Array.isArray(task && task.questions) ? task.questions : [];
+    if (!mcsetQs.length) return '';
+    var mcsetId = 'mcset-' + uniq;
+    var scoreMcsetId = 'score-' + uniq;
+    var mcsetHtml = mcsetQs.map(function(mq, mi) {
+      var mqId = mcsetId + '-' + mi;
+      var alts = Array.isArray(mq.alt) ? mq.alt : [];
+      var opts = alts.map(function(a, ai) {
+        return '<label class="mcq-opt"><input type="radio" name="' + mqId + '" value="' + ai + '"><span>' + nlMtEscHtml(a) + '</span></label>';
+      }).join('');
+      return '<div class="mcq-area" id="' + mqId + '" data-answer="' + (mq.fasit != null ? mq.fasit : 0) + '">' +
+        '<p>' + nlMtEscHtml(mq.q || '') + '</p>' + opts + '</div>';
+    }).join('');
+    return '<article class="ei">' + header +
+      '<div class="ec">' +
+      promptBoxHtml +
+      '<div class="inst">Velg ett alternativ på hvert spørsmål.</div>' +
+      guideHtml +
+      '<div id="' + mcsetId + '">' + mcsetHtml + '</div>' +
+      '<div class="ex-controls"><button class="btn-check" data-check="mcset" data-target="' + mcsetId + '" data-score="' + scoreMcsetId + '">Sjekk svar</button><button class="btn-reset" data-reset="mcset" data-target="' + mcsetId + '" data-score="' + scoreMcsetId + '">Start på nytt</button><span id="' + scoreMcsetId + '" class="ex-score"></span></div>' +
+      '<button class="btn-fasit" data-fasit="fb-' + uniq + '">' + revealLabel + '</button>' +
+      '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">' + revealTitle + '</div><p class="fb-ans">' + revealBody + '</p>' + metaHtml + '</div></div>' +
+      '</div></article>';
+  }
+
+  if (type === 'burger_sort') {
+    var burgerAvsnitt = Array.isArray(task && task.avsnitt) ? task.avsnitt : [];
+    var burgerLag = Array.isArray(task && task.lag) ? task.lag : [];
+    if (!burgerAvsnitt.length || !burgerLag.length) return '';
+    var burgerId = 'burger-' + uniq;
+    var scoreBurgerId = 'score-' + uniq;
+    return '<article class="ei">' + header +
+      '<div class="ec">' +
+      promptBoxHtml +
+      '<div class="inst">Dra hvert avsnitt til riktig lag.</div>' +
+      guideHtml +
+      '<div class="burger-ex" id="' + burgerId + '" data-paragraphs="' + nlMtEscHtml(JSON.stringify(burgerAvsnitt)) + '" data-layers="' + nlMtEscHtml(JSON.stringify(burgerLag)) + '"></div>' +
+      '<div class="ex-controls"><button class="btn-check" data-check="burger" data-target="' + burgerId + '" data-score="' + scoreBurgerId + '">Sjekk svar</button><button class="btn-reset" data-reset="burger" data-target="' + burgerId + '" data-score="' + scoreBurgerId + '">Start på nytt</button><span id="' + scoreBurgerId + '" class="ex-score"></span></div>' +
+      '<button class="btn-fasit" data-fasit="fb-' + uniq + '">' + revealLabel + '</button>' +
+      '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">' + revealTitle + '</div><p class="fb-ans">' + revealBody + '</p>' + metaHtml + '</div></div>' +
+      '</div></article>';
+  }
+
   // Generic fallback: show the task with guidance/fasit instead of dropping unsupported MT types.
   var fallbackId = 'write-' + uniq;
   return '<article class="ei">' + header +
@@ -794,7 +899,7 @@ function nlImportMTBankTasks() {
   else if (typeof globalThis !== 'undefined' && Array.isArray(globalThis.MT_BANK)) bank = globalThis.MT_BANK;
   if (!bank || !bank.length) return;
 
-  var maxPerCategory = 18;
+  var maxPerCategory = 30;
   var counters = {};
   var imported = 0;
   var stableBank = bank.slice().sort(function(a, b) {
