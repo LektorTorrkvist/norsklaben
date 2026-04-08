@@ -2483,9 +2483,81 @@ textarea.practice:focus { background:#fff; }
         });
       }
 
+      function buildCardExport(card) {
+        var clone = card.cloneNode(true);
+        clone.querySelectorAll('.nov-fs-btn,.nov-copy-btn').forEach(function(el){ el.remove(); });
+        clone.style.zoom = '';
+        return {
+          html: '<article>' + clone.innerHTML + '</article>',
+          text: (clone.innerText || '').replace(/\n{3,}/g, '\n\n').trim()
+        };
+      }
+
+      function setCopyState(btn, label) {
+        btn.textContent = label;
+        clearTimeout(btn._copyTimer);
+        btn._copyTimer = setTimeout(function() {
+          btn.textContent = '📋 Kopier kort';
+        }, 1600);
+      }
+
+      function copyCard(card, btn) {
+        var payload = buildCardExport(card);
+        if (!payload.text && !payload.html) {
+          setCopyState(btn, 'Feila');
+          return;
+        }
+
+        if (navigator.clipboard && window.ClipboardItem && navigator.clipboard.write) {
+          var item = new ClipboardItem({
+            'text/html': new Blob([payload.html], { type: 'text/html' }),
+            'text/plain': new Blob([payload.text], { type: 'text/plain' })
+          });
+          navigator.clipboard.write([item]).then(function() {
+            setCopyState(btn, 'Kopiert!');
+          }).catch(function() {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(payload.text).then(function() {
+                setCopyState(btn, 'Kopiert!');
+              }).catch(function() {
+                setCopyState(btn, 'Feila');
+              });
+            } else {
+              setCopyState(btn, 'Feila');
+            }
+          });
+          return;
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(payload.text).then(function() {
+            setCopyState(btn, 'Kopiert!');
+          }).catch(function() {
+            setCopyState(btn, 'Feila');
+          });
+          return;
+        }
+
+        setCopyState(btn, 'Feila');
+      }
+
       function ensureButtons() {
         document.querySelectorAll('#nov-slides .nov-slide .card').forEach(function(card) {
           if (getComputedStyle(card).position === 'static') card.style.position = 'relative';
+          if (!card.querySelector('.nov-copy-btn')) {
+            var copyBtn = document.createElement('button');
+            copyBtn.className = 'fs-btn fs-btn-card nov-copy-btn';
+            copyBtn.type = 'button';
+            copyBtn.style.top = '3.05rem';
+            copyBtn.textContent = '📋 Kopier kort';
+            copyBtn.setAttribute('aria-label', 'Kopier novellekort til utklippstavla');
+            copyBtn.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              copyCard(card, copyBtn);
+            });
+            card.appendChild(copyBtn);
+          }
           if (card.querySelector('.nov-fs-btn')) return;
           var btn = document.createElement('button');
           btn.className = 'fs-btn fs-btn-card nov-fs-btn';

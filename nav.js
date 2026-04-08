@@ -110,6 +110,61 @@ document.addEventListener('DOMContentLoaded', function () {
 
   renderSharedFooter();
 
+  function inferLangFromHref(href) {
+    return /-bm\.html(?:$|[?#])/i.test(String(href || '')) ? 'bm' : 'nn';
+  }
+
+  function setupLanguageMemory() {
+    const key = 'norsklaben-malform';
+    const toggle = document.querySelector('.lang-toggle');
+    if (!toggle) return;
+
+    const links = Array.from(toggle.querySelectorAll('a[href]'));
+    if (!links.length) return;
+
+    let saved = null;
+    try {
+      saved = localStorage.getItem(key);
+    } catch (_) {
+      saved = null;
+    }
+
+    const activeLink = links.find(function (a) {
+      return a.classList.contains('active');
+    }) || null;
+
+    const currentLang = activeLink
+      ? inferLangFromHref(activeLink.getAttribute('href'))
+      : (document.documentElement.lang || '').toLowerCase().startsWith('nb') ? 'bm' : 'nn';
+
+    if (saved === 'bm' || saved === 'nn') {
+      if (saved !== currentLang) {
+        const targetLink = links.find(function (a) {
+          return inferLangFromHref(a.getAttribute('href')) === saved;
+        });
+        if (targetLink) {
+          const target = targetLink.getAttribute('href');
+          if (target) {
+            window.location.replace(target);
+            return;
+          }
+        }
+      }
+    }
+
+    links.forEach(function (a) {
+      a.addEventListener('click', function () {
+        try {
+          localStorage.setItem(key, inferLangFromHref(a.getAttribute('href')));
+        } catch (_) {
+          // Ignore storage errors in locked-down browsers.
+        }
+      });
+    });
+  }
+
+  setupLanguageMemory();
+
   function closeMobileNav() {
     if (!header || !navToggle) return;
     header.classList.remove('nl-nav-open');

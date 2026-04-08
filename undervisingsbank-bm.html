@@ -666,6 +666,64 @@
     });
   }
 
+  function buildCardExport(card){
+    var clone = card.cloneNode(true);
+    clone.querySelectorAll('.ub-fs-btn,.ub-copy-btn').forEach(function(el){ el.remove(); });
+    clone.style.zoom = '';
+    return {
+      html: '<article>' + clone.innerHTML + '</article>',
+      text: (clone.innerText || '').replace(/\n{3,}/g, '\n\n').trim()
+    };
+  }
+
+  function setCopyState(btn, label){
+    btn.textContent = label;
+    clearTimeout(btn._copyTimer);
+    btn._copyTimer = setTimeout(function(){
+      btn.textContent = '📋 Kopier kort';
+    }, 1600);
+  }
+
+  function copyCard(card, btn){
+    var payload = buildCardExport(card);
+    if(!payload.text && !payload.html) {
+      setCopyState(btn, 'Feilet');
+      return;
+    }
+
+    if(navigator.clipboard && window.ClipboardItem && navigator.clipboard.write){
+      var item = new ClipboardItem({
+        'text/html': new Blob([payload.html], { type: 'text/html' }),
+        'text/plain': new Blob([payload.text], { type: 'text/plain' })
+      });
+      navigator.clipboard.write([item]).then(function(){
+        setCopyState(btn, 'Kopiert!');
+      }).catch(function(){
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(payload.text).then(function(){
+            setCopyState(btn, 'Kopiert!');
+          }).catch(function(){
+            setCopyState(btn, 'Feilet');
+          });
+        } else {
+          setCopyState(btn, 'Feilet');
+        }
+      });
+      return;
+    }
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(payload.text).then(function(){
+        setCopyState(btn, 'Kopiert!');
+      }).catch(function(){
+        setCopyState(btn, 'Feilet');
+      });
+      return;
+    }
+
+    setCopyState(btn, 'Feilet');
+  }
+
   function exitMobileFullscreen(){
     if(!mobileActive) return;
     mobileActive.classList.remove('fs-mobile');
@@ -714,6 +772,36 @@
     if(getComputedStyle(card).position === 'static') {
       card.style.position = 'relative';
     }
+    var copyBtn = document.createElement('button');
+    copyBtn.type = 'button';
+    copyBtn.className = 'fs-btn fs-btn-card ub-copy-btn';
+    copyBtn.style.cssText = [
+      'position:absolute',
+      'top:3.05rem',
+      'right:.7rem',
+      'z-index:10',
+      'border:none',
+      'border-radius:6px',
+      'background:rgba(0,0,0,.55)',
+      'color:#fff',
+      'font-family:inherit',
+      'font-size:.8rem',
+      'font-weight:600',
+      'padding:.3rem .7rem',
+      'cursor:pointer',
+      'transition:background .15s'
+    ].join(';');
+    copyBtn.addEventListener('mouseover', function(){ copyBtn.style.background = 'rgba(0,0,0,.8)'; });
+    copyBtn.addEventListener('mouseout', function(){ copyBtn.style.background = 'rgba(0,0,0,.55)'; });
+    copyBtn.textContent = '📋 Kopier kort';
+    copyBtn.setAttribute('aria-label', 'Kopier undervisningsopplegg til utklippstavlen');
+    copyBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      copyCard(card, copyBtn);
+    });
+    card.appendChild(copyBtn);
+
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'fs-btn fs-btn-card ub-fs-btn';
