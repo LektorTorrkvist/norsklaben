@@ -716,25 +716,15 @@
 <div class="exlist"><div class="ei">
   <button class="etog"><span class="etit">Koblingsoppgave: Match årsak og virkning</span><span class="b oi">Identifisere</span><span class="b dg">Lett</span><svg class="earr" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
   <div class="ec">
-    <p class="inst"><strong>Koble årsak med rett virkning (1→? / 2→? / 3→? / 4→?), og skriver ett av parene sammen til en setning med et kausaluttrykk.</strong></p>
-    <div class="ibox"><div class="cols">
-      <div><h4>Årsak</h4>
-        <p>1. Plast bryter sakte ned</p>
-        <p>2. Klima blir varmere</p>
-        <p>3. Fisken et plast</p>
-        <p>4. Ungdom bruker sosiale medier</p>
-      </div>
-      <div><h4>Virkning</h4>
-        <p>A. De utviklar et skjevt sjølvbilete gjennom sammenligning med redigerte bilder</p>
-        <p>B. Snøsesongen blir kortere og isen smelter raskere</p>
-        <p>C. Giftstoff sprer seg oppover i næringskjeden</p>
-        <p>D. Mikroplast hoper seg opp i dyr og jordsmonn i tusenvis av år</p>
-      </div>
-    </div></div>
-    <textarea class="write-area" id="ta-30" placeholder="Skriv koblingen (t.d. 1→D) og én fullstendig kausalsetning…" oninput="nlWC(this,'wc-30')"></textarea>
-    <div class="word-count" id="wc-30">0 ord</div>
+    <p class="inst"><strong>Koble hver årsak til riktig virkning ved å dra hver årsak til riktig bokstav.</strong></p>
+    <div class="sort-ex" id="sort-30"
+         data-words='["Plast bryter sakte ned","Klima blir varmere","Fisken et plast","Ungdom bruker sosiale medier"]'
+         data-buckets='[{"id":"A","label":"A: Skjevt selvbilde gjennom sammenligning med redigerte bilder"},{"id":"B","label":"B: Snøsesongen blir kortere og isen smelter raskere"},{"id":"C","label":"C: Giftstoff sprer seg oppover i næringskjeden"},{"id":"D","label":"D: Mikroplast hoper seg opp i dyr og jordsmonn i tusenvis av år"}]'
+         data-answers='{"Plast bryter sakte ned":"D","Klima blir varmere":"B","Fisken et plast":"C","Ungdom bruker sosiale medier":"A"}'></div>
     <div class="ex-controls">
-      <button class="btn-reset" onclick="this.closest('.ec').querySelectorAll('textarea.write-area').forEach(function(t){t.value='';var wc=document.getElementById('wc-'+t.id.substring(3));if(wc)wc.textContent='0 ord';})">Tøm felt</button>
+      <button class="btn-check" data-check="sort" data-target="sort-30" data-score="score-30">Sjekk svar</button>
+      <button class="btn-reset" data-reset="sort" data-target="sort-30" data-score="score-30">Start på nytt</button>
+      <span class="ex-score" id="score-30"></span>
       <button class="btn-fasit" data-fasit="fasit-30">Vis fasit</button>
     </div>
     <div class="fasit-box" id="fasit-30"><div class="fb"><div class="fl">Fasit</div>
@@ -2289,7 +2279,7 @@
 
 
   <script src="nav.js"></script>
-  <script src="mt-v1-bm.js"></script>
+  <script src="mt-v1-bm.js?v=20260408"></script>
   <script src="skrivelab-bm.js?v=20260406"></script>
   <script>
   (function() {

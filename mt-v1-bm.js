@@ -71,21 +71,21 @@ const MT_BANK = [
 
 /* — finn_feil: ny type for og_aa — */
 {kat:'og_aa',kat_label:'Og / å',type:'finn_feil',vanske:'lett',
- q:'Finn feilen: Klikk på det eine ordet som er FEIL brukt i setningen.',
+ q:'Klikk på det ene ordet som er FEIL brukt i setningen.',
  tekst:'Læraren bad elevene og tenke over spørsmålet.',
  fasit_feil:['og'],
  regel:'Etter «bad» kommer infinitiv → infinitivsmerket er «å», ikke «og»: «bad elevene å tenke».',
  eks:'«bad noen å gjøre noe» – alltid «å + infinitiv» etter «be» eller «bad».'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'finn_feil',vanske:'medium',
- q:'Finn feila: To ord er feil brukte. Klikk på begge.',
+ q:'To ord er feil brukte. Klikk på begge.',
  tekst:'Hun hadde lyst og synge, å alle i klassen ville høyre henne.',
  fasit_feil:['og','å'],
  regel:'«Hadde lyst og synge» → feil; rett er «lyst TIL å synge». «Å alle» → «å» er ikke bindeord; rett er «og alle».',
  eks:'RETT: «Hun hadde lyst til å synge, og alle i klassen ville høyre henne.»'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'finn_feil',vanske:'vanskelig',
- q:'Finn feila: To ord er feil brukte. Klikk på begge.',
+ q:'To ord er feil brukte. Klikk på begge.',
  tekst:'Jeg tror det er svært viktig og forstå grammatikk, å jeg øver derfor hver dag.',
  fasit_feil:['og','å'],
  regel:'«Viktig og forstå» → «viktig Å forstå» (infinitiv). «Å jeg øver» → «OG jeg øver» (bindeord mellom to helsetninger).',
@@ -116,7 +116,7 @@ const MT_BANK = [
  regel:'«Liker å lese» = infinitiv etter «liker». «Og skrive» = koordinert infinitiv uten nytt «å» (normert kortform).',
  eks:'«Hun liker å lese og (å) skrive» – begge varianter er riktige.'},
 
-{kat:'og_aa',kat_label:'Og / å',type:'drag_ord',vanske:'medium',
+{kat:'og_aa',kat_label:'Og / å',type:'drag_ord',vanske:'middels',
  q:'Trykk ordene inn i rett rekkefølge – sett «å» og «og» på rett plass.',
  ord:['Det','er','viktig','å','sove','nok,','og','det','vet','de','fleste'],
  fasit:'Det er viktig å sove nok, og det vet de fleste',
@@ -503,13 +503,13 @@ const MT_BANK = [
  fasit:'Jenta las ei bok på senga .',
  regel:'Grunnrekkefølge: Subjekt – Verbal – Objekt – Adverbial.'},
 
-{kat:'setningsbygging',kat_label:'Setningsbygging',type:'drag_ord',vanske:'medium',
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'drag_ord',vanske:'middels',
  sporsmal:'Sett ordene i rett rekkefølge (V2, tidsadverbial fremst):',
  ord:['I','dag','skal','vi','ha','prøve','.'],
  fasit:'I dag skal vi ha prøve .',
  regel:'«I dag» er adverbial fremst → verb (skal) kommer på plass 2.'},
 
-{kat:'setningsbygging',kat_label:'Setningsbygging',type:'drag_ord',vanske:'medium',
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'drag_ord',vanske:'middels',
  sporsmal:'Sett ordene i rett rekkefølge (V2, stadadverbial fremst):',
  ord:['Her','bur','mange','innvandrarar','.'],
  fasit:'Her bur mange innvandrarar .',
@@ -633,7 +633,7 @@ const MT_BANK = [
  regel:'«Derfor» kommer mellom de to setningene. Merk V2: etter «derfor» kommer verbet «gikk» før subjektet «hun».',
  eksempel:'Hun ble trøtt, derfor gikk hun hjem.',kontrast_bm:'Hun ble trøtt, derfor gikk hun hjem.'},
 
-{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'medium',
+{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'middels',
  sporsmal:'Sett ordene i rett rekkefølge.',
  hint:'«Selv om» innleder en leddsetning – hva kommer etter kommaet?',
  ord:['Selv om','det regner','vil','jeg','gå tur'],
@@ -660,19 +660,19 @@ const MT_BANK = [
  eks:'Hun leste mens han sov.'},
 
 
-{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'medium',
+{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'middels',
  sporsmal:'Sett ordene i rett rekkefølge (V2 etter «Derfor»):',
  ord:['Derfor','gikk','hun','hjem','tidlig','.'],
  fasit:'Derfor gikk hun hjem tidlig .',
  regel:'Etter «derfor» kommer verbet FØR subjektet (V2-regelen).'},
 
-{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'medium',
+{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'middels',
  sporsmal:'Sett ordene i rett rekkefølge (V2 etter «Likevel»):',
  ord:['Likevel','møtte','han','opp','på','skolen','.'],
  fasit:'Likevel møtte han opp på skolen .',
  regel:'Etter «likevel» kommer verbet FØR subjektet: Likevel møtte han.'},
 
-{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'medium',
+{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'middels',
  sporsmal:'Sett ordene i rett rekkefølge (V2 etter «Dessuten»):',
  ord:['Dessuten','er','det','billigere','å','sykle','.'],
  fasit:'Dessuten er det billigere å sykle .',
@@ -1210,7 +1210,7 @@ const MT_BANK = [
  regel:'Substantiv er namn på personar, ting, steder og begrep. Her: «læreren» (person), «oppgave» (ting/abstrakt), «tavla» (ting/sted).',
  eks:'«dag» er òg substantiv her – «hver dag» (adverbial). Merk: tidsuttrykk kan være substantiv i adverbiell bruk.'},
 
-{kat:'ordklassar',kat_label:'Ordklassar',type:'drag_ord',vanske:'medium',
+{kat:'ordklassar',kat_label:'Ordklassar',type:'drag_ord',vanske:'middels',
  q:'Kjernerekkefølge: Trykk ordene inn i rett rekkefølge – adjektivet MÅ komme rett FØR substantivet det beskriver.',
  ord:['blå','En','himmel','klar','og'],
  fasit:'En blå og klar himmel',
@@ -1741,7 +1741,7 @@ const MT_BANK = [
  regel:'Fagleg skriving uttrykker bare det en kan dokumentere. «Beviser definitivt» og «alle er enige» er for absolutte. «Betyr på», «indikere» og «kan argumentere for» viser faglig nøyaktigheit.',
  eks:'BLOKKERT: «beviser» → PASSERER: «betyr på» · BLOKKERT: «alle er enige» → PASSERER: «flere studiar indikerer»'},
 
-{kat:'spraak_stil',kat_label:'Språk og stil',type:'drag_ord',vanske:'medium',
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'drag_ord',vanske:'middels',
  q:'Setningssmeden 🔨 Smi en faglig avslutningssetning ved å trykke ordene inn i rett rekkefølge. Bare én rekkefølge er faglig korrekt og logisk.',
  ord:['Det','er','derfor','viktig','å','tilpasse','registeret','til','mottakaren','.'],
  fasit:'Det er derfor viktig å tilpasse registeret til mottakaren .',
