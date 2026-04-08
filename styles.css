@@ -67,8 +67,8 @@ header {
 .logo::after {
   content: 'beta';
   position: absolute;
-  top: -7px;
-  right: -30px;
+  top: -6px;
+  right: -4px;
   background: linear-gradient(135deg, #7ec8e3, #4da8da);
   color: #fff;
   font-family: 'Source Sans 3', sans-serif;
