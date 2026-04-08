@@ -219,6 +219,25 @@ const MT_BANK = [
 
 
 /* ── SAMANSETTE ORD (10) ── */
+{kat:'samansett',kat_label:'Samansette ord',type:'fix',vanske:'lett',
+ q:'Særskriving i elevtekst',
+ tekst:'Hvert år kastes enorme mengder hav plast i sjøen. Sjø dyr som hval og sel setter seg fast i plast biter. Forskere fra hav forsknings instituttet advarer om situasjonen. Det er bare en hoved grunn: forsøpling fra land og hav bruk.',
+ errors:{'hav plast':'havplast','Sjø dyr':'Sjødyr','plast biter':'plastbiter','hav forsknings instituttet':'Havforskningsinstituttet','hoved grunn':'hovedgrunn','hav bruk':'havbruk'},
+ fasit:'hav plast\u2009\u2192\u2009havplast | Sjø dyr\u2009\u2192\u2009Sjødyr | plast biter\u2009\u2192\u2009plastbiter | hav forsknings instituttet\u2009\u2192\u2009Havforskningsinstituttet | hoved grunn\u2009\u2192\u2009hovedgrunn | hav bruk\u2009\u2192\u2009havbruk'},
+
+{kat:'samansett',kat_label:'Samansette ord',type:'cloze',vanske:'lett',
+ q:'Lag sammensatte ord: ski+bane, snø+fall, klima+endring, miljø+problem, sosiale+medium, hav+bunn',
+ tekst:'ski + bane = ___ | snø + fall = ___ | klima + endring = ___ | miljø + problem = ___ | sosiale + medium = ___ | hav + bunn = ___',
+ svar:['skibane','snøfall','klimaendring','miljøproblem','sosiale medier','havbunn'],
+ fasit:'skibane | snøfall | klimaendring | miljøproblem | sosiale medier (to ord) | havbunn'},
+
+{kat:'samansett',kat_label:'Samansette ord',type:'drag_kolonne',vanske:'medium',
+ q:'Ett eller to ord?',
+ ord:['mørkerød','mørk rød','storby','stor by'],
+ kolonner:[{id:'sammen',label:'Sammensetning (en fast betydning)'},{id:'tooord',label:'To ord (beskrivelse)'}],
+ fasit_map:{'mørkerød':'sammen','mørk rød':'tooord','storby':'sammen','stor by':'tooord'},
+ fasit:'Sammensetning: mørkerød (én farge), storby (fast begrep). To ord: mørk rød (to egenskaper), stor by (beskrivelse av størrelse).'},
+
 {kat:'samansett',kat_label:'Samansette ord',type:'mc',vanske:'lett',
  q:'Hva er rett skrivemåte?',
  alt:['sjokolade kake','sjokoladekake','sjokolate kake','sjokolat kake'],
@@ -990,6 +1009,25 @@ const MT_BANK = [
  eks:'Hun skjønte ingenting. Jeg skjønte det med en gang.'},
 
 /* ── TEIKNSETTING – KOMMAREGLAR (12) ── */
+{kat:'tegnsetting',kat_label:'Tegnsetting',type:'fix',vanske:'lett',
+ q:'Kommaplassering: Sett inn 6 komma',
+ tekst:'Selv om det er kaldt ute bestemte vi oss for å gå tur. Vi tok med mat drikke og varme klær. Lena som er den raskeste i klassen sprang foran hele veien. Da vi kom hjem laget vi varm kakao og sette oss i sofaen. Det var en fin dag men vi var veldig slitne etterpå.',
+ errors:{'ute bestemte':'ute, bestemte','mat drikke':'mat, drikke','Lena som':'Lena, som','klassen sprang':'klassen, sprang','hjem laget':'hjem, laget','dag men':'dag, men'},
+ fasit:'«ute, bestemte» | «mat, drikke og» | «Lena, som\u2026klassen, sprang» | «hjem, laget» | «dag, men»'},
+
+{kat:'tegnsetting',kat_label:'Tegnsetting',type:'fix',vanske:'medium',
+ q:'Hermetegn: Korrekt sitatmarkering',
+ tekst:'1. Forskeren sier at plastforurensning er et globalt problem.\n2. \"Det finnes ingen enkel løsning,\" skriver WWF, men vi kan alle bidra.\n3. Rapporten konkluderer med at: mengden plast kan tredoble seg.',
+ errors:{'\"Det finnes ingen enkel løsning,\"':'«Det finnes ingen enkel løsning»,','at: mengden':'at mengden','sier at plastforurensning er et globalt problem':'sier at «plastforurensning er et globalt problem»'},
+ fasit:'1. sier at «plastforurensning er et globalt problem». | 2. «Det finnes ingen enkel løsning», skriver WWF (komma etter sitatet, ikke inni). | 3. Fjern kolon – unødvendig.'},
+
+{kat:'tegnsetting',kat_label:'Tegnsetting',type:'drag_kolonne',vanske:'medium',
+ q:'Kolon vs. semikolon: Velg rett tegn',
+ ord:['1. Hun snakket om tre emner \u2026 klima, plast og energi.','2. Det regnet hele dagen \u2026 likevel gikk vi tur.','3. Resultatene viste ett klart funn \u2026 plastmengden hadde økt.'],
+ kolonner:[{id:'kolon',label:'Kolon (:)'},{id:'semikolon',label:'Semikolon (;)'}],
+ fasit_map:{'1. Hun snakket om tre emner \u2026 klima, plast og energi.':'kolon','2. Det regnet hele dagen \u2026 likevel gikk vi tur.':'semikolon','3. Resultatene viste ett klart funn \u2026 plastmengden hadde økt.':'kolon'},
+ fasit:'1. : (kolon før oppramsing) | 2. ; (semikolon mellom selvstendige setninger) | 3. : (kolon = «det vil si»)'},
+
 {kat:'tegnsetting',kat_label:'Tegnsetting',type:'mc',vanske:'lett',
  q:'Hvor setter du komma? «Jeg liker fotball tennis og svømming.»',
  alt:['Jeg liker fotball, tennis og svømming.','Jeg liker, fotball, tennis, og, svømming.','Jeg liker fotball, tennis, og svømming.','Ingen sted – setningen trenger ikke komma.'],
@@ -1105,6 +1143,37 @@ const MT_BANK = [
 
 
 /* ── ORDKLASSAR (20 oppgaver) ── */
+
+/* ── ORDKLASSAR – fra skrivelab (5 statiske oppgaver) ── */
+{kat:'ordklassar',kat_label:'Ordklasser',type:'drag_kolonne',vanske:'lett',
+ q:'Dra ordene fra ordbanken ned i rett ordklasse-bøtte. På mobil: trykk et ord, så en bøtte.',
+ ord:['raskt','hus','løpe','grønn','men','hun','fordi','stille','bok','skrive','stor','alltid','fjell','glad','og','søte'],
+ kolonner:[{id:'substantiv',label:'Substantiv'},{id:'verb',label:'Verb'},{id:'adjektiv',label:'Adjektiv'},{id:'adverb',label:'Adverb'},{id:'pronomen',label:'Pronomen'},{id:'bindeord',label:'Bindeord'}],
+ fasit_map:{raskt:'adverb',hus:'substantiv','løpe':'verb','grønn':'adjektiv',men:'bindeord',hun:'pronomen',fordi:'bindeord',stille:'adverb',bok:'substantiv',skrive:'verb',stor:'adjektiv',alltid:'adverb',fjell:'substantiv',glad:'adjektiv',og:'bindeord','søte':'adjektiv'}},
+
+{kat:'ordklassar',kat_label:'Ordklasser',type:'klikk_marker',vanske:'lett',
+ q:'Klikk på alle substantivene i ordstripen (10 stk).',
+ tekst:['havet','er','fullt','av','plast','forskere','fra','hele','verden','jobbar','for','å','finne','gode','løsninger','på','problemet','hvert','år','havner','millioner','tonn','søppel','sjøen','ødelegger','livet','for','mange','dyr','fugler'],
+ svar:['havet','plast','forskere','verden','løsninger','problemet','søppel','sjøen','dyr','fugler']},
+
+{kat:'ordklassar',kat_label:'Ordklasser',type:'drag_kolonne',vanske:'middels',
+ q:'Dra hver setning til rett ordklasse for det [markerte] ordet.',
+ ord:['a) Vi gikk en [lang] tur.','b) Bussen er [lenge] forsinket.','c) De [raske] elevene vann.','d) Hun sprang [raskt] hjem.'],
+ kolonner:[{id:'adjektiv',label:'Adjektiv'},{id:'adverb',label:'Adverb'}],
+ fasit_map:{'a) Vi gikk en [lang] tur.':'adjektiv','b) Bussen er [lenge] forsinket.':'adverb','c) De [raske] elevene vann.':'adjektiv','d) Hun sprang [raskt] hjem.':'adverb'}},
+
+{kat:'ordklassar',kat_label:'Ordklasser',type:'drag_kolonne',vanske:'middels',
+ q:'Sorter ordene i rett ordklasse-kolonne.',
+ ord:['løper','huset','hurtig','under','de','vakker','fordi','kunnskap'],
+ kolonner:[{id:'verb',label:'Verb'},{id:'substantiv',label:'Substantiv'},{id:'adjektiv',label:'Adjektiv'},{id:'adverb',label:'Adverb'},{id:'preposisjon',label:'Preposisjon'},{id:'pronomen',label:'Pronomen'},{id:'bindeord',label:'Bindeord'}],
+ fasit_map:{'løper':'verb',huset:'substantiv',hurtig:'adverb',under:'preposisjon',de:'pronomen',vakker:'adjektiv',fordi:'bindeord',kunnskap:'substantiv'}},
+
+{kat:'ordklassar',kat_label:'Ordklasser',type:'mc',vanske:'middels',
+ q:'Hvilken ordklasse har det uthevede ordet i setningen: «Elevene arbeider *systematisk* med teksten.»',
+ alt:['Substantiv','Adjektiv','Adverb','Pronomen'],fasit:'Adverb',
+ regel:'Adverb sier noe om hvordan elevene arbeider.',
+ eks:'Elevene arbeider systematisk med teksten.'},
+
 {kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'lett',
  q:'Hva ordklasse hører «rask» til i setningen «Han er en rask løpar»?',
  alt:['Adjektiv','Substantiv','Verb','Adverb'],fasit:'Adjektiv',
@@ -1861,6 +1930,137 @@ const MT_BANK = [
  fasit:'I denne teksten skal jeg skrive om klimaendringer.',
  regel:'Metatekst er setninger der forfattaren omtalar seg selv og sin eigen tekst («I denne teksten skal jeg…», «No skal jeg forklare…»). Slike setninger er bortkasta ord – kom rett til saka i stedet.',
  eks:'METATEKST: «I denne teksten kommer jeg til å…» · FAGLEG: Start med fakta, problemstilling eller definisjon.'},
+
+/* ── Årsak og sammenheng ── */
+
+{kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'mc',vanske:'lett',
+ q:'Hvilken setning uttrykker en årsak–virkning-sammenheng?',
+ alt:[
+  'Sola skinner, og barna leker ute.',
+  'Sola skinner så sterkt at asfalten blir varm.',
+  'Sola skinner. Barna leker ute.',
+  'Sola skinner, men det er kaldt.'
+ ],
+ fasit:'Sola skinner så sterkt at asfalten blir varm.',
+ regel:'En årsak–virkning-sammenheng krever at den ene hendelsen fører til den andre. Uttrykket «så … at» markerer at solskinn (årsak) fører til varm asfalt (virkning).',
+ eks:'ÅRSAK–VIRKNING: «Hun leste så mye at hun ble trøtt.» IKKE årsak–virkning: «Hun leste, og hun var trøtt.» (to fakta uten kobling).'},
+
+{kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'klikk_marker',vanske:'lett',
+ q:'Klikk på det ordet eller uttrykket som markerer en årsakssammenheng.',
+ tekst:'Mange arter er utrydningstruet fordi leveområdene deres blir ødelagt av avskoging.',
+ maalordklasse:'årsakskonjunksjon',
+ fasit_ord:['fordi'],
+ regel:'«Fordi» er en underordningskonjunksjon som knytter en årsak (avskoging) til en følge (utrydningstruede arter).',
+ eks:'«fordi, siden, ettersom» = vanlige årsaksord. «men, likevel, derimot» = kontrastord.'},
+
+{kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'cloze',vanske:'lett',
+ q:'Fyll inn rett ord: «Matprisene stiger, ___ mange familier har dårligere råd.»',
+ hint:'Virkningen kommer etter årsaken. Hvilket ord knytter dem sammen og peker framover mot resultatet?',
+ fasit:'derfor',fasit_v:['derfor','og derfor'],
+ regel:'«Derfor» er et årsaksadverb som viser at det som følger, er resultatet av årsaken.',
+ eks:'Prisene steg, derfor handlet folk mindre. Veien var glatt, derfor kjørte hun sakte.'},
+
+{kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'drag_kolonne',vanske:'lett',
+ q:'Sorter uttrykkene: Hva er årsaksuttrykk, og hva er kontrastuttrykk?',
+ kolonner:['Årsaksuttrykk','Kontrastuttrykk'],
+ ord:[
+   {tekst:'fordi',fasit:0},
+   {tekst:'likevel',fasit:1},
+   {tekst:'siden',fasit:0},
+   {tekst:'derimot',fasit:1},
+   {tekst:'ettersom',fasit:0},
+   {tekst:'til tross for',fasit:1},
+   {tekst:'på grunn av',fasit:0},
+   {tekst:'men',fasit:1}
+ ],
+ regel:'Årsaksuttrykk (fordi, siden, ettersom, på grunn av) knytter årsak til virkning. Kontrastuttrykk (likevel, derimot, til tross for, men) markerer motsetning.',
+ eks:'ÅRSAK: «Hun kom for sent fordi bussen var forsinket.» KONTRAST: «Bussen var forsinket, men hun kom likevel tidsnok.»'},
+
+{kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'mc',vanske:'medium',
+ q:'Hvilken setning bruker det mest presise årsaksuttrykket?',
+ alt:[
+  'Luftforurensningen øker, og folk blir sykere.',
+  'Luftforurensningen øker. Folk blir sykere.',
+  'Den økende luftforurensningen fører til flere luftveissykdommer.',
+  'Luftforurensningen øker, men folk blir sykere.'
+ ],
+ fasit:'Den økende luftforurensningen fører til flere luftveissykdommer.',
+ regel:'«Fører til» er et presist årsaksuttrykk som eksplisitt viser hvordan A gir B. Vage koblinger som «og» eller to separate setninger uttrykker ikke årsak–virkning tydelig.',
+ eks:'PRESIST: «Røyking fører til større risiko for lungekreft.» VAGT: «Folk røyker, og de blir syke.»'},
+
+{kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'cloze',vanske:'medium',
+ q:'Fyll inn: «___ den kraftige nedbøren ble flere veier stengt i natt.»',
+ hint:'Årsaken (kraftig nedbør) kommer først i setningen. Hvilket uttrykk innleder en årsak i starten av setningen?',
+ fasit:'På grunn av',fasit_v:['På grunn av','Som følge av','Grunnet'],
+ regel:'«På grunn av» og «som følge av» fungerer som preposisjoner som innleder årsaken når den kommer først. De er mer formelle og presise enn «fordi» i denne posisjonen.',
+ eks:'«På grunn av streiken ble togene innstilt.» · «Som følge av økte skatter gikk forbruket ned.»'},
+
+{kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'finn_feil',vanske:'medium',
+ q:'Klikk på det ene uttrykket som er FEIL brukt i setningen.',
+ tekst:'Hun fikk gode karakterer til tross for at hun jobbet hardt hver dag.',
+ fasit_feil:['til tross for'],
+ regel:'«Til tross for» markerer kontrast (noe uventet). Når hardt arbeid gir gode karakterer, er det forventet – altså årsak–virkning. Rett: «fordi hun jobbet hardt» eller «ettersom hun jobbet hardt».',
+ eks:'RETT: «Hun fikk gode karakterer fordi hun jobbet hardt.» KONTRAST: «Hun fikk dårlige karakterer til tross for at hun jobbet hardt.»'},
+
+{kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'drag_kolonne',vanske:'medium',
+ q:'Sorter hver setning: Hva er årsaken og hva er virkningen?',
+ kolonner:['Årsak','Virkning'],
+ ord:[
+   {tekst:'Temperaturen stiger',fasit:0},
+   {tekst:'Isen på polene smelter',fasit:1},
+   {tekst:'Skogene hogges ned',fasit:0},
+   {tekst:'Dyrearter mister leveområdene sine',fasit:1},
+   {tekst:'Havnivået stiger',fasit:1},
+   {tekst:'Utslipp av drivhusgasser øker',fasit:0}
+ ],
+ regel:'Årsaken er det som utløser en endring. Virkningen er resultatet. Tips: Spør «hvorfor skjer dette?» – svaret er årsaken. Spør «hva skjer som følge av dette?» – svaret er virkningen.',
+ eks:'Utslipp øker (årsak) → Temperaturen stiger (virkning/ny årsak) → Isen smelter (virkning). En årsak kan være virkning av noe annet – dette er en årsak–virkning-kjede.'},
+
+{kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'mcset',vanske:'medium',
+ q:'Les teksten og svar på spørsmålene.',
+ tekst:'Når barn leser lite, utvikler de et smalere ordforråd. Et smalt ordforråd gjør det vanskeligere å forstå fagtekster på skolen. Derfor henger lesevansker og fagvansker ofte sammen.',
+ questions:[
+  {q:'Hva er den første årsaken i teksten?',alt:['Barn leser lite','Smalt ordforråd','Fagvansker','Lesevansker'],fasit:0},
+  {q:'Hva er den mellomliggende virkningen?',alt:['Barna leser mer','De utvikler smalere ordforråd','De henger etter','Fagtekstene blir enklere'],fasit:1},
+  {q:'Hvilket ord i teksten markerer den siste virkningen?',alt:['når','gjør','men','derfor'],fasit:3}
+ ],
+ regel:'I mange tekster er årsak–virkning-kjeden mer enn ett ledd: A fører til B, som fører til C. Se etter signal som «derfor», «som gjør at», «noe som fører til».',
+ eks:'KJEDE: Lite lesing → smalt ordforråd → vanskeligere å forstå fagtekster → fagvansker.'},
+
+{kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'fix',vanske:'vanskeleg',
+ q:'Rett feilene i årsaksuttrykkene (3 feil)',
+ tekst:'Skjermbruk blant unge øker. Likevel rapporterer forskere om mer søvnproblemer i denne aldersgruppen. Blått lys fra skjermer hemmer produksjonen av melatonin, derimot blir det vanskeligere å sovne. Til tross for at mange vet om sammenhengen, fortsetter bruken.',
+ errors:{
+  'Likevel rapporterer':'Derfor rapporterer',
+  'melatonin, derimot blir':'melatonin, noe som gjør at det blir',
+  'Til tross for at mange vet om sammenhengen, fortsetter bruken':'Selv om mange vet om sammenhengen, fortsetter bruken'
+ },
+ fasit:'1. «Likevel» → «Derfor» (det er forventet, ikke uventet). 2. «derimot» → «noe som gjør at» (virkning, ikke kontrast). 3. «Til tross for» → «Selv om» (innrømmelse, ikke motsetning til fakta).',
+ regel:'Kontrastuttrykk (likevel, derimot, til tross for) markerer noe uventet. Bruk årsaksuttrykk (derfor, som gjør at, fordi) når virkningen er forventet og logisk.'},
+
+{kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'mc',vanske:'vanskeleg',
+ q:'Hva er forskjellen mellom korrelasjon og årsak?',
+ alt:[
+  'Korrelasjon betyr at to ting skjer samtidig, men det trenger ikke være noen årsak–virkning.',
+  'Korrelasjon er det samme som årsak, bare et finere ord.',
+  'Årsak krever at man kan observere begge hendelsene samtidig.',
+  'Korrelasjon er sterkere enn årsak fordi den viser et mønster.'
+ ],
+ fasit:'Korrelasjon betyr at to ting skjer samtidig, men det trenger ikke være noen årsak–virkning.',
+ regel:'Korrelasjon = to ting varierer sammen (mønster). Årsak = A fører direkte til B. Feil i argumentasjon oppstår når man skriver som om korrelasjon er det samme som årsak.',
+ eks:'KORRELASJON: «Iskremsalget og drukning øker begge om sommeren» – isen er ikke årsaken! ÅRSAK: «Varmt vær fører til at flere bader, noe som dessverre øker drukningsulykker.»'},
+
+{kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'mc',vanske:'vanskeleg',
+ q:'Les: «Etter at kommunen innførte gratis skolemåltid, gikk sykefraværet ned med 15 %.» Hva er den sterkeste innvendingen mot å hevde at skolemåltidet er årsaken?',
+ alt:[
+  'Det er umulig å måle sykefravær nøyaktig.',
+  'Andre faktorer (f.eks. sesongvariasjon, nye helsekampanjer) kan forklare nedgangen.',
+  'Skolemåltid handler ikke om helse.',
+  '15 % er et for lite tall til å trekke slutninger.'
+ ],
+ fasit:'Andre faktorer (f.eks. sesongvariasjon, nye helsekampanjer) kan forklare nedgangen.',
+ regel:'Samvariasjon i tid («etter at A skjedde, skjedde B») er ikke det samme som årsak. Man må utelukke andre mulige forklaringer (konfunderende variabler) for å fastslå årsakssammenheng.',
+ eks:'Når du skriver «noe som fører til», må du kunne begrunne mekanismen – ikke bare tidspunktet. Tips: Spør alltid «kan noe annet forklare dette?».'},
 ]; // end MT_BANK
 
 // Expose task bank for other scripts that run on the samme page.

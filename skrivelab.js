@@ -97,6 +97,7 @@ function nlBoot() {
     if (t === 'fillsel') nlCheckFillSel(tgt, sid);
     if (t === 'drag-ord') nlCheckDragOrd(tgt, sid);
     if (t === 'write') nlCheckWrite(tgt, sid);
+    if (t === 'rhythm') nlCheckRhythm(btn);
   });
 
   /* ── Reset buttons ── */
@@ -114,6 +115,22 @@ function nlBoot() {
     if (t === 'mcset') nlResetMcSet(tgt, sid);
     if (t === 'fillsel') nlResetFillSel(tgt, sid);
     if (t === 'drag-ord') nlResetDragOrd(tgt, sid);
+    if (t === 'rhythm') nlResetRhythm(tgt, sid);
+  });
+
+  /* ── Rhythm pick click handling ── */
+  document.addEventListener('click', function(e) {
+    var pick = e.target.closest('.rhythm-pick');
+    if (!pick) return;
+    var wrap = pick.closest('.rhythm-wrap');
+    if (!wrap) return;
+    wrap.querySelectorAll('.rhythm-pick').forEach(function(p) {
+      p.style.borderColor = 'transparent'; p.style.background = '';
+    });
+    pick.style.borderColor = 'var(--mid)';
+    pick.style.background = 'var(--plight)';
+    var hid = document.getElementById('rhythm-val-' + wrap.id.replace('rhythm-', ''));
+    if (hid) hid.value = pick.getAttribute('data-val');
   });
 
   /* ── Drag-ord click handling ── */
@@ -529,6 +546,7 @@ function nlMtOperationMeta(task) {
   if (type === 'drag_ord') return { cls: 'ob', label: 'Byggje' };
   if (type === 'drag_kolonne' || type === 'burger_sort' || type === 'avsnitt_klikk') return { cls: 'or', label: 'Sortere' };
   if (type === 'open') return { cls: 'oo', label: 'Omskrive' };
+  if (type === 'rhythm') return { cls: 'oi', label: 'Identifisere' };
   return { cls: 'oa', label: 'Analysere' };
 }
 
@@ -551,7 +569,8 @@ function nlMtResolveCard(kat) {
     kjeldebruk: 'kjeldebruk',
     oppgavetolking: 'oppgaveforstaing',
     spraak_stil: 'spraak-stil',
-    kj_skj: 'kj-skj'
+    kj_skj: 'kj-skj',
+    aarsak_samanheng: 'aarsak-samanheng'
   };
   return map[kat] || '';
 }
@@ -676,15 +695,20 @@ function nlMtBuildExercise(task, i, localIx) {
   }
 
   if (type === 'drag_kolonne') {
-    var cols = Array.isArray(task && task.kolonner) ? task.kolonner.map(function(c) { return String(c); }).filter(function(c) { return !!c.trim(); }) : [];
-    if (cols.length < 2) cols = ['Kolonne 1', 'Kolonne 2'];
-
-    var bucketDefs = cols.map(function(c, ci) {
-      return { id: 'k' + ci, label: c };
-    });
+    var rawCols = Array.isArray(task && task.kolonner) ? task.kolonner : [];
+    var useObjCols = rawCols.length > 0 && typeof rawCols[0] === 'object' && rawCols[0].id;
+    var bucketDefs;
+    if (useObjCols) {
+      bucketDefs = rawCols.map(function(c) { return { id: String(c.id), label: String(c.label || c.id) }; });
+    } else {
+      var cols = rawCols.map(function(c) { return String(c); }).filter(function(c) { return !!c.trim(); });
+      if (cols.length < 2) cols = ['Kolonne 1', 'Kolonne 2'];
+      bucketDefs = cols.map(function(c, ci) { return { id: 'k' + ci, label: c }; });
+    }
 
     var rawItems = Array.isArray(task && task.ord) ? task.ord : [];
     if (!rawItems.length) return '';
+    var fasitMap = task.fasit_map || null;
 
     var seenText = {};
     var words = [];
@@ -698,16 +722,20 @@ function nlMtBuildExercise(task, i, localIx) {
       var key = txt;
       if (seenText[key]) {
         seenText[key]++;
-        key = txt + ' [' + seenText[txt] + ']';
+        key = txt + ' [' + seenText[key] + ']';
       } else {
         seenText[key] = 1;
       }
 
       words.push(key);
 
-      var idx = Number(typeof item === 'string' ? 0 : item.fasit);
-      if (!Number.isFinite(idx) || idx < 0 || idx >= bucketDefs.length) idx = 0;
-      answers[key] = bucketDefs[idx].id;
+      if (fasitMap && fasitMap[txt] !== undefined) {
+        answers[key] = String(fasitMap[txt]);
+      } else {
+        var idx = Number(typeof item === 'string' ? 0 : item.fasit);
+        if (!Number.isFinite(idx) || idx < 0 || idx >= bucketDefs.length) idx = 0;
+        answers[key] = bucketDefs[idx].id;
+      }
     });
 
     if (!words.length) return '';
@@ -875,6 +903,31 @@ function nlMtBuildExercise(task, i, localIx) {
       '</div></article>';
   }
 
+  if (type === 'rhythm') {
+    var va = String(task.versjon_a || '').trim();
+    var vb = String(task.versjon_b || '').trim();
+    if (!va || !vb) return '';
+    var fasitIdx = Number(task.fasit);
+    if (!Number.isFinite(fasitIdx)) fasitIdx = 1;
+    var rhythmId = 'rhythm-' + uniq;
+    var scoreRhythmId = 'score-' + uniq;
+
+    return '<article class="ei">' + header +
+      '<div class="ec">' +
+      promptBoxHtml +
+      '<div class="inst">Les begge versjonane – klikk på den beste.</div>' +
+      guideHtml +
+      '<div class="cols rhythm-wrap" id="' + rhythmId + '">' +
+      '<div class="rhythm-pick" data-val="0" style="cursor:pointer;border:2px solid transparent;border-radius:10px;padding:0.8rem;transition:border-color .2s,background .2s"><h4>Versjon A</h4><p>' + nlMtEscHtml(va) + '</p></div>' +
+      '<div class="rhythm-pick" data-val="1" style="cursor:pointer;border:2px solid transparent;border-radius:10px;padding:0.8rem;transition:border-color .2s,background .2s"><h4>Versjon B</h4><p>' + nlMtEscHtml(vb) + '</p></div>' +
+      '</div>' +
+      '<input type="hidden" id="rhythm-val-' + uniq + '" value="">' +
+      '<div class="ex-controls"><button class="btn-check" data-check="rhythm" data-target="' + rhythmId + '" data-answer="' + fasitIdx + '" data-score="' + scoreRhythmId + '">Sjekk svar</button><button class="btn-reset" data-reset="rhythm" data-target="' + rhythmId + '" data-score="' + scoreRhythmId + '">Start på nytt</button><span id="' + scoreRhythmId + '" class="ex-score"></span></div>' +
+      '<button class="btn-fasit" data-fasit="fb-' + uniq + '">' + revealLabel + '</button>' +
+      '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">' + revealTitle + '</div><p class="fb-ans">' + revealBody + '</p>' + metaHtml + '</div></div>' +
+      '</div></article>';
+  }
+
   // Generic fallback: show the task with guidance/fasit instead of dropping unsupported MT types.
   var fallbackId = 'write-' + uniq;
   return '<article class="ei">' + header +
@@ -896,6 +949,10 @@ function nlImportMTBankTasks() {
   else if (typeof window !== 'undefined' && Array.isArray(window.MT_BANK)) bank = window.MT_BANK;
   else if (typeof globalThis !== 'undefined' && Array.isArray(globalThis.MT_BANK)) bank = globalThis.MT_BANK;
   if (!bank || !bank.length) return;
+
+  /* Clear all static exercises — bank is the single source of truth */
+  document.querySelectorAll('.exlist').forEach(function(el) { el.innerHTML = ''; });
+  document.querySelectorAll('.exc').forEach(function(el) { el.textContent = '0 oppg.'; });
 
   var maxPerCategory = 30;
   var counters = {};
@@ -934,6 +991,15 @@ function nlImportMTBankTasks() {
   });
 
   document.body.dataset.nlMtImported = '1';
+
+  /* Update badge counts to reflect imported exercises */
+  Object.keys(counters).forEach(function(cat) {
+    var card = document.querySelector('.card[data-cat="' + cat + '"]');
+    if (!card) return;
+    var exc = card.querySelector('.exc');
+    if (exc) exc.textContent = counters[cat] + ' oppg.';
+  });
+
   if (imported > 0 && window.console && console.info) {
     console.info('[Skrivelab] Importerte', imported, 'oppgåver frå MT_BANK.');
   }
@@ -2239,6 +2305,34 @@ function nlCheckBurger(eid, sid) {
 
 function nlResetBurger(eid, sid) {
   nlBuildBurger(eid);
+  nlClearScore(sid);
+}
+
+function nlCheckRhythm(btn) {
+  var tgt = btn.dataset.target;
+  var sid = btn.dataset.score;
+  var answer = btn.dataset.answer;
+  var wrap = document.getElementById(tgt);
+  if (!wrap) return;
+  var uid = tgt.replace('rhythm-', '');
+  var hid = document.getElementById('rhythm-val-' + uid);
+  var sc = document.getElementById(sid);
+  if (!hid || hid.value === '') { if (sc) { sc.textContent = 'Vel ein versjon først.'; sc.style.color = ''; sc.classList.remove('ok','err'); } return; }
+  if (hid.value === String(answer)) {
+    nlSetScore(sid, '✔ Rett!', 'ok');
+  } else {
+    nlSetScore(sid, '✘ Prøv igjen.', 'err');
+  }
+}
+
+function nlResetRhythm(tgt, sid) {
+  var wrap = document.getElementById(tgt);
+  if (wrap) wrap.querySelectorAll('.rhythm-pick').forEach(function(p) {
+    p.style.borderColor = 'transparent'; p.style.background = '';
+  });
+  var uid = tgt.replace('rhythm-', '');
+  var hid = document.getElementById('rhythm-val-' + uid);
+  if (hid) hid.value = '';
   nlClearScore(sid);
 }
 
