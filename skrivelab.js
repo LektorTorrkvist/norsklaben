@@ -26,10 +26,7 @@ function nlBoot() {
   }
 
   nlSafeInit('normalize-categories', nlNormalizeCategories);
-  nlSafeInit('strip-legacy-inline-tasks', nlStripLegacyInlineTasks);
-  nlSafeInit('import-mt-bank', nlImportMTBankTasks);
   nlSafeInit('normalize-types-and-titles', nlNormalizeExerciseMetaFromType);
-  nlSafeInit('bind-bank-browse-controls', nlBindBankBrowseControls);
 
   /* ── Card open/close + exercise modal (delegated for robustness) ── */
   document.addEventListener('click', function(e) {

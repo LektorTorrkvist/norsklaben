@@ -26,7 +26,6 @@ function nlBoot() {
   }
 
   nlSafeInit('normalize-categories', nlNormalizeCategories);
-  nlSafeInit('import-mt-bank', nlImportMTBankTasks);
   nlSafeInit('normalize-types-and-titles', nlNormalizeExerciseMetaFromType);
 
   /* ── Card open/close + exercise modal (delegated for robustness) ── */
