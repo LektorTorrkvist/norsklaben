@@ -528,6 +528,133 @@ nav a.active { font-weight: 700; }
   pointer-events: none;
 }
 
+.adp-g-hero {
+  grid-column: 1 / -1;
+  border: 1px solid #ddc996;
+  border-radius: 12px;
+  padding: .56rem .68rem .6rem;
+  background: linear-gradient(140deg, #fff8e8 0%, #fef1d2 45%, #fae4b0 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.62), 0 4px 12px rgba(132, 95, 22, .13);
+  position: relative;
+  z-index: 1;
+}
+
+.adp-g-hero-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem;
+  margin-bottom: .35rem;
+  flex-wrap: wrap;
+}
+
+.adp-g-hero-title {
+  font-size: .67rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-weight: 700;
+  color: #7e5a1b;
+}
+
+.adp-g-hero-level {
+  display: inline-flex;
+  align-items: center;
+  gap: .34rem;
+  font-size: .9rem;
+  color: #684615;
+}
+
+#nl-ad-prof-level-icon {
+  font-size: 1.02rem;
+}
+
+#nl-ad-prof-level-name {
+  font-family: 'Playfair Display', serif;
+  font-size: .98rem;
+  color: #6b4914;
+}
+
+.adp-g-hero-bar {
+  height: 8px;
+  border-radius: 99px;
+  background: rgba(115, 85, 30, .16);
+  overflow: hidden;
+  margin-bottom: .34rem;
+}
+
+#nl-ad-prof-progress-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #2c7a57 0%, #c18b2e 100%);
+  transition: width .45s cubic-bezier(.4,0,.2,1);
+}
+
+#nl-ad-prof-progress-fill.adp-prof-progress-up {
+  animation: adpProfBarUp .8s ease;
+}
+
+@keyframes adpProfBarUp {
+  0% { box-shadow: 0 0 0 rgba(193,139,46,0); filter: saturate(1); }
+  35% { box-shadow: 0 0 10px rgba(193,139,46,.45), 0 0 18px rgba(44,122,87,.25); filter: saturate(1.15); }
+  100% { box-shadow: 0 0 0 rgba(193,139,46,0); filter: saturate(1); }
+}
+
+.adp-g-hero-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  flex-wrap: wrap;
+  font-size: .76rem;
+  color: #6a522a;
+}
+
+#nl-ad-prof-progress-text {
+  font-variant-numeric: tabular-nums;
+}
+
+.adp-g-hero-trophies {
+  display: inline-flex;
+  align-items: center;
+  gap: .24rem;
+  background: rgba(255,255,255,.42);
+  border: 1px solid rgba(175, 132, 45, .4);
+  border-radius: 999px;
+  padding: .08rem .44rem;
+}
+
+#nl-ad-prof-trophies {
+  color: #734d12;
+}
+
+.adp-g-hero-last {
+  display: inline-flex;
+  align-items: center;
+  gap: .28rem;
+  background: linear-gradient(135deg, rgba(255,255,255,.64), rgba(255,255,255,.42));
+  border: 1px solid rgba(175, 132, 45, .38);
+  border-radius: 999px;
+  padding: .08rem .46rem;
+  color: #6b4a1a;
+  font-size: .72rem;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adp-g-hero-last.adp-g-hero-last-pop {
+  animation: adpBadgePop .6s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes adpBadgePop {
+  0% { transform: scale(.75); opacity: 0; }
+  55% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 @keyframes adpOrbit {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -709,6 +836,22 @@ nav a.active { font-weight: 700; }
 @media (max-width: 760px) {
   .adp-gamify-cockpit {
     padding: .55rem;
+  }
+
+  .adp-g-hero {
+    padding: .5rem .55rem .52rem;
+  }
+
+  .adp-g-hero-level {
+    font-size: .84rem;
+  }
+
+  #nl-ad-prof-level-name {
+    font-size: .92rem;
+  }
+
+  .adp-g-hero-meta {
+    font-size: .72rem;
   }
 
   .adp-gamify-cockpit .adp-g-pill {

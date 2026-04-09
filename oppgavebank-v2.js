@@ -1450,6 +1450,28 @@ function mtBadgesCountRetryWin() {
   mtLsSet(data);
 }
 
+function mtBadgesLatestUnlocked() {
+  var badges = mtBadgesGet();
+  var latestId = null;
+  var latestTs = -1;
+
+  Object.keys(badges).forEach(function (id) {
+    var item = badges[id] || {};
+    var ts = item.dato ? Date.parse(item.dato) : 0;
+    if (!isFinite(ts)) ts = 0;
+    if (ts > latestTs) {
+      latestTs = ts;
+      latestId = id;
+    }
+  });
+
+  if (!latestId) return null;
+  for (var i = 0; i < MT_BADGE_DEFS.length; i++) {
+    if (MT_BADGE_DEFS[i].id === latestId) return MT_BADGE_DEFS[i];
+  }
+  return null;
+}
+
 /* ─── ADAPTIV MOTOR ──────────────────────────────── */
 
 function mtCatMastery(kat) {
@@ -1733,17 +1755,69 @@ function mtUpdateHeaderProfile(totalXP, streakCurrent) {
   var xpEl = document.getElementById('nl-ad-prof-xp');
   var nextEl = document.getElementById('nl-ad-prof-next');
   var streakEl = document.getElementById('nl-ad-prof-streak');
+  var levelNameEl = document.getElementById('nl-ad-prof-level-name');
+  var levelIconEl = document.getElementById('nl-ad-prof-level-icon');
+  var progressFillEl = document.getElementById('nl-ad-prof-progress-fill');
+  var progressTextEl = document.getElementById('nl-ad-prof-progress-text');
+  var trophiesEl = document.getElementById('nl-ad-prof-trophies');
+  var lastBadgeEl = document.getElementById('nl-ad-prof-last-badge');
   var lvl = mtXpLevel(totalXP || 0);
+  var badges = mtBadgesGet();
+  var latestBadge = mtBadgesLatestUnlocked();
+  var unlocked = Object.keys(badges).length;
+  var totalBadges = MT_BADGE_DEFS.length;
 
   if (levelEl) levelEl.textContent = String(lvl.index + 1);
   if (xpEl) xpEl.textContent = String(totalXP || 0);
+
+  var remain = lvl.next ? Math.max(0, lvl.next.xp - (totalXP || 0)) : 0;
+  var progressPct = 100;
+  var progressText = 'Maks nivå';
+  if (lvl.next) {
+    var span = Math.max(1, lvl.next.xp - lvl.current.xp);
+    var earned = Math.max(0, (totalXP || 0) - lvl.current.xp);
+    progressPct = Math.max(0, Math.min(100, Math.round((earned / span) * 100)));
+    progressText = earned + ' / ' + span + ' XP';
+  }
+
   if (nextEl) {
-    var remain = lvl.next ? Math.max(0, lvl.next.xp - (totalXP || 0)) : 0;
     nextEl.textContent = lvl.next ? (remain + ' XP') : 'Maks nivå';
   }
   if (streakEl) {
     var s = Math.max(0, Number(streakCurrent) || 0);
     streakEl.textContent = s + (s === 1 ? ' dag' : ' dagar');
+  }
+  if (levelNameEl) levelNameEl.textContent = lvl.current.name;
+  if (levelIconEl) levelIconEl.innerHTML = lvl.current.icon;
+  if (progressFillEl) {
+    var prevPct = Number(progressFillEl.dataset.pct || '0');
+    progressFillEl.style.width = progressPct + '%';
+    progressFillEl.dataset.pct = String(progressPct);
+    if (progressPct > prevPct + 0.5) {
+      progressFillEl.classList.remove('adp-prof-progress-up');
+      void progressFillEl.offsetWidth;
+      progressFillEl.classList.add('adp-prof-progress-up');
+      setTimeout(function () { progressFillEl.classList.remove('adp-prof-progress-up'); }, 850);
+    }
+  }
+  if (progressTextEl) progressTextEl.textContent = progressText;
+  if (trophiesEl) trophiesEl.textContent = unlocked + '/' + totalBadges;
+  if (lastBadgeEl) {
+    if (latestBadge) {
+      var prevBadgeId = lastBadgeEl.dataset.badgeId || '';
+      lastBadgeEl.hidden = false;
+      lastBadgeEl.textContent = latestBadge.icon + ' Siste pokal: ' + latestBadge.namn;
+      lastBadgeEl.dataset.badgeId = latestBadge.id;
+      if (prevBadgeId && prevBadgeId !== latestBadge.id) {
+        lastBadgeEl.classList.remove('adp-g-hero-last-pop');
+        void lastBadgeEl.offsetWidth;
+        lastBadgeEl.classList.add('adp-g-hero-last-pop');
+        setTimeout(function () { lastBadgeEl.classList.remove('adp-g-hero-last-pop'); }, 700);
+      }
+    } else {
+      lastBadgeEl.hidden = true;
+      lastBadgeEl.dataset.badgeId = '';
+    }
   }
 }
 
@@ -3272,6 +3346,11 @@ function mtInit() {
   if (closeBtn) closeBtn.addEventListener('click', mtAbort);
   if (winBg) winBg.addEventListener('click', mtAbort);
   if (sumClose) sumClose.addEventListener('click', mtAbort);
+
+  /* Synk toppcockpit med lagra nivå/xp/streak/trofé ved innlasting */
+  var initXP = mtXpGetTotal();
+  var initStreak = mtStreakGet();
+  mtUpdateHeaderProfile(initXP, initStreak.current || 0);
 }
 
 /* Auto-init ved DOMContentLoaded */
