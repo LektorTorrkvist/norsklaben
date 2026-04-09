@@ -126,20 +126,20 @@ var MT_BANK = [
  eks:'ananasringer (mat) vs. ananas ringer (absurd betydning)'},
 
 {kat:'sammensatt',kat_label:'Sammensatte ord',type:'fix',vanske:'lett',
- q:'Rett de fem særskrivingsfeilene i teksten.',
- tekst:'Hvert år havner enorme mengder havplast i sjøen. Sjødyr som hval og sel setter seg fast i plastbiter. Forskere fra Havforskningsinstituttet advarer om problemet.',
- errors:{'hav plast':'havplast','Sjø dyr':'Sjødyr','plast bitar':'plastbitar','Hav forskings instituttet':'Havforskingsinstituttet'},
- fasit:'havplast · Sjødyr · plastbitar · Havforskingsinstituttet',
+ q:'Rett de fire særskrivingsfeilene i teksten.',
+ tekst:'Hvert år havner enorme mengder hav plast i sjøen. Sjø dyr som hval og sel setter seg fast i plast biter. Forskere fra Hav forsknings instituttet advarer om problemet.',
+ errors:{'hav plast':'havplast','Sjø dyr':'Sjødyr','plast biter':'plastbiter','Hav forsknings instituttet':'Havforskningsinstituttet'},
+ fasit:'havplast · Sjødyr · plastbiter · Havforskningsinstituttet',
  regel:'Sammensatte ord skriver man alltid i ett på norsk. Ingen mellomrom mellom leddene.',
  eks:'havplast, sjødyr, plastbiter, Havforskningsinstituttet'},
 
 {kat:'sammensatt',kat_label:'Sammensatte ord',type:'fix',vanske:'medium',
- q:'Rett de fire særskrivingsfeilene i elevteksten.',
- tekst:'I dag skal vi ha julemiddag med hele familien. Bestemor lager pinnekjøttmiddag, og vi har pyntet juletreet med lys. Etter middagen spiller vi brettspill og drikker varm sjokolade.',
- errors:{'jule middag':'julemiddag','pinnekjøt middag':'pinnekjøtmiddag','jule treet':'juletreet'},
- fasit:'julemiddag · pinnekjøtmiddag · juletreet',
+ q:'Rett de tre særskrivingsfeilene i elevteksten.',
+ tekst:'I dag skal vi ha jule middag med hele familien. Bestemor lager pinnekjøtt middag, og vi har pyntet jule treet med lys. Etter middagen spiller vi brettspill og drikker varm sjokolade.',
+ errors:{'jule middag':'julemiddag','pinnekjøtt middag':'pinnekjøttmiddag','jule treet':'juletreet'},
+ fasit:'julemiddag · pinnekjøttmiddag · juletreet',
  regel:'Høytidsord skriver man i ett: julemiddag, juletre, påskemiddag.',
- eks:'julemiddag, juletreet, pinnekjøtmiddag'},
+ eks:'julemiddag, juletreet, pinnekjøttmiddag'},
 
 {kat:'sammensatt',kat_label:'Sammensatte ord',type:'drag_kolonne',vanske:'medium',
  q:'Hvilke ord er riktig skrevet, og hvilke er feil (særskrevne)?',
@@ -342,13 +342,13 @@ var MT_BANK = [
 {kat:'tegnsetting',kat_label:'Tegnsetting',type:'fix',vanske:'lett',
  q:'Sett inn de fem kommaene som mangler.',
  tekst:'Selv om det var kaldt ute bestemte vi oss for å gå tur. Vi tok med mat drikke og varme klær. Lena som er raskest i klassen sprang foran. Da vi kom hjem lagde vi kakao.',
- errors:{'kaldt ute bestemte':'kaldt ute, bestemte','mat drikke':'mat, drikke','Lena som':'Lena, som','klassen sprang':'klassen, sprang','heim laga':'heim, laga'},
- fasit:'ute, bestemte · mat, drikke · Lena, som · klassen, sprang · heim, laga',
+ errors:{'kaldt ute bestemte':'kaldt ute, bestemte','mat drikke':'mat, drikke','Lena som':'Lena, som','klassen sprang':'klassen, sprang','hjem lagde':'hjem, lagde'},
+ fasit:'ute, bestemte · mat, drikke · Lena, som · klassen, sprang · hjem, lagde',
  regel:'Komma etter fremskutt leddsetning, i oppramsing, og rundt innskutt relativsetning.',
  eks:'Selv om ..., [hovedsetning]. Lena, som ..., sprang.'},
 
 {kat:'tegnsetting',kat_label:'Tegnsetting',type:'fix',vanske:'medium',
- q:'Rett tegnsettinga i teksten (3 feil).',
+ q:'Rett tegnsettinga i teksten (2 feil).',
  tekst:'Hun sa at "Det finnes ingen enkel løsning" og alle var enige. Rapporten konkluderer med at: mengden plast kan tredoble seg.',
  errors:{'"Det finnes ingen enkel løsning"':'«Det finnes ingen enkel løsning»','at: mengden':'at mengden'},
  fasit:'Bruk guillemet «» i stedet for " ". Fjern kolon etter «at».',
@@ -544,11 +544,11 @@ var MT_BANK = [
 
 {kat:'setningsbygging',kat_label:'Setningsbygging',type:'fix',vanske:'vanskeleg',
  q:'Forbetr teksten: fjern gjentaking og munnlege uttrykk.',
- tekst:'Det er bra å trene fordi det er bra for helsa. Trening er bra og trening gjer at du vert sterkare og sånn.',
- errors:{'Det er bra å trene fordi det er bra for helsa.':'Regelmessig trening styrkjer helsa.','Trening er bra og trening gjer at du vert sterkare og sånn.':'Fysisk aktivitet betrar både kondisjon og muskelstyrke.'},
- fasit:'Regelmessig trening styrkjer helsa. Fysisk aktivitet betrar både kondisjon og muskelstyrke.',
- regel:'Unngå å gjenta same ord. Bruk synonym og variert ordval. Fjern «og sånn».',
- eks:'«bra» → «styrkjer helsa» · «sterkare og sånn» → «betrar kondisjon og muskelstyrke»'},
+ tekst:'Det er bra å trene fordi det er bra for helsa. Trening er bra og trening gjør at du blir sterkere og sånt.',
+ errors:{'Det er bra å trene fordi det er bra for helsa.':'Regelmessig trening styrker helsa.','Trening er bra og trening gjør at du blir sterkere og sånt.':'Fysisk aktivitet forbedrer både kondisjon og muskelstyrke.'},
+ fasit:'Regelmessig trening styrker helsa. Fysisk aktivitet forbedrer både kondisjon og muskelstyrke.',
+ regel:'Unngå å gjenta samme ord. Bruk synonymer og variert ordvalg. Fjern «og sånt».',
+ eks:'«bra» → «styrker helsa» · «sterkere og sånt» → «forbedrer kondisjon og muskelstyrke»'},
 
 /* ═══════════════════════════════════════════════════
   8. BINDEORD  (10 oppgåver)
@@ -2134,8 +2134,9 @@ function mtCheckFix() {
     if (val.indexOf(right) !== -1 && val.indexOf(wrong) === -1) hits++;
   });
   var correct = hits === keys.length;
+  var partial = !correct && hits > 0;
   el.disabled = true;
-  el.className = 'mt-text-input mt-textarea mt-mono ' + (correct ? 'mt-inp-correct' : 'mt-inp-wrong');
+  el.className = 'mt-text-input mt-textarea mt-mono ' + (correct ? 'mt-inp-correct' : (partial ? 'mt-inp-neutral' : 'mt-inp-wrong'));
   var feedback = correct ? null : mtSmartFeedback(val, t);
   mtFinish(correct, keys.length, hits, val, t, feedback);
 }

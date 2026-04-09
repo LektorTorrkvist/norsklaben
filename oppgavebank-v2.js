@@ -126,7 +126,7 @@ var MT_BANK = [
  eks:'ananasringar (mat) vs. ananas ringer (absurd tyding)'},
 
 {kat:'samansett',kat_label:'Samansette ord',type:'fix',vanske:'lett',
- q:'Rett dei fem særskrivingsfeila i teksten.',
+ q:'Rett dei fire særskrivingsfeila i teksten.',
  tekst:'Kvart år hamnar enorme mengder hav plast i sjøen. Sjø dyr som kval og sel set seg fast i plast bitar. Forskarar frå Hav forskings instituttet åtvarar om problemet.',
  errors:{'hav plast':'havplast','Sjø dyr':'Sjødyr','plast bitar':'plastbitar','Hav forskings instituttet':'Havforskingsinstituttet'},
  fasit:'havplast · Sjødyr · plastbitar · Havforskingsinstituttet',
@@ -134,7 +134,7 @@ var MT_BANK = [
  eks:'havplast, sjødyr, plastbitar, Havforskingsinstituttet'},
 
 {kat:'samansett',kat_label:'Samansette ord',type:'fix',vanske:'medium',
- q:'Rett dei fire særskrivingsfeila i elevteksten.',
+ q:'Rett dei tre særskrivingsfeila i elevteksten.',
  tekst:'I dag skal vi ha jule middag med heile familien. Bestemora lagar pinnekjøt middag, og vi har pynta jule treet med lys. Etter middagen spelar vi brettspel og drikk varm sjokolade.',
  errors:{'jule middag':'julemiddag','pinnekjøt middag':'pinnekjøtmiddag','jule treet':'juletreet'},
  fasit:'julemiddag · pinnekjøtmiddag · juletreet',
@@ -348,7 +348,7 @@ var MT_BANK = [
  eks:'Sjølv om ..., [hovudsetning]. Lena, som ..., sprang.'},
 
 {kat:'teiknsetting',kat_label:'Teiknsetting',type:'fix',vanske:'medium',
- q:'Rett teiknsettinga i teksten (3 feil).',
+ q:'Rett teiknsettinga i teksten (2 feil).',
  tekst:'Ho sa at \"Det finst ingen enkel løysing\" og alle var einige. Rapporten konkluderer med at: mengda plast kan tredoble seg.',
  errors:{'\"Det finst ingen enkel løysing\"':'«Det finst ingen enkel løysing»','at: mengda':'at mengda'},
  fasit:'Bruk guillemet «» i staden for " ". Fjern kolon etter «at».',
@@ -2172,8 +2172,9 @@ function mtCheckFix() {
     if (val.indexOf(right) !== -1 && val.indexOf(wrong) === -1) hits++;
   });
   var correct = hits === keys.length;
+  var partial = !correct && hits > 0;
   el.disabled = true;
-  el.className = 'mt-text-input mt-textarea mt-mono ' + (correct ? 'mt-inp-correct' : 'mt-inp-wrong');
+  el.className = 'mt-text-input mt-textarea mt-mono ' + (correct ? 'mt-inp-correct' : (partial ? 'mt-inp-neutral' : 'mt-inp-wrong'));
   var feedback = correct ? null : mtSmartFeedback(val, t);
   mtFinish(correct, keys.length, hits, val, t, feedback);
 }
