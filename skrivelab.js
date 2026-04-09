@@ -4305,7 +4305,7 @@ function nlAdSetFeedback(text, isCorrect, ruleText, eksText, fasitText) {
   text = nlAdCleanFeedbackText(text, isCorrect);
 
   // Build pedagogical encouragement based on result
-  var pedagogy = nlAdPedagogicalMsg(text, isCorrect, ruleText);
+  var pedagogy = nlAdPedagogicalMsg(text, isCorrect);
 
   var html = '<div class="fb-heading">' + icon + heading + '</div>';
   if (pedagogy) html += '<div class="fb-pedagogy">' + pedagogy + '</div>';
@@ -4336,9 +4336,8 @@ function nlAdSetFeedback(text, isCorrect, ruleText, eksText, fasitText) {
   box.classList.add(isCorrect === true ? 'correct-fb' : 'wrong-fb');
 }
 
-function nlAdPedagogicalMsg(scoreText, isCorrect, ruleText) {
+function nlAdPedagogicalMsg(scoreText, isCorrect) {
   if (isCorrect === null || isCorrect === undefined) return '';
-  var hasRule = !!(ruleText && ruleText.replace(/^regel:\s*/i, '').trim());
 
   // Parse score like "3 av 5 rette" or "2 av 4 ord på rett plass"
   var m = String(scoreText).match(/^(\d+)\s+av\s+(\d+)/);
@@ -4348,45 +4347,29 @@ function nlAdPedagogicalMsg(scoreText, isCorrect, ruleText) {
 
   if (isCorrect === true) {
     if (total > 1 && ratio === 1) {
-      return hasRule
-        ? 'Alle rett — utmerkt! Sjå regelen under for å feste kunnskapen.'
-        : 'Alle rett — utmerkt! Du har full kontroll.';
+      return 'Alle rett — utmerkt! Du har full kontroll.';
     }
-    var correctMsgs = hasRule ? [
-      'Flott jobba! Sjå regelen under — det styrker forståinga.',
-      'Heilt rett! Regelen under forklarer kvifor.',
-      'Knallbra! Les regelen for å hugse mønsteret.',
-      'Imponerande! Regelen stadfestar det du gjorde rett.',
-      'Topp! Sjå dømet under for å sjå mønsteret tydelegare.'
-    ] : [
-      'Flott jobba! Du viser god forståing.',
-      'Heilt rett! Du har god kontroll på dette.',
-      'Knallbra! Hald fram slik.',
+    var correctMsgs = [
+      'Flott jobba! Du viser god forståing av mønsteret.',
+      'Heilt rett! Du har tydelig kontroll på dette temaet.',
+      'Knallbra! Du kan dette — utfordre deg med neste nivå.',
       'Imponerande! Du meistrar dette godt.',
-      'Topp! Du er godt på veg.'
+      'Topp! Stø kunnskap — hald fram slik.'
     ];
     return correctMsgs[Math.floor(Math.random() * correctMsgs.length)];
   }
 
-  // Wrong/partial answer — always give concrete guidance
+  // Wrong/partial answer — give substantive diagnosis
   if (ratio >= 0) {
     if (ratio >= 0.7) {
-      return hasRule
-        ? 'Nesten! Sjå fasiten og regelen under — berre ein liten detalj som manglar.'
-        : 'Nesten! Sjå fasiten under og samanlikn med svaret ditt.';
+      return 'Nesten! Du har forstått hovudmønsteret — berre ein liten detalj som manglar.';
     } else if (ratio >= 0.4) {
-      return hasRule
-        ? 'Du er på rett veg! Studer fasiten og regelen under for å forstå kvifor.'
-        : 'Du er på rett veg! Sjå fasiten under og prøv å forstå mønsteret.';
+      return 'Du er på rett veg! Prøv å finne mønsteret som bind dei rette svara saman.';
     } else {
-      return hasRule
-        ? 'Ikkje gje opp! Fasiten og regelen under viser deg vegen vidare.'
-        : 'Ikkje gje opp! Sjå fasiten under nøye og prøv liknande oppgåver.';
+      return 'Ikkje gje opp! Øv på å kjenne att hovudregelen i denne kategorien.';
     }
   }
-  return hasRule
-    ? 'Sjå fasiten og regelen under — det hjelper til neste gong!'
-    : 'Sjå tilbakemeldinga under — det hjelper til neste gong!';
+  return 'Bruk tilbakemeldinga aktivt — det hjelper til neste gong!';
 }
 
 function nlAdSyncActionButtons() {
