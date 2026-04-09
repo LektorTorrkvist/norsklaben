@@ -837,16 +837,17 @@ function nlMtBuildExercise(task, i, localIx) {
   }
 
   if (type === 'fillsel') {
-    var sentences = Array.isArray(task && task.sentences) ? task.sentences : [];
+    var sentences = Array.isArray(task && task.items) ? task.items : (Array.isArray(task && task.sentences) ? task.sentences : []);
     if (!sentences.length) return '';
     var fillselId = 'fillsel-' + uniq;
     var scoreFillselId = 'score-' + uniq;
     var fillselHtml = sentences.map(function(s, si) {
-      var opts = (Array.isArray(s.options) ? s.options : []).map(function(o) {
+      var opts = (Array.isArray(s.alt) ? s.alt : (Array.isArray(s.options) ? s.options : [])).map(function(o) {
         return '<option value="' + nlMtEscHtml(o) + '">' + nlMtEscHtml(o) + '</option>';
       }).join('');
+      var answer = s.fasit != null ? s.fasit : (s.answer || '');
       return '<p class="fillsel-sentence">' + nlMtEscHtml(s.pre || '') +
-        '<select class="fill-select" data-answer="' + nlMtEscHtml(s.answer || '') + '"><option value="">– velg –</option>' + opts + '</select>' +
+        '<select class="fill-select" data-answer="' + nlMtEscHtml(answer) + '"><option value="">– velg –</option>' + opts + '</select>' +
         nlMtEscHtml(s.post || '') + '</p>';
     }).join('');
     return '<article class="ei">' + header +
@@ -944,6 +945,134 @@ function nlMtBuildExercise(task, i, localIx) {
     '</div></article>';
 }
 
+function nlMtValidateTaskForImport(task) {
+  var type = String(task && task.type || '').toLowerCase();
+  var prompt = nlMtPickPrompt(task);
+  var hasPrompt = !!String(prompt || '').trim();
+  var hasGuide = nlMtHasFasitValue(task && task.regel) || nlMtHasFasitValue(task && task.hint) || nlMtHasFasitValue(task && task.eks);
+  var supported = {
+    mc: 1,
+    cloze: 1,
+    open: 1,
+    drag_ord: 1,
+    drag_kolonne: 1,
+    finn_feil: 1,
+    klikk_marker: 1,
+    fix: 1,
+    rank: 1,
+    fillsel: 1,
+    mcset: 1,
+    burger_sort: 1,
+    rhythm: 1,
+    sann_usann_serie: 1,
+    sorter_rekke: 1,
+    avsnitt_klikk: 1,
+    omskriv: 1
+  };
+
+  if (!supported[type]) return { ok: false, reason: 'unsupported-type' };
+  if (!hasPrompt) return { ok: false, reason: 'missing-prompt' };
+  if (!hasGuide) return { ok: false, reason: 'missing-guide' };
+
+  if (type === 'mc') {
+    var alts = Array.isArray(task && task.alt) ? task.alt : [];
+    if (alts.length < 2) return { ok: false, reason: 'mc-too-few-options' };
+    if (nlMtResolveMcAnswerIndex(task, alts) < 0) return { ok: false, reason: 'mc-no-valid-answer' };
+    return { ok: true };
+  }
+
+  if (type === 'cloze') {
+    var hasAnswer = nlMtHasFasitValue(task && task.fasit) || (Array.isArray(task && task.fasit_v) && task.fasit_v.length > 0);
+    return hasAnswer ? { ok: true } : { ok: false, reason: 'cloze-missing-answer' };
+  }
+
+  if (type === 'fillsel') {
+    var fillItems = Array.isArray(task && task.items) ? task.items : (Array.isArray(task && task.sentences) ? task.sentences : []);
+    if (!fillItems.length) return { ok: false, reason: 'fillsel-no-items' };
+    var fillOk = fillItems.every(function(s) {
+      var opts = Array.isArray(s && s.alt) ? s.alt : (Array.isArray(s && s.options) ? s.options : []);
+      var ans = s && (s.fasit != null ? s.fasit : s.answer);
+      return opts.length >= 2 && ans != null && String(ans).trim();
+    });
+    return fillOk ? { ok: true } : { ok: false, reason: 'fillsel-invalid-item' };
+  }
+
+  if (type === 'mcset') {
+    var qs = Array.isArray(task && task.questions) ? task.questions : [];
+    if (qs.length < 2) return { ok: false, reason: 'mcset-too-few-questions' };
+    var qsOk = qs.every(function(q) {
+      return Array.isArray(q && q.alt) && q.alt.length >= 2 && q && q.fasit != null;
+    });
+    return qsOk ? { ok: true } : { ok: false, reason: 'mcset-invalid-question' };
+  }
+
+  if (type === 'drag_kolonne') {
+    var words = Array.isArray(task && task.ord) ? task.ord : [];
+    var cols = Array.isArray(task && task.kolonner) ? task.kolonner : [];
+    return (words.length >= 3 && cols.length >= 2) ? { ok: true } : { ok: false, reason: 'drag-kolonne-too-thin' };
+  }
+
+  if (type === 'drag_ord') {
+    var dragWords = Array.isArray(task && task.ord) ? task.ord : [];
+    return dragWords.length >= 3 ? { ok: true } : { ok: false, reason: 'drag-ord-too-short' };
+  }
+
+  if (type === 'finn_feil') {
+    var feils = nlMtToArray(task && task.fasit_feil);
+    return (String(task && task.tekst || '').trim() && feils.length > 0) ? { ok: true } : { ok: false, reason: 'finn-feil-invalid' };
+  }
+
+  if (type === 'klikk_marker') {
+    var keys = nlMtToArray((task && task.fasit_ord) || (task && task.fasit_v) || (task && task.fasit));
+    return (String(task && task.tekst || '').trim() && keys.length > 0) ? { ok: true } : { ok: false, reason: 'klikk-marker-invalid' };
+  }
+
+  if (type === 'fix') {
+    var fixText = String(task && task.tekst || '').trim();
+    var fixErrors = task && task.errors;
+    return (fixText && fixErrors && Object.keys(fixErrors).length > 0) ? { ok: true } : { ok: false, reason: 'fix-invalid' };
+  }
+
+  if (type === 'rank' || type === 'sorter_rekke') {
+    var rItems = Array.isArray(task && task.items) ? task.items : [];
+    return rItems.length >= 3 ? { ok: true } : { ok: false, reason: 'rank-too-few-items' };
+  }
+
+  if (type === 'burger_sort') {
+    var layers = Array.isArray(task && task.lag) ? task.lag : [];
+    var paras = Array.isArray(task && task.avsnitt) ? task.avsnitt : [];
+    return (layers.length >= 2 && paras.length >= 3) ? { ok: true } : { ok: false, reason: 'burger-too-few-parts' };
+  }
+
+  if (type === 'rhythm') {
+    return (String(task && task.versjon_a || '').trim() && String(task && task.versjon_b || '').trim())
+      ? { ok: true }
+      : { ok: false, reason: 'rhythm-invalid' };
+  }
+
+  if (type === 'sann_usann_serie') {
+    var claims = Array.isArray(task && task.paastandar) ? task.paastandar : [];
+    var claimsOk = claims.length >= 3 && claims.every(function(p) {
+      return p && String(p.tekst || '').trim() && typeof p.sann === 'boolean';
+    });
+    return claimsOk ? { ok: true } : { ok: false, reason: 'sann-usann-invalid' };
+  }
+
+  if (type === 'avsnitt_klikk') {
+    var segs = Array.isArray(task && task.segments) ? task.segments : [];
+    var breaks = Array.isArray(task && task.fasit_breaks) ? task.fasit_breaks : [];
+    return (segs.length >= 3 && breaks.length >= 1) ? { ok: true } : { ok: false, reason: 'avsnitt-klikk-invalid' };
+  }
+
+  if (type === 'omskriv') {
+    var rewriteText = String(task && task.tekst || '').trim();
+    var req = Array.isArray(task && task.maa_ha) ? task.maa_ha : [];
+    return (rewriteText && req.length >= 1) ? { ok: true } : { ok: false, reason: 'omskriv-invalid' };
+  }
+
+  return { ok: true };
+}
+
 function nlImportMTBankTasks() {
   if (document.body.dataset.nlMtImported === '1') return;
   var bank = null;
@@ -959,6 +1088,8 @@ function nlImportMTBankTasks() {
   var maxPerCategory = 30;
   var counters = {};
   var imported = 0;
+  var skipped = 0;
+  var skippedReasons = {};
   var stableBank = bank.slice().sort(function(a, b) {
     var ak = String((a && a.kat) || '');
     var bk = String((b && b.kat) || '');
@@ -980,6 +1111,13 @@ function nlImportMTBankTasks() {
 
     counters[cat] = counters[cat] || 0;
     if (counters[cat] >= maxPerCategory) return;
+
+    var validation = nlMtValidateTaskForImport(task);
+    if (!validation.ok) {
+      skipped++;
+      skippedReasons[validation.reason] = (skippedReasons[validation.reason] || 0) + 1;
+      return;
+    }
 
     var exlist = document.querySelector('.card[data-cat="' + cat + '"] .exlist');
     if (!exlist) return;
@@ -1004,6 +1142,9 @@ function nlImportMTBankTasks() {
 
   if (imported > 0 && window.console && console.info) {
     console.info('[Skrivelab] Importerte', imported, 'oppgaver fra MT_BANK.');
+  }
+  if (skipped > 0 && window.console && console.info) {
+    console.info('[Skrivelab] Hoppet over', skipped, 'oppgaver (kvalitetsfilter):', skippedReasons);
   }
 }
 
