@@ -42,7 +42,7 @@ function nlBoot() {
     if (!exBtn) return;
     var ei = exBtn.closest('.ei');
     if (!ei) return;
-    nlSafeInit('open-bank-exercise', function() { nlBankOpenExercise(ei); });
+    nlSafeInit('open-bank-exercise', function() { nlOpenManualQueueInMt(ei); });
   });
 
   /* ── Search ── */
@@ -158,18 +158,6 @@ function nlBoot() {
         var checkEl = cur.querySelector('.btn-check');
         if (checkEl && checkEl.dataset.check === 'mc') {
           setTimeout(function() { nlAdTriggerCheck(); }, 60);
-          return;
-        }
-      }
-    }
-
-    // Bank modal + MC: auto-check immediately
-    if (nlBankModalState && nlBankModalState.open && !nlBankModalState.checked) {
-      var bankEi = nlBankModalState.mountedEi;
-      if (bankEi && bankEi.contains(area)) {
-        var bankCheckEl = bankEi.querySelector('.btn-check');
-        if (bankCheckEl && bankCheckEl.dataset.check === 'mc') {
-          setTimeout(function() { nlBankTriggerCheck(); }, 60);
           return;
         }
       }
@@ -580,7 +568,7 @@ function nlMtResolveCard(kat) {
 function nlMtBuildExercise(task, i, localIx) {
   var html = nlMtBuildExerciseCore(task, i, localIx);
   if (!html) return '';
-  var attrs = '';
+  var attrs = ' data-mt-index="' + String(i) + '"';
   if (task && task.regel) attrs += ' data-regel="' + nlMtEscHtml(task.regel) + '"';
   if (task && task.eks) attrs += ' data-eks="' + nlMtEscHtml(task.eks) + '"';
   var ft = nlMtFasitText(task && task.fasit);
@@ -2624,174 +2612,24 @@ function nlResetExerciseVisibilityState() {
   });
 }
 
-/* ── BANK EXERCISE MODAL ── */
-var nlBankModalState = {
-  open: false,
-  mountedEi: null,
-  mountParent: null,
-  mountNext: null,
-  list: [],
-  idx: -1,
-  checked: false
-};
-
-function nlInitBankModal() {
-  var win = document.getElementById('nl-bank-win');
-  if (!win || win.dataset.bound === '1') return;
-  win.dataset.bound = '1';
-
-  var closeBtn = document.getElementById('nl-bank-win-close');
-  var bg = document.getElementById('nl-bank-win-bg');
-  var prevBtn = document.getElementById('nl-bank-prev');
-  var nextBtn = document.getElementById('nl-bank-next');
-
-  if (closeBtn) closeBtn.addEventListener('click', nlBankCloseModal);
-  if (bg) bg.addEventListener('click', nlBankCloseModal);
-  var checkBankBtn = document.getElementById('nl-bank-check');
-  if (prevBtn) prevBtn.addEventListener('click', function() { nlBankGo(-1); });
-  if (nextBtn) nextBtn.addEventListener('click', function() { nlBankGo(1); });
-  if (checkBankBtn) checkBankBtn.addEventListener('click', nlBankTriggerCheck);
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && nlBankModalState.open) {
-      nlBankCloseModal();
-    }
-  });
-}
-
-function nlBankRestoreExercise() {
-  if (!nlBankModalState.mountedEi || !nlBankModalState.mountParent) return;
-
-  nlAdRestoreExerciseControls(nlBankModalState.mountedEi);
-
-  if (nlBankModalState.mountNext && nlBankModalState.mountNext.parentNode === nlBankModalState.mountParent) {
-    nlBankModalState.mountParent.insertBefore(nlBankModalState.mountedEi, nlBankModalState.mountNext);
-  } else {
-    nlBankModalState.mountParent.appendChild(nlBankModalState.mountedEi);
-  }
-
-  nlBankModalState.mountedEi.classList.remove('nl-bank-modal-open');
-  nlBankModalState.mountedEi.classList.remove('open');
-  nlBankModalState.mountedEi = null;
-  nlBankModalState.mountParent = null;
-  nlBankModalState.mountNext = null;
-}
-
-function nlBankUpdateNav() {
-  var prevBtn = document.getElementById('nl-bank-prev');
-  var nextBtn = document.getElementById('nl-bank-next');
-  var pos = document.getElementById('nl-bank-pos');
-
-  var total = nlBankModalState.list.length;
-  var idx = nlBankModalState.idx;
-
-  if (prevBtn) prevBtn.disabled = !(total > 1 && idx > 0);
-  if (nextBtn) nextBtn.disabled = !(total > 1 && idx >= 0 && idx < total - 1);
-  if (pos) pos.textContent = (idx >= 0 ? (idx + 1) : 0) + ' av ' + total;
-}
-
-function nlBankSyncButtons() {
-  var checkBtn = document.getElementById('nl-bank-check');
-  var nextBtn = document.getElementById('nl-bank-next');
-  var prevBtn = document.getElementById('nl-bank-prev');
-  if (!checkBtn || !nextBtn) return;
-
-  var ei = nlBankModalState.mountedEi;
-  var hasCheck = ei && !!ei.querySelector('.btn-check');
-  var isChecked = nlBankModalState.checked;
-
-  if (!hasCheck || isChecked) {
-    checkBtn.style.display = 'none';
-    nextBtn.style.display = '';
-    if (prevBtn) prevBtn.style.display = '';
-  } else {
-    checkBtn.style.display = '';
-    nextBtn.style.display = 'none';
-    if (prevBtn) prevBtn.style.display = 'none';
-  }
-  nlBankUpdateNav();
-}
-
-function nlBankTriggerCheck() {
-  var ei = nlBankModalState.mountedEi;
+/* ── NEW MANUAL FLOW (v2 oppgavebank-motor) ── */
+function nlOpenManualQueueInMt(ei) {
   if (!ei) return;
-
-  var checkBtn = ei.querySelector('.btn-check');
-  if (!checkBtn) { nlBankModalState.checked = true; nlBankSyncButtons(); return; }
-
-  checkBtn.click();
-
-  var scoreEl = null;
-  if (checkBtn.dataset.score) scoreEl = document.getElementById(checkBtn.dataset.score);
-  if (!scoreEl) scoreEl = ei.querySelector('.ex-score');
-
-  var hasResult = scoreEl ? (scoreEl.classList.contains('ok') || scoreEl.classList.contains('err')) : true;
-  if (!hasResult) return;  // User hasn't answered yet
-
-  nlBankModalState.checked = true;
-  nlAdAutoRevealFasit(ei);
-  nlBankSyncButtons();
-}
-
-function nlBankGo(step) {
-  var total = nlBankModalState.list.length;
-  if (!total) return;
-
-  var next = nlBankModalState.idx + step;
-  if (next < 0 || next >= total) return;
-
-  var target = nlBankModalState.list[next];
-  if (!target) return;
-
-  nlBankOpenExercise(target, nlBankModalState.list, next);
-}
-
-function nlBankOpenExercise(ei, list, idx) {
-  var win = document.getElementById('nl-bank-win');
-  var body = document.getElementById('nl-bank-win-body');
-  var title = document.getElementById('nl-bank-win-title');
-  if (!win || !body || !ei) return;
+  if (typeof window === 'undefined' || typeof window.mtStartManualQueue !== 'function') return;
 
   var card = ei.closest('.card');
   var cardList = card ? Array.prototype.slice.call(card.querySelectorAll('.exlist > .ei')) : [ei];
-  var useList = list && list.length ? list : cardList;
-  var useIdx = (typeof idx === 'number') ? idx : useList.indexOf(ei);
-  if (useIdx < 0) useIdx = 0;
+  var idxs = cardList.map(function(node) {
+    return Number(node.getAttribute('data-mt-index'));
+  }).filter(function(n) {
+    return Number.isFinite(n) && n >= 0;
+  });
+  if (!idxs.length) return;
 
-  nlInitBankModal();
-  nlBankRestoreExercise();
-
-  nlBankModalState.list = useList;
-  nlBankModalState.idx = useIdx;
-
-  nlBankModalState.mountedEi = ei;
-  nlBankModalState.mountParent = ei.parentNode;
-  nlBankModalState.mountNext = ei.nextSibling;
-
-  ei.classList.add('nl-bank-modal-open');
-  ei.classList.add('open');
-  body.appendChild(ei);
-
-  nlAdHideExerciseControls(ei);
-
-  var et = ei.querySelector('.etit');
-  if (title) title.textContent = et ? et.textContent.trim() : 'Oppgave';
-
-  win.hidden = false;
-  nlBankModalState.open = true;
-  nlBankModalState.checked = false;
-  nlBankSyncButtons();
-}
-
-function nlBankCloseModal() {
-  var win = document.getElementById('nl-bank-win');
-  if (win) win.hidden = true;
-  nlBankRestoreExercise();
-  nlBankModalState.open = false;
-  nlBankModalState.list = [];
-  nlBankModalState.idx = -1;
-  nlBankModalState.checked = false;
-  nlBankUpdateNav();
+  var startIndex = cardList.indexOf(ei);
+  if (startIndex < 0) startIndex = 0;
+  if (startIndex >= idxs.length) startIndex = 0;
+  window.mtStartManualQueue(idxs, startIndex);
 }
 
 /* ── ADAPTIVE PRACTICE ── */

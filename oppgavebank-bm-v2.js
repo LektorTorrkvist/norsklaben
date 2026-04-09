@@ -1094,6 +1094,9 @@ if (typeof window !== 'undefined') window.MT_BANK = MT_BANK;
 /* ─── STATE ──────────────────────────────────────── */
 var MTS = {
   pool: [],
+  manualQueue: [],
+  manualCursor: 0,
+  manualMode: false,
   served: 0,
   targetCount: 8,
   score: 0,
@@ -1155,10 +1158,16 @@ function mtLevenshtein(a, b) {
 }
 
 /* ─── LOCALSTORAGE ───────────────────────────────── */
-var MT_LS_KEY = 'nlMestringBM';
+var MT_LS_KEY = 'nlMestring';
+var MT_LS_LEGACY_KEY = 'nlMestringBM';
 
 function mtLsGet() {
-  try { return JSON.parse(localStorage.getItem(MT_LS_KEY)) || {}; }
+  try {
+    var shared = JSON.parse(localStorage.getItem(MT_LS_KEY)) || {};
+    if (shared && Object.keys(shared).length) return shared;
+    var legacy = JSON.parse(localStorage.getItem(MT_LS_LEGACY_KEY)) || {};
+    return legacy && typeof legacy === 'object' ? legacy : {};
+  }
   catch (e) { return {}; }
 }
 function mtLsSet(data) {
@@ -1282,35 +1291,15 @@ function mtStartFeillogg() {
   pool = mtShuffle(pool);
   var count = Math.min(pool.length, 10);
 
-  MTS.pool = pool;
-  MTS.served = 0;
-  MTS.targetCount = count;
-  MTS.score = 0;
-  MTS.maxScore = 0;
-  MTS.answered = false;
-  MTS.streak = 0;
-  MTS.history = [];
-  MTS.current = null;
-  MTS.catHistory = {};
-  MTS.retryQueue = [];
-  MTS.sinceLastRetry = 0;
-  MTS.feilLog = {};
-  MTS.level = 'adaptiv';
-  MTS.selectedCats = [];
-  MTS.active = true;
-  MTS.showRule = false;
-  MTS.sessionXP = 0;
-
-  var win = $mt('nl-ad-win');
-  var run = $mt('nl-ad-run');
-  var summary = $mt('nl-ad-summary');
-  var body = $mt('nl-ad-win-body');
-  var actions = $mt('nl-ad-actions');
-  if (win) win.hidden = false;
-  if (run) run.hidden = false;
-  if (summary) summary.hidden = true;
-  if (body) body.innerHTML = '';
-  if (actions) actions.style.display = '';
+  mtResetSessionState({
+    pool: pool,
+    targetCount: count,
+    level: 'adaptiv',
+    selectedCats: [],
+    manualMode: false,
+    manualQueue: []
+  });
+  mtOpenSessionUi();
 
   mtUpdateProgress();
   mtServeNext();
@@ -1434,6 +1423,10 @@ function mtEffectiveLevel(kat) {
 }
 
 function mtPickNext() {
+  if (MTS.manualMode) {
+    if (MTS.manualCursor >= MTS.manualQueue.length) return null;
+    return { task: MTS.manualQueue[MTS.manualCursor++], isRetry: false };
+  }
   if (MTS.retryQueue.length && MTS.sinceLastRetry >= 3) {
     MTS.sinceLastRetry = 0;
     return { task: MTS.retryQueue.shift(), isRetry: true };
@@ -1451,6 +1444,42 @@ function mtPickNext() {
   var task = MTS.pool.splice(best, 1)[0];
   MTS.sinceLastRetry++;
   return { task: task, isRetry: false };
+}
+
+function mtResetSessionState(opts) {
+  var cfg = opts || {};
+  MTS.pool = Array.isArray(cfg.pool) ? cfg.pool : [];
+  MTS.manualQueue = Array.isArray(cfg.manualQueue) ? cfg.manualQueue : [];
+  MTS.manualCursor = 0;
+  MTS.manualMode = !!cfg.manualMode;
+  MTS.served = 0;
+  MTS.targetCount = Math.max(1, Number(cfg.targetCount) || 8);
+  MTS.score = 0;
+  MTS.maxScore = 0;
+  MTS.answered = false;
+  MTS.streak = 0;
+  MTS.history = [];
+  MTS.current = null;
+  MTS.catHistory = {};
+  MTS.retryQueue = [];
+  MTS.sinceLastRetry = 0;
+  MTS.feilLog = {};
+  MTS.level = String(cfg.level || 'adaptiv');
+  MTS.selectedCats = Array.isArray(cfg.selectedCats) ? cfg.selectedCats.slice() : [];
+  MTS.active = true;
+  MTS.showRule = false;
+  MTS.sessionXP = 0;
+}
+
+function mtOpenSessionUi() {
+  var win = $mt('nl-ad-win');
+  var summary = $mt('nl-ad-summary');
+  var body = $mt('nl-ad-win-body');
+  var actions = $mt('nl-ad-actions');
+  if (win) win.hidden = false;
+  if (summary) summary.hidden = true;
+  if (body) body.innerHTML = '';
+  if (actions) actions.style.display = '';
 }
 
 /* ─── SESJON ─────────────────────────────────────── */
@@ -1475,35 +1504,49 @@ function mtStart() {
   if (!pool.length) { alert('Ingen oppgaver passer valgene dine.'); return; }
   if (count > pool.length) count = pool.length;
 
-  MTS.pool = pool;
-  MTS.served = 0;
-  MTS.targetCount = count;
-  MTS.score = 0;
-  MTS.maxScore = 0;
-  MTS.answered = false;
-  MTS.streak = 0;
-  MTS.history = [];
-  MTS.current = null;
-  MTS.catHistory = {};
-  MTS.retryQueue = [];
-  MTS.sinceLastRetry = 0;
-  MTS.feilLog = {};
-  MTS.level = level;
-  MTS.selectedCats = valgte;
-  MTS.active = true;
-  MTS.showRule = false;
-  MTS.sessionXP = 0;
+  mtResetSessionState({
+    pool: pool,
+    targetCount: count,
+    level: level,
+    selectedCats: valgte,
+    manualMode: false,
+    manualQueue: []
+  });
+  mtOpenSessionUi();
 
-  var win = $mt('nl-ad-win');
-  var run = $mt('nl-ad-run');
-  var summary = $mt('nl-ad-summary');
-  var body = $mt('nl-ad-win-body');
-  var actions = $mt('nl-ad-actions');
-  if (win) win.hidden = false;
-  if (run) run.hidden = false;
-  if (summary) summary.hidden = true;
-  if (body) body.innerHTML = '';
-  if (actions) actions.style.display = '';
+  mtUpdateProgress();
+  mtServeNext();
+}
+
+function mtStartManualQueue(taskIndexes, startIndex) {
+  var idxs = Array.isArray(taskIndexes) ? taskIndexes : [];
+  var tasks = idxs.map(function(idx) {
+    return MT_BANK[Number(idx)];
+  }).filter(function(task) {
+    return !!task;
+  });
+  if (!tasks.length) {
+    alert('Fant ingen manuelle oppgaver å starte.');
+    return;
+  }
+
+  var start = Number(startIndex);
+  if (!Number.isFinite(start) || start < 0 || start >= tasks.length) start = 0;
+  var ordered = tasks.slice(start).concat(tasks.slice(0, start));
+  var cats = [];
+  ordered.forEach(function(task) {
+    if (cats.indexOf(task.kat) === -1) cats.push(task.kat);
+  });
+
+  mtResetSessionState({
+    pool: [],
+    targetCount: ordered.length,
+    level: 'manuell',
+    selectedCats: cats,
+    manualMode: true,
+    manualQueue: ordered
+  });
+  mtOpenSessionUi();
 
   mtUpdateProgress();
   mtServeNext();
@@ -1523,12 +1566,6 @@ function mtUpdateProgress() {
   var total = MTS.targetCount + retries;
   var done = MTS.history.length;
   var pct = total > 0 ? Math.round(done / total * 100) : 0;
-  var p = $mt('nl-ad-progress');
-  var bar = $mt('nl-ad-bar-fill');
-  var sc = $mt('nl-ad-score-val');
-  if (p) p.textContent = 'Oppgave ' + Math.min(done + 1, total) + ' av ' + total;
-  if (bar) bar.style.width = Math.min(pct, 100) + '%';
-  if (sc) sc.textContent = String(MTS.score);
 
   var liveP = $mt('mt-live-progress');
   var liveBar = $mt('mt-live-bar-fill');
@@ -2300,7 +2337,7 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType) {
     if (!MTS.feilLog[t.feiltype]) MTS.feilLog[t.feiltype] = 0;
     MTS.feilLog[t.feiltype]++;
   }
-  if (!correct && !t._isRetry) MTS.retryQueue.push(t);
+  if (!MTS.manualMode && !correct && !t._isRetry) MTS.retryQueue.push(t);
 
   /* Feillogg – lagre til localStorage */
   if (!correct) {
@@ -2629,13 +2666,6 @@ function mtShowSummary() {
   if (actions) actions.style.display = 'none';
   if (body) body.innerHTML = '';
 
-  var p = $mt('nl-ad-progress');
-  var sc = $mt('nl-ad-score-val');
-  var bar = $mt('nl-ad-bar-fill');
-  if (p) p.textContent = '\u00d8kt fullf\u00f8rt';
-  if (sc) sc.textContent = String(MTS.score);
-  if (bar) bar.style.width = '100%';
-
   if (summary) summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -2785,8 +2815,8 @@ function mtBindMcKeys() {
     '.mt-fb-fasit { margin-top:.3rem; }',
     '.mt-fb-extra { margin-top:.4rem; padding:.4rem .6rem; background:rgba(74,80,166,.06); border-radius:6px; font-size:.84rem; }',
     '.mt-fb-forklaring { margin-top:.45rem; padding:.45rem .65rem; background:rgba(0,0,0,.03); border-radius:6px; font-size:.84rem; line-height:1.55; font-style:italic; }',
-    '.mt-fb-rule { margin-top:.4rem; padding:.4rem .6rem; border-left:3px solid #4a90d9; background:#eef5fc; border-radius:0 6px 6px 0; font-size:.84rem; line-height:1.5; }',
-    '.mt-fb-eks { margin-top:.35rem; padding:.35rem .6rem; border-left:3px solid #d4a017; background:#fdfaf0; border-radius:0 6px 6px 0; font-size:.83rem; line-height:1.5; font-family:"JetBrains Mono",monospace; }',
+    '.mt-fb-rule { margin-top:.45rem; padding:.55rem .7rem; border:1px solid rgba(26,86,219,.22); background:linear-gradient(135deg,rgba(26,86,219,.08),rgba(26,86,219,.02)); border-radius:8px; font-size:.84rem; line-height:1.55; }',
+    '.mt-fb-eks { margin-top:.4rem; padding:.5rem .7rem; border:1px solid rgba(199,146,46,.28); background:linear-gradient(135deg,rgba(255,244,214,.86),rgba(255,250,239,.96)); border-radius:8px; font-size:.83rem; line-height:1.55; font-family:"JetBrains Mono",monospace; }',
     '.mt-fb-streak { margin-top:.35rem; font-weight:700; }',
     '.mt-fb-retry-tip { margin-top:.4rem; font-size:.82rem; color:var(--tmuted,#8a8a84); font-style:italic; }',
     '.mt-fb-retry-win { margin-top:.35rem; font-weight:700; color:#1a5c42; }',
@@ -2859,8 +2889,7 @@ function mtBindMcKeys() {
 ══════════════════════════════════════════════════════ */
 
 function mtInit() {
-  // Keep nl-ad-run because it contains shared controls (check/next/progress).
-  // Only clear legacy feedback element that the new engine does not use.
+  // Fjern eventuell legacy feedback-node dersom den finst i eldre markup.
   var legacyFeedback = $mt('nl-ad-feedback');
   if (legacyFeedback && legacyFeedback.parentNode) legacyFeedback.parentNode.removeChild(legacyFeedback);
 
@@ -2888,6 +2917,7 @@ if (document.readyState === 'loading') {
 }
 
 window.mtStart = mtStart;
+window.mtStartManualQueue = mtStartManualQueue;
 window.mtAbort = mtAbort;
 window.mtStartFeillogg = mtStartFeillogg;
 window.mtTriggerCheck = mtTriggerCheck;
