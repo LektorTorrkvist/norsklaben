@@ -99,6 +99,8 @@ function nlBoot() {
     if (t === 'drag-ord') nlCheckDragOrd(tgt, sid);
     if (t === 'write') nlCheckWrite(tgt, sid);
     if (t === 'rhythm') nlCheckRhythm(btn);
+    if (t === 'sann-usann') nlCheckSannUsann(tgt, sid);
+    if (t === 'omskriv') nlCheckOmskriv(tgt, sid);
   });
 
   /* ── Reset buttons ── */
@@ -117,6 +119,24 @@ function nlBoot() {
     if (t === 'fillsel') nlResetFillSel(tgt, sid);
     if (t === 'drag-ord') nlResetDragOrd(tgt, sid);
     if (t === 'rhythm') nlResetRhythm(tgt, sid);
+    if (t === 'sann-usann') nlResetSannUsann(tgt, sid);
+    if (t === 'omskriv') nlResetOmskriv(tgt, sid);
+  });
+
+  /* ── Sann/usann pick click handling ── */
+  document.addEventListener('click', function(e) {
+    var suPick = e.target.closest('.su-pick');
+    if (!suPick) return;
+    var row = suPick.closest('.su-row');
+    if (!row) return;
+    row.querySelectorAll('.su-pick').forEach(function(b) { b.classList.remove('sel'); });
+    suPick.classList.add('sel');
+    row.classList.remove('ok', 'err');
+    var area = suPick.closest('.su-area');
+    if (area) {
+      var sid = area.dataset.score;
+      if (sid) nlClearScore(sid);
+    }
   });
 
   /* ── Rhythm pick click handling ── */
@@ -545,9 +565,10 @@ function nlMtOperationMeta(task) {
   if (type === 'cloze') return { cls: 'of', label: 'Fylloppgåve' };
   if (type === 'klikk_marker' || type === 'mc') return { cls: 'oi', label: 'Identifisere' };
   if (type === 'drag_ord') return { cls: 'ob', label: 'Byggje' };
-  if (type === 'drag_kolonne' || type === 'burger_sort' || type === 'avsnitt_klikk') return { cls: 'or', label: 'Sortere' };
-  if (type === 'open') return { cls: 'oo', label: 'Omskrive' };
+  if (type === 'drag_kolonne' || type === 'burger_sort' || type === 'avsnitt_klikk' || type === 'sorter_rekke') return { cls: 'or', label: 'Sortere' };
+  if (type === 'open' || type === 'omskriv') return { cls: 'oo', label: 'Omskrive' };
   if (type === 'rhythm') return { cls: 'oi', label: 'Identifisere' };
+  if (type === 'sann_usann_serie') return { cls: 'osu', label: 'Sant/usant' };
   return { cls: 'oa', label: 'Analysere' };
 }
 
@@ -924,6 +945,96 @@ function nlMtBuildExercise(task, i, localIx) {
       '</div>' +
       '<input type="hidden" id="rhythm-val-' + uniq + '" value="">' +
       '<div class="ex-controls"><button class="btn-check" data-check="rhythm" data-target="' + rhythmId + '" data-answer="' + fasitIdx + '" data-score="' + scoreRhythmId + '">Sjekk svar</button><button class="btn-reset" data-reset="rhythm" data-target="' + rhythmId + '" data-score="' + scoreRhythmId + '">Start på nytt</button><span id="' + scoreRhythmId + '" class="ex-score"></span></div>' +
+      '<button class="btn-fasit" data-fasit="fb-' + uniq + '">' + revealLabel + '</button>' +
+      '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">' + revealTitle + '</div><p class="fb-ans">' + revealBody + '</p>' + metaHtml + '</div></div>' +
+      '</div></article>';
+  }
+
+  /* ── sann_usann_serie ── */
+  if (type === 'sann_usann_serie') {
+    var paastandar = Array.isArray(task && task.paastandar) ? task.paastandar : [];
+    if (!paastandar.length) return '';
+    var suId = 'su-' + uniq;
+    var scoreSuId = 'score-' + uniq;
+    var suHtml = paastandar.map(function(p, pi) {
+      var pid = suId + '-' + pi;
+      return '<div class="su-row" data-sann="' + (p.sann ? '1' : '0') + '">' +
+        '<p class="su-tekst">' + nlMtEscHtml(p.tekst || '') + '</p>' +
+        '<div class="su-btns">' +
+        '<button type="button" class="su-pick" data-val="1" data-pid="' + pid + '">Sann</button>' +
+        '<button type="button" class="su-pick" data-val="0" data-pid="' + pid + '">Usann</button>' +
+        '</div></div>';
+    }).join('');
+    return '<article class="ei">' + header +
+      '<div class="ec">' +
+      promptBoxHtml +
+      '<div class="inst">Er påstandane sanne eller usanne?</div>' +
+      guideHtml +
+      '<div class="su-area" id="' + suId + '" data-count="' + paastandar.length + '">' + suHtml + '</div>' +
+      '<div class="ex-controls"><button class="btn-check" data-check="sann-usann" data-target="' + suId + '" data-score="' + scoreSuId + '">Sjekk svar</button><button class="btn-reset" data-reset="sann-usann" data-target="' + suId + '" data-score="' + scoreSuId + '">Start på nytt</button><span id="' + scoreSuId + '" class="ex-score"></span></div>' +
+      '<button class="btn-fasit" data-fasit="fb-' + uniq + '">' + revealLabel + '</button>' +
+      '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">' + revealTitle + '</div><p class="fb-ans">' + revealBody + '</p>' + metaHtml + '</div></div>' +
+      '</div></article>';
+  }
+
+  /* ── sorter_rekke ── */
+  if (type === 'sorter_rekke') {
+    var srItems = Array.isArray(task && task.items) ? task.items : [];
+    if (!srItems.length) return '';
+    var labels = srItems.map(function(it) { return typeof it === 'string' ? it : (it && it.tekst || ''); });
+    var correct = labels.slice();
+    var srId = 'rank-' + uniq;
+    var scoreSrId = 'score-' + uniq;
+    return '<article class="ei">' + header +
+      '<div class="ec">' +
+      promptBoxHtml +
+      '<div class="inst">Dra elementa i rett rekkjefølgje.</div>' +
+      guideHtml +
+      '<div class="rank-list" id="' + srId + '" data-items="' + nlMtEscHtml(JSON.stringify(labels)) + '" data-correct="' + nlMtEscHtml(JSON.stringify(correct)) + '"></div>' +
+      '<div class="ex-controls"><button class="btn-check" data-check="rank" data-target="' + srId + '" data-score="' + scoreSrId + '">Sjekk rekkjefølgje</button><button class="btn-reset" data-reset="rank" data-target="' + srId + '" data-score="' + scoreSrId + '">Bland på nytt</button><span id="' + scoreSrId + '" class="ex-score"></span></div>' +
+      '<button class="btn-fasit" data-fasit="fb-' + uniq + '">' + revealLabel + '</button>' +
+      '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">' + revealTitle + '</div><p class="fb-ans">' + revealBody + '</p>' + metaHtml + '</div></div>' +
+      '</div></article>';
+  }
+
+  /* ── avsnitt_klikk ── */
+  if (type === 'avsnitt_klikk') {
+    var segs = Array.isArray(task && task.segments) ? task.segments : [];
+    if (!segs.length) return '';
+    var breaks = Array.isArray(task && task.fasit_breaks) ? task.fasit_breaks : [];
+    var akId = 'ak-' + uniq;
+    var scoreAkId = 'score-' + uniq;
+    var akHtml = segs.map(function(seg) {
+      return '<span class="ak-seg mark-item" data-key="' + nlMtEscHtml(seg.id) + '">' + nlMtEscHtml(seg.tekst || '') + '</span>';
+    }).join(' ');
+    return '<article class="ei">' + header +
+      '<div class="ec">' +
+      promptBoxHtml +
+      '<div class="inst">Klikk der eit nytt avsnitt bør starte.</div>' +
+      guideHtml +
+      '<div class="mark-area ak-area" id="' + akId + '" data-score="' + scoreAkId + '" data-answers="' + nlMtEscHtml(JSON.stringify(breaks)) + '">' + akHtml + '</div>' +
+      '<div class="ex-controls"><button class="btn-check" data-check="mark" data-target="' + akId + '" data-score="' + scoreAkId + '">Sjekk svar</button><button class="btn-reset" data-reset="mark" data-target="' + akId + '" data-score="' + scoreAkId + '">Start på nytt</button><span id="' + scoreAkId + '" class="ex-score"></span></div>' +
+      '<button class="btn-fasit" data-fasit="fb-' + uniq + '">' + revealLabel + '</button>' +
+      '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">' + revealTitle + '</div><p class="fb-ans">' + revealBody + '</p>' + metaHtml + '</div></div>' +
+      '</div></article>';
+  }
+
+  /* ── omskriv ── */
+  if (type === 'omskriv') {
+    var omTekst = String(task && (task.tekst || '') || '').trim();
+    var omInstr = String(task && (task.instruksjon || '') || '').trim();
+    var omMaaHa = Array.isArray(task && task.maa_ha) ? task.maa_ha : [];
+    var omMaaIkkje = Array.isArray(task && task.maa_ikkje_ha) ? task.maa_ikkje_ha : [];
+    var omId = 'omskriv-' + uniq;
+    var scoreOmId = 'score-' + uniq;
+    return '<article class="ei">' + header +
+      '<div class="ec">' +
+      promptBoxHtml +
+      (omTekst ? '<div class="ibox"><div class="box"><p>' + nlMtEscHtml(omTekst) + '</p></div></div>' : '') +
+      (omInstr ? '<div class="inst">' + nlMtEscHtml(omInstr) + '</div>' : '<div class="inst">Skriv om teksten.</div>') +
+      guideHtml +
+      '<textarea id="' + omId + '" class="write-area" rows="4" placeholder="Skriv omskrivinga di her..." data-maa-ha="' + nlMtEscHtml(JSON.stringify(omMaaHa)) + '" data-maa-ikkje="' + nlMtEscHtml(JSON.stringify(omMaaIkkje)) + '"></textarea>' +
+      '<div class="ex-controls"><button class="btn-check" data-check="omskriv" data-target="' + omId + '" data-score="' + scoreOmId + '">Sjekk svar</button><button class="btn-reset" data-reset="omskriv" data-target="' + omId + '" data-score="' + scoreOmId + '">Start på nytt</button><span id="' + scoreOmId + '" class="ex-score"></span></div>' +
       '<button class="btn-fasit" data-fasit="fb-' + uniq + '">' + revealLabel + '</button>' +
       '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">' + revealTitle + '</div><p class="fb-ans">' + revealBody + '</p>' + metaHtml + '</div></div>' +
       '</div></article>';
@@ -2408,6 +2519,64 @@ function nlResetRhythm(tgt, sid) {
   nlClearScore(sid);
 }
 
+/* ── SANN/USANN CHECK + RESET ── */
+function nlCheckSannUsann(tid, sid) {
+  var area = document.getElementById(tid);
+  if (!area) return;
+  var rows = area.querySelectorAll('.su-row');
+  var ok = 0, total = rows.length;
+  rows.forEach(function(row) {
+    var chosen = row.querySelector('.su-pick.sel');
+    if (!chosen) { row.classList.add('err'); return; }
+    var correct = row.dataset.sann;
+    if (chosen.dataset.val === correct) {
+      row.classList.add('ok');
+      row.classList.remove('err');
+      ok++;
+    } else {
+      row.classList.add('err');
+      row.classList.remove('ok');
+    }
+  });
+  nlSetScore(sid, ok + ' av ' + total + ' rette', ok === total ? 'ok' : 'err');
+}
+function nlResetSannUsann(tid, sid) {
+  var area = document.getElementById(tid);
+  if (!area) return;
+  area.querySelectorAll('.su-row').forEach(function(row) {
+    row.classList.remove('ok', 'err');
+    row.querySelectorAll('.su-pick').forEach(function(b) { b.classList.remove('sel'); });
+  });
+  nlClearScore(sid);
+}
+
+/* ── OMSKRIV CHECK + RESET ── */
+function nlCheckOmskriv(tid, sid) {
+  var ta = document.getElementById(tid);
+  if (!ta) return;
+  var val = ta.value.trim().toLowerCase();
+  if (!val) { nlSetScore(sid, 'Skriv svaret ditt først.', ''); return; }
+  var maaHa = [];
+  var maaIkkje = [];
+  try { maaHa = JSON.parse(ta.dataset.maaHa || '[]'); } catch(e) {}
+  try { maaIkkje = JSON.parse(ta.dataset.maaIkkje || '[]'); } catch(e) {}
+  var missing = maaHa.filter(function(w) { return val.indexOf(w.toLowerCase()) === -1; });
+  var forbidden = maaIkkje.filter(function(w) { return val.indexOf(w.toLowerCase()) !== -1; });
+  var msgs = [];
+  if (missing.length) msgs.push('Manglar: ' + missing.join(', '));
+  if (forbidden.length) msgs.push('Bør fjernast: ' + forbidden.join(', '));
+  if (!msgs.length) {
+    nlSetScore(sid, '✔ Godt omskrive!', 'ok');
+  } else {
+    nlSetScore(sid, msgs.join(' | '), 'err');
+  }
+}
+function nlResetOmskriv(tid, sid) {
+  var ta = document.getElementById(tid);
+  if (ta) ta.value = '';
+  nlClearScore(sid);
+}
+
 /* ── SEARCH / FILTER ── */
 function nlOp() {
   var a = document.querySelector('.chip.active');
@@ -2424,6 +2593,8 @@ function nlFilter(q, op) {
     if (opNeedles[0] === 'rangere' || opNeedles[0] === 'sortere') opNeedles.push('sortering', 'sortere', 'rangere');
     if (opNeedles[0] === 'fyllopp\u00E5ve') opNeedles.push('fylloppgave');
     if (opNeedles[0] === 'byggje') opNeedles.push('bygge');
+    if (opNeedles[0] === 'sant/usant') opNeedles.push('sant', 'usant', 'sann', 'usann');
+    if (opNeedles[0] === 'avsnittklikk') opNeedles.push('avsnitt');
     var mo = op === 'alle' || [].some.call(card.querySelectorAll('.ei'), function(ei) {
       return [].some.call(ei.querySelectorAll('.b'), function(b) {
         var bt = b.textContent.toLowerCase();
@@ -2445,7 +2616,8 @@ function nlTypeMetaFromCheckType(checkType) {
   if (t === 'mark' || t === 'mc' || t === 'mcset') return { cls: 'oi', label: 'Identifisere' };
   if (t === 'drag-ord') return { cls: 'ob', label: 'Byggje' };
   if (t === 'rank' || t === 'sort' || t === 'burger') return { cls: 'or', label: 'Sortere' };
-  if (t === 'write') return { cls: 'oo', label: 'Omskrive' };
+  if (t === 'write' || t === 'omskriv') return { cls: 'oo', label: 'Omskrive' };
+  if (t === 'sann-usann') return { cls: 'osu', label: 'Sant/usant' };
   return { cls: 'oa', label: 'Analysere' };
 }
 
