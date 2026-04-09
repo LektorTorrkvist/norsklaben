@@ -1126,7 +1126,30 @@ function nnConfetti() {
 document.addEventListener('DOMContentLoaded', function() {
   nnRenderCockpit();
   nnBuildCatButtons();
+
+  var win = $('nn-ad-win');
+  var bg = $('nn-ad-win-bg');
+  var closeBtn = $('nn-ad-win-close');
+  if (bg) bg.addEventListener('click', gramReset);
+  if (closeBtn) closeBtn.addEventListener('click', gramReset);
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape' && win && !win.hidden) gramReset();
+  });
 });
+
+function gramOpenModal(){
+  var win = $('nn-ad-win');
+  if (!win) return;
+  win.hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+
+function gramCloseModal(){
+  var win = $('nn-ad-win');
+  if (!win) return;
+  win.hidden = true;
+  document.body.style.overflow = '';
+}
 
 
 
@@ -1173,6 +1196,8 @@ function gramStart(){
 
   GS.tasks = pool;
 
+  gramOpenModal();
+
   $('gram-start-btn').disabled=true;
   if($('gram-reset-btn')) $('gram-reset-btn').disabled=false;
   $('gram-quiz-area').classList.add('active');
@@ -1203,6 +1228,7 @@ function gramReset(){
   if($('gram-score-txt')) $('gram-score-txt').textContent='0';
   if($('gram-progress-fill')) $('gram-progress-fill').style.width='0%';
   if($('gram-progress-label')) $('gram-progress-label').textContent='0 / 0';
+  gramCloseModal();
 }
 
 /* ══════════════════════════════════════════════════════
@@ -1725,16 +1751,8 @@ function showSummary(){
 
   const corrEl=$('sum-corrections');
   if(corrEl){
-    const withErrors=Object.keys(byTopic).filter(function(k){ return byTopic[k].fail>0; });
-    if(!withErrors.length){
-      corrEl.innerHTML='<div class="adp-summary-row ok"><strong>Null feil!</strong><span>Du svara rett på alle oppgåvene.</span></div>';
-    }else{
-      let html='<h5>Øv på desse igjen</h5>';
-      withErrors.forEach(function(k){
-        html+='<div class="adp-summary-row"><strong>'+escH(k)+'</strong><span>'+byTopic[k].fail+' feil</span></div>';
-      });
-      corrEl.innerHTML=html;
-    }
+    corrEl.innerHTML='';
+    corrEl.style.display='none';
   }
 
   $('gram-summary').classList.add('show');

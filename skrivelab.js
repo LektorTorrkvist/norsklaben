@@ -26,6 +26,7 @@ function nlBoot() {
   }
 
   nlSafeInit('normalize-categories', nlNormalizeCategories);
+  nlSafeInit('strip-legacy-inline-tasks', nlStripLegacyInlineTasks);
   nlSafeInit('import-mt-bank', nlImportMTBankTasks);
   nlSafeInit('normalize-types-and-titles', nlNormalizeExerciseMetaFromType);
   nlSafeInit('bind-bank-browse-controls', nlBindBankBrowseControls);
@@ -41,8 +42,15 @@ function nlBoot() {
 
     var exBtn = e.target.closest('.etog');
     if (!exBtn) return;
+    e.preventDefault();
+    e.stopPropagation();
     var ei = exBtn.closest('.ei');
     if (!ei) return;
+    var mtIdx = Number(ei.getAttribute('data-mt-index'));
+    if (!Number.isFinite(mtIdx) || mtIdx < 0) return;
+    document.querySelectorAll('.main .ei.open').forEach(function (row) {
+      row.classList.remove('open');
+    });
     nlSafeInit('open-bank-exercise', function() { nlOpenManualQueueInMt(ei); });
   });
 
@@ -1230,15 +1238,16 @@ function nlMtValidateTaskForImport(task) {
 
 function nlImportMTBankTasks() {
   if (document.body.dataset.nlMtImported === '1') return;
+
+  /* Always clear legacy inline tasks first: card dropdowns should be MT-bank driven only. */
+  document.querySelectorAll('.exlist').forEach(function(el) { el.innerHTML = ''; });
+  document.querySelectorAll('.exc').forEach(function(el) { el.textContent = '0 oppg.'; });
+
   var bank = null;
   if (typeof MT_BANK !== 'undefined' && Array.isArray(MT_BANK)) bank = MT_BANK;
   else if (typeof window !== 'undefined' && Array.isArray(window.MT_BANK)) bank = window.MT_BANK;
   else if (typeof globalThis !== 'undefined' && Array.isArray(globalThis.MT_BANK)) bank = globalThis.MT_BANK;
   if (!bank || !bank.length) return;
-
-  /* Clear all static exercises — bank is the single source of truth */
-  document.querySelectorAll('.exlist').forEach(function(el) { el.innerHTML = ''; });
-  document.querySelectorAll('.exc').forEach(function(el) { el.textContent = '0 oppg.'; });
 
   var maxPerCategory = 30;
   var counters = {};
@@ -1301,6 +1310,16 @@ function nlImportMTBankTasks() {
   if (skipped > 0 && window.console && console.info) {
     console.info('[Skrivelab] Hoppa over', skipped, 'oppgåver (kvalitetsfilter):', skippedReasons);
   }
+}
+
+function nlStripLegacyInlineTasks() {
+  /* Hard reset of all card content: MT_BANK is the only source of tasks. */
+  document.querySelectorAll('.main .exlist').forEach(function(exlist) {
+    exlist.innerHTML = '';
+  });
+  document.querySelectorAll('.main .card .exc').forEach(function(exc) {
+    exc.textContent = '0 oppg.';
+  });
 }
 
 function nlCardHasExercises(card) {
@@ -2931,16 +2950,26 @@ function nlOpenManualQueueInMt(ei) {
   if (typeof window === 'undefined' || typeof window.mtStartManualQueue !== 'function') return;
 
   var card = ei.closest('.card');
-  var cardList = card ? Array.prototype.slice.call(card.querySelectorAll('.exlist > .ei')) : [ei];
+  var allRows = card ? Array.prototype.slice.call(card.querySelectorAll('.exlist > .ei')) : [ei];
+  var cardList = allRows.filter(function (node) {
+    var n = Number(node.getAttribute('data-mt-index'));
+    return Number.isFinite(n) && n >= 0;
+  });
   var idxs = cardList.map(function (node) {
     return Number(node.getAttribute('data-mt-index'));
-  }).filter(function (n) {
-    return Number.isFinite(n) && n >= 0;
   });
   if (!idxs.length) return;
 
   var startIndex = cardList.indexOf(ei);
-  if (startIndex < 0) startIndex = 0;
+  if (startIndex < 0) {
+    var clickedIdx = Number(ei.getAttribute('data-mt-index'));
+    if (Number.isFinite(clickedIdx)) {
+      var mapped = idxs.indexOf(clickedIdx);
+      startIndex = mapped >= 0 ? mapped : 0;
+    } else {
+      startIndex = 0;
+    }
+  }
   if (startIndex >= idxs.length) startIndex = 0;
   window.mtStartManualQueue(idxs, startIndex);
 }

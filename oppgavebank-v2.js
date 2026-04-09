@@ -1929,6 +1929,13 @@ function mtEsc(s) {
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/\n/g, '<br>');
 }
 
+function mtTaskLabel(task) {
+  var txt = String((task && (task.q || task.sporsmal)) || 'Oppgåve').replace(/\s+/g, ' ').trim();
+  if (!txt) txt = 'Oppgåve';
+  if (txt.length > 96) txt = txt.slice(0, 93) + '...';
+  return txt;
+}
+
 function mtNorm(s) { return String(s).trim().toLowerCase(); }
 
 /* Levenshtein-avstand */
@@ -2758,6 +2765,34 @@ function mtRenderTask(t, isRetry) {
   /* Oppgåve-input (bygt per type) */
   var inputHTML = mtBuildInput(t);
 
+  /* Enkel veljar i manuell modus: byt mellom oppgåver i same kategori */
+  var manualNavHTML = '';
+  if (MTS.manualMode && Array.isArray(MTS.manualQueue) && MTS.manualQueue.length > 1) {
+    var currentIx = MTS.manualQueue.indexOf(t);
+    if (currentIx < 0) currentIx = 0;
+    var sameCat = [];
+    MTS.manualQueue.forEach(function (task, i) {
+      if (task && t && task.kat === t.kat) sameCat.push({ i: i, task: task });
+    });
+    var options = sameCat.length > 1 ? sameCat : MTS.manualQueue.map(function (task, i) {
+      return { i: i, task: task };
+    });
+    if (options.length > 1) {
+      var optsHtml = options.map(function (o, pos) {
+        var selected = o.i === currentIx ? ' selected' : '';
+        var label = (pos + 1) + '. ' + mtTaskLabel(o.task);
+        return '<option value="' + o.i + '"' + selected + '>' + mtEsc(label) + '</option>';
+      }).join('');
+      manualNavHTML =
+        '<div class="mt-manual-nav" style="margin:.5rem 0 .7rem">' +
+          '<label for="mt-manual-task-select" style="display:block;font-size:.78rem;font-weight:700;color:var(--tmid);margin-bottom:.35rem">Vel oppgåve i kategorien</label>' +
+          '<select id="mt-manual-task-select" class="gram-blank" onchange="mtManualJump(this.value)" style="width:100%;font-size:.9rem;padding:.48rem .62rem;border:1.5px solid var(--b2,#ddd);border-radius:8px">' +
+            optsHtml +
+          '</select>' +
+        '</div>';
+    }
+  }
+
   body.innerHTML =
     '<div class="mt-card">' +
       '<div class="mt-live">' +
@@ -2781,6 +2816,7 @@ function mtRenderTask(t, isRetry) {
         '<span class="mt-badge mt-badge-' + (t.vanske || 'lett') + '">' + vLabel + '</span>' +
         retryBadge +
       '</div>' +
+      manualNavHTML +
       ruleFirst +
       '<p class="mt-question">' + mtEsc(t.q || t.sporsmal || '') + '</p>' +
       tekstHTML +
@@ -3736,6 +3772,38 @@ function mtNext() {
   mtServeNext();
 }
 
+function mtManualJump(startIndex) {
+  if (!MTS.manualMode || !Array.isArray(MTS.manualQueue) || !MTS.manualQueue.length) return;
+  var start = Number(startIndex);
+  if (!Number.isFinite(start) || start < 0 || start >= MTS.manualQueue.length) return;
+
+  if (MTS.history.length > 0) {
+    var ok = window.confirm('Bytte oppgåve startar den manuelle økta på nytt. Vil du halde fram?');
+    if (!ok) {
+      mtRenderTask(MTS.current || MTS.manualQueue[0], !!(MTS.current && MTS.current._isRetry));
+      return;
+    }
+  }
+
+  var ordered = MTS.manualQueue.slice(start).concat(MTS.manualQueue.slice(0, start));
+  var cats = [];
+  ordered.forEach(function (task) {
+    if (task && cats.indexOf(task.kat) === -1) cats.push(task.kat);
+  });
+
+  mtResetSessionState({
+    pool: [],
+    targetCount: ordered.length,
+    level: 'manuell',
+    selectedCats: cats,
+    manualMode: true,
+    manualQueue: ordered
+  });
+  mtOpenSessionUi();
+  mtUpdateProgress();
+  mtServeNext();
+}
+
 /* ══════════════════════════════════════════════════════
    OPPSUMMERING
 ══════════════════════════════════════════════════════ */
@@ -4428,3 +4496,4 @@ window.mtSuPick = mtSuPick;
 window.mtSrDragStart = mtSrDragStart;
 window.mtSrClick = mtSrClick;
 window.mtSrReset = mtSrReset;
+window.mtManualJump = mtManualJump;
