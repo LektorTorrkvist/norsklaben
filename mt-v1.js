@@ -13,6 +13,7 @@ const MT_BANK = [
 
 {kat:'og_aa',kat_label:'Og / å',type:'mcset',vanske:'lett',
  q:'Vel og eller å',
+ regel:'«Å» står framfor infinitiv (verb i grunnform). «Og» bind saman setningsledd. Test: kan du setje inn «det å» framfor neste ord? Ja → bruk «å». Nei → bruk «og».',
  questions:[
   {q:'1. Kva setning er rett?',alt:['Det er viktig og ete sunt å sove godt.','Det er viktig å ete sunt og sove godt.','Det er viktig og ete sunt og sove godt.'],fasit:1},
   {q:'2. Kva setning er rett?',alt:['Han prøvde og lese, men klarte og konsentrere seg.','Han prøvde å lese, men klarte å konsentrere seg.','Han prøvde å lese, men klarte og konsentrere seg.'],fasit:1},
@@ -221,18 +222,21 @@ const MT_BANK = [
 /* ── SAMANSETTE ORD (10) ── */
 {kat:'samansett',kat_label:'Samansette ord',type:'fix',vanske:'lett',
  q:'Særskriving i elevtekst',
+ regel:'I norsk skriv ein samansette ord saman, ikkje kvar for seg. «Hav» + «plast» = «havplast». Viss du er i tvil: les orda høgt – høyrest det ut som eitt omgrep, skriv det saman.',
  tekst:'Kvart år kastast enorme mengder hav plast i sjøen. Sjø dyr som kval og sel set seg fast i plast bitar. Forskarar frå hav forskings instituttet åtvarar om situasjonen. Det er berre ein hoved grunn: forsøpling frå land og hav bruk.',
  errors:{'hav plast':'havplast','Sjø dyr':'Sjødyr','plast bitar':'plastbitar','hav forskings instituttet':'Havforskingsinstituttet','hoved grunn':'hovudgrunn','hav bruk':'havbruk'},
  fasit:'hav plast\u2009\u2192\u2009havplast | Sjø dyr\u2009\u2192\u2009Sjødyr | plast bitar\u2009\u2192\u2009plastbitar | hav forskings instituttet\u2009\u2192\u2009Havforskingsinstituttet | hoved grunn\u2009\u2192\u2009hovudgrunn | hav bruk\u2009\u2192\u2009havbruk'},
 
 {kat:'samansett',kat_label:'Samansette ord',type:'cloze',vanske:'lett',
  q:'Lag samansette ord: ski+bane, snø+fall, klima+endring, miljø+problem, sosiale+medium, hav+botn',
+ regel:'Samansette ord vert laga ved å setje to eller fleire ord saman til eitt. Hovudregelen: skriv det saman utan mellomrom. Unnatak: «sosiale medium» er to ord på nynorsk (adjektiv + substantiv der begge bøyest).',
  tekst:'ski + bane = ___ | snø + fall = ___ | klima + endring = ___ | miljø + problem = ___ | sosiale + medium = ___ | hav + botn = ___',
  svar:['skibane','snøfall','klimaendring','miljøproblem','sosiale medium','havbotn'],
  fasit:'skibane | snøfall | klimaendring | miljøproblem | sosiale medium (to ord på nynorsk) | havbotn'},
 
 {kat:'samansett',kat_label:'Samansette ord',type:'drag_kolonne',vanske:'medium',
  q:'Eitt eller to ord?',
+ regel:'Samansetjingar har ei FAST tyding: «mørkerød» er éin bestemt farge, «storby» er eit fast omgrep. To separate ord beskriv kvar for seg: «mørk rød» er noko som er både mørkt og raudt, «stor by» er ein by som er stor.',
  ord:['mørkerød','mørk rød','storby','stor by'],
  kolonner:[{id:'saman',label:'Samansetjing (ei fast tyding)'},{id:'tooord',label:'To ord (beskriving)'}],
  fasit_map:{'mørkerød':'saman','mørk rød':'tooord','storby':'saman','stor by':'tooord'},
@@ -744,6 +748,7 @@ const MT_BANK = [
 /* ── DOBBEL KONSONANT (20 oppgåver) ── */
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'lett',
  q:'Fem feil i elevtekst',
+ regel:'Dobbel konsonant kjem etter kort vokal: «middagsbordet» (kort i → dd). Enkel konsonant kjem etter lang vokal: «dagen» (lang a → éin g). Lytt til vokalen – er han kort, dobl konsonanten.',
  tekst:'Mange unggdomar er optat av sosiale medium. Det er viktig at vi set grenser for kor lang tid vi brukar på mobilen. Familien bør samlast rundt midagsbordet og snakke saman om daagen. Prøv å leggje ned telefonen og sjå ut vinnduet i staden.',
  errors:{'unggdomar':'ungdommar','optat':['opptekne','oppteken','opptatt','opptatte'],'midagsbordet':'middagsbordet','daagen':'dagen','vinnduet':'vinduet'},
  fasit:'unggdomar\u2009\u2192\u2009ungdommar | optat\u2009\u2192\u2009opptekne | midags-\u2009\u2192\u2009middags- | daagen\u2009\u2192\u2009dagen | vinnduet\u2009\u2192\u2009vinduet'},
@@ -1011,18 +1016,21 @@ const MT_BANK = [
 /* ── TEIKNSETTING – KOMMAREGLAR (12) ── */
 {kat:'teiknsetting',kat_label:'Teiknsetting',type:'fix',vanske:'lett',
  q:'Kommaplassering: Set inn 6 komma',
+ regel:'Hovudreglar for komma: 1) Mellom ledd i oppremsing (ikkje framfor siste «og»). 2) Etter leddsetning som kjem først. 3) Rundt innskotne leddsetningar. 4) Framfor «men» mellom sjølvstendige setningar.',
  tekst:'Sjølv om det er kaldt ute bestemte vi oss for å gå tur. Vi tok med mat drikke og varme klede. Lena som er den raskaste i klassen sprang foran heile vegen. Då vi kom heim laga vi varm kakao og sette oss i sofaen. Det var ein fin dag men vi var veldig slitne etterpå.',
  errors:{'ute bestemte':'ute, bestemte','mat drikke':'mat, drikke','Lena som':'Lena, som','klassen sprang':'klassen, sprang','heim laga':'heim, laga','dag men':'dag, men'},
  fasit:'«ute, bestemte» | «mat, drikke og» | «Lena, som\u2026klassen, sprang» | «heim, laga» | «dag, men»'},
 
 {kat:'teiknsetting',kat_label:'Teiknsetting',type:'fix',vanske:'medium',
  q:'Hermetekn: Korrekt sitatmarkering',
+ regel:'Bruk guillemet «» for direkte sitat på nynorsk. Komma/punktum kjem ETTER slutthermeteknet. Kolon skal ikkje stå mellom verb og at-setning. Berre ordrett tale får hermetekn.',
  tekst:'1. Forskaren seier at plastforureining er eit globalt problem.\n2. \"Det finst ingen enkel løysing,\" skriv WWF, men vi kan alle bidra.\n3. Rapporten konkluderer med at: mengda plast kan tredoble seg.',
  errors:{'\"Det finst ingen enkel løysing,\"':'«Det finst ingen enkel løysing»,','at: mengda':'at mengda','seier at plastforureining er eit globalt problem':'seier at «plastforureining er eit globalt problem»'},
  fasit:'1. seier at «plastforureining er eit globalt problem». | 2. «Det finst ingen enkel løysing», skriv WWF (komma etter sitatet, ikkje inni). | 3. Fjern kolon – unødvendig.'},
 
 {kat:'teiknsetting',kat_label:'Teiknsetting',type:'drag_kolonne',vanske:'medium',
  q:'Kolon vs. semikolon: Vel rett teikn',
+ regel:'Kolon (:) innleier forklaring, oppramsing eller presisering. Semikolon (;) skil to sjølvstendige setningar som heng tematisk saman, men som ikkje er bundne med «og/men».',
  ord:['1. Ho snakka om tre emne \u2026 klima, plast og energi.','2. Det regnde heile dagen \u2026 likevel gjekk vi tur.','3. Resultata viste eitt klart funn \u2026 plastmengda hadde auka.'],
  kolonner:[{id:'kolon',label:'Kolon (:)'},{id:'semikolon',label:'Semikolon (;)'}],
  fasit_map:{'1. Ho snakka om tre emne \u2026 klima, plast og energi.':'kolon','2. Det regnde heile dagen \u2026 likevel gjekk vi tur.':'semikolon','3. Resultata viste eitt klart funn \u2026 plastmengda hadde auka.':'kolon'},
@@ -1147,23 +1155,27 @@ const MT_BANK = [
 /* ── ORDKLASSAR – frå skrivelab (5 statiske oppgåver) ── */
 {kat:'ordklassar',kat_label:'Ordklassar',type:'drag_kolonne',vanske:'lett',
  q:'Dra orda frå ordbanken ned i rett ordklasse-bøtte. På mobil: trykk eit ord, så ei bøtte.',
+ regel:'Substantiv er namn på ting/vesen (hus, bok). Verb er handlingsord (løpe, skrive). Adjektiv skildrar eigenskapar (grøn, stor). Adverb seier korleis/når/kor (raskt, alltid). Pronomen erstattar substantiv (ho). Bindeord koplar setningar (og, men, fordi).',
  ord:['raskt','hus','løpe','grøn','men','ho','fordi','stille','bok','skrive','stor','alltid','fjell','glad','og','søte'],
  kolonner:[{id:'substantiv',label:'Substantiv'},{id:'verb',label:'Verb'},{id:'adjektiv',label:'Adjektiv'},{id:'adverb',label:'Adverb'},{id:'pronomen',label:'Pronomen'},{id:'bindeord',label:'Bindeord'}],
  fasit_map:{raskt:'adverb',hus:'substantiv','løpe':'verb','grøn':'adjektiv',men:'bindeord',ho:'pronomen',fordi:'bindeord',stille:'adverb',bok:'substantiv',skrive:'verb',stor:'adjektiv',alltid:'adverb',fjell:'substantiv',glad:'adjektiv',og:'bindeord','søte':'adjektiv'}},
 
 {kat:'ordklassar',kat_label:'Ordklassar',type:'klikk_marker',vanske:'lett',
  q:'Klikk på alle substantiva i ordstripa (10 stk).',
+ regel:'Substantiv er ord som namnset ting, vesen, stader eller omgrep. Test: kan du setje «ein/ei/eit» framfor ordet? Kan det stå i fleirtal? Då er det truleg eit substantiv.',
  tekst:['havet','er','fullt','av','plast','forskarar','frå','heile','verda','jobbar','for','å','finne','gode','løysingar','på','problemet','kvart','år','hamnar','millionar','tonn','søppel','sjøen','øydelegg','livet','for','mange','dyr','fuglar'],
  svar:['havet','plast','forskarar','verda','løysingar','problemet','søppel','sjøen','dyr','fuglar']},
 
 {kat:'ordklassar',kat_label:'Ordklassar',type:'drag_kolonne',vanske:'middels',
  q:'Dra kvar setning til rett ordklasse for det [markerte] ordet.',
+ regel:'Adjektiv skildrar eit substantiv og samsvarar i kjønn/tal: «ein lang tur». Adverb skildrar eit verb, adjektiv eller anna adverb, og bøyest ikkje: «sprang raskt». Spør: skildrar ordet eit substantiv? → adjektiv. Skildrar det korleis noko skjer? → adverb.',
  ord:['a) Vi gjekk ein [lang] tur.','b) Bussen er [lenge] forseinka.','c) Dei [raske] elevane vann.','d) Ho sprang [raskt] heim.'],
  kolonner:[{id:'adjektiv',label:'Adjektiv'},{id:'adverb',label:'Adverb'}],
  fasit_map:{'a) Vi gjekk ein [lang] tur.':'adjektiv','b) Bussen er [lenge] forseinka.':'adverb','c) Dei [raske] elevane vann.':'adjektiv','d) Ho sprang [raskt] heim.':'adverb'}},
 
 {kat:'ordklassar',kat_label:'Ordklassar',type:'drag_kolonne',vanske:'middels',
  q:'Sorter orda i rett ordklasse-kolonne.',
+ regel:'Dei viktigaste ordklassane: Verb = handlingsord (løper). Substantiv = namnord (huset, kunnskap). Adjektiv = eigenskapsord (vakker). Adverb = seier korleis/når (hurtig). Preposisjon = plassord (under). Pronomen = erstattar substantiv (dei). Bindeord = koplar setningar (fordi).',
  ord:['løper','huset','hurtig','under','dei','vakker','fordi','kunnskap'],
  kolonner:[{id:'verb',label:'Verb'},{id:'substantiv',label:'Substantiv'},{id:'adjektiv',label:'Adjektiv'},{id:'adverb',label:'Adverb'},{id:'preposisjon',label:'Preposisjon'},{id:'pronomen',label:'Pronomen'},{id:'bindeord',label:'Bindeord'}],
  fasit_map:{'løper':'verb',huset:'substantiv',hurtig:'adverb',under:'preposisjon',dei:'pronomen',vakker:'adjektiv',fordi:'bindeord',kunnskap:'substantiv'}},

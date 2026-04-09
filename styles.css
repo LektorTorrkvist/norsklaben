@@ -1074,6 +1074,80 @@ nav a.active { font-weight: 700; }
 .adp-summary-kpi.kpi-ok strong { color: #1d6a45; }
 .adp-summary-kpi.kpi-err strong { color: #8b5b1b; }
 
+/* ══════ XP visual effects on correct answer ══════ */
+
+/* Floating "+XP" popup that rises and fades out */
+.xp-float {
+  position: absolute;
+  pointer-events: none;
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: #7b2fbe;
+  text-shadow: 0 1px 6px rgba(123,47,190,.35);
+  white-space: nowrap;
+  z-index: 1600;
+  animation: xpFloatUp .95s cubic-bezier(.2,.6,.3,1) forwards;
+}
+.xp-float.xp-big {
+  font-size: 1.5rem;
+  color: #c8832a;
+  text-shadow: 0 2px 10px rgba(200,131,42,.45);
+}
+@keyframes xpFloatUp {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  20%  { opacity: 1; transform: translateY(-12px) scale(1.25); }
+  100% { opacity: 0; transform: translateY(-62px) scale(.85); }
+}
+
+/* Score pill pulse on point gain */
+.adp-live-score.xp-pulse {
+  animation: xpPulse .55s ease;
+}
+@keyframes xpPulse {
+  0%   { transform: scale(1); box-shadow: 0 0 0 0 rgba(200,131,42,.45); }
+  40%  { transform: scale(1.18); box-shadow: 0 0 14px 4px rgba(200,131,42,.35); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(200,131,42,0); }
+}
+
+/* Correct-answer flash on the exercise area */
+.nl-ad-correct-flash {
+  animation: correctFlash .45s ease;
+}
+@keyframes correctFlash {
+  0%   { box-shadow: inset 0 0 0 0 rgba(26,122,80,0); }
+  35%  { box-shadow: inset 0 0 30px 4px rgba(26,122,80,.12); }
+  100% { box-shadow: inset 0 0 0 0 rgba(26,122,80,0); }
+}
+
+/* Confetti spark particles */
+.xp-spark {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1500;
+  animation: xpSparkBurst .7s cubic-bezier(.2,.8,.3,1) forwards;
+}
+@keyframes xpSparkBurst {
+  0%   { opacity: 1; transform: translate(0,0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(.3); }
+}
+
+/* Streak flame icon glow */
+.adp-g-pill.streak-glow strong {
+  animation: streakGlow 1.2s ease;
+}
+@keyframes streakGlow {
+  0%   { text-shadow: 0 0 0 transparent; }
+  30%  { text-shadow: 0 0 12px rgba(200,131,42,.6), 0 0 24px rgba(200,131,42,.3); }
+  100% { text-shadow: 0 0 0 transparent; }
+}
+
+/* Gamification header pill position context for absolute popups */
+.adp-gamify { position: relative; }
+.adp-live-score { position: relative; }
+
 .adp-summary-msg {
   margin: .7rem 0 .4rem;
   color: var(--text);

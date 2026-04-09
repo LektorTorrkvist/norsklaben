@@ -3139,9 +3139,8 @@ function nlAdStartFeillogg() {
   nlAdState.results = new Map();
   nlAdState.cats = cats.slice();
   nlAdState.xpGain = 0;
-  nlAdState.isFeillogg = false;
-  nlAdState.xpGain = 0;
   nlAdState.isFeillogg = true;
+  nlAdStreak = 0;
 
   nlAdSetGlobalControls(false);
 
@@ -3633,6 +3632,99 @@ function nlAdTitleFromExercise(ei) {
   return text || 'Oppgave';
 }
 
+/* ══════ XP visual effects on correct answer ══════ */
+var nlAdStreak = 0;
+
+function nlAdSpawnXpFloat(anchor, points, isStreak) {
+  if (!anchor) return;
+  var el = document.createElement('span');
+  el.className = 'xp-float' + (isStreak ? ' xp-big' : '');
+  var label = '+' + points;
+  if (isStreak) label += ' 🔥';
+  el.textContent = label;
+  anchor.style.position = 'relative';
+  anchor.appendChild(el);
+  el.addEventListener('animationend', function() { el.remove(); });
+  setTimeout(function() { if (el.parentNode) el.remove(); }, 1200);
+}
+
+function nlAdPulseScore() {
+  var pill = document.getElementById('nl-ad-score-pill');
+  if (!pill) return;
+  pill.classList.remove('xp-pulse');
+  void pill.offsetWidth;
+  pill.classList.add('xp-pulse');
+  pill.addEventListener('animationend', function handler() {
+    pill.classList.remove('xp-pulse');
+    pill.removeEventListener('animationend', handler);
+  });
+}
+
+function nlAdFlashExercise(ei) {
+  if (!ei) return;
+  ei.classList.remove('nl-ad-correct-flash');
+  void ei.offsetWidth;
+  ei.classList.add('nl-ad-correct-flash');
+  ei.addEventListener('animationend', function handler() {
+    ei.classList.remove('nl-ad-correct-flash');
+    ei.removeEventListener('animationend', handler);
+  });
+}
+
+function nlAdSpawnSparks(anchor, count) {
+  if (!anchor) return;
+  anchor.style.position = 'relative';
+  var colors = ['#7b2fbe', '#c8832a', '#1d6a45', '#1D6FD1', '#C0392B', '#f5c542'];
+  for (var i = 0; i < count; i++) {
+    var spark = document.createElement('span');
+    spark.className = 'xp-spark';
+    var angle = (Math.PI * 2 / count) * i + (Math.random() * 0.4 - 0.2);
+    var dist = 28 + Math.random() * 40;
+    spark.style.setProperty('--sx', Math.cos(angle) * dist + 'px');
+    spark.style.setProperty('--sy', Math.sin(angle) * dist + 'px');
+    spark.style.background = colors[i % colors.length];
+    spark.style.left = '50%';
+    spark.style.top = '50%';
+    anchor.appendChild(spark);
+    (function(s) {
+      s.addEventListener('animationend', function() { s.remove(); });
+      setTimeout(function() { if (s.parentNode) s.remove(); }, 1000);
+    })(spark);
+  }
+}
+
+function nlAdGlowStreak() {
+  var streakPill = document.getElementById('nl-ad-prof-streak');
+  if (!streakPill) return;
+  var pill = streakPill.closest('.adp-g-pill');
+  if (!pill) return;
+  pill.classList.remove('streak-glow');
+  void pill.offsetWidth;
+  pill.classList.add('streak-glow');
+  pill.addEventListener('animationend', function handler() {
+    pill.classList.remove('streak-glow');
+    pill.removeEventListener('animationend', handler);
+  });
+}
+
+function nlAdPlayCorrectEffects(ei, points) {
+  var pts = Math.max(1, points || 1);
+  nlAdStreak++;
+  nlAdFlashExercise(ei);
+  var scorePill = document.getElementById('nl-ad-score-pill');
+  nlAdSpawnXpFloat(scorePill, pts, nlAdStreak >= 3);
+  nlAdPulseScore();
+  if (nlAdStreak >= 3) {
+    var sparkCount = nlAdStreak >= 5 ? 14 : 8;
+    nlAdSpawnSparks(scorePill, sparkCount);
+    nlAdGlowStreak();
+  }
+}
+
+function nlAdPlayWrongEffects() {
+  nlAdStreak = 0;
+}
+
 function nlAdExtractPoints(msg, isCorrect) {
   var out = { earned: isCorrect ? 1 : 0, max: 1 };
   if (!msg) return out;
@@ -4034,6 +4126,8 @@ function nlAdTriggerCheck() {
     nlAdState.checked.add(current);
     nlAdSetFeedback('Svar registrert.', true, rule, eks);
     nlAdStoreResult(current, 'Svar registrert.', true, rule);
+    var noPts = nlAdExtractPoints('Svar registrert.', true);
+    nlAdPlayCorrectEffects(current, noPts.earned);
     nlAdLockExercise(current);
     nlAdAutoRevealFasit(current);
     nlAdSyncActionButtons();
@@ -4064,6 +4158,13 @@ function nlAdTriggerCheck() {
   nlAdStoreResult(current, msg, correct, rule);
   if (correct && nlAdState.isFeillogg && typeof window !== 'undefined' && typeof window.mtBadgesCountRetryWin === 'function') {
     try { window.mtBadgesCountRetryWin(); } catch (e) {}
+  }
+  // XP visual effects
+  if (correct) {
+    var efPts = nlAdExtractPoints(msg, correct);
+    nlAdPlayCorrectEffects(current, efPts.earned);
+  } else {
+    nlAdPlayWrongEffects();
   }
   nlAdLockExercise(current);
   nlAdSetFeedback(msg, correct, rule, eks);
@@ -4165,6 +4266,9 @@ function nlAdStart() {
   nlAdState.checked = new Set();
   nlAdState.results = new Map();
   nlAdState.cats = cats.slice();
+  nlAdState.xpGain = 0;
+  nlAdState.isFeillogg = false;
+  nlAdStreak = 0;
 
   nlAdSetGlobalControls(false);
 
