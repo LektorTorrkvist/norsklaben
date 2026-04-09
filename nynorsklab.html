@@ -32,7 +32,7 @@
   <p>Adaptiv øving i nynorsk grammatikk med emneval, vanskegrad og automatisk progresjon.</p>
   <div class="hero-stats">
     <div><div class="stat-n">9</div><div class="stat-l">Kategoriar</div></div>
-    <div><div class="stat-n">30+</div><div class="stat-l">Oppgåver</div></div>
+    <div><div class="stat-n">100+</div><div class="stat-l">Oppgåver</div></div>
     <div><div class="stat-n">Adaptiv</div><div class="stat-l">Løype</div></div>
   </div>
 </div>
@@ -41,6 +41,56 @@
   <div class="gram-inner">
     <h2 class="gram-heading">Nynorsklab<br><em style="font-style:italic;opacity:0.6">— adaptiv øving</em></h2>
     <p class="gram-sub">Vel emne, tal på oppgåver og vanskegrad. Systemet tilpassar seg svara dine undervegs.</p>
+
+    <!-- ── Gamification cockpit ── -->
+    <div class="adp-gamify adp-gamify-cockpit" id="nn-gamify" aria-live="polite">
+      <div class="adp-g-orbit" aria-hidden="true"></div>
+
+      <div class="adp-g-hero">
+        <div class="adp-g-hero-head">
+          <span class="adp-g-hero-title">Nynorskmeisterstatus</span>
+          <span class="adp-g-hero-level"><span id="nn-prof-level-icon">&#127793;</span> <strong id="nn-prof-level-name">Ordlærling</strong></span>
+        </div>
+        <div class="adp-g-hero-bar" role="img" aria-label="Framdrift mot neste nivå">
+          <span id="nn-prof-progress-fill" style="width:0%"></span>
+        </div>
+        <div class="adp-g-hero-meta">
+          <span id="nn-prof-progress-text">0 / 80 XP</span>
+        </div>
+      </div>
+
+      <div class="adp-g-pill adp-g-pill-level">
+        <span class="adp-g-icon" aria-hidden="true">&#127942;</span>
+        <div class="adp-g-stack">
+          <span class="adp-g-kicker">Rang</span>
+          <strong id="nn-prof-level">1</strong>
+        </div>
+      </div>
+
+      <div class="adp-g-pill adp-g-pill-xp">
+        <span class="adp-g-icon" aria-hidden="true">&#11088;</span>
+        <div class="adp-g-stack">
+          <span class="adp-g-kicker">Erfaring</span>
+          <strong id="nn-prof-xp">0</strong>
+        </div>
+      </div>
+
+      <div class="adp-g-pill adp-g-pill-next">
+        <span class="adp-g-icon" aria-hidden="true">&#127919;</span>
+        <div class="adp-g-stack">
+          <span class="adp-g-kicker">Neste steg</span>
+          <strong id="nn-prof-next">80 XP</strong>
+        </div>
+      </div>
+
+      <div class="adp-g-pill adp-g-pill-streak">
+        <span class="adp-g-icon" aria-hidden="true">&#128293;</span>
+        <div class="adp-g-stack">
+          <span class="adp-g-kicker">Flyt</span>
+          <strong id="nn-prof-streak">0 dagar</strong>
+        </div>
+      </div>
+    </div>
 
     <div class="gram-config">
       <label>Emne
@@ -127,6 +177,10 @@
           <div class="adp-summary-kpi kpi-err">
             <span class="adp-summary-lbl">Feil</span>
             <strong id="sum-feil">0</strong>
+          </div>
+          <div class="adp-summary-kpi">
+            <span class="adp-summary-lbl">XP tent</span>
+            <strong id="sum-xp-gain">+0</strong>
           </div>
         </div>
 

@@ -1421,7 +1421,22 @@ nav a.active { font-weight: 700; }
 }
 
 /* Gamification header pill position context for absolute popups */
-.adp-gamify { position: relative; }
+.adp-gamify { position: relative; overflow: hidden; }
+
+/* Level-up confetti */
+.adp-confetti {
+  position: absolute;
+  top: -10px;
+  font-size: 1.2rem;
+  pointer-events: none;
+  z-index: 1500;
+  animation: confettiFall 2s ease-out forwards;
+}
+@keyframes confettiFall {
+  0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+  80%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(180px) rotate(360deg) scale(.4); }
+}
 
 /* ══════════════════════════════════════════════════════
    MT – Live session card (rendered by v2 engine)

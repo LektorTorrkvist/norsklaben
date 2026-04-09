@@ -714,6 +714,158 @@ const BANK = [
 ══════════════════════════════════════════════════════ */
 const GS = { tasks:[], idx:0, score:0, answered:false, config:{}, streak:0, history:[] };
 
+/* ══════════════════════════════════════════════════════
+   GAMIFICATION – XP, LEVELS, PROFILE
+══════════════════════════════════════════════════════ */
+var NN_XP_LEVELS = [
+  { name: 'Ordlærling',         xp: 0,    icon: '\uD83C\uDF31' },
+  { name: 'Setningssmed',       xp: 80,   icon: '\uD83D\uDD28' },
+  { name: 'Tekstbyggjar',       xp: 250,  icon: '\uD83C\uDFD7' },
+  { name: 'Grammatikksnekkar',  xp: 500,  icon: '\u2699\uFE0F' },
+  { name: 'Språkmeister',       xp: 900,  icon: '\uD83C\uDFC6' },
+  { name: 'Norskmeistar',       xp: 1500, icon: '\uD83D\uDC51' }
+];
+
+var NN_PROFILE_KEY = 'norsklaben-nynorsklab-profile-v1';
+
+function nnTodayKey() {
+  var d = new Date();
+  return String(d.getFullYear()) + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function nnPrevDayKey(dateKey) {
+  var d = new Date(dateKey + 'T00:00:00');
+  if (isNaN(d.getTime())) return '';
+  d.setDate(d.getDate() - 1);
+  return String(d.getFullYear()) + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function nnDefaultProfile() {
+  return { xp: 0, sessions: 0, streak: 0, lastPlayedDay: '', bestPct: 0 };
+}
+
+function nnLoadProfile() {
+  var base = nnDefaultProfile();
+  try {
+    if (!window.localStorage) return base;
+    var raw = window.localStorage.getItem(NN_PROFILE_KEY);
+    if (!raw) return base;
+    var p = JSON.parse(raw);
+    if (!p || typeof p !== 'object') return base;
+    return {
+      xp: Math.max(0, Number(p.xp) || 0),
+      sessions: Math.max(0, Number(p.sessions) || 0),
+      streak: Math.max(0, Number(p.streak) || 0),
+      lastPlayedDay: String(p.lastPlayedDay || ''),
+      bestPct: Math.max(0, Math.min(100, Number(p.bestPct) || 0))
+    };
+  } catch (e) { return base; }
+}
+
+function nnSaveProfile(profile) {
+  try {
+    if (!window.localStorage) return;
+    window.localStorage.setItem(NN_PROFILE_KEY, JSON.stringify(profile || nnDefaultProfile()));
+  } catch (e) {}
+}
+
+function nnXpLevel(totalXP) {
+  var lvl = NN_XP_LEVELS[0];
+  for (var i = NN_XP_LEVELS.length - 1; i >= 0; i--) {
+    if (totalXP >= NN_XP_LEVELS[i].xp) { lvl = NN_XP_LEVELS[i]; break; }
+  }
+  var next = null;
+  var idx = NN_XP_LEVELS.indexOf(lvl);
+  if (idx < NN_XP_LEVELS.length - 1) next = NN_XP_LEVELS[idx + 1];
+  return { current: lvl, next: next, index: idx };
+}
+
+function nnRenderCockpit(profile) {
+  var p = profile || nnLoadProfile();
+  var info = nnXpLevel(p.xp);
+  var lvl = info.current;
+  var next = info.next;
+
+  var iconEl = document.getElementById('nn-prof-level-icon');
+  var nameEl = document.getElementById('nn-prof-level-name');
+  var levelEl = document.getElementById('nn-prof-level');
+  var xpEl = document.getElementById('nn-prof-xp');
+  var nextEl = document.getElementById('nn-prof-next');
+  var streakEl = document.getElementById('nn-prof-streak');
+  var fillEl = document.getElementById('nn-prof-progress-fill');
+  var textEl = document.getElementById('nn-prof-progress-text');
+
+  if (iconEl) iconEl.textContent = lvl.icon;
+  if (nameEl) nameEl.textContent = lvl.name;
+  if (levelEl) levelEl.textContent = String(info.index + 1);
+  if (xpEl) xpEl.textContent = String(p.xp);
+  if (streakEl) streakEl.textContent = String(p.streak) + (p.streak === 1 ? ' dag' : ' dagar');
+
+  if (next) {
+    var range = next.xp - lvl.xp;
+    var progress = p.xp - lvl.xp;
+    var pct = range > 0 ? Math.min(100, Math.round((progress / range) * 100)) : 100;
+    if (fillEl) fillEl.style.width = pct + '%';
+    if (textEl) textEl.textContent = progress + ' / ' + range + ' XP';
+    if (nextEl) nextEl.textContent = (next.xp - p.xp) + ' XP';
+  } else {
+    if (fillEl) fillEl.style.width = '100%';
+    if (textEl) textEl.textContent = 'Maks nivå!';
+    if (nextEl) nextEl.textContent = 'Maks!';
+  }
+}
+
+function nnAwardXp(totalCorrect, totalTasks, pct) {
+  var profile = nnLoadProfile();
+  var prevLevel = nnXpLevel(profile.xp).index;
+
+  var base = Math.max(0, totalCorrect) * 10;
+  var masteryBonus = pct >= 90 ? 40 : (pct >= 75 ? 25 : (pct >= 60 ? 10 : 0));
+  var perfectBonus = (totalTasks > 0 && totalCorrect === totalTasks) ? 30 : 0;
+  var streakBonus = Math.min(7, profile.streak || 0) * 3;
+  var gain = base + masteryBonus + perfectBonus + streakBonus;
+
+  var today = nnTodayKey();
+  var prevDay = nnPrevDayKey(today);
+  if (profile.lastPlayedDay === today) {
+    /* same-day: keep streak */
+  } else if (profile.lastPlayedDay === prevDay) {
+    profile.streak = (profile.streak || 0) + 1;
+  } else {
+    profile.streak = 1;
+  }
+
+  profile.xp = Math.max(0, (profile.xp || 0) + gain);
+  profile.sessions = (profile.sessions || 0) + 1;
+  profile.lastPlayedDay = today;
+  profile.bestPct = Math.max(profile.bestPct || 0, pct || 0);
+
+  nnSaveProfile(profile);
+  nnRenderCockpit(profile);
+
+  var newLevel = nnXpLevel(profile.xp).index;
+  if (newLevel > prevLevel) nnConfetti();
+
+  return gain;
+}
+
+function nnConfetti() {
+  var cockpit = document.getElementById('nn-gamify');
+  if (!cockpit) return;
+  for (var i = 0; i < 30; i++) {
+    var s = document.createElement('span');
+    s.className = 'adp-confetti';
+    s.textContent = ['🎉','✨','⭐','🏆','🎊'][i % 5];
+    s.style.left = Math.random() * 100 + '%';
+    s.style.animationDelay = Math.random() * 0.5 + 's';
+    cockpit.appendChild(s);
+    setTimeout(function(el){ try { el.remove(); } catch(e){} }, 2200, s);
+  }
+}
+
+/* Initialise cockpit on page load */
+document.addEventListener('DOMContentLoaded', function() { nnRenderCockpit(); });
+
 
 
 /* ══════════════════════════════════════════════════════
@@ -1037,6 +1189,11 @@ function showSummary(){
   $('sum-pct').textContent=pct+'%';
   $('sum-msg').textContent=mastery.comment;
 
+  /* Award XP */
+  var xpGain = nnAwardXp(GS.score, total, pct);
+  var xpGainEl = $('sum-xp-gain');
+  if (xpGainEl) xpGainEl.textContent = '+' + xpGain;
+
   const byTopic={};
   GS.history.forEach(function(h){
     const raw=h.emne_label||'Blanda';
@@ -1050,29 +1207,55 @@ function showSummary(){
     const strengths=Object.keys(byTopic).filter(function(k){
       const t=byTopic[k],n=t.ok+t.fail;
       return n>0 && Math.round((t.ok/n)*100)>=75;
+    }).sort(function(a,b){
+      const pa=byTopic[a],pb=byTopic[b];
+      const pctA=Math.round((pa.ok/(pa.ok+pa.fail))*100);
+      const pctB=Math.round((pb.ok/(pb.ok+pb.fail))*100);
+      return pctB-pctA;
     }).slice(0,3);
-    if(!strengths.length){
-      strengthsEl.innerHTML='';
-      strengthsEl.style.display='none';
-    }else{
-      let html='<h5>Dette fekk du til</h5>';
+
+    const weak=Object.keys(byTopic).filter(function(k){
+      const t=byTopic[k],n=t.ok+t.fail;
+      return n>0 && Math.round((t.ok/n)*100)<75;
+    }).sort(function(a,b){
+      const pa=byTopic[a],pb=byTopic[b];
+      const pctA=Math.round((pa.ok/(pa.ok+pa.fail))*100);
+      const pctB=Math.round((pb.ok/(pb.ok+pb.fail))*100);
+      return pctA-pctB;
+    }).slice(0,2);
+
+    var summaryHtml='';
+    if(strengths.length){
+      summaryHtml+='<h5>Dette fekk du til</h5>';
       strengths.forEach(function(k){
         const t=byTopic[k],n=t.ok+t.fail,p=Math.round((t.ok/n)*100);
-        html+='<div class="adp-summary-row ok"><strong>'+escH(k)+'</strong><span>'+p+'% treff</span></div>';
+        summaryHtml+='<div class="adp-summary-row ok"><strong>'+escH(k)+'</strong><span>'+p+'% treff</span></div>';
       });
-      strengthsEl.innerHTML=html;
+    }
+    if(weak.length){
+      summaryHtml+='<h5>Øv meir på</h5>';
+      weak.forEach(function(k){
+        const t=byTopic[k],n=t.ok+t.fail,p=Math.round((t.ok/n)*100);
+        summaryHtml+='<div class="adp-summary-row"><strong>'+escH(k)+'</strong><span>'+p+'% treff</span></div>';
+      });
+    }
+    if(summaryHtml){
+      strengthsEl.innerHTML=summaryHtml;
       strengthsEl.style.display='';
+    } else {
+      strengthsEl.innerHTML='';
+      strengthsEl.style.display='none';
     }
   }
 
   const corrEl=$('sum-corrections');
   if(corrEl){
-    const weak=Object.keys(byTopic).filter(function(k){ return byTopic[k].fail>0; });
-    if(!weak.length){
+    const withErrors=Object.keys(byTopic).filter(function(k){ return byTopic[k].fail>0; });
+    if(!withErrors.length){
       corrEl.innerHTML='<div class="adp-summary-row ok"><strong>Null feil!</strong><span>Du svara rett på alle oppgåvene.</span></div>';
     }else{
       let html='<h5>Øv på desse igjen</h5>';
-      weak.forEach(function(k){
+      withErrors.forEach(function(k){
         html+='<div class="adp-summary-row"><strong>'+escH(k)+'</strong><span>'+byTopic[k].fail+' feil</span></div>';
       });
       corrEl.innerHTML=html;
