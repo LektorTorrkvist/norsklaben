@@ -1162,10 +1162,8 @@ nav a.active { font-weight: 700; }
   font-size: .83rem;
   line-height: 1.55;
   color: #3d2e00;
-  font-family: 'JetBrains Mono', monospace;
 }
 .adp-fb-eks strong {
-  font-family: 'Source Sans 3', sans-serif;
   color: #a07800;
   font-size: .75rem;
   text-transform: uppercase;
@@ -1917,6 +1915,7 @@ nav a.active { font-weight: 700; }
 .adp-summary-row.ok {
   border-color: #beddc9;
   background: #f2fbf5;
+  color: #1a6b46;
 }
 
 #nl-ad-sum-strengths .adp-summary-row.ok strong {
@@ -1944,6 +1943,7 @@ nav a.active { font-weight: 700; }
 #nl-ad-sum-retting .adp-summary-row.ok {
   border-color: #a8d5b8;
   background: linear-gradient(135deg, #f0faf3 0%, #fdf8ec 100%);
+  color: #1a6b46;
 }
 
 #nl-ad-sum-retting .adp-summary-row.ok strong {
@@ -1974,6 +1974,7 @@ nav a.active { font-weight: 700; }
 #sum-corrections .adp-summary-row.ok {
   border-color: #beddc9;
   background: #f2fbf5;
+  color: #1a6b46;
 }
 
 #sum-corrections .adp-summary-row.ok strong {
@@ -2252,6 +2253,7 @@ body.nl-js-collapsible .card.open .exlist { display: block; }
 .oa { background: #FFF0E0; color: var(--op-analysere); }
 .or { background: #E3F6F8; color: var(--op-rangere); }
 .of { background: #EBF0FA; color: var(--op-fylloppgåve); }
+.osu { background: #fce4ec; color: #880e4f; }
 
 /* Vanskegradsbadges */
 .dg { background: #e8f2f8; color: #1a567a; }

@@ -4096,16 +4096,38 @@ function nlAdShowSummary() {
       return b.count - a.count;
     }).slice(0, 3);
 
-    if (!strong.length) {
+    // Improvements – 2 weakest categories
+    var weak = Object.keys(categoryStats).map(function(cat) {
+      var st = categoryStats[cat];
+      var pctCat = st.max ? Math.round((st.points / st.max) * 100) : 0;
+      return { cat: cat, pct: pctCat, count: st.count };
+    }).filter(function(row) {
+      return row.count >= 1 && row.pct < 75;
+    }).sort(function(a, b) {
+      if (a.pct !== b.pct) return a.pct - b.pct;
+      return b.count - a.count;
+    }).slice(0, 2);
+
+    var summaryHtml = '';
+    if (strong.length) {
+      summaryHtml += '<h5>Dette fekk eg til</h5>';
+      strong.forEach(function(row) {
+        summaryHtml += '<div class="adp-summary-row ok"><strong>' + row.cat + '</strong><span>' + row.pct + '% treff</span></div>';
+      });
+    }
+    if (weak.length) {
+      summaryHtml += '<h5>Øv meir på</h5>';
+      weak.forEach(function(row) {
+        summaryHtml += '<div class="adp-summary-row"><strong>' + row.cat + '</strong><span>' + row.pct + '% treff</span></div>';
+      });
+    }
+
+    if (summaryHtml) {
+      strengthsEl.innerHTML = summaryHtml;
+      strengthsEl.style.display = '';
+    } else {
       strengthsEl.innerHTML = '';
       strengthsEl.style.display = 'none';
-    } else {
-      var strongHtml = '<h5>Dette fekk eg til</h5>';
-      strong.forEach(function(row) {
-        strongHtml += '<div class="adp-summary-row ok"><strong>' + row.cat + '</strong><span>' + row.pct + '% treff</span></div>';
-      });
-      strengthsEl.innerHTML = strongHtml;
-      strengthsEl.style.display = '';
     }
   }
 
