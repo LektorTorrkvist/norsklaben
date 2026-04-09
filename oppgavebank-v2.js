@@ -15,6 +15,47 @@
    • «Vis regel først»-toggle
 ══════════════════════════════════════════════════════ */
 
+/* ─── LEGACY-FILTER (for kortimport i Skrivelab) ─── */
+var MT_LEGACY_BLOCKLIST = [
+  'jule middag',
+  'jule treet',
+  'brettspel er bra',
+  'brettspel som monopol er populære'
+];
+
+function mtTaskLooksLegacy(task) {
+  if (!task || typeof task !== 'object') return false;
+
+  function addText(buf, value) {
+    if (value == null) return;
+    if (Array.isArray(value)) {
+      value.forEach(function(v) { addText(buf, v); });
+      return;
+    }
+    if (typeof value === 'object') {
+      Object.keys(value).forEach(function(k) {
+        addText(buf, value[k]);
+      });
+      return;
+    }
+    buf.push(String(value));
+  }
+
+  var corpus = [];
+  addText(corpus, task.q);
+  addText(corpus, task.tekst);
+  addText(corpus, task.alt);
+  addText(corpus, task.items);
+  addText(corpus, task.errors);
+  addText(corpus, task.fasit);
+  addText(corpus, task.fasit_feil);
+
+  var hay = corpus.join(' ').toLowerCase();
+  return MT_LEGACY_BLOCKLIST.some(function(needle) {
+    return hay.indexOf(String(needle).toLowerCase()) !== -1;
+  });
+}
+
 /* ─── DATA ───────────────────────────────────────── */
 var MT_BANK = [
 

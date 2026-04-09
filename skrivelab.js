@@ -1273,6 +1273,12 @@ function nlImportMTBankTasks() {
     var cat = nlMtResolveCard(task && task.kat);
     if (!cat) return;
 
+    if (typeof mtTaskLooksLegacy === 'function' && mtTaskLooksLegacy(task)) {
+      skipped++;
+      skippedReasons['legacy-blocked'] = (skippedReasons['legacy-blocked'] || 0) + 1;
+      return;
+    }
+
     counters[cat] = counters[cat] || 0;
     if (counters[cat] >= maxPerCategory) return;
 
