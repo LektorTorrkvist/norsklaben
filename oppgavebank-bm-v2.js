@@ -1160,18 +1160,58 @@ function mtLevenshtein(a, b) {
 /* ─── LOCALSTORAGE ───────────────────────────────── */
 var MT_LS_KEY = 'nlMestring';
 var MT_LS_LEGACY_KEY = 'nlMestringBM';
+var MT_LS_BACKUP_KEY = 'nlMestring_backup';
+var MT_LS_VERSION = 2;
+
+function mtLsReadKey(key) {
+  var raw = localStorage.getItem(key);
+  if (!raw) return null;
+  var parsed = JSON.parse(raw);
+  return (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) ? parsed : null;
+}
+
+function mtLsSanitize(data) {
+  var out = (data && typeof data === 'object' && !Array.isArray(data)) ? data : {};
+
+  if (!Array.isArray(out.sessions)) out.sessions = [];
+  if (typeof out.totalXP !== 'number' || !isFinite(out.totalXP) || out.totalXP < 0) out.totalXP = 0;
+  if (!out.badges || typeof out.badges !== 'object' || Array.isArray(out.badges)) out.badges = {};
+  if (!Array.isArray(out.feillogg)) out.feillogg = [];
+
+  if (!out.streak || typeof out.streak !== 'object' || Array.isArray(out.streak)) {
+    out.streak = { dagar: [], current: 0, rekord: 0 };
+  }
+  if (!Array.isArray(out.streak.dagar)) out.streak.dagar = [];
+  out.streak.current = Math.max(0, Number(out.streak.current) || 0);
+  out.streak.rekord = Math.max(out.streak.current, Number(out.streak.rekord) || 0);
+
+  out._v = MT_LS_VERSION;
+  return out;
+}
 
 function mtLsGet() {
   try {
-    var shared = JSON.parse(localStorage.getItem(MT_LS_KEY)) || {};
-    if (shared && Object.keys(shared).length) return shared;
-    var legacy = JSON.parse(localStorage.getItem(MT_LS_LEGACY_KEY)) || {};
-    return legacy && typeof legacy === 'object' ? legacy : {};
+    var shared = mtLsReadKey(MT_LS_KEY);
+    if (shared && Object.keys(shared).length) return mtLsSanitize(shared);
+
+    var backup = mtLsReadKey(MT_LS_BACKUP_KEY);
+    if (backup && Object.keys(backup).length) return mtLsSanitize(backup);
+
+    var legacy = mtLsReadKey(MT_LS_LEGACY_KEY);
+    if (legacy && Object.keys(legacy).length) return mtLsSanitize(legacy);
+
+    return mtLsSanitize({});
   }
   catch (e) { return {}; }
 }
 function mtLsSet(data) {
-  try { localStorage.setItem(MT_LS_KEY, JSON.stringify(data)); }
+  try {
+    var clean = mtLsSanitize(data || {});
+    clean._savedAt = new Date().toISOString();
+    var payload = JSON.stringify(clean);
+    localStorage.setItem(MT_LS_KEY, payload);
+    localStorage.setItem(MT_LS_BACKUP_KEY, payload);
+  }
   catch (e) { /* privat modus */ }
 }
 function mtLsSaveSession() {
@@ -1469,6 +1509,7 @@ function mtResetSessionState(opts) {
   MTS.active = true;
   MTS.showRule = false;
   MTS.sessionXP = 0;
+  MTS._uiCache = { score: 0, xp: 0, streak: 0 };
 }
 
 function mtOpenSessionUi() {
@@ -1479,7 +1520,7 @@ function mtOpenSessionUi() {
   if (win) win.hidden = false;
   if (summary) summary.hidden = true;
   if (body) body.innerHTML = '';
-  if (actions) actions.style.display = '';
+  if (actions) actions.style.display = 'flex';
 }
 
 /* ─── SESJON ─────────────────────────────────────── */
@@ -1572,11 +1613,131 @@ function mtUpdateProgress() {
   var liveScore = $mt('mt-live-score');
   var liveXp = $mt('mt-live-xp');
   var liveStreak = $mt('mt-live-streak');
+  var prev = MTS._uiCache || { score: 0, xp: 0, streak: 0 };
+
   if (liveP) liveP.textContent = 'Oppgave ' + Math.min(done + 1, total) + ' av ' + total;
   if (liveBar) liveBar.style.width = Math.min(pct, 100) + '%';
-  if (liveScore) liveScore.textContent = String(MTS.score);
-  if (liveXp) liveXp.textContent = String(MTS.sessionXP || 0);
-  if (liveStreak) liveStreak.textContent = String(MTS.streak || 0);
+  if (liveScore) {
+    if (prev.score !== MTS.score) mtFxAnimatePill(liveScore.parentElement, 'pill-pop');
+    liveScore.textContent = String(MTS.score);
+  }
+  if (liveXp) {
+    if (prev.xp !== (MTS.sessionXP || 0)) mtFxAnimatePill(liveXp.parentElement, 'pill-pop');
+    liveXp.textContent = String(MTS.sessionXP || 0);
+  }
+  if (liveStreak) {
+    if (prev.streak !== (MTS.streak || 0)) {
+      mtFxAnimatePill(liveStreak.parentElement, 'pill-pop');
+      if ((MTS.streak || 0) >= 3 && (MTS.streak || 0) > (prev.streak || 0)) {
+        mtFxAnimatePill(liveStreak.parentElement, 'streak-fire');
+      }
+    }
+    liveStreak.textContent = String(MTS.streak || 0);
+  }
+
+  MTS._uiCache = {
+    score: MTS.score,
+    xp: MTS.sessionXP || 0,
+    streak: MTS.streak || 0
+  };
+}
+
+function mtFxAnimatePill(el, className) {
+  if (!el) return;
+  el.classList.remove(className);
+  void el.offsetWidth;
+  el.classList.add(className);
+  setTimeout(function () { el.classList.remove(className); }, 700);
+}
+
+function mtFxSpawnFloat(anchor, text, big) {
+  if (!anchor || !text) return;
+  var host = anchor.closest('.adp-win-card') || document.body;
+  if (!host) return;
+  if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+
+  var rHost = host.getBoundingClientRect();
+  var rAnchor = anchor.getBoundingClientRect();
+  var el = document.createElement('span');
+  el.className = 'xp-float' + (big ? ' xp-big' : '');
+  el.textContent = text;
+  el.style.left = (rAnchor.left - rHost.left + rAnchor.width / 2) + 'px';
+  el.style.top = (rAnchor.top - rHost.top - 4) + 'px';
+  host.appendChild(el);
+  el.addEventListener('animationend', function () { el.remove(); });
+}
+
+function mtFxSpawnSparks(anchor, count) {
+  if (!anchor) return;
+  var host = anchor.closest('.adp-win-card') || document.body;
+  if (!host) return;
+  if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+
+  var rHost = host.getBoundingClientRect();
+  var rAnchor = anchor.getBoundingClientRect();
+  var cx = rAnchor.left - rHost.left + rAnchor.width / 2;
+  var cy = rAnchor.top - rHost.top + rAnchor.height / 2;
+  var colors = ['#7b2fbe', '#c8832a', '#1d6a45', '#1D6FD1', '#C0392B', '#f5c542'];
+
+  for (var i = 0; i < count; i++) {
+    var spark = document.createElement('span');
+    spark.className = 'xp-spark';
+    var angle = ((Math.PI * 2) / count) * i + (Math.random() * 0.5 - 0.25);
+    var dist = 26 + Math.random() * 46;
+    spark.style.setProperty('--sx', Math.cos(angle) * dist + 'px');
+    spark.style.setProperty('--sy', Math.sin(angle) * dist + 'px');
+    spark.style.background = colors[i % colors.length];
+    spark.style.left = cx + 'px';
+    spark.style.top = cy + 'px';
+    host.appendChild(spark);
+    spark.addEventListener('animationend', function (e) { e.currentTarget.remove(); });
+  }
+}
+
+function mtFxFlashCard() {
+  var card = document.querySelector('#nl-ad-win-body .mt-card');
+  if (!card) return;
+  card.classList.remove('nl-ad-correct-flash');
+  void card.offsetWidth;
+  card.classList.add('nl-ad-correct-flash');
+  setTimeout(function () { card.classList.remove('nl-ad-correct-flash'); }, 1050);
+}
+
+function mtFxGlowHeaderStreak() {
+  var streakEl = document.getElementById('nl-ad-prof-streak');
+  if (!streakEl) return;
+  var pill = streakEl.closest('.adp-g-pill');
+  if (!pill) return;
+  pill.classList.remove('streak-glow');
+  void pill.offsetWidth;
+  pill.classList.add('streak-glow');
+  setTimeout(function () { pill.classList.remove('streak-glow'); }, 2200);
+}
+
+function mtFxLevelUpFlash() {
+  var fx = document.createElement('div');
+  fx.className = 'level-up-flash';
+  document.body.appendChild(fx);
+  setTimeout(function () { fx.remove(); }, 1900);
+}
+
+function mtUpdateHeaderProfile(totalXP, streakCurrent) {
+  var levelEl = document.getElementById('nl-ad-prof-level');
+  var xpEl = document.getElementById('nl-ad-prof-xp');
+  var nextEl = document.getElementById('nl-ad-prof-next');
+  var streakEl = document.getElementById('nl-ad-prof-streak');
+  var lvl = mtXpLevel(totalXP || 0);
+
+  if (levelEl) levelEl.textContent = String(lvl.index + 1);
+  if (xpEl) xpEl.textContent = String(totalXP || 0);
+  if (nextEl) {
+    var remain = lvl.next ? Math.max(0, lvl.next.xp - (totalXP || 0)) : 0;
+    nextEl.textContent = lvl.next ? (remain + ' XP') : 'Maks nivå';
+  }
+  if (streakEl) {
+    var s = Math.max(0, Number(streakCurrent) || 0);
+    streakEl.textContent = s + (s === 1 ? ' dag' : ' dager');
+  }
 }
 
 function mtServeNext() {
@@ -2353,6 +2514,16 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType) {
   var earnedXP = mtXpCalc(correct, pts, maxPts, t.vanske, MTS.streak, !!t._isRetry);
   MTS.sessionXP += earnedXP;
 
+  if (correct && earnedXP > 0) {
+    var xpAnchor = ($mt('mt-live-xp') && $mt('mt-live-xp').parentElement) || document.querySelector('#nl-ad-win-body .mt-live-kpis') || $mt('nl-ad-win-body');
+    mtFxSpawnFloat(xpAnchor, '+' + earnedXP + ' XP', MTS.streak >= 5 || earnedXP >= 20);
+    mtFxFlashCard();
+    if (MTS.streak >= 3) {
+      mtFxSpawnSparks(xpAnchor, MTS.streak >= 5 ? 14 : 8);
+      mtFxGlowHeaderStreak();
+    }
+  }
+
   MTS.history.push({ task: t, correct: correct, points: pts, maxPts: maxPts, time: elapsed, isRetry: !!t._isRetry });
 
   var fb = $mt('mt-feedback');
@@ -2444,6 +2615,8 @@ function mtShowSummary() {
 
   /* Registrer daglig streak */
   var streak = mtStreakRegister();
+  mtUpdateHeaderProfile(newTotalXP, streak.current);
+  if (leveledUp) mtFxLevelUpFlash();
 
   /* Lagre til localStorage */
   mtLsSaveSession();

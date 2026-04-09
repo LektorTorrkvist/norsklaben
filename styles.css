@@ -651,88 +651,11 @@ nav a.active { font-weight: 700; }
 .adp-btn:hover { border-color: var(--mid); color: var(--primary); }
 .adp-btn-pri:hover { background: var(--mid); border-color: var(--mid); color: #fff; }
 
-.adp-run {
-  margin-top: .75rem;
-  padding-top: .7rem;
-  border-top: 1px solid var(--border);
-}
-
-.adp-run-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: .65rem;
-  flex-wrap: wrap;
-  font-size: .82rem;
-  color: var(--tmid);
-  margin-bottom: .42rem;
-}
-
-#nl-ad-badges {
-  display: none;
-  align-items: center;
-  gap: .35rem;
-  flex-wrap: wrap;
-}
-
-#nl-ad-badges .gram-badge {
-  font-size: .67rem;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  padding: .18rem .52rem;
-  border: 1px solid #d8d2c8;
-  color: #4a4540;
-  background: #f5f2ee;
-}
-
-#nl-ad-badges .adp-type-badge {
-  background: #eef3fb;
-  border-color: #c8d8f2;
-  color: #2b4f85;
-}
-
-#nl-ad-badges .adp-grp-badge {
-  background: #f3f0fa;
-  border-color: #d4cce8;
-  color: #4a3780;
-}
-
-.adp-bar {
-  height: 8px;
-  background: var(--border);
-  border-radius: 99px;
-  overflow: hidden;
-}
-
-.adp-bar span {
-  display: block;
-  height: 100%;
-  width: 0;
-  background: linear-gradient(90deg, var(--mid), var(--accent));
-  border-radius: 99px;
-  transition: width .35s cubic-bezier(.4,0,.2,1);
-}
-
 .adp-run-actions {
   margin-top: .65rem;
   display: flex;
   gap: .5rem;
 }
-
-/* Live score pill in progress bar area */
-.adp-live-score {
-  display: inline-flex;
-  align-items: center;
-  gap: .3rem;
-  padding: .15rem .55rem;
-  border-radius: 999px;
-  background: var(--alight);
-  color: #7c5b00;
-  font-size: .78rem;
-  font-weight: 700;
-  letter-spacing: .02em;
-}
-.adp-live-score .adp-score-icon { font-size: .85rem; }
 
 #nl-ad-actions {
   display: none;
@@ -744,8 +667,7 @@ nav a.active { font-weight: 700; }
   display: none !important;
 }
 
-/* Fasit button and fasit-box: always hidden in adaptive mode.
-   Rule + example are shown in #nl-ad-feedback instead. */
+/* Fasit button and fasit-box: always hidden in adaptive mode. */
 #nl-ad-win .btn-fasit,
 #nl-ad-win .fasit-box {
   display: none !important;
@@ -799,10 +721,6 @@ nav a.active { font-weight: 700; }
   color: var(--text);
   margin: 0 0 .6rem;
   line-height: 1.55;
-}
-
-#nl-ad-feedback {
-  margin-top: .75rem;
 }
 
 /* Hint toggle button in adaptive window */
@@ -947,7 +865,7 @@ nav a.active { font-weight: 700; }
   overflow: auto;
   background: #fff;
   border: 1px solid var(--border);
-  border-radius: var(--rm);
+  border-radius: var(--r);
   box-shadow: 0 22px 55px rgba(0, 0, 0, .32);
   padding: 1rem 1.1rem;
 }
@@ -1120,17 +1038,6 @@ nav a.active { font-weight: 700; }
   100% { opacity: 0; transform: translateY(-70px) scale(.85); }
 }
 
-/* Score pill pulse on point gain */
-.adp-live-score.xp-pulse {
-  animation: xpPulse 1s ease;
-}
-@keyframes xpPulse {
-  0%   { transform: scale(1); box-shadow: 0 0 0 0 rgba(200,131,42,.45); }
-  30%  { transform: scale(1.22); box-shadow: 0 0 18px 6px rgba(200,131,42,.4); }
-  60%  { transform: scale(1.05); box-shadow: 0 0 8px 2px rgba(200,131,42,.2); }
-  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(200,131,42,0); }
-}
-
 /* Correct-answer flash on the exercise area */
 .nl-ad-correct-flash {
   animation: correctFlash 1s ease;
@@ -1171,7 +1078,439 @@ nav a.active { font-weight: 700; }
 
 /* Gamification header pill position context for absolute popups */
 .adp-gamify { position: relative; }
-.adp-live-score { position: relative; }
+
+/* ══════════════════════════════════════════════════════
+   MT – Live session card (rendered by v2 engine)
+══════════════════════════════════════════════════════ */
+
+.mt-card {
+  padding: .25rem 0 0;
+}
+
+/* ── Live progress header ── */
+.mt-live {
+  margin-bottom: .75rem;
+}
+
+.mt-live-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin-bottom: .45rem;
+}
+
+.mt-live-progress {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.mt-live-kpis {
+  display: flex;
+  gap: .4rem;
+  flex-wrap: wrap;
+}
+
+.mt-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .22rem .55rem;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: .73rem;
+  font-weight: 500;
+  color: var(--tmuted);
+  white-space: nowrap;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.mt-live-pill strong {
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* XP pill special colour */
+.mt-live-pill:nth-child(2) strong {
+  color: #7b2fbe;
+}
+
+/* Streak pill special colour */
+.mt-live-pill:nth-child(3) strong {
+  color: #c8832a;
+}
+
+/* Pill pop animation on value change */
+.mt-live-pill.pill-pop {
+  animation: pillPop .35s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes pillPop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.18); box-shadow: 0 0 10px rgba(26,61,43,.15); }
+  100% { transform: scale(1); }
+}
+
+/* ── Progress bar ── */
+.mt-live-bar {
+  height: 6px;
+  border-radius: 99px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.mt-live-bar span {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--mid) 0%, var(--primary) 100%);
+  transition: width .45s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Badges ── */
+.mt-badges {
+  display: flex;
+  gap: .35rem;
+  flex-wrap: wrap;
+  margin-bottom: .65rem;
+}
+
+.mt-badge {
+  display: inline-block;
+  padding: .18rem .55rem;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+}
+
+.mt-badge-cat {
+  background: var(--plight);
+  color: var(--primary);
+  border: 1px solid #c5dece;
+}
+
+.mt-badge-lett {
+  background: #e8f6ee;
+  color: #1d6a45;
+  border: 1px solid #b8dcc6;
+}
+
+.mt-badge-medium {
+  background: #fff7e6;
+  color: #a07800;
+  border: 1px solid #edd9a4;
+}
+
+.mt-badge-vanskeleg {
+  background: #fceced;
+  color: #a83232;
+  border: 1px solid #f0c5c5;
+}
+
+.mt-badge-retry {
+  background: #eef5fc;
+  color: #2563a8;
+  border: 1px solid #b7cfff;
+}
+
+/* ── Rule shown before question ── */
+.mt-rule-first {
+  margin-bottom: .65rem;
+  padding: .55rem .75rem;
+  border-left: 3px solid #4a90d9;
+  background: linear-gradient(135deg, #eef5fc, #f5f8ff);
+  border-radius: 0 var(--rs) var(--rs) 0;
+  font-size: .86rem;
+  line-height: 1.55;
+  color: #1a2e45;
+}
+
+.mt-rule-first strong {
+  color: #2563a8;
+  font-size: .73rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* ── Question ── */
+.mt-question {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.55;
+  margin-bottom: .6rem;
+}
+
+/* ── Context text (reading passage) ── */
+.mt-context-text {
+  padding: .65rem .85rem;
+  background: #f8f9fa;
+  border: 1px solid var(--border);
+  border-radius: var(--rs);
+  font-size: .9rem;
+  color: var(--text);
+  line-height: 1.65;
+  margin-bottom: .7rem;
+}
+
+/* ── Hint ── */
+.mt-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: .4rem;
+  padding: .45rem .65rem;
+  background: linear-gradient(135deg, #fffbf0, #fff8e8);
+  border: 1px dashed #e6d198;
+  border-radius: var(--rs);
+  font-size: .84rem;
+  color: #5a4520;
+  line-height: 1.5;
+  margin-bottom: .65rem;
+}
+
+/* ── Feedback area ── */
+.mt-feedback {
+  display: none;
+  margin-top: .85rem;
+  padding: .7rem .85rem;
+  border-radius: var(--rs);
+  font-size: .9rem;
+  line-height: 1.55;
+  animation: mtFbSlideIn .3s ease;
+}
+
+@keyframes mtFbSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mt-feedback.mt-fb-correct {
+  background: linear-gradient(135deg, #edfaf2 0%, #e0f5e8 100%);
+  border: 1.5px solid #8ed4a8;
+  color: #14402a;
+}
+
+.mt-feedback.mt-fb-partial {
+  background: linear-gradient(135deg, #fff9eb 0%, #fdf3d7 100%);
+  border: 1.5px solid #edd9a4;
+  color: #4f3d1d;
+}
+
+.mt-feedback.mt-fb-wrong {
+  background: linear-gradient(135deg, #fef2f2 0%, #fce8e8 100%);
+  border: 1.5px solid #f0b8b8;
+  color: #5a1a1a;
+}
+
+.mt-fb-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: .35rem;
+}
+
+.mt-fb-correct .mt-fb-heading { color: #1a6b46; }
+.mt-fb-partial .mt-fb-heading { color: #a07800; }
+.mt-fb-wrong .mt-fb-heading   { color: #a83232; }
+
+.mt-fb-detail {
+  font-size: .86rem;
+  color: inherit;
+  opacity: .85;
+  margin-bottom: .3rem;
+}
+
+.mt-fb-streak {
+  display: inline-block;
+  margin-top: .3rem;
+  padding: .22rem .6rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fff1d6, #ffe4a8);
+  border: 1px solid #f0c840;
+  font-size: .82rem;
+  font-weight: 700;
+  color: #8a5a00;
+  animation: mtStreakBounce .5s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes mtStreakBounce {
+  0%   { transform: scale(.7); opacity: 0; }
+  50%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.mt-fb-fasit {
+  margin-top: .4rem;
+  padding: .45rem .65rem;
+  border-left: 3px solid #1a7a50;
+  background: #edf8f2;
+  border-radius: 0 var(--rs) var(--rs) 0;
+  font-size: .85rem;
+  color: #14402a;
+}
+
+.mt-fb-fasit strong {
+  color: #1a7a50;
+}
+
+.mt-fb-extra {
+  margin-top: .3rem;
+  font-size: .86rem;
+  color: inherit;
+}
+
+.mt-fb-forklaring {
+  margin-top: .45rem;
+  padding: .45rem .65rem;
+  background: rgba(255,255,255,.5);
+  border-radius: var(--rs);
+  font-size: .86rem;
+  color: inherit;
+  line-height: 1.55;
+}
+
+.mt-fb-rule {
+  margin-top: .5rem;
+  padding: .5rem .7rem;
+  border-left: 3px solid #4a90d9;
+  background: #eef5fc;
+  border-radius: 0 var(--rs) var(--rs) 0;
+  font-size: .84rem;
+  line-height: 1.55;
+  color: #1a2e45;
+}
+
+.mt-fb-rule strong {
+  color: #2563a8;
+  font-size: .73rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.mt-fb-eks {
+  margin-top: .4rem;
+  padding: .45rem .65rem;
+  border-left: 3px solid #d4a017;
+  background: #fdfaf0;
+  border-radius: 0 var(--rs) var(--rs) 0;
+  font-size: .83rem;
+  line-height: 1.55;
+  color: #3d2e00;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.mt-fb-eks strong {
+  font-family: 'Source Sans 3', sans-serif;
+  color: #a07800;
+  font-size: .73rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.mt-fb-retry-tip {
+  margin-top: .4rem;
+  font-size: .82rem;
+  color: #2563a8;
+  font-style: italic;
+}
+
+.mt-fb-retry-win {
+  margin-top: .35rem;
+  padding: .3rem .6rem;
+  border-radius: var(--rs);
+  background: linear-gradient(135deg, #e8f6ee, #d4f0e0);
+  border: 1px solid #8ed4a8;
+  font-size: .84rem;
+  font-weight: 600;
+  color: #1a6b46;
+  animation: mtStreakBounce .5s cubic-bezier(.34,1.56,.64,1);
+}
+
+.mt-fb-xp {
+  display: inline-block;
+  margin-top: .45rem;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f0e8ff, #e0d0ff);
+  border: 1px solid #c8a8f0;
+  font-size: .82rem;
+  font-weight: 700;
+  color: #7b2fbe;
+  animation: mtXpPop .4s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes mtXpPop {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* ── Open-type model answer boxes ── */
+.mt-fb-models {
+  display: grid;
+  gap: .4rem;
+  margin-top: .45rem;
+}
+
+.mt-fb-model {
+  padding: .5rem .7rem;
+  border-radius: var(--rs);
+  font-size: .86rem;
+  line-height: 1.55;
+}
+
+.mt-fb-model-weak {
+  background: #fef7f0;
+  border: 1px solid #f0c8a0;
+  color: #5a3a1a;
+}
+
+.mt-fb-model-good {
+  background: #edfaf2;
+  border: 1px solid #8ed4a8;
+  color: #14402a;
+}
+
+.mt-fb-model-label {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: .2rem;
+}
+
+.mt-fb-model-weak .mt-fb-model-label { color: #a07800; }
+.mt-fb-model-good .mt-fb-model-label { color: #1a6b46; }
+
+/* ══════ Streak fire ring aura (3+) ══════ */
+.mt-live-pill.streak-fire {
+  animation: streakFireRing 1.5s ease;
+}
+@keyframes streakFireRing {
+  0%   { box-shadow: 0 0 0 0 rgba(200,131,42,0); }
+  20%  { box-shadow: 0 0 0 4px rgba(200,131,42,.35), 0 0 12px rgba(200,131,42,.2); }
+  60%  { box-shadow: 0 0 0 2px rgba(200,131,42,.15), 0 0 6px rgba(200,131,42,.1); }
+  100% { box-shadow: 0 0 0 0 rgba(200,131,42,0); }
+}
+
+/* ══════ Level-up celebration ══════ */
+.level-up-flash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2000;
+  animation: levelUpFlash 1.8s ease forwards;
+}
+@keyframes levelUpFlash {
+  0%   { background: rgba(123,47,190,0); }
+  15%  { background: rgba(123,47,190,.12); }
+  40%  { background: rgba(123,47,190,.06); }
+  100% { background: rgba(123,47,190,0); }
+}
 
 .adp-summary-msg {
   margin: .7rem 0 .4rem;
@@ -1313,50 +1652,6 @@ nav a.active { font-weight: 700; }
   gap: .5rem;
   justify-content: flex-end;
   flex-wrap: wrap;
-}
-
-.bank-win-card {
-  width: min(1140px, 97vw);
-  max-height: 94vh;
-}
-
-.bank-win-actions {
-  margin-top: .75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: .55rem;
-  flex-wrap: wrap;
-}
-
-#nl-bank-check {
-  width: 100%;
-  text-align: center;
-}
-
-.bank-win-pos {
-  flex: 1;
-  text-align: center;
-  font-size: .84rem;
-  color: var(--tmid);
-  font-weight: 600;
-}
-
-.bank-win-actions .adp-btn:disabled {
-  opacity: .45;
-  cursor: not-allowed;
-}
-
-.nl-bank-modal-open {
-  margin: 0;
-}
-
-.adp-win-body .nl-bank-modal-open .etog {
-  display: none;
-}
-
-.adp-win-body .nl-bank-modal-open .ec {
-  display: block !important;
 }
 
 .nl-ad-hidden,
