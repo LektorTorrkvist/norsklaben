@@ -28,6 +28,7 @@ function nlBoot() {
   nlSafeInit('normalize-categories', nlNormalizeCategories);
   nlSafeInit('import-mt-bank', nlImportMTBankTasks);
   nlSafeInit('normalize-types-and-titles', nlNormalizeExerciseMetaFromType);
+  nlSafeInit('bind-bank-browse-controls', nlBindBankBrowseControls);
 
   /* ── Card open/close + exercise modal (delegated for robustness) ── */
   document.addEventListener('click', function(e) {
@@ -1002,6 +1003,77 @@ function nlImportMTBankTasks() {
 
   if (imported > 0 && window.console && console.info) {
     console.info('[Skrivelab] Importerte', imported, 'oppgåver frå MT_BANK.');
+  }
+}
+
+function nlCardHasExercises(card) {
+  if (!card) return false;
+  return card.querySelectorAll('.exlist .ei').length > 0;
+}
+
+function nlSyncGroupVisibility() {
+  document.querySelectorAll('.main .grp').forEach(function(grp) {
+    var hasVisibleCards = [].some.call(grp.querySelectorAll('.card[data-cat]'), function(card) {
+      return !card.classList.contains('hidden');
+    });
+    grp.style.display = hasVisibleCards ? '' : 'none';
+  });
+}
+
+function nlShowAllCards() {
+  document.querySelectorAll('.main .card[data-cat]').forEach(function(card) {
+    card.classList.remove('hidden');
+  });
+  nlSyncGroupVisibility();
+}
+
+function nlOpenCardsWithTasks() {
+  nlShowAllCards();
+  document.querySelectorAll('.main .card[data-cat]').forEach(function(card) {
+    if (nlCardHasExercises(card)) card.classList.add('open');
+  });
+}
+
+function nlCloseAllCards() {
+  nlShowAllCards();
+  document.querySelectorAll('.main .card[data-cat]').forEach(function(card) {
+    card.classList.remove('open');
+  });
+}
+
+function nlShowOnlyCardsWithTasks() {
+  document.querySelectorAll('.main .card[data-cat]').forEach(function(card) {
+    var hasTasks = nlCardHasExercises(card);
+    card.classList.toggle('hidden', !hasTasks);
+    if (hasTasks) card.classList.add('open');
+  });
+  nlSyncGroupVisibility();
+}
+
+function nlBindBankBrowseControls() {
+  var openBtn = document.getElementById('nl-bank-open-all');
+  if (openBtn) {
+    openBtn.addEventListener('click', function() {
+      nlOpenCardsWithTasks();
+      var main = document.querySelector('main.main');
+      if (main && main.scrollIntoView) main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  var closeBtn = document.getElementById('nl-bank-close-all');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function() {
+      nlCloseAllCards();
+    });
+  }
+
+  var onlyBtn = document.getElementById('nl-bank-show-with-tasks');
+  if (onlyBtn) {
+    onlyBtn.addEventListener('click', function() {
+      nlShowOnlyCardsWithTasks();
+      var main = document.querySelector('main.main');
+      if (main && main.scrollIntoView) main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   }
 }
 
