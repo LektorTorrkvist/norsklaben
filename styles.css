@@ -3570,6 +3570,14 @@ tr:nth-child(even) td { background: var(--bg); }
   color: #8a2b21;
 }
 
+/* ── Nye oppgåvetypar (finn_feil, sann_usann, sorter_rekke, fillsel) ── */
+.ff-word.active { background: #ffe082; border-color: #f9a825; }
+.ff-word.correct { background: rgba(26,122,80,.15); border-color: #1a7a50; }
+.ff-word.wrong { background: rgba(192,57,43,.15); border-color: #c0392b; }
+.su-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.sr-token { transition: transform .15s, border-color .2s, background .2s; }
+.sr-token:hover { transform: translateX(4px); }
+
 .fb-heading {
   font-weight: 700;
   margin-bottom: .3rem;

@@ -572,7 +572,6 @@ function nlMtResolveCard(kat) {
     dobbel_konsonant: 'dobbel-konsonant',
     teiknsetting: 'teiknsetting',
     samansett: 'saerskriving-samansetjing',
-    ordklasse: 'ordklasse',
     ordklassar: 'ordklasse',
     setningsbygging: 'setningsbygging',
     tekststruktur: 'tekststruktur-delar',

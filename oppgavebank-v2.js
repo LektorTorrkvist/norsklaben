@@ -2761,6 +2761,7 @@ function mtRenderTask(t, isRetry) {
   body.innerHTML =
     '<div class="mt-card">' +
       '<div class="mt-live">' +
+        '<div class="mt-live-bar"><span id="mt-live-bar-fill"></span></div>' +
         '<div class="mt-live-top">' +
           '<div class="mt-live-progress" id="mt-live-progress">Oppgåve 1 av 1</div>' +
           '<div class="mt-live-kpis">' +
@@ -2769,7 +2770,6 @@ function mtRenderTask(t, isRetry) {
             '<span class="mt-live-pill">Streak <strong id="mt-live-streak">0</strong></span>' +
           '</div>' +
         '</div>' +
-        '<div class="mt-live-bar"><span id="mt-live-bar-fill"></span></div>' +
         '<div class="mt-live-mastery">' +
           '<div class="mt-live-mastery-head"><span id="mt-live-mastery-icon">&#127793;</span><strong id="mt-live-mastery-name">Ordlærling</strong><span id="mt-live-mastery-trophies">0/12 trofé</span></div>' +
           '<div class="mt-live-mastery-bar"><span id="mt-live-mastery-fill"></span></div>' +
@@ -4285,12 +4285,60 @@ function mtInit() {
   /* Bygg kategoriknappar frå MT_BANK dersom #nl-ad-cats er tomt */
   var catsWrap = $mt('nl-ad-cats');
   if (catsWrap && !catsWrap.querySelector('.adp-cat') && MT_BANK.length) {
-    var catGroups = [
-      { title: 'Rettskriving', cats: ['og_aa','samansett','dobbel_konsonant','kj_skj','teiknsetting'] },
-      { title: 'Grammatikk',   cats: ['ordklassar','setningsbygging','bindeord'] },
-      { title: 'Tekst og skriving', cats: ['tekststruktur','kjeldebruk','oppgavetolking','spraak_stil','aarsak_samanheng','referansekjede','logisk_struktur'] },
-      { title: 'Sjanger og formål', cats: ['sjangerkompetanse','fagartikkel','debattinnlegg','overskrift_ingress','novelle','parafrase','sitat','tal_og_statistikk'] }
-    ];
+    var catGroups = (function () {
+      var htmlToMt = {
+        'og-aa': 'og_aa',
+        'dobbel-konsonant': 'dobbel_konsonant',
+        'kj-skj': 'kj_skj',
+        teiknsetting: 'teiknsetting',
+        'saerskriving-samansetjing': 'samansett',
+        ordklasse: 'ordklassar',
+        oppgaveforstaing: 'oppgavetolking',
+        setningsbygging: 'setningsbygging',
+        'aarsak-samanheng': 'aarsak_samanheng',
+        referansekjede: 'referansekjede',
+        'logisk-struktur': 'logisk_struktur',
+        'tekststruktur-delar': 'tekststruktur',
+        'bindeord-overgangar': 'bindeord',
+        sjangerkompetanse: 'sjangerkompetanse',
+        fagartikkel: 'fagartikkel',
+        debattinnlegg: 'debattinnlegg',
+        'overskrift-ingress': 'overskrift_ingress',
+        'spraak-stil': 'spraak_stil',
+        novelle: 'novelle',
+        kjeldebruk: 'kjeldebruk',
+        parafrase: 'parafrase',
+        sitat: 'sitat',
+        'tal-og-statistikk': 'tal_og_statistikk'
+      };
+
+      var groups = [];
+      var htmlGroups = document.querySelectorAll('.main .grp');
+      htmlGroups.forEach(function (grp) {
+        var h = grp.querySelector('.glabel h2');
+        var title = h ? String(h.textContent || '').trim() : '';
+        if (!title) return;
+
+        var cats = [];
+        grp.querySelectorAll('.card[data-cat]').forEach(function (card) {
+          var htmlCat = String(card.getAttribute('data-cat') || '').trim();
+          var mtCat = htmlToMt[htmlCat] || '';
+          if (mtCat && cats.indexOf(mtCat) === -1) cats.push(mtCat);
+        });
+
+        if (cats.length) groups.push({ title: title, cats: cats });
+      });
+
+      if (groups.length) return groups;
+
+      /* Fallback dersom kortgrupper ikkje kan lesast frå DOM */
+      return [
+        { title: 'Rettskriving', cats: ['og_aa','samansett','dobbel_konsonant','kj_skj','teiknsetting'] },
+        { title: 'Grammatikk', cats: ['ordklassar','setningsbygging','bindeord'] },
+        { title: 'Tekst og skriving', cats: ['tekststruktur','kjeldebruk','oppgavetolking','spraak_stil','aarsak_samanheng','referansekjede','logisk_struktur'] },
+        { title: 'Sjanger og formål', cats: ['sjangerkompetanse','fagartikkel','debattinnlegg','overskrift_ingress','novelle','parafrase','sitat','tal_og_statistikk'] }
+      ];
+    })();
     var labelMap = {};
     MT_BANK.forEach(function (t) {
       if (t && t.kat && t.kat_label && !labelMap[t.kat]) labelMap[t.kat] = t.kat_label;

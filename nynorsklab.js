@@ -706,7 +706,178 @@ const BANK = [
  sporsmal:'Kva spørjeord passar: «___ tid kjem toget?»',setning:null,
  alternativer:['Kva','Kven','Kor','Korleis'],fasit:'Kva',fasit_variant:['Kva'],
  regel:'«Kva tid» spør om tidspunkt. «Kva» er spørjeordet her.',
- eksempel:'Kva tid kjem toget? = Når kjem toget?',kontrast_bm:'Når (hva tid)'}
+ eksempel:'Kva tid kjem toget? = Når kjem toget?',kontrast_bm:'Når (hva tid)'},
+
+/* ═══════════════════════════════════════════════════
+   NYE OPPGÅVETYPAR: finn_feil, fix, sann_usann,
+   sorter_rekke, fillsel
+   ═══════════════════════════════════════════════════ */
+
+/* ── 1. finn_feil – substantiv ──────────────────── */
+{emne:'substantiv',emne_label:'Substantiv – bøying',type:'finn_feil',vanske:'medium',
+ sporsmal:'Klikk på det ordet som har feil bøying.',
+ tekst:'Guten las boken heile kvelden.',
+ fasit_feil:['boken'],fasit:'boka (ikkje boken)',
+ regel:'«Bok» er hokjønn på nynorsk: ei bok → boka. «Boken» er bokmålsform.',
+ eksempel:'ei bok → boka, ei hytte → hytta'},
+
+/* ── 2. finn_feil – verb ────────────────────────── */
+{emne:'verb',emne_label:'Verb – presens',type:'finn_feil',vanske:'medium',
+ sporsmal:'Klikk på det ordet som har feil verbform.',
+ tekst:'Ho spiser frukost kvar morgon.',
+ fasit_feil:['spiser'],fasit:'et (ikkje spiser)',
+ regel:'«Å ete» er eit sterkt verb. Presensforma på nynorsk er «et», ikkje «spiser».',
+ eksempel:'å ete → et (presens) → åt (preteritum) → ete (perfektum)'},
+
+/* ── 3. finn_feil – pronomen ────────────────────── */
+{emne:'pronomen',emne_label:'Pronomen',type:'finn_feil',vanske:'lett',
+ sporsmal:'Klikk på det ordet som er feil pronomen.',
+ tekst:'Jentene sa at dem ville gå heim.',
+ fasit_feil:['dem'],fasit:'dei (ikkje dem)',
+ regel:'«Dem» er objektsform på bokmål. På nynorsk brukar ein «dei» som både subjekt og objekt.',
+ eksempel:'Dei gjekk heim. Eg såg dei.'},
+
+/* ── 4. fix – adjektiv ──────────────────────────── */
+{emne:'adjektiv',emne_label:'Adjektiv – samsvar',type:'fix',vanske:'medium',
+ sporsmal:'Rett samsvarsbøyingsfeilen i setninga.',
+ tekst:'Dei stor husa ligg ved fjorden.',
+ errors:{'Dei stor husa':'Dei store husa'},
+ fasit:'Dei store husa ligg ved fjorden.',
+ regel:'Adjektivet skal samsvare med substantivet. Bestemt form fleirtal: stor → store.',
+ eksempel:'dei store husa, dei fine bilane, dei raude rosene'},
+
+/* ── 5. fix – verb ──────────────────────────────── */
+{emne:'verb',emne_label:'Verb – preteritum',type:'fix',vanske:'vanskeleg',
+ sporsmal:'Rett dei to verbformene som er feil i teksten.',
+ tekst:'Ho tenkte mykje og skrevet eit langt brev. Så ringte ho venninna si.',
+ errors:{'skrevet':'skreiv','ringte':'ringde'},
+ fasit:'skreiv, ringde',
+ regel:'«Å skrive» er sterkt verb: skreiv (preteritum). «Å ringje» er svakt e-verb: ringde.',
+ eksempel:'skreiv (pret.), har skrive (perf.) · ringde (pret.), har ringt (perf.)'},
+
+/* ── 6. fix – eigedomsord ──────────────────────── */
+{emne:'eigedomsord',emne_label:'Eigedomsord',type:'fix',vanske:'medium',
+ sporsmal:'Rett feilen i eigedomsordet.',
+ tekst:'Han tok min bok og gøymde den under senga si.',
+ errors:{'min bok':'boka mi','den':'henne'},
+ fasit:'boka mi … henne',
+ regel:'Eigedomsordet kjem etter substantivet på nynorsk: boka mi, huset mitt. «Den» → «henne» (ho-ord).',
+ eksempel:'boka mi, huset mitt, bilen min, hendene mine'},
+
+/* ── 7. sann_usann – substantiv ─────────────────── */
+{emne:'substantiv',emne_label:'Substantiv – kjønn',type:'sann_usann',vanske:'medium',
+ sporsmal:'Er påstandane om substantivkjønn på nynorsk sanne eller usanne?',
+ fasit:'Sann, Usann, Sann, Usann',
+ paastandar:[
+  {tekst:'«Sol» er hokjønn på nynorsk: ei sol → sola.',sann:true},
+  {tekst:'«Bok» er hankjønn: ein bok → boken.',sann:false},
+  {tekst:'Inkjekjønnsord i eintal får endinga -et: eit hus → huset.',sann:true},
+  {tekst:'«Veke» er inkjekjønn: eit veke → veket.',sann:false}
+ ],
+ regel:'«Bok» er hokjønn: ei bok → boka. «Veke» er hokjønn: ei veke → veka.',
+ eksempel:'ei bok → boka · ei veke → veka · eit hus → huset'},
+
+/* ── 8. sann_usann – verb ───────────────────────── */
+{emne:'verb',emne_label:'Verb – infinitiv',type:'sann_usann',vanske:'vanskeleg',
+ sporsmal:'Er påstandane om verbformer på nynorsk sanne eller usanne?',
+ fasit:'Usann, Sann, Sann, Sann, Sann',
+ paastandar:[
+  {tekst:'Infinitivsendinga -e er obligatorisk for alle verb på nynorsk.',sann:false},
+  {tekst:'A-infinitiv er valfri: «å kaste» eller «å kasta» er begge rette.',sann:true},
+  {tekst:'Sterke verb i preteritum får vokalskifte: «skrive → skreiv».',sann:true},
+  {tekst:'«Å bli» har preteritumsforma «blei» på nynorsk.',sann:true},
+  {tekst:'Presens av «å vere» er «er» på nynorsk.',sann:true}
+ ],
+ regel:'A-infinitiv og e-infinitiv er valfrie (kasta/kaste). Sterke verb har vokalskifte.',
+ eksempel:'å kaste / å kasta · skreiv (pret.) · blei (pret.)'},
+
+/* ── 9. sann_usann – typiske ord ────────────────── */
+{emne:'typiske_ord',emne_label:'Typiske ord',type:'sann_usann',vanske:'medium',
+ sporsmal:'Er desse nynorskformene rette eller feil?',
+ fasit:'Sann, Usann, Sann, Usann',
+ paastandar:[
+  {tekst:'«Nokon» er rett nynorsk for bokmål «noen».',sann:true},
+  {tekst:'«Forskjellig» er korrekt nynorsk.',sann:false},
+  {tekst:'«Mogleg» er nynorsk for bokmål «mulig».',sann:true},
+  {tekst:'«Annerledes» er godkjend nynorskform.',sann:false}
+ ],
+ regel:'«Forskjellig» → «ulik» eller «forskjellig» (valfri). «Annerledes» → «annleis».',
+ eksempel:'nokon (noen) · mogleg (mulig) · annleis (annerledes)'},
+
+/* ── 10. sorter_rekke – verb: bøyingsrekkjefølgje ── */
+{emne:'verb',emne_label:'Verb – bøying',type:'sorter_rekke',vanske:'medium',
+ sporsmal:'Set bøyingsformene av «å skrive» i rett rekkjefølgje: infinitiv → presens → preteritum → perfektum.',
+ items:[
+  {tekst:'skrive'},
+  {tekst:'skriv'},
+  {tekst:'skreiv'},
+  {tekst:'har skrive'}
+ ],
+ fasit:'skrive → skriv → skreiv → har skrive',
+ regel:'Bøyingsrekka for sterke verb: infinitiv → presens → preteritum → perfektum.',
+ eksempel:'skrive → skriv → skreiv → har skrive'},
+
+/* ── 11. sorter_rekke – adjektiv: grader ────────── */
+{emne:'adjektiv',emne_label:'Adjektiv – gradbøying',type:'sorter_rekke',vanske:'lett',
+ sporsmal:'Set gradbøyinga av «stor» i rett rekkjefølgje: positiv → komparativ → superlativ.',
+ items:[
+  {tekst:'stor'},
+  {tekst:'større'},
+  {tekst:'størst'}
+ ],
+ fasit:'stor → større → størst',
+ regel:'Adjektiv har tre grader: positiv (stor), komparativ (større), superlativ (størst).',
+ eksempel:'fin → finare → finast · stor → større → størst'},
+
+/* ── 12. sorter_rekke – substantiv: bøying ──────── */
+{emne:'substantiv',emne_label:'Substantiv – bøying',type:'sorter_rekke',vanske:'medium',
+ sporsmal:'Set bøyingsformene av «gut» i rett rekkjefølgje: ub.et. → b.et. → ub.fl. → b.fl.',
+ items:[
+  {tekst:'ein gut'},
+  {tekst:'guten'},
+  {tekst:'gutar'},
+  {tekst:'gutane'}
+ ],
+ fasit:'ein gut → guten → gutar → gutane',
+ regel:'Fullt bøyingsparadigme for hankjønnsord: ein gut → guten → gutar → gutane.',
+ eksempel:'ein bil → bilen → bilar → bilane'},
+
+/* ── 13. fillsel – pronomen ─────────────────────── */
+{emne:'pronomen',emne_label:'Pronomen',type:'fillsel',vanske:'medium',
+ sporsmal:'Vel rett pronomen i kvar setning.',
+ items:[
+  {pre:'Eg gav boka til',alt:['ho','hun','henne'],fasit:'ho',post:'.'},
+  {pre:'',alt:['Dei','Dem','Dom'],fasit:'Dei',post:'gjekk på kino i går.'},
+  {pre:'Kan du hjelpe',alt:['eg','meg','mi'],fasit:'meg',post:'med leksene?'}
+ ],
+ fasit:'ho, Dei, meg',
+ regel:'Ho = subjekt og objekt. Dei = subjekt og objekt (fleirtal). Meg = objektsform av «eg».',
+ eksempel:'Eg gav ho boka. Dei gjekk heim. Ho hjelpte meg.'},
+
+/* ── 14. fillsel – verb: presens ────────────────── */
+{emne:'verb',emne_label:'Verb – presens',type:'fillsel',vanske:'medium',
+ sporsmal:'Vel rett presensform av verbet.',
+ items:[
+  {pre:'Ho',alt:['spring','springer','springe'],fasit:'spring',post:'fort.'},
+  {pre:'Vi',alt:['et','eter','ete'],fasit:'et',post:'middag no.'},
+  {pre:'Han',alt:['søv','sover','søve'],fasit:'søv',post:'lenge i dag.'},
+  {pre:'Dei',alt:['les','leser','lese'],fasit:'les',post:'avisa.'}
+ ],
+ fasit:'spring, et, søv, les',
+ regel:'Nynorske presensformer av sterke verb: spring, et, søv, les. Korkje -er eller -ar ending.',
+ eksempel:'ho spring, vi et, han søv, dei les'},
+
+/* ── 15. fillsel – eigedomsord ──────────────────── */
+{emne:'eigedomsord',emne_label:'Eigedomsord',type:'fillsel',vanske:'lett',
+ sporsmal:'Vel rett eigedomsord.',
+ items:[
+  {pre:'Eg fann boka',alt:['min','mi','mitt'],fasit:'mi',post:'.'},
+  {pre:'Han tok huset',alt:['sin','si','sitt'],fasit:'sitt',post:'.'},
+  {pre:'Ho mista nøklane',alt:['sin','sine','sitt'],fasit:'sine',post:'.'}
+ ],
+ fasit:'mi, sitt, sine',
+ regel:'Eigedomsordet rettar seg etter kjønnet til substantivet: boka mi (ho), huset mitt/sitt (inkje), nøklane mine/sine (fl.).',
+ eksempel:'boka mi, bilen min, huset mitt, nøklane mine'}
 ];
 
 /* ══════════════════════════════════════════════════════
@@ -1083,6 +1254,53 @@ function renderTask(){
         <button class="gram-btn" onclick="goReset()">Start på nytt</button>
       </div>
     </div>`;
+
+  } else if(t.type==='finn_feil'&&t.tekst){
+    /* Klikk-på-feil-ord */
+    const words=t.tekst.split(/\s+/);
+    inputHTML=`<div style="margin-top:0.8rem">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:6px">Klikk på det/dei orda som er feil:</div>
+      <div class="drag-tokens" id="ff-words" style="min-height:40px">${words.map((w,i)=>`<span class="drag-token ff-word" data-idx="${i}" data-word="${escH(w)}" onclick="ffToggle(this)" style="cursor:pointer">${escH(w)}</span>`).join(' ')}</div>
+      <div style="margin-top:8px"><button class="gram-btn primary" onclick="ffCheck()">Sjekk svar</button></div>
+    </div>`;
+
+  } else if(t.type==='fix'&&t.tekst){
+    /* Rett feila i teksten */
+    inputHTML=`<div style="margin-top:0.6rem">
+      <textarea id="gram-fix-inp" class="gram-blank" rows="4" style="width:100%;font-family:monospace;font-size:0.9rem;resize:vertical" spellcheck="false">${escH(t.tekst)}</textarea>
+      <div style="margin-top:8px"><button class="gram-btn primary" onclick="fixCheck()">Sjekk svar</button></div>
+    </div>`;
+
+  } else if(t.type==='sann_usann'&&Array.isArray(t.paastandar)){
+    /* Sann/usann-serie */
+    inputHTML=`<div class="gram-choices" id="su-list" style="gap:10px">`;
+    t.paastandar.forEach((p,i)=>{
+      inputHTML+=`<div class="su-row" data-idx="${i}" style="display:flex;align-items:center;gap:8px;padding:6px 10px;border:1.5px solid var(--b2,#ddd);border-radius:8px">
+        <span style="flex:1;font-size:0.9rem">${escH(p.tekst)}</span>
+        <button class="gram-btn su-btn" data-idx="${i}" data-val="1" onclick="suPick(this)" style="min-width:56px">Sann</button>
+        <button class="gram-btn su-btn" data-idx="${i}" data-val="0" onclick="suPick(this)" style="min-width:56px">Usann</button>
+      </div>`;
+    });
+    inputHTML+=`</div><div style="margin-top:8px"><button class="gram-btn primary" onclick="suCheck()">Sjekk svar</button></div>`;
+
+  } else if(t.type==='sorter_rekke'&&Array.isArray(t.items)){
+    /* Set i rett rekkjefølgje */
+    const shuffled=shuffle(t.items.map((it,i)=>({tekst:it.tekst||it,orig:i})));
+    inputHTML=`<div style="margin-top:0.8rem">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:6px">Trykk på elementa for å flytte dei (klikk = flytt ned):</div>
+      <div id="sr-list" style="display:flex;flex-direction:column;gap:6px">${shuffled.map((it,i)=>`<div class="drag-token sr-token" data-orig="${it.orig}" onclick="srClick(this)" style="cursor:pointer;padding:8px 12px;text-align:left">${escH(it.tekst)}</div>`).join('')}</div>
+      <div style="margin-top:8px"><button class="gram-btn primary" onclick="srCheck()">Sjekk svar</button></div>
+    </div>`;
+
+  } else if(t.type==='fillsel'&&Array.isArray(t.items)){
+    /* Fyll inn med nedtrekksmeny */
+    inputHTML=`<div style="margin-top:0.6rem" id="fs-wrap">`;
+    t.items.forEach((item,i)=>{
+      const alts=shuffle([...item.alt]);
+      inputHTML+=`<div style="margin-bottom:6px;font-size:0.9rem">${escH(item.pre||'')} <select class="gram-blank fs-sel" data-idx="${i}" style="font-size:0.9rem;padding:3px 6px;border-radius:6px;border:1.5px solid var(--b2,#ddd)"><option value="">– vel –</option>${alts.map(a=>`<option value="${escH(a)}">${escH(a)}</option>`).join('')}</select> ${escH(item.post||'')}</div>`;
+    });
+    inputHTML+=`<div style="margin-top:8px"><button class="gram-btn primary" onclick="fsCheck()">Sjekk svar</button></div></div>`;
+
   } else if(t.type==='multiple_choice'&&t.alternativer&&t.alternativer.length){
     /* Shuffle alternatives */
     const alts=shuffle(t.alternativer);
@@ -1234,6 +1452,161 @@ function goCheck(){
   goReset();
   finishAnswer(correct, placed, t);
 }
+
+/* ── Finn feil (klikk på feil ord) ─────────────── */
+var _ffPicked = {};
+function ffToggle(el) {
+  if (GS.answered) return;
+  var idx = el.getAttribute('data-idx');
+  if (_ffPicked[idx]) {
+    delete _ffPicked[idx];
+    el.classList.remove('active');
+  } else {
+    _ffPicked[idx] = el.getAttribute('data-word');
+    el.classList.add('active');
+  }
+}
+function ffCheck() {
+  if (GS.answered) return;
+  var t = GS.tasks[GS.idx];
+  if (!t || !t.fasit_feil) return;
+  var picked = Object.keys(_ffPicked).length;
+  if (picked === 0) { alert('Klikk på minst eitt ord du meiner er feil.'); return; }
+  GS.answered = true;
+
+  var fasitSet = {};
+  var fasitWords = t.fasit_feil.map(function(w) { return w.toLowerCase(); });
+
+  /* Mark all word spans */
+  var spans = document.querySelectorAll('.ff-word');
+  var hits = 0;
+  spans.forEach(function(el) {
+    var idx = el.getAttribute('data-idx');
+    var word = el.getAttribute('data-word').replace(/[.,;:!?]/g, '').toLowerCase();
+    var isFasit = fasitWords.indexOf(word) !== -1;
+    var wasPicked = !!_ffPicked[idx];
+    if (wasPicked && isFasit) { el.classList.add('correct'); hits++; }
+    else if (wasPicked && !isFasit) el.classList.add('wrong');
+    else if (!wasPicked && isFasit) el.classList.add('correct');
+    el.onclick = null;
+  });
+
+  var correct = hits === fasitWords.length && picked === fasitWords.length;
+  _ffPicked = {};
+  finishAnswer(correct, hits + ' av ' + fasitWords.length + ' funne', t);
+}
+
+/* ── Fix (rett feila i tekst) ──────────────────── */
+function fixCheck() {
+  if (GS.answered) return;
+  var el = document.getElementById('gram-fix-inp');
+  if (!el) return;
+  var val = el.value.trim();
+  if (!val) { el.focus(); return; }
+  GS.answered = true;
+  var t = GS.tasks[GS.idx];
+  el.disabled = true;
+
+  var errors = t.errors || {};
+  var keys = Object.keys(errors);
+  var hits = 0;
+  keys.forEach(function(wrong) {
+    var right = errors[wrong];
+    if (val.indexOf(right) !== -1 && val.indexOf(wrong) === -1) hits++;
+  });
+  var correct = hits === keys.length;
+  el.style.borderColor = correct ? '#1a7a50' : '#c0392b';
+  finishAnswer(correct, hits + ' av ' + keys.length + ' retta', t);
+}
+
+/* ── Sann/usann-serie ──────────────────────────── */
+var _suPicks = {};
+function suPick(btn) {
+  if (GS.answered) return;
+  var idx = btn.getAttribute('data-idx');
+  var val = parseInt(btn.getAttribute('data-val'), 10);
+  _suPicks[idx] = val;
+  /* Highlight picked */
+  document.querySelectorAll('.su-btn[data-idx="' + idx + '"]').forEach(function(b) {
+    b.classList.remove('active');
+  });
+  btn.classList.add('active');
+}
+function suCheck() {
+  if (GS.answered) return;
+  var t = GS.tasks[GS.idx];
+  if (!t || !t.paastandar) return;
+  var total = t.paastandar.length;
+  var answered = Object.keys(_suPicks).length;
+  if (answered < total) { alert('Svar på alle påstandane før du sjekkar.'); return; }
+  GS.answered = true;
+  var hits = 0;
+  t.paastandar.forEach(function(p, i) {
+    var picked = _suPicks[String(i)];
+    var fasit = p.sann ? 1 : 0;
+    var ok = picked === fasit;
+    if (ok) hits++;
+    var row = document.querySelectorAll('.su-row')[i];
+    if (row) row.style.borderColor = ok ? '#1a7a50' : '#c0392b';
+    document.querySelectorAll('.su-btn[data-idx="' + i + '"]').forEach(function(b) { b.disabled = true; });
+  });
+  _suPicks = {};
+  var correct = hits === total;
+  finishAnswer(correct, hits + ' av ' + total + ' rette', t);
+}
+
+/* ── Sorter rekkjefølgje ───────────────────────── */
+function srClick(el) {
+  if (GS.answered) return;
+  var list = document.getElementById('sr-list');
+  if (!list) return;
+  if (el.nextSibling) list.insertBefore(el.nextSibling, el);
+  else list.insertBefore(el, list.firstChild);
+}
+function srCheck() {
+  if (GS.answered) return;
+  var t = GS.tasks[GS.idx];
+  if (!t || !t.items) return;
+  GS.answered = true;
+  var toks = document.querySelectorAll('.sr-token');
+  var hits = 0;
+  toks.forEach(function(el, pos) {
+    var orig = parseInt(el.getAttribute('data-orig'), 10);
+    var ok = orig === pos;
+    if (ok) hits++;
+    el.style.borderColor = ok ? '#1a7a50' : '#c0392b';
+    el.style.background = ok ? 'rgba(26,122,80,.1)' : 'rgba(192,57,43,.08)';
+    el.onclick = null;
+  });
+  var total = toks.length;
+  var correct = hits === total;
+  finishAnswer(correct, hits + ' av ' + total + ' i rett rekkjefølgje', t);
+}
+
+/* ── Fyll inn med nedtrekksmeny (fillsel) ──────── */
+function fsCheck() {
+  if (GS.answered) return;
+  var t = GS.tasks[GS.idx];
+  if (!t || !t.items) return;
+  var sels = document.querySelectorAll('.fs-sel');
+  var unanswered = false;
+  sels.forEach(function(s) { if (!s.value) unanswered = true; });
+  if (unanswered) { alert('Vel svar i alle nedtrekksmenyane.'); return; }
+  GS.answered = true;
+  var hits = 0;
+  sels.forEach(function(s, i) {
+    var item = t.items[i];
+    if (!item) return;
+    var ok = s.value.toLowerCase() === item.fasit.toLowerCase();
+    if (ok) hits++;
+    s.disabled = true;
+    s.style.borderColor = ok ? '#1a7a50' : '#c0392b';
+  });
+  var total = t.items.length;
+  var correct = hits === total;
+  finishAnswer(correct, hits + ' av ' + total + ' rette', t);
+}
+
 function gramNext(){
   GS.idx++;
   updateProgress();
