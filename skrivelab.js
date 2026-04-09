@@ -223,6 +223,7 @@ function nlBoot() {
   nlSafeInit('init-bank-modal', nlInitBankModal);
   nlSafeInit('refresh-counts', nlRefreshCounts);
   nlSafeInit('init-adaptive', nlInitAdaptive);
+  nlSafeInit('front-insights', nlRenderFrontInsights);
 
   // Safety net: if adaptive categories are still empty, rebuild once.
   nlSafeInit('adaptive-cats-fallback', function() {
@@ -2192,6 +2193,68 @@ function nlMakeRI(item, idx, lid) {
     document.getElementById(lid).insertBefore(_rd, el);
     nlRNums(lid);
   });
+
+  /* Touch support for rank reorder */
+  (function(el, lid) {
+    var _rt = null;
+    el.addEventListener('touchstart', function(ev) {
+      var t = (ev.touches && ev.touches[0]);
+      if (!t) return;
+      _rt = { startX: t.clientX, startY: t.clientY, active: false, ghost: null, target: null };
+    }, { passive: true });
+    el.addEventListener('touchmove', function(ev) {
+      if (!_rt) return;
+      var t = (ev.touches && ev.touches[0]);
+      if (!t) return;
+      var dx = t.clientX - _rt.startX, dy = t.clientY - _rt.startY;
+      if (!_rt.active && Math.sqrt(dx*dx + dy*dy) < 8) return;
+      if (!_rt.active) {
+        _rt.active = true;
+        el.classList.add('dragging');
+        _rt.ghost = el.cloneNode(true);
+        _rt.ghost.classList.add('touch-drag-ghost');
+        _rt.ghost.style.cssText = 'position:fixed;pointer-events:none;opacity:.85;z-index:9999;width:' + el.offsetWidth + 'px';
+        document.body.appendChild(_rt.ghost);
+      }
+      ev.preventDefault();
+      _rt.ghost.style.left = t.clientX + 'px';
+      _rt.ghost.style.top = t.clientY + 'px';
+      _rt.ghost.style.transform = 'translate(-50%,-50%)';
+      var hit = document.elementFromPoint(t.clientX, t.clientY);
+      var tgt = hit ? hit.closest('.rank-item') : null;
+      if (tgt && tgt === el) tgt = null;
+      var list = document.getElementById(lid);
+      if (tgt && list && !list.contains(tgt)) tgt = null;
+      if (tgt !== _rt.target) {
+        if (_rt.target) _rt.target.classList.remove('drag-over');
+        _rt.target = tgt;
+        if (_rt.target) _rt.target.classList.add('drag-over');
+      }
+    }, { passive: false });
+    el.addEventListener('touchend', function(ev) {
+      if (!_rt) return;
+      if (_rt.active) {
+        ev.preventDefault();
+        if (_rt.target) {
+          _rt.target.classList.remove('drag-over');
+          document.getElementById(lid).insertBefore(el, _rt.target);
+          nlRNums(lid);
+        }
+        if (_rt.ghost && _rt.ghost.parentNode) _rt.ghost.parentNode.removeChild(_rt.ghost);
+        el.classList.remove('dragging');
+      }
+      _rt = null;
+    }, { passive: false });
+    el.addEventListener('touchcancel', function() {
+      if (_rt) {
+        if (_rt.target) _rt.target.classList.remove('drag-over');
+        if (_rt.ghost && _rt.ghost.parentNode) _rt.ghost.parentNode.removeChild(_rt.ghost);
+        el.classList.remove('dragging');
+        _rt = null;
+      }
+    }, { passive: true });
+  })(el, lid);
+
   return el;
 }
 
@@ -3059,6 +3122,48 @@ function nlAdAwardXp(totalPoints, totalMax, pct) {
   nlAdSaveProfile(profile);
   nlAdRenderProfile(profile);
   return gain;
+}
+
+/* ── FRONT-PAGE STRENGTHS / WEAKNESSES ── */
+function nlRenderFrontInsights() {
+  var wrap = document.getElementById('nl-front-insights');
+  var strBox = document.getElementById('nl-front-strengths');
+  var weakBox = document.getElementById('nl-front-weak');
+  if (!wrap || !strBox || !weakBox) return;
+  if (typeof MT_BANK === 'undefined' || typeof mtLsCatStats !== 'function') return;
+
+  var labelMap = {};
+  MT_BANK.forEach(function(t) {
+    if (t && t.kat && t.kat_label && !labelMap[t.kat]) labelMap[t.kat] = t.kat_label;
+  });
+
+  var stats = [];
+  Object.keys(labelMap).forEach(function(kat) {
+    var s = mtLsCatStats(kat);
+    if (s.total > 0) stats.push({ kat: kat, label: labelMap[kat], pct: s.pct, total: s.total });
+  });
+  if (!stats.length) return;
+
+  stats.sort(function(a, b) { return b.pct - a.pct; });
+  var strengths = stats.filter(function(s) { return s.pct >= 75; }).slice(0, 3);
+  var weakest = stats.filter(function(s) { return s.pct < 75; });
+  weakest.sort(function(a, b) { return a.pct - b.pct; });
+  weakest = weakest.slice(0, 2);
+
+  if (!strengths.length && !weakest.length) return;
+
+  function row(s, cls) {
+    return '<div class="adp-front-row ' + cls + '"><span>' + s.label + '</span><span>' + s.pct + ' %</span></div>';
+  }
+
+  strBox.innerHTML = '<h5>Styrker 💪</h5>' + (strengths.length
+    ? strengths.map(function(s) { return row(s, 'ok'); }).join('')
+    : '<div class="adp-front-row">Ingen data enno</div>');
+  weakBox.innerHTML = '<h5>Øv meir på 🎯</h5>' + (weakest.length
+    ? weakest.map(function(s) { return row(s, 'weak'); }).join('')
+    : '<div class="adp-front-row">Alt over 75 % – flott!</div>');
+
+  wrap.hidden = false;
 }
 
 function nlInitAdaptive() {

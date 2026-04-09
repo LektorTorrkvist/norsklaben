@@ -206,27 +206,27 @@ nav a.active { font-weight: 700; }
   align-items: center;
   gap: 0;
   margin-left: .45rem;
-  background: rgba(255,255,255,.08);
+  background: rgba(255,255,255,.04);
   border-radius: 999px;
   overflow: hidden;
 }
 .lang-toggle a {
-  padding: .22rem .48rem;
-  font-size: .72rem;
+  padding: .18rem .4rem;
+  font-size: .68rem;
   font-weight: 700;
   letter-spacing: .02em;
-  color: rgba(255,255,255,.74);
+  color: rgba(255,255,255,.6);
   text-decoration: none;
   transition: all .2s;
   line-height: 1;
 }
 .lang-toggle a:hover {
   color: #fff;
-  background: rgba(255,255,255,.16);
+  background: rgba(255,255,255,.1);
 }
 .lang-toggle a.active {
   color: #fff;
-  background: rgba(255,255,255,.24);
+  background: rgba(255,255,255,.15);
   pointer-events: none;
 }
 
@@ -831,6 +831,53 @@ nav a.active { font-weight: 700; }
 
 .adp-g-pill-streak strong {
   color: #8a3f18 !important;
+}
+
+/* ─── Front page insights (strengths/weaknesses) ─── */
+.adp-front-insights {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .6rem;
+  margin-top: .65rem;
+}
+.adp-front-col h5 {
+  margin: 0 0 .3rem;
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--tmid);
+}
+.adp-front-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .3rem .5rem;
+  margin-bottom: .25rem;
+  border-radius: var(--rs);
+  font-size: .8rem;
+  background: #f7f9f8;
+}
+.adp-front-row.ok {
+  background: #f0faf3;
+  color: #1a6b46;
+}
+.adp-front-row.weak {
+  background: #fff7ed;
+  color: #7a4a10;
+}
+.adp-front-row strong {
+  font-weight: 600;
+}
+.adp-front-row span {
+  font-size: .74rem;
+  opacity: .8;
+}
+
+@media (max-width: 520px) {
+  .adp-front-insights {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 760px) {

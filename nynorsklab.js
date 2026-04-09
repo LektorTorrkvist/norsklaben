@@ -715,6 +715,94 @@ const BANK = [
 const GS = { tasks:[], idx:0, score:0, answered:false, config:{}, streak:0, history:[] };
 
 /* ══════════════════════════════════════════════════════
+   CATEGORY GROUPS (v2-style)
+══════════════════════════════════════════════════════ */
+var NN_CAT_GROUPS = [
+  { name: 'Bøying og ordklasse', cats: ['substantiv','pronomen','adjektiv','eigedomsord'] },
+  { name: 'Verb',                cats: ['verb'] },
+  { name: 'Setningslære',        cats: ['ordstilling'] },
+  { name: 'Nynorsk ordforråd',   cats: ['spørjeord','typiske_ord'] }
+];
+
+function nnBuildCatButtons() {
+  var wrap = document.getElementById('nn-cats');
+  if (!wrap || wrap.querySelector('.adp-cat')) return;
+
+  /* Build label map from BANK */
+  var labelMap = {};
+  BANK.forEach(function(t) {
+    if (t.emne && !labelMap[t.emne]) {
+      var lbl = t.emne_label || t.emne;
+      /* Strip sub-labels like "Substantiv – bøying" → "Substantiv" */
+      labelMap[t.emne] = lbl.split(/\s+[\u2013\u2014–—-]\s+/)[0];
+    }
+  });
+
+  /* Override with nicer labels */
+  var niceLabels = {
+    substantiv:  'Substantiv',
+    verb:        'Verb',
+    pronomen:    'Pronomen',
+    adjektiv:    'Adjektiv',
+    ordstilling: 'Ordstilling',
+    eigedomsord: 'Eigedomsord',
+    'spørjeord': 'Spørjeord',
+    typiske_ord: 'Typiske ord'
+  };
+
+  NN_CAT_GROUPS.forEach(function(grp) {
+    var gDiv = document.createElement('div');
+    gDiv.className = 'adp-cat-group';
+
+    var title = document.createElement('h4');
+    title.className = 'adp-cat-group-title';
+    title.textContent = grp.name;
+    gDiv.appendChild(title);
+
+    var list = document.createElement('div');
+    list.className = 'adp-cat-group-list';
+
+    grp.cats.forEach(function(catId) {
+      /* Only show cats that exist in BANK */
+      var exists = BANK.some(function(t) { return t.emne === catId; });
+      if (!exists) return;
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'adp-cat on';
+      btn.dataset.cat = catId;
+      btn.textContent = niceLabels[catId] || labelMap[catId] || catId;
+      btn.addEventListener('click', function() { btn.classList.toggle('on'); });
+      list.appendChild(btn);
+    });
+
+    if (list.children.length) {
+      gDiv.appendChild(list);
+      wrap.appendChild(gDiv);
+    }
+  });
+
+  /* Wire clear / select-all */
+  var clearBtn = document.getElementById('nn-cats-clear');
+  var allBtn   = document.getElementById('nn-cats-all');
+  if (clearBtn) clearBtn.addEventListener('click', function() {
+    wrap.querySelectorAll('.adp-cat').forEach(function(b) { b.classList.remove('on'); });
+  });
+  if (allBtn) allBtn.addEventListener('click', function() {
+    wrap.querySelectorAll('.adp-cat').forEach(function(b) { b.classList.add('on'); });
+  });
+}
+
+function nnGetSelectedCats() {
+  var wrap = document.getElementById('nn-cats');
+  if (!wrap) return [];
+  var btns = wrap.querySelectorAll('.adp-cat.on');
+  var cats = [];
+  btns.forEach(function(b) { cats.push(b.dataset.cat); });
+  return cats;
+}
+
+/* ══════════════════════════════════════════════════════
    GAMIFICATION – XP, LEVELS, PROFILE
 ══════════════════════════════════════════════════════ */
 var NN_XP_LEVELS = [
@@ -863,8 +951,11 @@ function nnConfetti() {
   }
 }
 
-/* Initialise cockpit on page load */
-document.addEventListener('DOMContentLoaded', function() { nnRenderCockpit(); });
+/* Initialise cockpit + category buttons on page load */
+document.addEventListener('DOMContentLoaded', function() {
+  nnRenderCockpit();
+  nnBuildCatButtons();
+});
 
 
 
@@ -872,19 +963,22 @@ document.addEventListener('DOMContentLoaded', function() { nnRenderCockpit(); })
    START
 ══════════════════════════════════════════════════════ */
 function gramStart(){
-  const emne   = $('gc-emne').value;
+  const selectedCats = nnGetSelectedCats();
   const type   = $('gc-type').value;
   const antal  = Math.min(15, Math.max(3, parseInt($('gc-antal').value)||8));
   const vanske = $('gc-vanske').value;
 
   GS.config = {
-    emne, type, antal, vanske,
+    emne: selectedCats.length ? 'val' : 'blanda',
+    type, antal, vanske,
     kontrast: $('gc-kontrast').value==='true',
   };
   GS.tasks=[]; GS.idx=0; GS.score=0; GS.answered=false; GS.streak=0; GS.history=[];
 
-  /* Filter bank by emne */
-  let pool = emne==='blanda' ? [...BANK] : BANK.filter(t=>t.emne===emne);
+  /* Filter bank by selected categories */
+  let pool = selectedCats.length
+    ? BANK.filter(t => selectedCats.indexOf(t.emne) !== -1)
+    : [...BANK];
 
   /* Filter by type */
   if(type!=='blanda') pool = pool.filter(t=>t.type===type);
@@ -980,9 +1074,9 @@ function renderTask(){
   if(t.type==='drag_ord'&&t.ord&&t.ord.length){
     const shuffled=shuffle([...t.ord]);
     inputHTML=`<div style="margin-top:0.8rem">
-      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:6px">Trekkbare ord – trykk for å setje dei i ei kasse:</div>
-      <div class="drag-tokens" id="go-bank" style="min-height:40px;margin-bottom:10px">${shuffled.map(w=>`<div class="drag-token" draggable="true" ondragstart="dragStart(event,'${w.replace(/'/g,'&#39;')}')" ondragend="dragEnd(event)" id="got-${encodeURIComponent(w)}" data-word="${w.replace(/'/g,'&#39;')}">${w}</div>`).join('')}</div>
-      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:6px">Bygg setninga her (trykk eit ord for å fjerne det):</div>
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:6px">Trykk på orda i rett rekkjefølgje:</div>
+      <div class="drag-tokens" id="go-bank" style="min-height:40px;margin-bottom:10px">${shuffled.map(w=>`<div class="drag-token" draggable="true" ondragstart="dragStart(event,'${w.replace(/'/g,'&#39;')}')" ondragend="dragEnd(event)" onclick="goTapAdd(this)" id="got-${encodeURIComponent(w)}" data-word="${w.replace(/'/g,'&#39;')}" style="cursor:pointer">${w}</div>`).join('')}</div>
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:6px">Setninga di (trykk eit ord for å fjerne det):</div>
       <div id="go-slots" style="display:flex;flex-wrap:wrap;gap:6px;min-height:40px;background:#f0f4ff;border:1px dashed #93b4f8;border-radius:10px;padding:8px 10px" ondragover="allowDrop(event)" ondrop="goDropSlot(event)"></div>
       <div style="margin-top:8px;display:flex;gap:8px">
         <button class="gram-btn primary" onclick="goCheck()">Sjekk svar</button>
@@ -1090,6 +1184,14 @@ function finishAnswer(correct,chosen,t){
 
 /* ── Drag-ord (ordstilling) ─────────────────── */
 let _goPlaced = [];
+
+function goTapAdd(el) {
+  if (!el || el.classList.contains('used')) return;
+  var w = el.dataset.word || el.textContent.trim();
+  _goPlaced.push(w);
+  el.classList.add('used');
+  goRenderSlots();
+}
 
 function goDropSlot(e){
   e.preventDefault();

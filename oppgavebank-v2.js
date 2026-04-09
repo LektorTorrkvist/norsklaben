@@ -241,7 +241,7 @@ var MT_BANK = [
  q:'Vel rett form av verbet.',
  items:[
   {pre:'Ho',alt:['hopar','hoppar'],fasit:'hoppar',post:'over bekken.'},
-  {pre:'Katten',alt:['sover','sovver'],fasit:'sover',post:'i sofaen.'},
+  {pre:'Katten',alt:['sover','sovver'],fasit:'søv',post:'i sofaen.'},
   {pre:'Han',alt:['løper','løpper'],fasit:'løper',post:'fort.'},
   {pre:'Vi',alt:['lagar','laggar'],fasit:'lagar',post:'middag.'}
  ],
@@ -1179,14 +1179,13 @@ var MT_BANK = [
 {kat:'logisk_struktur',kat_label:'Logisk struktur',type:'sorter_rekke',vanske:'medium',
  q:'Set avsnitta i logisk rekkjefølgje for ein fagartikkel om plast i havet.',
  items:[
-  {id:'A',tekst:'Det finst fleire løysingar: betre avfallssortering, internasjonale avtalar og forbrukarmakt.'},
   {id:'B',tekst:'Kvart år hamnar millionar tonn plast i havet, og problemet veks raskt.'},
+  {id:'D',tekst:'Plasten kjem frå fiskeri, skipstrafikk og forsøpling frå land.'},
   {id:'C',tekst:'Konsekvensane er alvorlege: dyr døyr, giftstoff spreier seg og strender vert øydelagde.'},
-  {id:'D',tekst:'Plasten kjem frå fiskeri, skipstrafikk og forsøpling frå land.'}
+  {id:'A',tekst:'Det finst fleire løysingar: betre avfallssortering, internasjonale avtalar og forbrukarmakt.'}
  ],
- fasit:['B','D','C','A'],
  regel:'Logisk oppbygging: Problem → Årsaker → Konsekvensar → Løysingar.',
- eks:'B (problem) → D (årsaker) → C (konsekvensar) → A (løysingar)'},
+ eks:'Problem → Årsaker → Konsekvensar → Løysingar'},
 
 {kat:'logisk_struktur',kat_label:'Logisk struktur',type:'drag_kolonne',vanske:'medium',
  q:'Sorter setningane etter kva del av teksten dei høyrer til.',
@@ -1446,14 +1445,13 @@ var MT_BANK = [
 {kat:'debattinnlegg',kat_label:'Debattinnlegg',type:'sorter_rekke',vanske:'medium',
  q:'Set avsnitta i logisk rekkjefølgje for eit debattinnlegg.',
  items:[
-  {id:'A',tekst:'Nokon vil hevde at mobilforbod krenker elevane sin fridom, men skulens oppgåve er å lære, ikkje å underholde.'},
   {id:'B',tekst:'Skulen bør innføre mobilforbod. Forsking viser at mobilen distrahere elevane.'},
   {id:'C',tekst:'Forskinga er tydeleg: mobilen øydelegg konsentrasjonen. Ein studie frå Universitetet i Bergen viser at elevar utan mobil presterte 15 % betre.'},
+  {id:'A',tekst:'Nokon vil hevde at mobilforbod krenker elevane sin fridom, men skulens oppgåve er å lære, ikkje å underholde.'},
   {id:'D',tekst:'Vi oppmodar politikarane til å innføre eit nasjonalt mobilforbod i skulen – for elevane si skuld.'}
  ],
- fasit:['B','C','A','D'],
  regel:'Debattinnlegg: Standpunkt → Argument → Motargument + tilbakevising → Avsluttande oppmoding.',
- eks:'B (standpunkt) → C (hovudargument) → A (møte motargument) → D (oppmoding)'},
+ eks:'Standpunkt → Hovudargument → Møte motargument → Oppmoding'},
 
 {kat:'debattinnlegg',kat_label:'Debattinnlegg',type:'fix',vanske:'vanskeleg',
  q:'Gjer dei usaklege formuleringane meir overtydande med retoriske verkemiddel.',
@@ -3105,6 +3103,46 @@ function mtCheckCloze() {
 }
 
 /* ── open ── */
+/* ── fagord-liste for open/omskriv XP-bonus ── */
+var MT_FAGORD = [
+  'argumentere','drøfte','påstand','grunngje','konklusjon','konsekvens','årsak','verknad',
+  'perspektiv','hypotese','analyse','analysere','kjelde','kjeldebruk','referere','parafrase',
+  'sitat','dokumentere','etterprøvbar','truverdig','truverde','reliabilitet','validitet',
+  'fagomgrep','relevant','samanlikne','kontrastere','vurdere','strategi','metode',
+  'innleiing','hovuddel','avslutting','drøfting','argumentasjon','motargument',
+  'retorisk','ethos','pathos','logos','mottakar','formål','sjanger','teksttype',
+  'koherens','samanheng','avsnitt','temasetning','disposisjon','struktur'
+];
+
+function mtDetectFagord(text) {
+  var lower = text.toLowerCase();
+  var found = [];
+  MT_FAGORD.forEach(function(w) {
+    if (lower.indexOf(w) !== -1 && found.indexOf(w) === -1) found.push(w);
+  });
+  return found;
+}
+
+function mtIsGibberish(text) {
+  /* Heuristikk: for kort, berre same bokstav, eller ingen vokal */
+  var trimmed = text.trim();
+  if (trimmed.length < 8) return true;
+  var words = trimmed.split(/\s+/);
+  if (words.length < 2) return true;
+  /* Sjekk at det finst minst ein vokal */
+  if (!/[aeiouyæøå]/i.test(trimmed)) return true;
+  /* Sjekk gjentaking: same teikn >60% */
+  var freq = {};
+  for (var i = 0; i < trimmed.length; i++) {
+    var c = trimmed[i].toLowerCase();
+    freq[c] = (freq[c] || 0) + 1;
+  }
+  var maxFreq = 0;
+  for (var k in freq) { if (freq[k] > maxFreq) maxFreq = freq[k]; }
+  if (maxFreq / trimmed.length > 0.6) return true;
+  return false;
+}
+
 function mtCheckOpen() {
   if (MTS.answered) return;
   var el = $mt('mt-open-inp');
@@ -3114,9 +3152,25 @@ function mtCheckOpen() {
   MTS.answered = true;
   var t = MTS.current;
   el.disabled = true;
+
+  /* Gibberish-sjekk → 0 XP */
+  if (mtIsGibberish(val)) {
+    el.className = 'mt-text-input mt-textarea mt-inp-wrong';
+    mtFinish(false, 1, 0, val, t, 'Svaret ser ikkje ut til å vere eit skikkeleg forsøk. Prøv å skrive eit ordentleg svar.', true);
+    return;
+  }
+
+  /* Fagord-bonus */
+  var fagord = mtDetectFagord(val);
+  var extra = null;
+  if (fagord.length >= 2) {
+    extra = 'Flott fagspråk! Du brukte: ' + fagord.join(', ');
+  } else if (fagord.length === 1) {
+    extra = 'Bra, du brukte fagomgrepet «' + fagord[0] + '».';
+  }
+
   el.className = 'mt-text-input mt-textarea mt-inp-neutral';
-  /* Open-svar er alltid «rett» – gjev poeng for innsats */
-  mtFinish(true, 1, 1, val, t, null, true);
+  mtFinish(true, 1, 1, val, t, extra, true);
 }
 
 /* ── fix ── */
@@ -3445,6 +3499,15 @@ function mtCheckOmskriv() {
 
   var extra = null;
   if (!ok && missing.length) extra = 'Hugs å bruke: ' + missing.join(', ');
+
+  /* Fagord-bonus for omskriv */
+  var fagord = mtDetectFagord(val);
+  if (ok && fagord.length >= 2) {
+    extra = 'Flott fagspråk! Du brukte: ' + fagord.join(', ');
+  } else if (ok && fagord.length === 1) {
+    extra = (extra ? extra + ' ' : '') + 'Bra, du brukte fagomgrepet «' + fagord[0] + '».';
+  }
+
   mtFinish(ok, 1, ok ? 1 : 0, val, t, extra);
 }
 
@@ -3554,6 +3617,14 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType) {
 
   /* XP */
   var earnedXP = mtXpCalc(correct, pts, maxPts, t.vanske, MTS.streak, !!t._isRetry);
+
+  /* Fagord-bonus for open / omskriv-svar */
+  if (correct && typeof chosen === 'string' && (t.type === 'open' || t.type === 'omskriv')) {
+    var fagordHit = mtDetectFagord(chosen);
+    var fagBonus = Math.min(fagordHit.length * 3, 12);
+    earnedXP += fagBonus;
+  }
+
   MTS.sessionXP += earnedXP;
 
   if (correct && earnedXP > 0) {
@@ -3720,9 +3791,11 @@ function mtShowSummary() {
   var poengEl = $mt('nl-ad-sum-poeng');
   var retteEl = $mt('nl-ad-sum-rette');
   var feilEl = $mt('nl-ad-sum-feil');
+  var xpEl   = $mt('nl-ad-sum-xp');
   if (poengEl) poengEl.textContent = MTS.score + '/' + MTS.maxScore;
   if (retteEl) retteEl.textContent = String(rett);
   if (feilEl) feilEl.textContent = String(feil);
+  if (xpEl)   xpEl.textContent = '+' + MTS.sessionXP;
 
   /* Kommentar */
   var commentEl = $mt('nl-ad-sum-comment');
@@ -4121,7 +4194,7 @@ function mtBindMcKeys() {
     '.mt-fb-forklaring { margin-top:.45rem; padding:.45rem .65rem; background:rgba(0,0,0,.03); border-radius:6px; font-size:.84rem; line-height:1.55; font-style:italic; }',
     '.mt-fb-rule { margin-top:.35rem; padding:0; border:none; background:transparent; font-size:.84rem; line-height:1.55; color:inherit; }',
     '.mt-fb-rule strong { color:inherit; opacity:.85; }',
-    '.mt-fb-eks { margin-top:.2rem; padding:0; border:none; background:transparent; font-size:.83rem; line-height:1.55; font-family:"JetBrains Mono",monospace; color:inherit; }',
+    '.mt-fb-eks { margin-top:.2rem; padding:0; border:none; background:transparent; font-size:.83rem; line-height:1.55; font-family:inherit; color:inherit; }',
     '.mt-fb-eks strong { font-family:inherit; color:inherit; opacity:.85; }',
     '.mt-fb-correction { margin-top:.45rem; padding:.45rem .6rem; border-radius:6px; background:rgba(255,255,255,.35); border:1px solid rgba(140,115,66,.22); }',
     '.mt-fb-corr-row { margin-top:.24rem; font-size:.83rem; line-height:1.55; }',
@@ -4213,9 +4286,10 @@ function mtInit() {
   var catsWrap = $mt('nl-ad-cats');
   if (catsWrap && !catsWrap.querySelector('.adp-cat') && MT_BANK.length) {
     var catGroups = [
-      { title: 'Rettskriving', cats: ['og_aa','samansett','dobbel_konsonant','kj_skj'] },
-      { title: 'Grammatikk',   cats: ['ordklassar','setningsbygging','bindeord','teiknsetting'] },
-      { title: 'Tekst og skriving', cats: ['tekststruktur','kjeldebruk','oppgavetolking','spraak_stil','aarsak_samanheng'] }
+      { title: 'Rettskriving', cats: ['og_aa','samansett','dobbel_konsonant','kj_skj','teiknsetting'] },
+      { title: 'Grammatikk',   cats: ['ordklassar','setningsbygging','bindeord'] },
+      { title: 'Tekst og skriving', cats: ['tekststruktur','kjeldebruk','oppgavetolking','spraak_stil','aarsak_samanheng','referansekjede','logisk_struktur'] },
+      { title: 'Sjanger og formål', cats: ['sjangerkompetanse','fagartikkel','debattinnlegg','overskrift_ingress','novelle','parafrase','sitat','tal_og_statistikk'] }
     ];
     var labelMap = {};
     MT_BANK.forEach(function (t) {

@@ -31,7 +31,7 @@
   <h1>Nynorsklab</h1>
   <p>Adaptiv øving i nynorsk grammatikk med emneval, vanskegrad og automatisk progresjon.</p>
   <div class="hero-stats">
-    <div><div class="stat-n">9</div><div class="stat-l">Kategoriar</div></div>
+    <div><div class="stat-n">8</div><div class="stat-l">Kategoriar</div></div>
     <div><div class="stat-n">100+</div><div class="stat-l">Oppgåver</div></div>
     <div><div class="stat-n">Adaptiv</div><div class="stat-l">Løype</div></div>
   </div>
@@ -40,7 +40,7 @@
 <section id="grammatikk">
   <div class="gram-inner">
     <h2 class="gram-heading">Nynorsklab<br><em style="font-style:italic;opacity:0.6">— adaptiv øving</em></h2>
-    <p class="gram-sub">Vel emne, tal på oppgåver og vanskegrad. Systemet tilpassar seg svara dine undervegs.</p>
+    <p class="gram-sub">Vel kategoriar, tal på oppgåver og vanskegrad. Systemet tilpassar seg svara dine undervegs.</p>
 
     <!-- ── Gamification cockpit ── -->
     <div class="adp-gamify adp-gamify-cockpit" id="nn-gamify" aria-live="polite">
@@ -93,24 +93,20 @@
     </div>
 
     <div class="gram-config">
-      <label>Emne
-        <select id="gc-emne">
-          <option value="blanda">Blanda (alle emne)</option>
-          <option value="substantiv">Substantiv – kjønn og bøying</option>
-          <option value="verb">Verb – presens og preteritum</option>
-          <option value="pronomen">Pronomen</option>
-          <option value="adjektiv">Adjektiv – samsvarsbøying</option>
-          <option value="ordstilling">Ordstilling (V2-regelen)</option>
-          <option value="eigedomsord">Eigedomsord (min/mi/mitt)</option>
-          <option value="spørjeord">Spørjeord</option>
-          <option value="typiske_ord">Typiske ord (nynorsk vs. bokmål)</option>
-        </select>
-      </label>
+      <div class="adp-field adp-field-wide">
+        <label>Kategoriar – vel kva du vil øve på</label>
+        <div class="adp-cats" id="nn-cats"></div>
+        <div class="adp-cat-tools">
+          <button type="button" class="adp-btn adp-cat-tool" id="nn-cats-clear">Tøm</button>
+          <button type="button" class="adp-btn adp-cat-tool" id="nn-cats-all">Vel alle</button>
+        </div>
+      </div>
       <label>Oppgåvetypar
         <select id="gc-type">
           <option value="blanda">Blanda</option>
           <option value="multiple_choice">Fleirval</option>
           <option value="cloze">Fyll inn</option>
+          <option value="drag_ord">Ordstilling (dra ord)</option>
         </select>
       </label>
       <label>Antal oppgåver

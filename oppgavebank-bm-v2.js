@@ -1179,14 +1179,13 @@ var MT_BANK = [
 {kat:'logisk_struktur',kat_label:'Logisk struktur',type:'sorter_rekke',vanske:'medium',
  q:'Sett avsnittene i logisk rekkefølge for en fagartikkel om plast i havet.',
  items:[
-  {id:'A',tekst:'Det finnes flere løsninger: bedre avfallssortering, internasjonale avtaler og forbrukermakt.'},
   {id:'B',tekst:'Hvert år havner millioner tonn plast i havet, og problemet vokser raskt.'},
+  {id:'D',tekst:'Plasten kommer fra fiskeri, skipstrafikk og forsøpling fra land.'},
   {id:'C',tekst:'Konsekvensene er alvorlige: dyr dør, giftstoffer spres og strender ødelegges.'},
-  {id:'D',tekst:'Plasten kommer fra fiskeri, skipstrafikk og forsøpling fra land.'}
+  {id:'A',tekst:'Det finnes flere løsninger: bedre avfallssortering, internasjonale avtaler og forbrukermakt.'}
  ],
- fasit:['B','D','C','A'],
  regel:'Logisk oppbygging: Problem → Årsaker → Konsekvenser → Løsninger.',
- eks:'B (problem) → D (årsaker) → C (konsekvenser) → A (løsninger)'},
+ eks:'Problem → Årsaker → Konsekvenser → Løsninger'},
 
 {kat:'logisk_struktur',kat_label:'Logisk struktur',type:'drag_kolonne',vanske:'medium',
  q:'Sorter setningene etter hvilken del av teksten de hører til.',
@@ -1446,14 +1445,13 @@ var MT_BANK = [
 {kat:'debattinnlegg',kat_label:'Debattinnlegg',type:'sorter_rekke',vanske:'medium',
  q:'Sett avsnittene i logisk rekkefølge for et debattinnlegg.',
  items:[
-  {id:'A',tekst:'Noen vil hevde at mobilforbud krenker elevenes frihet, men skolens oppgave er å lære, ikke å underholde.'},
   {id:'B',tekst:'Skolen bør innføre mobilforbud. Forskning viser at mobilen distraherer elevene.'},
   {id:'C',tekst:'Forskningen er tydelig: mobilen ødelegger konsentrasjonen. En studie fra Universitetet i Bergen viser at elever uten mobil presterte 15 % bedre.'},
+  {id:'A',tekst:'Noen vil hevde at mobilforbud krenker elevenes frihet, men skolens oppgave er å lære, ikke å underholde.'},
   {id:'D',tekst:'Vi oppfordrer politikerne til å innføre et nasjonalt mobilforbud i skolen – for elevenes skyld.'}
  ],
- fasit:['B','C','A','D'],
  regel:'Debattinnlegg: Standpunkt → Argument → Motargument + tilbakevisning → Avsluttende oppfordring.',
- eks:'B (standpunkt) → C (hovedargument) → A (møte motargument) → D (oppfordring)'},
+ eks:'Standpunkt → Hovedargument → Møte motargument → Oppfordring'},
 
 {kat:'debattinnlegg',kat_label:'Debattinnlegg',type:'fix',vanske:'vanskeleg',
  q:'Gjør de usaklige formuleringene mer overbevisende med retoriske virkemidler.',
@@ -2956,7 +2954,7 @@ function mtRenderTask(t, isRetry) {
   var body = $mt('nl-ad-win-body');
   if (!body) return;
 
-  var vMap = { lett: 'Lett', medium: 'Medium', vanskelig: 'Vanskelig' };
+  var vMap = { lett: 'Lett', medium: 'Medium', vanskelig: 'Vanskelig', vanskeleg: 'Vanskelig' };
   var vLabel = vMap[t.vanske] || '';
 
   var retryBadge = isRetry
@@ -3302,6 +3300,43 @@ function mtCheckCloze() {
   mtFinish(correct, 1, correct ? 1 : 0, val, t, feedback);
 }
 
+/* ── fagord-liste for open/omskriv XP-bonus ── */
+var MT_FAGORD = [
+  'argumentere','drøfte','påstand','begrunne','konklusjon','konsekvens','årsak','virkning',
+  'perspektiv','hypotese','analyse','analysere','kilde','kildebruk','referere','parafrase',
+  'sitat','dokumentere','etterprøvbar','troverdig','troverdighet','reliabilitet','validitet',
+  'fagbegrep','relevant','sammenligne','kontrastere','vurdere','strategi','metode',
+  'innledning','hoveddel','avslutning','drøfting','argumentasjon','motargument',
+  'retorisk','ethos','pathos','logos','mottaker','formål','sjanger','teksttype',
+  'koherens','sammenheng','avsnitt','temasetning','disposisjon','struktur'
+];
+
+function mtDetectFagord(text) {
+  var lower = text.toLowerCase();
+  var found = [];
+  MT_FAGORD.forEach(function(w) {
+    if (lower.indexOf(w) !== -1 && found.indexOf(w) === -1) found.push(w);
+  });
+  return found;
+}
+
+function mtIsGibberish(text) {
+  var trimmed = text.trim();
+  if (trimmed.length < 8) return true;
+  var words = trimmed.split(/\s+/);
+  if (words.length < 2) return true;
+  if (!/[aeiouyæøå]/i.test(trimmed)) return true;
+  var freq = {};
+  for (var i = 0; i < trimmed.length; i++) {
+    var c = trimmed[i].toLowerCase();
+    freq[c] = (freq[c] || 0) + 1;
+  }
+  var maxFreq = 0;
+  for (var k in freq) { if (freq[k] > maxFreq) maxFreq = freq[k]; }
+  if (maxFreq / trimmed.length > 0.6) return true;
+  return false;
+}
+
 function mtCheckOpen() {
   if (MTS.answered) return;
   var el = $mt('mt-open-inp');
@@ -3311,8 +3346,25 @@ function mtCheckOpen() {
   MTS.answered = true;
   var t = MTS.current;
   el.disabled = true;
+
+  /* Gibberish-sjekk → 0 XP */
+  if (mtIsGibberish(val)) {
+    el.className = 'mt-text-input mt-textarea mt-inp-wrong';
+    mtFinish(false, 1, 0, val, t, 'Svaret ser ikke ut til å være et ordentlig forsøk. Prøv å skrive et skikkelig svar.', true);
+    return;
+  }
+
+  /* Fagord-bonus */
+  var fagord = mtDetectFagord(val);
+  var extra = null;
+  if (fagord.length >= 2) {
+    extra = 'Flott fagspråk! Du brukte: ' + fagord.join(', ');
+  } else if (fagord.length === 1) {
+    extra = 'Bra, du brukte fagbegrepet «' + fagord[0] + '».';
+  }
+
   el.className = 'mt-text-input mt-textarea mt-inp-neutral';
-  mtFinish(true, 1, 1, val, t, null, true);
+  mtFinish(true, 1, 1, val, t, extra, true);
 }
 
 function mtCheckFix() {
@@ -3627,6 +3679,15 @@ function mtCheckOmskriv() {
   el.className = 'mt-text-input mt-textarea ' + (ok ? 'mt-inp-correct' : 'mt-inp-wrong');
   var extra = null;
   if (!ok && missing.length) extra = 'Husk \u00e5 bruke: ' + missing.join(', ');
+
+  /* Fagord-bonus for omskriv */
+  var fagord = mtDetectFagord(val);
+  if (ok && fagord.length >= 2) {
+    extra = 'Flott fagspråk! Du brukte: ' + fagord.join(', ');
+  } else if (ok && fagord.length === 1) {
+    extra = (extra ? extra + ' ' : '') + 'Bra, du brukte fagbegrepet «' + fagord[0] + '».';
+  }
+
   mtFinish(ok, 1, ok ? 1 : 0, val, t, extra);
 }
 
@@ -3718,6 +3779,14 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType) {
 
   /* XP */
   var earnedXP = mtXpCalc(correct, pts, maxPts, t.vanske, MTS.streak, !!t._isRetry);
+
+  /* Fagord-bonus for open / omskriv-svar */
+  if (correct && typeof chosen === 'string' && (t.type === 'open' || t.type === 'omskriv')) {
+    var fagordHit = mtDetectFagord(chosen);
+    var fagBonus = Math.min(fagordHit.length * 3, 12);
+    earnedXP += fagBonus;
+  }
+
   MTS.sessionXP += earnedXP;
 
   if (correct && earnedXP > 0) {
@@ -3857,9 +3926,11 @@ function mtShowSummary() {
   var poengEl = $mt('nl-ad-sum-poeng');
   var retteEl = $mt('nl-ad-sum-rette');
   var feilEl = $mt('nl-ad-sum-feil');
+  var xpEl   = $mt('nl-ad-sum-xp');
   if (poengEl) poengEl.textContent = MTS.score + '/' + MTS.maxScore;
   if (retteEl) retteEl.textContent = String(rett);
   if (feilEl) feilEl.textContent = String(feil);
+  if (xpEl)   xpEl.textContent = '+' + MTS.sessionXP;
 
   var commentEl = $mt('nl-ad-sum-comment');
   if (commentEl) {
@@ -4207,7 +4278,7 @@ function mtBindMcKeys() {
     '.mt-fb-forklaring { margin-top:.45rem; padding:.45rem .65rem; background:rgba(0,0,0,.03); border-radius:6px; font-size:.84rem; line-height:1.55; font-style:italic; }',
     '.mt-fb-rule { margin-top:.35rem; padding:0; border:none; background:transparent; font-size:.84rem; line-height:1.55; color:inherit; }',
     '.mt-fb-rule strong { color:inherit; opacity:.85; }',
-    '.mt-fb-eks { margin-top:.2rem; padding:0; border:none; background:transparent; font-size:.83rem; line-height:1.55; font-family:"JetBrains Mono",monospace; color:inherit; }',
+    '.mt-fb-eks { margin-top:.2rem; padding:0; border:none; background:transparent; font-size:.83rem; line-height:1.55; font-family:inherit; color:inherit; }',
     '.mt-fb-eks strong { font-family:inherit; color:inherit; opacity:.85; }',
     '.mt-fb-correction { margin-top:.45rem; padding:.45rem .6rem; border-radius:6px; background:rgba(255,255,255,.35); border:1px solid rgba(140,115,66,.22); }',
     '.mt-fb-corr-row { margin-top:.24rem; font-size:.83rem; line-height:1.55; }',
@@ -4290,6 +4361,45 @@ function mtInit() {
   // Fjern eventuell legacy feedback-node dersom den finst i eldre markup.
   var legacyFeedback = $mt('nl-ad-feedback');
   if (legacyFeedback && legacyFeedback.parentNode) legacyFeedback.parentNode.removeChild(legacyFeedback);
+
+  /* Bygg kategoriknappar frå MT_BANK dersom #nl-ad-cats er tomt */
+  var catsWrap = $mt('nl-ad-cats');
+  if (catsWrap && !catsWrap.querySelector('.adp-cat') && MT_BANK.length) {
+    var catGroups = [
+      { title: 'Rettskriving', cats: ['og_aa','sammensatt','dobbel_konsonant','kj_skj','tegnsetting'] },
+      { title: 'Grammatikk',   cats: ['ordklasser','setningsbygging','bindeord'] },
+      { title: 'Tekst og skriving', cats: ['tekststruktur','kildebruk','oppgavetolking','spraak_stil','aarsak_sammenheng','referansekjede','logisk_struktur','ordval','bruke_eksempel','tilpass_til_lesaren'] },
+      { title: 'Sjanger og formål', cats: ['sjangerkompetanse','fagartikkel','debattinnlegg','overskrift_ingress','novelle','parafrase','sitat','tal_og_statistikk'] }
+    ];
+    var labelMap = {};
+    MT_BANK.forEach(function (t) {
+      if (t && t.kat && t.kat_label && !labelMap[t.kat]) labelMap[t.kat] = t.kat_label;
+    });
+    catGroups.forEach(function (grp) {
+      var groupBox = document.createElement('div');
+      groupBox.className = 'adp-cat-group';
+      var heading = document.createElement('h4');
+      heading.className = 'adp-cat-group-title';
+      heading.textContent = grp.title;
+      groupBox.appendChild(heading);
+      var list = document.createElement('div');
+      list.className = 'adp-cat-group-list';
+      grp.cats.forEach(function (catId) {
+        if (!labelMap[catId]) return;
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'adp-cat on';
+        b.dataset.cat = catId;
+        b.textContent = labelMap[catId];
+        b.addEventListener('click', function () { b.classList.toggle('on'); });
+        list.appendChild(b);
+      });
+      if (list.children.length) {
+        groupBox.appendChild(list);
+        catsWrap.appendChild(groupBox);
+      }
+    });
+  }
 
   var startBtn = $mt('nl-ad-start');
   var resetBtn = $mt('nl-ad-reset');
