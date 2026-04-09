@@ -560,7 +560,21 @@ function nlMtResolveCard(kat) {
     oppgavetolking: 'oppgaveforstaing',
     spraak_stil: 'spraak-stil',
     kj_skj: 'kj-skj',
-    aarsak_sammenheng: 'aarsak-sammenheng'
+    aarsak_sammenheng: 'aarsak-sammenheng',
+    referansekjede: 'referansekjede',
+    logisk_struktur: 'logisk-struktur',
+    sjangerkompetanse: 'sjangerkompetanse',
+    fagartikkel: 'fagartikkel',
+    debattinnlegg: 'debattinnlegg',
+    overskrift_ingress: 'overskrift-ingress',
+    novelle: 'novelle',
+    parafrase: 'parafrase',
+    sitat: 'sitat',
+    tal_og_statistikk: 'tal-og-statistikk',
+    ordval: 'ordval',
+    bruke_eksempel: 'bruke-eksempel',
+    tilpass_til_lesaren: 'tilpass-til-lesaren',
+    tilpass_til_lesaran: 'tilpass-til-lesaren'
   };
   return map[kat] || '';
 }
