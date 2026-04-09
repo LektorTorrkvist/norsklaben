@@ -598,6 +598,18 @@ function nlMtResolveCard(kat) {
 }
 
 function nlMtBuildExercise(task, i, localIx) {
+  var html = nlMtBuildExerciseCore(task, i, localIx);
+  if (!html) return '';
+  // Inject data-attrs so the adaptive engine can read regel/eks/fasit reliably
+  var attrs = '';
+  if (task && task.regel) attrs += ' data-regel="' + nlMtEscHtml(task.regel) + '"';
+  if (task && task.eks) attrs += ' data-eks="' + nlMtEscHtml(task.eks) + '"';
+  var ft = nlMtFasitText(task && task.fasit);
+  if (ft) attrs += ' data-fasit-text="' + nlMtEscHtml(ft) + '"';
+  return attrs ? html.replace('<article class="ei">', '<article class="ei"' + attrs + '>') : html;
+}
+
+function nlMtBuildExerciseCore(task, i, localIx) {
   var type = String(task && task.type || '').toLowerCase();
   var promptRaw = nlMtPickPrompt(task);
   var titleText = nlMtCleanPromptForTitle(promptRaw);
@@ -3835,11 +3847,13 @@ function nlAdLockExercise(ei) {
 
 function nlAdRuleFromExercise(ei) {
   if (!ei) return '';
-  // MT_BANK tasks store rules/examples in .fasit-box .fr elements
+  // Prefer data-attr (injected by nlMtBuildExercise wrapper)
+  if (ei.dataset && ei.dataset.regel) return ei.dataset.regel;
+  // Fallback: search DOM
   var frEls = ei.querySelectorAll('.fasit-box .fr');
   for (var i = 0; i < frEls.length; i++) {
     var txt = (frEls[i].textContent || '').trim();
-    if (/^regel:/i.test(txt)) return txt;
+    if (/^regel:/i.test(txt)) return txt.replace(/^regel:\s*/i, '');
   }
 
   var note = ei.querySelector('.fasit-box .note');
@@ -3848,19 +3862,31 @@ function nlAdRuleFromExercise(ei) {
   var paragraphs = ei.querySelectorAll('.fasit-box .fb p');
   for (var i = 0; i < paragraphs.length; i++) {
     var txt = (paragraphs[i].textContent || '').trim();
-    if (txt.toLowerCase().indexOf('regel:') === 0) return txt;
+    if (txt.toLowerCase().indexOf('regel:') === 0) return txt.replace(/^regel:\s*/i, '');
   }
   return '';
 }
 
 function nlAdEksFromExercise(ei) {
   if (!ei) return '';
+  // Prefer data-attr
+  if (ei.dataset && ei.dataset.eks) return ei.dataset.eks;
+  // Fallback: search DOM
   var frEls = ei.querySelectorAll('.fasit-box .fr');
   for (var i = 0; i < frEls.length; i++) {
     var txt = (frEls[i].textContent || '').trim();
     if (/^eksempel:/i.test(txt)) return txt.replace(/^eksempel:\s*/i, '');
   }
   return '';
+}
+
+function nlAdFasitFromExercise(ei) {
+  if (!ei) return '';
+  // Prefer data-attr
+  if (ei.dataset && ei.dataset.fasitText) return ei.dataset.fasitText;
+  // Fallback: search DOM
+  var ans = ei.querySelector('.fasit-box .fb-ans');
+  return ans ? ans.textContent.trim() : '';
 }
 
 function nlAdTitleFromExercise(ei) {
@@ -3885,7 +3911,7 @@ function nlAdSpawnXpFloat(anchor, points, isStreak) {
   anchor.style.position = 'relative';
   anchor.appendChild(el);
   el.addEventListener('animationend', function() { el.remove(); });
-  setTimeout(function() { if (el.parentNode) el.remove(); }, 1200);
+  setTimeout(function() { if (el.parentNode) el.remove(); }, 2500);
 }
 
 function nlAdPulseScore() {
@@ -3928,7 +3954,7 @@ function nlAdSpawnSparks(anchor, count) {
     anchor.appendChild(spark);
     (function(s) {
       s.addEventListener('animationend', function() { s.remove(); });
-      setTimeout(function() { if (s.parentNode) s.remove(); }, 1000);
+      setTimeout(function() { if (s.parentNode) s.remove(); }, 1800);
     })(spark);
   }
 }
@@ -4264,7 +4290,7 @@ function nlAdShowSummary() {
   summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function nlAdSetFeedback(text, isCorrect, ruleText, eksText) {
+function nlAdSetFeedback(text, isCorrect, ruleText, eksText, fasitText) {
   var box = document.getElementById('nl-ad-feedback');
   if (!box) return;
 
@@ -4284,13 +4310,25 @@ function nlAdSetFeedback(text, isCorrect, ruleText, eksText) {
   var html = '<div class="fb-heading">' + icon + heading + '</div>';
   if (pedagogy) html += '<div class="fb-pedagogy">' + pedagogy + '</div>';
   if (text) html += '<div class="fb-msg">' + text + '</div>';
-  if (ruleText && isCorrect !== true) {
-    var clean = ruleText.replace(/^regel:\s*/i, '');
-    html += '<div class="adp-fb-rule"><strong>&#128218; Regel</strong>' + clean + '</div>';
+
+  // Show fasit (correct answer) on wrong answers so students can compare
+  if (fasitText && isCorrect === false) {
+    html += '<div class="adp-fb-fasit"><strong>&#9989; Fasit:</strong> ' + fasitText + '</div>';
   }
-  if (eksText && isCorrect !== true) {
+
+  // Always show regel when available — reinforces learning on both correct and wrong
+  if (ruleText) {
+    var clean = ruleText.replace(/^regel:\s*/i, '');
+    if (clean) {
+      html += '<div class="adp-fb-rule"><strong>&#128218; Regel:</strong> ' + clean + '</div>';
+    }
+  }
+  // Always show eksempel when available
+  if (eksText) {
     var cleanEks = eksText.replace(/^eks(?:empel)?:\s*/i, '');
-    html += '<div class="adp-fb-eks"><strong>&#128221; Døme:</strong> ' + cleanEks + '</div>';
+    if (cleanEks) {
+      html += '<div class="adp-fb-eks"><strong>&#128221; Døme:</strong> ' + cleanEks + '</div>';
+    }
   }
 
   box.innerHTML = html;
@@ -4309,35 +4347,46 @@ function nlAdPedagogicalMsg(scoreText, isCorrect, ruleText) {
   var ratio = total > 0 ? got / total : -1;
 
   if (isCorrect === true) {
-    // Correct answer — pick encouraging message
-    var correctMsgs = [
+    if (total > 1 && ratio === 1) {
+      return hasRule
+        ? 'Alle rett — utmerkt! Sjå regelen under for å feste kunnskapen.'
+        : 'Alle rett — utmerkt! Du har full kontroll.';
+    }
+    var correctMsgs = hasRule ? [
+      'Flott jobba! Sjå regelen under — det styrker forståinga.',
+      'Heilt rett! Regelen under forklarer kvifor.',
+      'Knallbra! Les regelen for å hugse mønsteret.',
+      'Imponerande! Regelen stadfestar det du gjorde rett.',
+      'Topp! Sjå dømet under for å sjå mønsteret tydelegare.'
+    ] : [
       'Flott jobba! Du viser god forståing.',
       'Heilt rett! Du har god kontroll på dette.',
       'Knallbra! Hald fram slik.',
       'Imponerande! Du meistrar dette godt.',
       'Topp! Du er godt på veg.'
     ];
-    if (total > 1 && ratio === 1) {
-      return 'Alle rett — utmerkt! Du har full kontroll.';
-    }
     return correctMsgs[Math.floor(Math.random() * correctMsgs.length)];
   }
 
-  // Wrong/partial answer
+  // Wrong/partial answer — always give concrete guidance
   if (ratio >= 0) {
     if (ratio >= 0.7) {
-      return 'Nesten! Du har forstått det meste — sjå nøye på kva som manglar.';
+      return hasRule
+        ? 'Nesten! Sjå fasiten og regelen under — berre ein liten detalj som manglar.'
+        : 'Nesten! Sjå fasiten under og samanlikn med svaret ditt.';
     } else if (ratio >= 0.4) {
       return hasRule
-        ? 'Du er på rett veg! Les regelen under for å forstå kvifor.'
-        : 'Du er på rett veg! Samanlikn svaret ditt med fasiten for å forstå kvifor.';
+        ? 'Du er på rett veg! Studer fasiten og regelen under for å forstå kvifor.'
+        : 'Du er på rett veg! Sjå fasiten under og prøv å forstå mønsteret.';
     } else {
       return hasRule
-        ? 'Ikkje gje opp — studer regelen under og prøv liknande oppgåver.'
-        : 'Ikkje gje opp — samanlikn svaret ditt med fasiten og prøv på nytt.';
+        ? 'Ikkje gje opp! Fasiten og regelen under viser deg vegen vidare.'
+        : 'Ikkje gje opp! Sjå fasiten under nøye og prøv liknande oppgåver.';
     }
   }
-  return 'Sjå tilbakemeldinga — det hjelper til neste gong!';
+  return hasRule
+    ? 'Sjå fasiten og regelen under — det hjelper til neste gong!'
+    : 'Sjå tilbakemeldinga under — det hjelper til neste gong!';
 }
 
 function nlAdSyncActionButtons() {
@@ -4371,9 +4420,10 @@ function nlAdTriggerCheck() {
   var checkBtn = current.querySelector('.btn-check');
   var rule = nlAdRuleFromExercise(current);
   var eks = nlAdEksFromExercise(current);
+  var fasitText = nlAdFasitFromExercise(current);
   if (!checkBtn) {
     nlAdState.checked.add(current);
-    nlAdSetFeedback('Svar registrert.', true, rule, eks);
+    nlAdSetFeedback('Svar registrert.', true, rule, eks, fasitText);
     nlAdStoreResult(current, 'Svar registrert.', true, rule);
     var noPts = nlAdExtractPoints('Svar registrert.', true);
     nlAdPlayCorrectEffects(current, noPts.earned);
@@ -4416,7 +4466,7 @@ function nlAdTriggerCheck() {
     nlAdPlayWrongEffects();
   }
   nlAdLockExercise(current);
-  nlAdSetFeedback(msg, correct, rule, eks);
+  nlAdSetFeedback(msg, correct, rule, eks, fasitText);
   nlAdAutoRevealFasit(current);
   current.classList.add('nl-ad-done');
   nlAdSyncActionButtons();
