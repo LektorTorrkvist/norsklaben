@@ -2822,6 +2822,12 @@ function mtBindMcKeys() {
 ══════════════════════════════════════════════════════ */
 
 function mtInit() {
+  // Remove legacy adaptive chrome so only oppgavebank UI is shown in the modal.
+  var legacyRun = $mt('nl-ad-run');
+  if (legacyRun && legacyRun.parentNode) legacyRun.parentNode.removeChild(legacyRun);
+  var legacyFeedback = $mt('nl-ad-feedback');
+  if (legacyFeedback && legacyFeedback.parentNode) legacyFeedback.parentNode.removeChild(legacyFeedback);
+
   var startBtn = $mt('nl-ad-start');
   var resetBtn = $mt('nl-ad-reset');
   var checkBtn = $mt('nl-ad-check');

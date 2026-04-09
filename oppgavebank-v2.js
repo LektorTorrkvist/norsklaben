@@ -2589,18 +2589,6 @@ function mtShowSummary() {
     }
   }
 
-    /* Feiltype-oppsummering */
-    var feilKeys = Object.keys(MTS.feilLog);
-    if (feilKeys.length && rettingEl) {
-      var fhtml = '<h5 style="margin-top:.7rem">Typiske feil</h5>';
-      feilKeys.sort(function (a, b) { return MTS.feilLog[b] - MTS.feilLog[a]; });
-      feilKeys.forEach(function (ft) {
-        fhtml += '<div class="adp-summary-row"><strong>' + mtEsc(ft) + '</strong><span>' + MTS.feilLog[ft] + ' gonger</span></div>';
-      });
-      rettingEl.innerHTML += fhtml;
-    }
-  }
-
   /* ═══ GAMIFICATION-PANEL ═══ */
   var sumEl = $mt('nl-ad-summary');
   if (sumEl) {
@@ -2992,6 +2980,12 @@ function mtBindMcKeys() {
 ══════════════════════════════════════════════════════ */
 
 function mtInit() {
+  // Remove legacy adaptive chrome so only oppgavebank UI is shown in the modal.
+  var legacyRun = $mt('nl-ad-run');
+  if (legacyRun && legacyRun.parentNode) legacyRun.parentNode.removeChild(legacyRun);
+  var legacyFeedback = $mt('nl-ad-feedback');
+  if (legacyFeedback && legacyFeedback.parentNode) legacyFeedback.parentNode.removeChild(legacyFeedback);
+
   /* Bygg kategoriknappar frå MT_BANK dersom #nl-ad-cats er tomt */
   var catsWrap = $mt('nl-ad-cats');
   if (catsWrap && !catsWrap.querySelector('.adp-cat') && MT_BANK.length) {
