@@ -1059,7 +1059,22 @@ function nlMtValidateTaskForImport(task) {
   var type = String(task && task.type || '').toLowerCase();
   var prompt = nlMtPickPrompt(task);
   var hasPrompt = !!String(prompt || '').trim();
-  var hasGuide = nlMtHasFasitValue(task && task.regel) || nlMtHasFasitValue(task && task.hint) || nlMtHasFasitValue(task && task.eks);
+  var hasExplanation = nlMtHasFasitValue(task && task.forklaring) || nlMtHasFasitValue(task && task.regel);
+  var hasExample = nlMtHasFasitValue(task && task.eks);
+
+  function nlNormOpt(v) {
+    return String(v == null ? '' : v).trim().toLowerCase();
+  }
+
+  function nlCountUnclearDistractors(options, answerIx) {
+    var unclearRx = /(vet\s*ikkje|vet\s*ikke|usikker|kanskje|kjem\s*an\s*på|kommer\s*an\s*på|ingen\s*av\s*(desse|disse)|alle\s*over|alt\s*over|både\s*a\s*og\s*b|kan\s*variere)/i;
+    var n = 0;
+    options.forEach(function(opt, ix) {
+      if (ix === answerIx) return;
+      if (unclearRx.test(String(opt || ''))) n++;
+    });
+    return n;
+  }
   var supported = {
     mc: 1,
     cloze: 1,
@@ -1082,12 +1097,18 @@ function nlMtValidateTaskForImport(task) {
 
   if (!supported[type]) return { ok: false, reason: 'unsupported-type' };
   if (!hasPrompt) return { ok: false, reason: 'missing-prompt' };
-  if (!hasGuide) return { ok: false, reason: 'missing-guide' };
+  if (!hasExplanation) return { ok: false, reason: 'missing-fasitforklaring' };
+  if (!hasExample) return { ok: false, reason: 'missing-example' };
 
   if (type === 'mc') {
     var alts = Array.isArray(task && task.alt) ? task.alt : [];
     if (alts.length < 2) return { ok: false, reason: 'mc-too-few-options' };
-    if (nlMtResolveMcAnswerIndex(task, alts) < 0) return { ok: false, reason: 'mc-no-valid-answer' };
+    var answerIx = nlMtResolveMcAnswerIndex(task, alts);
+    if (answerIx < 0) return { ok: false, reason: 'mc-no-valid-answer' };
+    var mcNorm = alts.map(nlNormOpt).filter(function(v) { return !!v; });
+    if (mcNorm.length !== alts.length) return { ok: false, reason: 'mc-empty-option' };
+    if (new Set(mcNorm).size !== mcNorm.length) return { ok: false, reason: 'mc-duplicate-options' };
+    if (nlCountUnclearDistractors(alts, answerIx) > 1) return { ok: false, reason: 'mc-too-many-unclear-distractors' };
     return { ok: true };
   }
 
@@ -1102,7 +1123,14 @@ function nlMtValidateTaskForImport(task) {
     var fillOk = fillItems.every(function(s) {
       var opts = Array.isArray(s && s.alt) ? s.alt : (Array.isArray(s && s.options) ? s.options : []);
       var ans = s && (s.fasit != null ? s.fasit : s.answer);
-      return opts.length >= 2 && ans != null && String(ans).trim();
+      if (!(opts.length >= 2 && ans != null && String(ans).trim())) return false;
+      var norm = opts.map(nlNormOpt).filter(function(v) { return !!v; });
+      if (norm.length !== opts.length) return false;
+      if (new Set(norm).size !== norm.length) return false;
+      var ansIx = norm.indexOf(nlNormOpt(ans));
+      if (ansIx < 0) return false;
+      if (nlCountUnclearDistractors(opts, ansIx) > 1) return false;
+      return true;
     });
     return fillOk ? { ok: true } : { ok: false, reason: 'fillsel-invalid-item' };
   }
@@ -1111,7 +1139,14 @@ function nlMtValidateTaskForImport(task) {
     var qs = Array.isArray(task && task.questions) ? task.questions : [];
     if (qs.length < 2) return { ok: false, reason: 'mcset-too-few-questions' };
     var qsOk = qs.every(function(q) {
-      return Array.isArray(q && q.alt) && q.alt.length >= 2 && q && q.fasit != null;
+      if (!(Array.isArray(q && q.alt) && q.alt.length >= 2 && q && q.fasit != null)) return false;
+      var qNorm = q.alt.map(nlNormOpt).filter(function(v) { return !!v; });
+      if (qNorm.length !== q.alt.length) return false;
+      if (new Set(qNorm).size !== qNorm.length) return false;
+      var qAnswerIx = nlMtResolveMcAnswerIndex(q, q.alt);
+      if (qAnswerIx < 0) return false;
+      if (nlCountUnclearDistractors(q.alt, qAnswerIx) > 1) return false;
+      return true;
     });
     return qsOk ? { ok: true } : { ok: false, reason: 'mcset-invalid-question' };
   }
