@@ -57,7 +57,7 @@ function mtTaskLooksLegacy(task) {
 }
 
 /* ─── DATA ───────────────────────────────────────── */
-var MT_BANK = [
+var BANKV2 = [
 
 /* ═══════════════════════════════════════════════════
    1. OG / Å  (10 oppgåver)
@@ -1915,8 +1915,8 @@ var MT_BANK = [
  regel:'Prosentpoeng for differanse. Vage påstandar utan kjelde svekkjer teksten. Alltid konkret + kjelde.',
  eks:'75 % → 60 % = 15 prosentpoeng. «Skulane opplyser» → treng kjelde.'}
 
-]; // end MT_BANK
-if (typeof window !== 'undefined') window.MT_BANK = MT_BANK;
+]; // end BANKV2
+if (typeof window !== 'undefined') window.BANKV2 = BANKV2;
 
 /* ─── STATE ──────────────────────────────────────── */
 var MTS = {
@@ -2156,12 +2156,12 @@ function mtStartFeillogg() {
   /* Finn unike oppgåve-IDar frå feilloggen */
   var ids = {};
   logg.forEach(function (e) { if (e.id) ids[e.id] = true; });
-  var pool = MT_BANK.filter(function (t) { return t.id && ids[t.id]; });
+  var pool = BANKV2.filter(function (t) { return t.id && ids[t.id]; });
   /* Fallback: match på kategori + vanske */
   if (!pool.length) {
     var katSet = {};
     logg.forEach(function (e) { katSet[e.kat] = true; });
-    pool = MT_BANK.filter(function (t) { return katSet[t.kat]; });
+    pool = BANKV2.filter(function (t) { return katSet[t.kat]; });
   }
   if (!pool.length) { alert('Fann ikkje oppgåver som matchlar feilloggen din.'); return; }
   pool = mtShuffle(pool);
@@ -2251,7 +2251,7 @@ function mtBadgesCheck(sessionData) {
   /* Retry-wins frå alle historikk-sessionar */
   if (data.retryWins) retryWins = data.retryWins;
   var allBankCats = {};
-  MT_BANK.forEach(function (t) { allBankCats[t.kat] = true; });
+  BANKV2.forEach(function (t) { allBankCats[t.kat] = true; });
   var allCats = Object.keys(allBankCats).length > 0 && Object.keys(allBankCats).every(function (k) { return seenCats[k]; });
 
   var str = mtStreakGet();
@@ -2403,7 +2403,7 @@ function mtStart() {
   if (!Number.isFinite(count) || count < 3) count = 3;
   if (count > 25) count = 25;
 
-  var pool = MT_BANK.filter(function (t) { return valgte.indexOf(t.kat) !== -1; });
+  var pool = BANKV2.filter(function (t) { return valgte.indexOf(t.kat) !== -1; });
   if (level !== 'adaptiv') pool = pool.filter(function (t) { return t.vanske === level; });
   pool = mtShuffle(pool);
   if (!pool.length) { alert('Ingen oppgåver passar vala dine.'); return; }
@@ -2426,7 +2426,7 @@ function mtStart() {
 function mtStartManualQueue(taskIndexes, startIndex) {
   var idxs = Array.isArray(taskIndexes) ? taskIndexes : [];
   var tasks = idxs.map(function (idx) {
-    return MT_BANK[Number(idx)];
+    return BANKV2[Number(idx)];
   }).filter(function (task) {
     return !!task;
   });
@@ -4409,9 +4409,9 @@ function mtInit() {
   var legacyFeedback = $mt('nl-ad-feedback');
   if (legacyFeedback && legacyFeedback.parentNode) legacyFeedback.parentNode.removeChild(legacyFeedback);
 
-  /* Bygg kategoriknappar frå MT_BANK dersom #nl-ad-cats er tomt */
+  /* Bygg kategoriknappar frå BANKV2 dersom #nl-ad-cats er tomt */
   var catsWrap = $mt('nl-ad-cats');
-  if (catsWrap && !catsWrap.querySelector('.adp-cat') && MT_BANK.length) {
+  if (catsWrap && !catsWrap.querySelector('.adp-cat') && BANKV2.length) {
     var catGroups = (function () {
       var htmlToMt = {
         'og-aa': 'og_aa',
@@ -4467,7 +4467,7 @@ function mtInit() {
       ];
     })();
     var labelMap = {};
-    MT_BANK.forEach(function (t) {
+    BANKV2.forEach(function (t) {
       if (t && t.kat && t.kat_label && !labelMap[t.kat]) labelMap[t.kat] = t.kat_label;
     });
     catGroups.forEach(function (grp) {

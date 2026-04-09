@@ -1239,14 +1239,14 @@ function nlMtValidateTaskForImport(task) {
 function nlImportMTBankTasks() {
   if (document.body.dataset.nlMtImported === '1') return;
 
-  /* Always clear legacy inline tasks first: card dropdowns should be MT-bank driven only. */
+  /* Always clear legacy inline tasks first: card dropdowns should be BANKV2-driven only. */
   document.querySelectorAll('.exlist').forEach(function(el) { el.innerHTML = ''; });
   document.querySelectorAll('.exc').forEach(function(el) { el.textContent = '0 oppg.'; });
 
   var bank = null;
-  if (typeof MT_BANK !== 'undefined' && Array.isArray(MT_BANK)) bank = MT_BANK;
-  else if (typeof window !== 'undefined' && Array.isArray(window.MT_BANK)) bank = window.MT_BANK;
-  else if (typeof globalThis !== 'undefined' && Array.isArray(globalThis.MT_BANK)) bank = globalThis.MT_BANK;
+  if (typeof BANKV2 !== 'undefined' && Array.isArray(BANKV2)) bank = BANKV2;
+  else if (typeof window !== 'undefined' && Array.isArray(window.BANKV2)) bank = window.BANKV2;
+  else if (typeof globalThis !== 'undefined' && Array.isArray(globalThis.BANKV2)) bank = globalThis.BANKV2;
   if (!bank || !bank.length) return;
 
   var maxPerCategory = 30;
@@ -1311,7 +1311,7 @@ function nlImportMTBankTasks() {
   });
 
   if (imported > 0 && window.console && console.info) {
-    console.info('[Skrivelab] Importerte', imported, 'oppgåver frå MT_BANK.');
+    console.info('[Skrivelab] Importerte', imported, 'oppgåver frå BANKV2.');
   }
   if (skipped > 0 && window.console && console.info) {
     console.info('[Skrivelab] Hoppa over', skipped, 'oppgåver (kvalitetsfilter):', skippedReasons);
@@ -1319,7 +1319,7 @@ function nlImportMTBankTasks() {
 }
 
 function nlStripLegacyInlineTasks() {
-  /* Hard reset of all card content: MT_BANK is the only source of tasks. */
+  /* Hard reset of all card content: BANKV2 is the only source of tasks. */
   document.querySelectorAll('.main .exlist').forEach(function(exlist) {
     exlist.innerHTML = '';
   });
@@ -3164,10 +3164,10 @@ function nlRenderFrontInsights() {
   var strBox = document.getElementById('nl-front-strengths');
   var weakBox = document.getElementById('nl-front-weak');
   if (!wrap || !strBox || !weakBox) return;
-  if (typeof MT_BANK === 'undefined' || typeof mtLsCatStats !== 'function') return;
+  if (typeof BANKV2 === 'undefined' || typeof mtLsCatStats !== 'function') return;
 
   var labelMap = {};
-  MT_BANK.forEach(function(t) {
+  BANKV2.forEach(function(t) {
     if (t && t.kat && t.kat_label && !labelMap[t.kat]) labelMap[t.kat] = t.kat_label;
   });
 
