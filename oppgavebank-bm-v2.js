@@ -1531,6 +1531,7 @@ function mtResetSessionState(opts) {
   MTS.active = true;
   MTS.showRule = false;
   MTS.sessionXP = 0;
+  MTS.baseXP = mtXpGetTotal();
   MTS._uiCache = { score: 0, xp: 0, streak: 0 };
 }
 
@@ -1635,6 +1636,11 @@ function mtUpdateProgress() {
   var liveScore = $mt('mt-live-score');
   var liveXp = $mt('mt-live-xp');
   var liveStreak = $mt('mt-live-streak');
+  var masteryIcon = $mt('mt-live-mastery-icon');
+  var masteryName = $mt('mt-live-mastery-name');
+  var masteryTrophies = $mt('mt-live-mastery-trophies');
+  var masteryFill = $mt('mt-live-mastery-fill');
+  var masteryText = $mt('mt-live-mastery-text');
   var prev = MTS._uiCache || { score: 0, xp: 0, streak: 0 };
 
   if (liveP) liveP.textContent = 'Oppgave ' + Math.min(done + 1, total) + ' av ' + total;
@@ -1656,6 +1662,26 @@ function mtUpdateProgress() {
     }
     liveStreak.textContent = String(MTS.streak || 0);
   }
+
+  var totalXpNow = Math.max(0, Number(MTS.baseXP || 0) + Number(MTS.sessionXP || 0));
+  var lvl = mtXpLevel(totalXpNow);
+  var remain = lvl.next ? Math.max(0, lvl.next.xp - totalXpNow) : 0;
+  var unlocked = Object.keys(mtBadgesGet()).length;
+  var totalBadges = MT_BADGE_DEFS.length;
+  var progressPct = 100;
+  var progressText = 'Maks nivå';
+  if (lvl.next) {
+    var span = Math.max(1, lvl.next.xp - lvl.current.xp);
+    var earned = Math.max(0, totalXpNow - lvl.current.xp);
+    progressPct = Math.max(0, Math.min(100, Math.round((earned / span) * 100)));
+    progressText = earned + ' / ' + span + ' XP';
+  }
+
+  if (masteryIcon) masteryIcon.innerHTML = lvl.current.icon;
+  if (masteryName) masteryName.textContent = lvl.current.name;
+  if (masteryTrophies) masteryTrophies.textContent = unlocked + '/' + totalBadges + ' troféer';
+  if (masteryFill) masteryFill.style.width = progressPct + '%';
+  if (masteryText) masteryText.textContent = lvl.next ? ('Til neste nivå: ' + remain + ' XP') : progressText;
 
   MTS._uiCache = {
     score: MTS.score,
@@ -1741,6 +1767,77 @@ function mtFxLevelUpFlash() {
   fx.className = 'level-up-flash';
   document.body.appendChild(fx);
   setTimeout(function () { fx.remove(); }, 1900);
+}
+
+function mtFxModalConfetti() {
+  var host = document.querySelector('#nl-ad-win .adp-win-card') || document.body;
+  if (!host) return;
+  if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+
+  var rect = host.getBoundingClientRect();
+  var cx = rect.width / 2;
+  var cy = Math.min(120, rect.height * 0.2);
+  var colors = ['#f5c542', '#7b2fbe', '#1d6a45', '#1D6FD1', '#C0392B', '#f08b2d'];
+
+  for (var i = 0; i < 28; i++) {
+    var p = document.createElement('span');
+    p.className = 'xp-spark';
+    var angle = (Math.PI * 2 * Math.random()) - Math.PI;
+    var dist = 90 + Math.random() * 170;
+    p.style.setProperty('--sx', Math.cos(angle) * dist + 'px');
+    p.style.setProperty('--sy', Math.sin(angle) * dist + 120 + 'px');
+    p.style.background = colors[i % colors.length];
+    p.style.left = cx + 'px';
+    p.style.top = cy + 'px';
+    host.appendChild(p);
+    p.addEventListener('animationend', function (e) { e.currentTarget.remove(); });
+  }
+}
+
+function mtEscHighlight(text, tokens, className) {
+  var html = mtEsc(String(text || ''));
+  (tokens || []).forEach(function (tok) {
+    if (!tok) return;
+    var e = mtEsc(String(tok));
+    html = html.split(e).join('<span class="' + className + '">' + e + '</span>');
+  });
+  return html;
+}
+
+function mtBuildFixCorrectionHtml(task) {
+  var text = String(task.tekst || '');
+  var map = task.errors || {};
+  var wrongs = Object.keys(map);
+  if (!wrongs.length || !text) return '';
+
+  var corrected = text;
+  wrongs.forEach(function (wrong) {
+    corrected = corrected.split(wrong).join(map[wrong]);
+  });
+
+  var correctedTokens = wrongs.map(function (w) { return map[w]; });
+  return '<div class="mt-fb-correction">' +
+    '<div class="mt-fb-corr-row"><strong>Retting i teksten:</strong> ' + mtEscHighlight(text, wrongs, 'mt-mark-bad') + '</div>' +
+    '<div class="mt-fb-corr-row"><strong>Foreslått versjon:</strong> ' + mtEscHighlight(corrected, correctedTokens, 'mt-mark-ok') + '</div>' +
+    '</div>';
+}
+
+function mtBuildFillselCorrectionHtml(task, selects) {
+  var items = task.items || [];
+  if (!items.length) return '';
+
+  var rows = [];
+  for (var i = 0; i < items.length; i++) {
+    var item = items[i] || {};
+    var sel = selects[i];
+    var chosen = sel ? String(sel.value || '') : '';
+    var answer = String(item.fasit || '');
+    var ok = mtNorm(chosen) === mtNorm(answer);
+    var token = '<span class="' + (ok ? 'mt-mark-ok' : 'mt-mark-bad') + '">' + mtEsc(chosen || '∅') + '</span>';
+    var fasit = ok ? '' : ' <span class="mt-fb-fasit-inline">→ ' + mtEsc(answer) + '</span>';
+    rows.push('<div class="mt-fb-corr-row">' + mtEsc(item.pre || '') + ' ' + token + ' ' + mtEsc(item.post || '') + fasit + '</div>');
+  }
+  return '<div class="mt-fb-correction"><strong>Retting:</strong>' + rows.join('') + '</div>';
 }
 
 function mtUpdateHeaderProfile(totalXP, streakCurrent) {
@@ -1874,6 +1971,11 @@ function mtRenderTask(t, isRetry) {
           '</div>' +
         '</div>' +
         '<div class="mt-live-bar"><span id="mt-live-bar-fill"></span></div>' +
+        '<div class="mt-live-mastery">' +
+          '<div class="mt-live-mastery-head"><span id="mt-live-mastery-icon">&#127793;</span><strong id="mt-live-mastery-name">Ordlærling</strong><span id="mt-live-mastery-trophies">0/12 troféer</span></div>' +
+          '<div class="mt-live-mastery-bar"><span id="mt-live-mastery-fill"></span></div>' +
+          '<div class="mt-live-mastery-text" id="mt-live-mastery-text">Til neste nivå: 80 XP</div>' +
+        '</div>' +
       '</div>' +
       '<div class="mt-badges">' +
         '<span class="mt-badge mt-badge-cat">' + mtEsc(t.kat_label || t.kat) + '</span>' +
@@ -2213,6 +2315,11 @@ function mtCheckFix() {
   el.className = 'mt-text-input mt-textarea mt-mono ' + (correct ? 'mt-inp-correct' : (partial ? 'mt-inp-neutral' : 'mt-inp-wrong'));
   var feedback = correct ? null : mtSmartFeedback(val, t);
   mtFinish(correct, keys.length, hits, val, t, feedback);
+
+  if (!correct) {
+    var fb = $mt('mt-feedback');
+    if (fb) fb.innerHTML += mtBuildFixCorrectionHtml(t);
+  }
 }
 
 function mtCheckFillsel() {
@@ -2229,6 +2336,9 @@ function mtCheckFillsel() {
     sel.className = 'mt-fill-select ' + (ok ? 'mt-inp-correct' : 'mt-inp-wrong');
   });
   mtFinish(hits === total, total, hits, hits + ' av ' + total + ' riktige', t);
+
+  var fb = $mt('mt-feedback');
+  if (fb) fb.innerHTML += mtBuildFillselCorrectionHtml(t, Array.prototype.slice.call(sels));
 }
 
 function mtFfClick(el) {
@@ -2691,7 +2801,10 @@ function mtShowSummary() {
   /* Registrer daglig streak */
   var streak = mtStreakRegister();
   mtUpdateHeaderProfile(newTotalXP, streak.current);
-  if (leveledUp) mtFxLevelUpFlash();
+  if (leveledUp) {
+    mtFxLevelUpFlash();
+    mtFxModalConfetti();
+  }
 
   /* Lagre til localStorage */
   mtLsSaveSession();
@@ -2953,6 +3066,14 @@ function mtBindMcKeys() {
     '.mt-live-pill strong { color:var(--text,#1a1a18); font-weight:700; }',
     '.mt-live-bar { height:6px; border-radius:999px; background:#ebe6dc; overflow:hidden; }',
     '#mt-live-bar-fill { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--mid,#2E6B4F),var(--accent,#C8832A)); transition:width .35s ease; }',
+    '.mt-live-mastery { margin-top:.45rem; border:1px solid #e3d4b2; border-radius:8px; background:linear-gradient(145deg,#fff9ea,#fdf1d5); padding:.42rem .55rem; }',
+    '.mt-live-mastery-head { display:flex; align-items:center; gap:7px; font-size:.78rem; color:#6b4a00; }',
+    '#mt-live-mastery-icon { font-size:.98rem; }',
+    '#mt-live-mastery-name { font-size:.82rem; font-weight:700; color:#5f4311; margin-right:auto; }',
+    '#mt-live-mastery-trophies { font-size:.72rem; background:rgba(255,255,255,.55); border:1px solid rgba(193,139,46,.35); border-radius:999px; padding:1px 7px; }',
+    '.mt-live-mastery-bar { margin-top:.28rem; height:5px; border-radius:99px; overflow:hidden; background:rgba(115,85,30,.16); }',
+    '#mt-live-mastery-fill { display:block; height:100%; width:0; border-radius:99px; background:linear-gradient(90deg,#2c7a57,#c18b2e); transition:width .35s ease; }',
+    '#mt-live-mastery-text { margin-top:.2rem; font-size:.7rem; color:#6f5a33; }',
     '.mt-badges { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:.6rem; }',
     '.mt-badge { font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; padding:3px 10px; border-radius:99px; font-weight:600; }',
     '.mt-badge-cat { background:var(--alight,#fff3e0); color:var(--accent,#7a3800); }',
@@ -3063,8 +3184,16 @@ function mtBindMcKeys() {
     '.mt-fb-fasit { margin-top:.3rem; }',
     '.mt-fb-extra { margin-top:.4rem; padding:.4rem .6rem; background:rgba(74,80,166,.06); border-radius:6px; font-size:.84rem; }',
     '.mt-fb-forklaring { margin-top:.45rem; padding:.45rem .65rem; background:rgba(0,0,0,.03); border-radius:6px; font-size:.84rem; line-height:1.55; font-style:italic; }',
-    '.mt-fb-rule { margin-top:.45rem; padding:.55rem .7rem; border:1px solid rgba(26,86,219,.22); background:linear-gradient(135deg,rgba(26,86,219,.08),rgba(26,86,219,.02)); border-radius:8px; font-size:.84rem; line-height:1.55; }',
-    '.mt-fb-eks { margin-top:.4rem; padding:.5rem .7rem; border:1px solid rgba(199,146,46,.28); background:linear-gradient(135deg,rgba(255,244,214,.86),rgba(255,250,239,.96)); border-radius:8px; font-size:.83rem; line-height:1.55; font-family:"JetBrains Mono",monospace; }',
+    '.mt-fb-rule { margin-top:.35rem; padding:0; border:none; background:transparent; font-size:.84rem; line-height:1.55; color:inherit; }',
+    '.mt-fb-rule strong { color:inherit; opacity:.85; }',
+    '.mt-fb-eks { margin-top:.2rem; padding:0; border:none; background:transparent; font-size:.83rem; line-height:1.55; font-family:"JetBrains Mono",monospace; color:inherit; }',
+    '.mt-fb-eks strong { font-family:inherit; color:inherit; opacity:.85; }',
+    '.mt-fb-correction { margin-top:.45rem; padding:.45rem .6rem; border-radius:6px; background:rgba(255,255,255,.35); border:1px solid rgba(140,115,66,.22); }',
+    '.mt-fb-corr-row { margin-top:.24rem; font-size:.83rem; line-height:1.55; }',
+    '.mt-fb-corr-row:first-child { margin-top:0; }',
+    '.mt-mark-bad { color:#a32020; background:rgba(210,61,61,.14); border-radius:4px; padding:0 3px; }',
+    '.mt-mark-ok { color:#17653e; background:rgba(26,122,80,.14); border-radius:4px; padding:0 3px; }',
+    '.mt-fb-fasit-inline { color:#17653e; font-weight:600; font-size:.8rem; }',
     '.mt-fb-streak { margin-top:.35rem; font-weight:700; }',
     '.mt-fb-retry-tip { margin-top:.4rem; font-size:.82rem; color:var(--tmuted,#8a8a84); font-style:italic; }',
     '.mt-fb-retry-win { margin-top:.35rem; font-weight:700; color:#1a5c42; }',
