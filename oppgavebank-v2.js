@@ -3019,9 +3019,8 @@ function mtBindMcKeys() {
 ══════════════════════════════════════════════════════ */
 
 function mtInit() {
-  // Remove legacy adaptive chrome so only oppgavebank UI is shown in the modal.
-  var legacyRun = $mt('nl-ad-run');
-  if (legacyRun && legacyRun.parentNode) legacyRun.parentNode.removeChild(legacyRun);
+  // Keep nl-ad-run because it contains shared controls (check/next/progress).
+  // Only clear legacy feedback element that the new engine does not use.
   var legacyFeedback = $mt('nl-ad-feedback');
   if (legacyFeedback && legacyFeedback.parentNode) legacyFeedback.parentNode.removeChild(legacyFeedback);
 
