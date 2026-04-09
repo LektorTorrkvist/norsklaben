@@ -1529,6 +1529,17 @@ function mtUpdateProgress() {
   if (p) p.textContent = 'Oppgave ' + Math.min(done + 1, total) + ' av ' + total;
   if (bar) bar.style.width = Math.min(pct, 100) + '%';
   if (sc) sc.textContent = String(MTS.score);
+
+  var liveP = $mt('mt-live-progress');
+  var liveBar = $mt('mt-live-bar-fill');
+  var liveScore = $mt('mt-live-score');
+  var liveXp = $mt('mt-live-xp');
+  var liveStreak = $mt('mt-live-streak');
+  if (liveP) liveP.textContent = 'Oppgave ' + Math.min(done + 1, total) + ' av ' + total;
+  if (liveBar) liveBar.style.width = Math.min(pct, 100) + '%';
+  if (liveScore) liveScore.textContent = String(MTS.score);
+  if (liveXp) liveXp.textContent = String(MTS.sessionXP || 0);
+  if (liveStreak) liveStreak.textContent = String(MTS.streak || 0);
 }
 
 function mtServeNext() {
@@ -1581,6 +1592,17 @@ function mtRenderTask(t, isRetry) {
 
   body.innerHTML =
     '<div class="mt-card">' +
+      '<div class="mt-live">' +
+        '<div class="mt-live-top">' +
+          '<div class="mt-live-progress" id="mt-live-progress">Oppgave 1 av 1</div>' +
+          '<div class="mt-live-kpis">' +
+            '<span class="mt-live-pill">Poeng <strong id="mt-live-score">0</strong></span>' +
+            '<span class="mt-live-pill">XP <strong id="mt-live-xp">0</strong></span>' +
+            '<span class="mt-live-pill">Streak <strong id="mt-live-streak">0</strong></span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="mt-live-bar"><span id="mt-live-bar-fill"></span></div>' +
+      '</div>' +
       '<div class="mt-badges">' +
         '<span class="mt-badge mt-badge-cat">' + mtEsc(t.kat_label || t.kat) + '</span>' +
         '<span class="mt-badge mt-badge-' + (t.vanske || 'lett') + '">' + vLabel + '</span>' +
@@ -1597,12 +1619,18 @@ function mtRenderTask(t, isRetry) {
   var checkBtn = $mt('nl-ad-check');
   var nextBtn = $mt('nl-ad-next');
   if (checkBtn) { checkBtn.style.display = ''; checkBtn.disabled = false; }
-  if (nextBtn) nextBtn.style.display = 'none';
+  if (nextBtn) {
+    nextBtn.style.display = '';
+    nextBtn.disabled = true;
+    nextBtn.textContent = 'Neste oppgave \u2192';
+  }
 
   var focusEl = body.querySelector('.mt-text-input');
   if (focusEl) setTimeout(function () { focusEl.focus(); }, 60);
 
   if (t.type === 'mc') mtBindMcKeys();
+
+  mtUpdateProgress();
 }
 
 /* ─── Bygg input-HTML per type ─────────────────── */
@@ -2333,6 +2361,7 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType) {
   if (nextBtn) {
     var isLast = MTS.served >= MTS.targetCount && !MTS.retryQueue.length;
     nextBtn.textContent = isLast ? 'Se resultat \u2192' : 'Neste oppgave \u2192';
+    nextBtn.disabled = false;
     nextBtn.style.display = '';
   }
   mtUpdateProgress();
@@ -2638,6 +2667,14 @@ function mtBindMcKeys() {
   s.textContent = [
     '.mt-card { animation: mtFadeIn .25s ease; }',
     '@keyframes mtFadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }',
+    '.mt-live { margin-bottom:.65rem; padding:.55rem .65rem; border:1px solid var(--border,#e0dbd2); border-radius:10px; background:linear-gradient(180deg,#fff,#fbfaf8); }',
+    '.mt-live-top { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:.42rem; }',
+    '.mt-live-progress { font-size:.82rem; font-weight:700; color:var(--text,#1a1a18); }',
+    '.mt-live-kpis { display:flex; gap:6px; flex-wrap:wrap; }',
+    '.mt-live-pill { font-size:.72rem; padding:2px 8px; border-radius:999px; background:#f3f1ec; color:var(--tmid,#4a4a46); border:1px solid #e6e1d7; }',
+    '.mt-live-pill strong { color:var(--text,#1a1a18); font-weight:700; }',
+    '.mt-live-bar { height:6px; border-radius:999px; background:#ebe6dc; overflow:hidden; }',
+    '#mt-live-bar-fill { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--mid,#2E6B4F),var(--accent,#C8832A)); transition:width .35s ease; }',
     '.mt-badges { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:.6rem; }',
     '.mt-badge { font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; padding:3px 10px; border-radius:99px; font-weight:600; }',
     '.mt-badge-cat { background:var(--alight,#fff3e0); color:var(--accent,#7a3800); }',
