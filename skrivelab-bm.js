@@ -3155,6 +3155,12 @@ function nlAdStartFeillogg() {
 
   nlAdSetGlobalControls(false);
 
+  // Hide the old card grid — only the adaptive dialog should be visible
+  var mainEl = document.querySelector('.main');
+  if (mainEl) mainEl.style.display = 'none';
+  var adaptivePanel = document.getElementById('nl-adaptive');
+  if (adaptivePanel) adaptivePanel.style.display = 'none';
+
   var win = document.getElementById('nl-ad-win');
   if (win) win.hidden = false;
 
@@ -4304,6 +4310,12 @@ function nlAdStart() {
 
   nlAdSetGlobalControls(false);
 
+  // Hide the old card grid — only the adaptive dialog should be visible
+  var mainEl = document.querySelector('.main');
+  if (mainEl) mainEl.style.display = 'none';
+  var adaptivePanel = document.getElementById('nl-adaptive');
+  if (adaptivePanel) adaptivePanel.style.display = 'none';
+
   var win = document.getElementById('nl-ad-win');
   if (win) win.hidden = false;
 
@@ -4355,6 +4367,12 @@ function nlAdReset() {
   if (win) win.hidden = true;
   if (summary) summary.hidden = true;
   if (actions) actions.style.display = 'none';
+
+  // Restore the card grid and adaptive config panel
+  var mainEl = document.querySelector('.main');
+  if (mainEl) mainEl.style.display = '';
+  var adaptivePanel = document.getElementById('nl-adaptive');
+  if (adaptivePanel) adaptivePanel.style.display = '';
 
   nlAdSetFeedback('', null, '');
 
