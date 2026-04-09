@@ -2943,16 +2943,18 @@ function mtBuildInput(t) {
 
   /* ── drag_kolonne ── */
   case 'drag_kolonne': {
+    var cols = Array.isArray(t.kolonner) && t.kolonner.length ? t.kolonner : ['Kolonne 1', 'Kolonne 2'];
     var items = mtShuffle(t.ord.map(function (o, i) { return { tekst: typeof o === 'string' ? o : o.tekst, fasit: typeof o === 'string' ? null : o.fasit, _i: i }; }));
-    var k0 = mtEsc(t.kolonner[0]), k1 = mtEsc(t.kolonner[1]);
     var tokens = items.map(function (o) {
       return '<div class="mt-dk-token" draggable="true" data-i="' + o._i + '" data-fasit="' + o.fasit + '" data-placed="-1" onclick="mtDkMove(this)" ondragstart="mtDkDragStart(event,' + o._i + ')">' + mtEsc(o.tekst) + '</div>';
+    }).join('');
+    var colsHtml = cols.map(function (label, ci) {
+      return '<div class="mt-dk-col mt-dk-col-' + ci + '" ondragover="event.preventDefault()" ondrop="mtDkDropCol(event,' + ci + ')"><div class="mt-dk-col-label">' + mtEsc(label) + '</div><div id="mt-dk-placed-' + ci + '" class="mt-dk-placed"></div></div>';
     }).join('');
     return '<div class="mt-dk">' +
       '<div id="mt-dk-bank" class="mt-dk-bank" ondragover="event.preventDefault()" ondrop="mtDkDropBank(event)">' + tokens + '</div>' +
       '<div class="mt-dk-cols">' +
-      '<div class="mt-dk-col mt-dk-col-0" ondragover="event.preventDefault()" ondrop="mtDkDropCol(event,0)"><div class="mt-dk-col-label">' + k0 + '</div><div id="mt-dk-placed-0" class="mt-dk-placed"></div></div>' +
-      '<div class="mt-dk-col mt-dk-col-1" ondragover="event.preventDefault()" ondrop="mtDkDropCol(event,1)"><div class="mt-dk-col-label">' + k1 + '</div><div id="mt-dk-placed-1" class="mt-dk-placed"></div></div>' +
+      colsHtml +
       '</div></div>';
   }
 
@@ -3325,10 +3327,26 @@ var _dkDrag = -1;
 function mtDkDragStart(ev, idx) { _dkDrag = idx; ev.dataTransfer.effectAllowed = 'move'; }
 function mtDkMove(el) {
   if (MTS.answered) return;
+  var colCount = 0;
+  if (MTS.current && Array.isArray(MTS.current.kolonner) && MTS.current.kolonner.length) colCount = MTS.current.kolonner.length;
+  if (!colCount) colCount = document.querySelectorAll('.mt-dk-col').length;
+  if (!colCount) colCount = 2;
+
   var p = parseInt(el.getAttribute('data-placed'), 10);
-  if (p === -1) { var c = document.getElementById('mt-dk-placed-0'); if (c) { c.appendChild(el); el.setAttribute('data-placed', '0'); } }
-  else if (p === 0) { var c = document.getElementById('mt-dk-placed-1'); if (c) { c.appendChild(el); el.setAttribute('data-placed', '1'); } }
-  else { var b = document.getElementById('mt-dk-bank'); if (b) { b.appendChild(el); el.setAttribute('data-placed', '-1'); } }
+  if (p < 0) {
+    var c0 = document.getElementById('mt-dk-placed-0');
+    if (c0) { c0.appendChild(el); el.setAttribute('data-placed', '0'); }
+    return;
+  }
+
+  var next = p + 1;
+  if (next < colCount) {
+    var cn = document.getElementById('mt-dk-placed-' + next);
+    if (cn) { cn.appendChild(el); el.setAttribute('data-placed', String(next)); }
+  } else {
+    var b = document.getElementById('mt-dk-bank');
+    if (b) { b.appendChild(el); el.setAttribute('data-placed', '-1'); }
+  }
 }
 function mtDkDropCol(ev, ci) {
   ev.preventDefault(); if (MTS.answered) return;
