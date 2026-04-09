@@ -3217,6 +3217,12 @@ function nlInitAdaptive() {
   var root = document.getElementById('nl-adaptive');
   if (!root) return;
 
+  // New oppgavebank motor owns adaptive mode in this page.
+  // Skip legacy adaptive bindings to avoid double rendering in the same modal.
+  if (typeof window !== 'undefined' && typeof window.mtStart === 'function' && typeof window.mtTriggerCheck === 'function') {
+    return;
+  }
+
   var catsWrap = document.getElementById('nl-ad-cats');
   if (!catsWrap) return;
 
