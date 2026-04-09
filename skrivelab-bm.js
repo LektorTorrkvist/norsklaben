@@ -2793,11 +2793,173 @@ var nlAdState = {
   cats: [],
   prevSearch: '',
   prevOp: 'alle',
+  profile: null,
+  xpGain: 0,
+  isFeillogg: false,
   hintSource: null,
   mountedEi: null,
   mountParent: null,
   mountNext: null
 };
+
+var NL_AD_PROFILE_KEY = 'norsklaben-adaptive-profile-v1';
+var NL_AD_HISTORY_KEY = 'norsklaben-adaptive-history-v1';
+
+function nlAdTodayKey() {
+  var d = new Date();
+  var m = String(d.getMonth() + 1).padStart(2, '0');
+  var day = String(d.getDate()).padStart(2, '0');
+  return String(d.getFullYear()) + '-' + m + '-' + day;
+}
+
+function nlAdPrevDayKey(dateKey) {
+  var d = new Date(dateKey + 'T00:00:00');
+  if (isNaN(d.getTime())) return '';
+  d.setDate(d.getDate() - 1);
+  var m = String(d.getMonth() + 1).padStart(2, '0');
+  var day = String(d.getDate()).padStart(2, '0');
+  return String(d.getFullYear()) + '-' + m + '-' + day;
+}
+
+function nlAdLevelFromXp(xp) {
+  var safeXp = Math.max(0, Number(xp) || 0);
+  if (typeof window !== 'undefined' && Array.isArray(window.MT_XP_LEVELS) && window.MT_XP_LEVELS.length) {
+    var level = 1;
+    for (var i = 0; i < window.MT_XP_LEVELS.length; i++) {
+      var def = window.MT_XP_LEVELS[i] || {};
+      var threshold = Math.max(0, Number(def.xp) || 0);
+      if (safeXp >= threshold) level = i + 1;
+    }
+    return level;
+  }
+  return Math.floor(safeXp / 150) + 1;
+}
+
+function nlAdXpToNextLevel(xp) {
+  var safeXp = Math.max(0, Number(xp) || 0);
+  if (typeof window !== 'undefined' && Array.isArray(window.MT_XP_LEVELS) && window.MT_XP_LEVELS.length) {
+    for (var i = 0; i < window.MT_XP_LEVELS.length; i++) {
+      var def = window.MT_XP_LEVELS[i] || {};
+      var threshold = Math.max(0, Number(def.xp) || 0);
+      if (safeXp < threshold) return threshold - safeXp;
+    }
+    return 0;
+  }
+  var level = nlAdLevelFromXp(safeXp);
+  var nextThreshold = level * 150;
+  return Math.max(0, nextThreshold - safeXp);
+}
+
+function nlAdDefaultProfile() {
+  return {
+    xp: 0,
+    sessions: 0,
+    streak: 0,
+    lastPlayedDay: '',
+    bestPct: 0
+  };
+}
+
+function nlAdLoadProfile() {
+  var base = nlAdDefaultProfile();
+  try {
+    if (!window.localStorage) return base;
+    var raw = window.localStorage.getItem(NL_AD_PROFILE_KEY);
+    if (!raw) return base;
+    var parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object') return base;
+    return {
+      xp: Math.max(0, Number(parsed.xp) || 0),
+      sessions: Math.max(0, Number(parsed.sessions) || 0),
+      streak: Math.max(0, Number(parsed.streak) || 0),
+      lastPlayedDay: String(parsed.lastPlayedDay || ''),
+      bestPct: Math.max(0, Math.min(100, Number(parsed.bestPct) || 0))
+    };
+  } catch (e) {
+    return base;
+  }
+}
+
+function nlAdSaveProfile(profile) {
+  try {
+    if (!window.localStorage) return;
+    window.localStorage.setItem(NL_AD_PROFILE_KEY, JSON.stringify(profile || nlAdDefaultProfile()));
+  } catch (e) {}
+}
+
+function nlAdSaveSessionHistory(entry) {
+  try {
+    if (!window.localStorage) return;
+    var raw = window.localStorage.getItem(NL_AD_HISTORY_KEY);
+    var list = [];
+    if (raw) {
+      try { list = JSON.parse(raw) || []; } catch (e) { list = []; }
+    }
+    list.push(entry);
+    if (list.length > 120) list = list.slice(-120);
+    window.localStorage.setItem(NL_AD_HISTORY_KEY, JSON.stringify(list));
+  } catch (e) {}
+}
+
+function nlAdRenderProfile(profile) {
+  var p = profile || nlAdState.profile || nlAdDefaultProfile();
+  var level = nlAdLevelFromXp(p.xp);
+  var toNext = nlAdXpToNextLevel(p.xp);
+
+  var levelEl = document.getElementById('nl-ad-prof-level');
+  var xpEl = document.getElementById('nl-ad-prof-xp');
+  var nextEl = document.getElementById('nl-ad-prof-next');
+  var streakEl = document.getElementById('nl-ad-prof-streak');
+
+  if (levelEl) levelEl.textContent = String(level);
+  if (xpEl) xpEl.textContent = String(p.xp);
+  if (nextEl) nextEl.textContent = String(toNext) + ' XP';
+  if (streakEl) streakEl.textContent = String(p.streak) + (p.streak === 1 ? ' dag' : ' dager');
+}
+
+function nlAdAwardXp(totalPoints, totalMax, pct) {
+  var profile = nlAdState.profile || nlAdLoadProfile();
+  var base = Math.max(0, Number(totalPoints) || 0) * 10;
+  var masteryBonus = pct >= 90 ? 40 : (pct >= 75 ? 25 : (pct >= 60 ? 10 : 0));
+  var perfectBonus = (totalMax > 0 && totalPoints === totalMax) ? 30 : 0;
+  var streakBonus = Math.min(7, profile.streak || 0) * 3;
+  var gain = base + masteryBonus + perfectBonus + streakBonus;
+
+  var today = nlAdTodayKey();
+  var prevDay = nlAdPrevDayKey(today);
+  if (profile.lastPlayedDay === today) {
+    // same-day sessions keep streak unchanged
+  } else if (profile.lastPlayedDay === prevDay) {
+    profile.streak = (profile.streak || 0) + 1;
+  } else {
+    profile.streak = 1;
+  }
+
+  profile.sessions = (profile.sessions || 0) + 1;
+  profile.lastPlayedDay = today;
+  profile.bestPct = Math.max(profile.bestPct || 0, pct || 0);
+
+  if (typeof window !== 'undefined' && typeof window.mtXpSave === 'function') {
+    var total = Number(window.mtXpSave(gain));
+    if (Number.isFinite(total) && total >= 0) profile.xp = total;
+    else profile.xp = Math.max(0, (profile.xp || 0) + gain);
+  } else {
+    profile.xp = Math.max(0, (profile.xp || 0) + gain);
+  }
+
+  if (typeof window !== 'undefined' && typeof window.mtStreakRegister === 'function') {
+    var st = window.mtStreakRegister();
+    if (st && Number.isFinite(Number(st.current))) {
+      profile.streak = Math.max(0, Number(st.current) || 0);
+    }
+  }
+
+  nlAdState.profile = profile;
+  nlAdState.xpGain = gain;
+  nlAdSaveProfile(profile);
+  nlAdRenderProfile(profile);
+  return gain;
+}
 
 function nlInitAdaptive() {
   var root = document.getElementById('nl-adaptive');
@@ -2864,6 +3026,7 @@ function nlInitAdaptive() {
   });
 
   var startBtn = document.getElementById('nl-ad-start');
+  var retryBtn = document.getElementById('nl-ad-retry');
   var resetBtn = document.getElementById('nl-ad-reset');
   var catsClearBtn = document.getElementById('nl-ad-cats-clear');
   var catsAllBtn = document.getElementById('nl-ad-cats-all');
@@ -2875,6 +3038,7 @@ function nlInitAdaptive() {
   var sumCloseBtn = document.getElementById('nl-ad-sum-close');
 
   if (startBtn) startBtn.addEventListener('click', nlAdStart);
+  if (retryBtn) retryBtn.addEventListener('click', nlAdStartFeillogg);
   if (resetBtn) resetBtn.addEventListener('click', nlAdReset);
   if (catsClearBtn) catsClearBtn.addEventListener('click', function() { nlAdSetAllCats(false); });
   if (catsAllBtn) catsAllBtn.addEventListener('click', function() { nlAdSetAllCats(true); });
@@ -2884,6 +3048,9 @@ function nlInitAdaptive() {
   if (winBg) winBg.addEventListener('click', nlAdReset);
   if (sumNewBtn) sumNewBtn.addEventListener('click', nlAdStart);
   if (sumCloseBtn) sumCloseBtn.addEventListener('click', nlAdReset);
+
+  nlAdState.profile = nlAdLoadProfile();
+  nlAdRenderProfile(nlAdState.profile);
 }
 
 function nlAdRestoreMountedExercise() {
@@ -2921,6 +3088,76 @@ function nlAdSetAllCats(enabled) {
   document.querySelectorAll('#nl-ad-cats .adp-cat').forEach(function(el) {
     el.classList.toggle('on', !!enabled);
   });
+}
+
+function nlAdStartFeillogg() {
+  var cats = [];
+  if (typeof window !== 'undefined' && typeof window.mtFeilloggGet === 'function') {
+    try {
+      var logg = window.mtFeilloggGet() || [];
+      var seen = {};
+      logg.forEach(function(entry) {
+        var kat = String(entry && entry.kat || '').trim();
+        if (!kat) return;
+        var resolved = nlMtResolveCard(kat);
+        if (!resolved || seen[resolved]) return;
+        seen[resolved] = 1;
+        cats.push(resolved);
+      });
+    } catch (e) {}
+  }
+
+  if (!cats.length) {
+    if (typeof window !== 'undefined' && typeof window.mtStartFeillogg === 'function') {
+      try { window.mtStartFeillogg(); return; } catch (e) {}
+    }
+    alert('Ingen tidligere feil å øve på ennå.');
+    return;
+  }
+
+  var count = Math.min(10, Math.max(3, cats.length * 2));
+  var list = nlAdBuildList(cats, 'adaptiv', count);
+  list = nlAdDiversify(list, 2, count);
+  if (!list.length) {
+    alert('Fant ingen egnede oppgaver fra feilloggen.');
+    return;
+  }
+
+  var si = document.getElementById('search-input');
+  if (si) si.value = '';
+  Array.prototype.forEach.call(document.querySelectorAll('.chip'), function(ch) {
+    ch.classList.remove('active');
+  });
+  var allChip = document.querySelector('.chip[data-op="alle"]');
+  if (allChip) allChip.classList.add('active');
+  nlFilter('', 'alle');
+
+  nlAdState.active = true;
+  nlAdState.list = list;
+  nlAdState.idx = 0;
+  nlAdState.checked = new Set();
+  nlAdState.results = new Map();
+  nlAdState.cats = cats.slice();
+  nlAdState.xpGain = 0;
+  nlAdState.isFeillogg = false;
+  nlAdState.xpGain = 0;
+  nlAdState.isFeillogg = true;
+
+  nlAdSetGlobalControls(false);
+
+  var win = document.getElementById('nl-ad-win');
+  if (win) win.hidden = false;
+
+  nlAdOpenCurrent();
+
+  var run = document.getElementById('nl-ad-run');
+  var reset = document.getElementById('nl-ad-reset');
+  var actions = document.getElementById('nl-ad-actions');
+  var summary = document.getElementById('nl-ad-summary');
+  if (run) run.hidden = false;
+  if (reset) reset.hidden = false;
+  if (summary) summary.hidden = true;
+  if (actions) actions.style.display = 'flex';
 }
 
 function nlAdDifficulty(ei) {
@@ -2984,6 +3221,13 @@ function nlAdCategoryFromExercise(ei) {
   var card = ei.closest('.card');
   var cnEl = card ? card.querySelector('.cn') : null;
   return cnEl ? cnEl.textContent.trim() : '';
+}
+
+function nlAdCategoryIdFromExercise(ei) {
+  if (!ei) return '';
+  if (ei.dataset.adCatId) return ei.dataset.adCatId;
+  var card = ei.closest('.card');
+  return card ? (card.dataset.cat || '') : '';
 }
 
 function nlAdTypeFromExercise(ei) {
@@ -3060,6 +3304,7 @@ function nlAdBuildList(cats, level, count) {
         // Cache contextual info before the exercise is detached from its DOM
         var card = ei.closest('.card');
         var cnEl = card ? card.querySelector('.cn') : null;
+        ei.dataset.adCatId = card ? (card.dataset.cat || '') : '';
         ei.dataset.adCat = cnEl ? cnEl.textContent.trim() : '';
         var grp = ei.closest('.grp');
         var grpH2 = grp ? grp.querySelector('.glabel h2') : null;
@@ -3525,6 +3770,7 @@ function nlAdShowSummary() {
 
   var pct = totalMax ? Math.round((totalPoints / totalMax) * 100) : 0;
   var mastery = nlAdMasteryData(pct);
+  var sessionXp = nlAdAwardXp(totalPoints, totalMax, pct);
 
   // Medal & heading
   var medalEl = document.getElementById('nl-ad-sum-medal');
@@ -3551,11 +3797,57 @@ function nlAdShowSummary() {
 
   // KPIs
   var poengEl = document.getElementById('nl-ad-sum-poeng');
+  var xpEl = document.getElementById('nl-ad-sum-xp');
   var retteEl = document.getElementById('nl-ad-sum-rette');
   var feilEl = document.getElementById('nl-ad-sum-feil');
   if (poengEl) poengEl.textContent = totalPoints + '/' + totalMax;
+  if (xpEl) xpEl.textContent = '+' + String(sessionXp);
   if (retteEl) retteEl.textContent = String(totalCorrect);
   if (feilEl) feilEl.textContent = String(totalWrong);
+
+  nlAdSaveSessionHistory({
+    ts: new Date().toISOString(),
+    points: totalPoints,
+    max: totalMax,
+    pct: pct,
+    xp: sessionXp,
+    retryMode: !!nlAdState.isFeillogg,
+    cats: nlAdState.cats.slice(),
+    count: nlAdState.list.length
+  });
+
+  if (typeof window !== 'undefined' && window.MTS && typeof window.mtLsSaveSession === 'function') {
+    window.MTS.history = nlAdState.list.map(function(ei) {
+      var res = nlAdState.results.get(ei) || { correct: false, points: 0, pointsMax: 1 };
+      return {
+        task: { kat: nlAdCategoryIdFromExercise(ei) || '_' },
+        correct: !!res.correct,
+        points: Math.max(0, Number(res.points) || 0),
+        maxPts: Math.max(1, Number(res.pointsMax) || 1),
+        time: new Date().toISOString(),
+        isRetry: !!nlAdState.isFeillogg
+      };
+    });
+    window.MTS.score = totalPoints;
+    window.MTS.maxScore = totalMax;
+    var levelElBridge = document.getElementById('nl-ad-level');
+    window.MTS.level = nlAdState.isFeillogg ? 'feillogg' : (levelElBridge ? String(levelElBridge.value || 'adaptiv') : 'adaptiv');
+    try { window.mtLsSaveSession(); } catch (e) {}
+    if (typeof window.mtBadgesCheck === 'function') {
+      try {
+        var newBadges = window.mtBadgesCheck({ pct: pct, level: window.MTS.level }) || [];
+        if (newBadges.length) {
+          var strengthsEl2 = document.getElementById('nl-ad-sum-strengths');
+          if (strengthsEl2) {
+            var currentHtml = strengthsEl2.innerHTML || '';
+            var badgeText = '<div class="adp-summary-row ok"><strong>Nye badges</strong><span>' + newBadges.length + ' låst opp</span></div>';
+            strengthsEl2.innerHTML = currentHtml + badgeText;
+            strengthsEl2.style.display = '';
+          }
+        }
+      } catch (e) {}
+    }
+  }
 
   // Teacher screenshot section
   var timeEl = document.getElementById('nl-ad-sum-time');
@@ -3770,6 +4062,9 @@ function nlAdTriggerCheck() {
   if (!msg) msg = 'Svar sjekket.';
   nlAdState.checked.add(current);
   nlAdStoreResult(current, msg, correct, rule);
+  if (correct && nlAdState.isFeillogg && typeof window !== 'undefined' && typeof window.mtBadgesCountRetryWin === 'function') {
+    try { window.mtBadgesCountRetryWin(); } catch (e) {}
+  }
   nlAdLockExercise(current);
   nlAdSetFeedback(msg, correct, rule, eks);
   nlAdAutoRevealFasit(current);
@@ -3900,6 +4195,7 @@ function nlAdReset() {
   nlAdState.cats = [];
   nlAdState.prevSearch = '';
   nlAdState.prevOp = 'alle';
+  nlAdState.isFeillogg = false;
 
   nlAdRestoreMountedExercise();
 

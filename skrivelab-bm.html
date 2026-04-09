@@ -47,6 +47,24 @@
     <div class="adp-head">
       <h2 id="nl-adaptive-title">Adaptiv øvingsrekke</h2>
       <p>Velg kategorier og nivå, så lager Skrivelab en økt fra den eksisterende oppgavebanken.</p>
+      <div class="adp-gamify" id="nl-ad-gamify" aria-live="polite">
+        <div class="adp-g-pill">
+          <span class="adp-g-lbl">Nivå</span>
+          <strong id="nl-ad-prof-level">1</strong>
+        </div>
+        <div class="adp-g-pill">
+          <span class="adp-g-lbl">Total XP</span>
+          <strong id="nl-ad-prof-xp">0</strong>
+        </div>
+        <div class="adp-g-pill">
+          <span class="adp-g-lbl">Til neste nivå</span>
+          <strong id="nl-ad-prof-next">150 XP</strong>
+        </div>
+        <div class="adp-g-pill">
+          <span class="adp-g-lbl">Streak</span>
+          <strong id="nl-ad-prof-streak">0 dager</strong>
+        </div>
+      </div>
     </div>
 
     <div class="adp-grid">
@@ -77,6 +95,7 @@
 
     <div class="adp-actions">
       <button class="adp-btn adp-btn-pri" id="nl-ad-start">Start øvelse</button>
+      <button class="adp-btn" id="nl-ad-retry">Øv på tidligere feil</button>
       <button class="adp-btn" id="nl-ad-reset" hidden>Avslutt økt</button>
     </div>
   </div>
@@ -124,6 +143,10 @@
         <div class="adp-summary-kpi">
           <span class="adp-summary-lbl">Poeng</span>
           <strong id="nl-ad-sum-poeng">0/0</strong>
+        </div>
+        <div class="adp-summary-kpi kpi-xp">
+          <span class="adp-summary-lbl">XP i økta</span>
+          <strong id="nl-ad-sum-xp">+0</strong>
         </div>
         <div class="adp-summary-kpi kpi-ok">
           <span class="adp-summary-lbl">Rette</span>

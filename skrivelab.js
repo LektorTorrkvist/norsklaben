@@ -3035,6 +3035,7 @@ var nlAdState = {
   prevOp: 'alle',
   profile: null,
   xpGain: 0,
+  isFeillogg: false,
   hintSource: null,
   mountedEi: null,
   mountParent: null,
@@ -3265,6 +3266,7 @@ function nlInitAdaptive() {
   });
 
   var startBtn = document.getElementById('nl-ad-start');
+  var retryBtn = document.getElementById('nl-ad-retry');
   var resetBtn = document.getElementById('nl-ad-reset');
   var catsClearBtn = document.getElementById('nl-ad-cats-clear');
   var catsAllBtn = document.getElementById('nl-ad-cats-all');
@@ -3276,6 +3278,7 @@ function nlInitAdaptive() {
   var sumCloseBtn = document.getElementById('nl-ad-sum-close');
 
   if (startBtn) startBtn.addEventListener('click', nlAdStart);
+  if (retryBtn) retryBtn.addEventListener('click', nlAdStartFeillogg);
   if (resetBtn) resetBtn.addEventListener('click', nlAdReset);
   if (catsClearBtn) catsClearBtn.addEventListener('click', function() { nlAdSetAllCats(false); });
   if (catsAllBtn) catsAllBtn.addEventListener('click', function() { nlAdSetAllCats(true); });
@@ -3325,6 +3328,75 @@ function nlAdSetAllCats(enabled) {
   document.querySelectorAll('#nl-ad-cats .adp-cat').forEach(function(el) {
     el.classList.toggle('on', !!enabled);
   });
+}
+
+function nlAdStartFeillogg() {
+  var cats = [];
+  if (typeof window !== 'undefined' && typeof window.mtFeilloggGet === 'function') {
+    try {
+      var logg = window.mtFeilloggGet() || [];
+      var seen = {};
+      logg.forEach(function(entry) {
+        var kat = String(entry && entry.kat || '').trim();
+        if (!kat) return;
+        var resolved = nlMtResolveCard(kat);
+        if (!resolved || seen[resolved]) return;
+        seen[resolved] = 1;
+        cats.push(resolved);
+      });
+    } catch (e) {}
+  }
+
+  if (!cats.length) {
+    if (typeof window !== 'undefined' && typeof window.mtStartFeillogg === 'function') {
+      try { window.mtStartFeillogg(); return; } catch (e) {}
+    }
+    alert('Ingen tidlegare feil å øve på enno.');
+    return;
+  }
+
+  var count = Math.min(10, Math.max(3, cats.length * 2));
+  var list = nlAdBuildList(cats, 'adaptiv', count);
+  list = nlAdDiversify(list, 2, count);
+  if (!list.length) {
+    alert('Fann ingen eigna oppgåver frå feilloggen.');
+    return;
+  }
+
+  var si = document.getElementById('search-input');
+  if (si) si.value = '';
+  Array.prototype.forEach.call(document.querySelectorAll('.chip'), function(ch) {
+    ch.classList.remove('active');
+  });
+  var allChip = document.querySelector('.chip[data-op="alle"]');
+  if (allChip) allChip.classList.add('active');
+  nlFilter('', 'alle');
+
+  nlAdState.active = true;
+  nlAdState.list = list;
+  nlAdState.idx = 0;
+  nlAdState.checked = new Set();
+  nlAdState.results = new Map();
+  nlAdState.cats = cats.slice();
+  nlAdState.xpGain = 0;
+  nlAdState.isFeillogg = false;
+  nlAdState.isFeillogg = true;
+
+  nlAdSetGlobalControls(false);
+
+  var win = document.getElementById('nl-ad-win');
+  if (win) win.hidden = false;
+
+  nlAdOpenCurrent();
+
+  var run = document.getElementById('nl-ad-run');
+  var reset = document.getElementById('nl-ad-reset');
+  var actions = document.getElementById('nl-ad-actions');
+  var summary = document.getElementById('nl-ad-summary');
+  if (run) run.hidden = false;
+  if (reset) reset.hidden = false;
+  if (summary) summary.hidden = true;
+  if (actions) actions.style.display = 'flex';
 }
 
 function nlAdDifficulty(ei) {
@@ -3978,6 +4050,7 @@ function nlAdShowSummary() {
     max: totalMax,
     pct: pct,
     xp: sessionXp,
+    retryMode: !!nlAdState.isFeillogg,
     cats: nlAdState.cats.slice(),
     count: nlAdState.list.length
   });
@@ -3992,13 +4065,13 @@ function nlAdShowSummary() {
         points: Math.max(0, Number(res.points) || 0),
         maxPts: Math.max(1, Number(res.pointsMax) || 1),
         time: new Date().toISOString(),
-        isRetry: false
+        isRetry: !!nlAdState.isFeillogg
       };
     });
     window.MTS.score = totalPoints;
     window.MTS.maxScore = totalMax;
     var levelElBridge = document.getElementById('nl-ad-level');
-    window.MTS.level = levelElBridge ? String(levelElBridge.value || 'adaptiv') : 'adaptiv';
+    window.MTS.level = nlAdState.isFeillogg ? 'feillogg' : (levelElBridge ? String(levelElBridge.value || 'adaptiv') : 'adaptiv');
     try { window.mtLsSaveSession(); } catch (e) {}
     if (typeof window.mtBadgesCheck === 'function') {
       try {
@@ -4229,6 +4302,9 @@ function nlAdTriggerCheck() {
   if (!msg) msg = 'Svar sjekka.';
   nlAdState.checked.add(current);
   nlAdStoreResult(current, msg, correct, rule);
+  if (correct && nlAdState.isFeillogg && typeof window !== 'undefined' && typeof window.mtBadgesCountRetryWin === 'function') {
+    try { window.mtBadgesCountRetryWin(); } catch (e) {}
+  }
   nlAdLockExercise(current);
   nlAdSetFeedback(msg, correct, rule, eks);
   nlAdAutoRevealFasit(current);
@@ -4360,6 +4436,7 @@ function nlAdReset() {
   nlAdState.cats = [];
   nlAdState.prevSearch = '';
   nlAdState.prevOp = 'alle';
+  nlAdState.isFeillogg = false;
 
   nlAdRestoreMountedExercise();
 
