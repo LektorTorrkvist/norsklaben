@@ -25,6 +25,7 @@ function nlBoot() {
     }
   }
 
+  nlSafeInit('ensure-bank-shell', nlEnsureBankShell);
   nlSafeInit('normalize-categories', nlNormalizeCategories);
   nlSafeInit('normalize-types-and-titles', nlNormalizeExerciseMetaFromType);
 
@@ -305,6 +306,89 @@ var nlCategoryData = [
     {n: 'Tilpass til leseren',  d: 'Forklar fagord og uttrykk slik at leseren forstår.'}
   ]
 ];
+
+var nlCategoryIdsByGroup = [
+  ['og-aa', 'bindeord-overganger', 'dobbel-konsonant', 'teiknsetting', 'saerskriving-sammensetning', 'ordklasse', 'oppgaveforstaing'],
+  ['setningsbygging', 'temasetning', 'aarsak-sammenheng', 'referansekjede', 'logisk-struktur'],
+  ['tekststruktur-delar', 'sjangerkompetanse', 'debattinnlegg', 'overskrift-ingress', 'fagartikkel'],
+  ['kjeldebruk', 'parafrase', 'sitat', 'tal-og-statistikk'],
+  ['ordval', 'bruke-eksempel', 'tilpass-til-lesaren']
+];
+
+var nlGroupTitles = [
+  'Gruppe 1 - Grunnleggende grammatikk',
+  'Gruppe 2 - Setning og avsnitt',
+  'Gruppe 3 - Tekst og sjanger',
+  'Gruppe 4 - Kildebruk',
+  'Gruppe 5 - Språk og stil'
+];
+
+function nlEnsureBankShell() {
+  var paused = document.querySelector('section[aria-labelledby="nl-bank-paused-title"]');
+  if (paused && paused.parentNode) paused.parentNode.removeChild(paused);
+
+  var mainEl = document.querySelector('main.main');
+  if (!mainEl) {
+    mainEl = document.createElement('main');
+    mainEl.className = 'main';
+    var footer = document.querySelector('footer');
+    if (footer && footer.parentNode) footer.parentNode.insertBefore(mainEl, footer);
+    else document.body.appendChild(mainEl);
+  }
+
+  if (mainEl.querySelector('.card[data-cat]')) return;
+
+  nlCategoryData.forEach(function(group, gi) {
+    var grp = document.createElement('section');
+    grp.className = 'grp';
+
+    var glabel = document.createElement('h2');
+    glabel.className = 'glabel';
+    glabel.textContent = nlGroupTitles[gi] || ('Gruppe ' + (gi + 1));
+    grp.appendChild(glabel);
+
+    var grid = document.createElement('div');
+    grid.className = 'grid';
+
+    group.forEach(function(catInfo, ci) {
+      var catId = (nlCategoryIdsByGroup[gi] && nlCategoryIdsByGroup[gi][ci]) || ('kategori-' + gi + '-' + ci);
+
+      var card = document.createElement('article');
+      card.className = 'card';
+      card.setAttribute('data-cat', catId);
+
+      var header = document.createElement('button');
+      header.className = 'ch';
+      header.type = 'button';
+
+      var cn = document.createElement('span');
+      cn.className = 'cn';
+      cn.textContent = (catInfo && catInfo.n) ? catInfo.n : 'Kategori';
+
+      var exc = document.createElement('span');
+      exc.className = 'exc';
+      exc.textContent = '0 oppg.';
+
+      var cd = document.createElement('span');
+      cd.className = 'cd';
+      cd.textContent = (catInfo && catInfo.d) ? catInfo.d : '';
+
+      header.appendChild(cn);
+      header.appendChild(exc);
+      header.appendChild(cd);
+
+      var exlist = document.createElement('div');
+      exlist.className = 'exlist';
+
+      card.appendChild(header);
+      card.appendChild(exlist);
+      grid.appendChild(card);
+    });
+
+    grp.appendChild(grid);
+    mainEl.appendChild(grp);
+  });
+}
 
 function nlNormalizeCategories() {
   if (document.body.dataset.nlNormalized === '1') return;
