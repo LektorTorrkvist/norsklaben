@@ -679,38 +679,38 @@ var BANKV2 = [
  eks:'Selv om det er vanskelig, prøver hun.'},
 
 /* ═══════════════════════════════════════════════════
-  9. TEKSTSTRUKTUR  (10 oppgåver)
+  9. TEKSTSTRUKTUR  (10 oppgaver)
   ═══════════════════════════════════════════════════ */
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'burger_sort',vanske:'lett',
- q:'Sorter avsnitta til rett del av fagartikkelen.',
- lag:['Innleiing','Hovuddel','Avslutning'],
+ q:'Sorter avsnittene til riktig del av fagartikkelen.',
+ lag:['Innledning','Hoveddel','Avslutning'],
  avsnitt:[
-  {tekst:'Plast i havet er et aukande problem som påverkar dyr og natur over heile verda.',lag:0},
-  {tekst:'Éi løysing er å innføre strengare regulering av eingongsplast i alle EU-land.',lag:1},
+  {tekst:'Plast i havet er et økende problem som påvirker dyr og natur over hele verden.',lag:0},
+  {tekst:'En løsning er å innføre strengere regulering av engangsplast i alle EU-land.',lag:1},
   {tekst:'Kildesortering og bedre infrastruktur kan også redusere problemet.',lag:1},
-  {tekst:'Alt i alt viser dette at plastforureining krev samarbeid på tvers av landegrenser.',lag:2}
+  {tekst:'Alt i alt viser dette at plastforurensning krever samarbeid på tvers av landegrenser.',lag:2}
  ],
- regel:'Innleiinga presenterer temaet. Hovuddelen utdjupar. Avsluttinga konkluderer.',
- eks:'Innleiing → tema · Hovuddel → argument · Avslutning → konklusjon'},
+ regel:'Innledningen presenterer temaet. Hoveddelen utdyper. Avslutningen konkluderer.',
+ eks:'Innledning → tema · Hoveddel → argument · Avslutning → konklusjon'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'burger_sort',vanske:'medium',
- q:'Sorter avsnitta frå et debattinnlegg om skjermtid til rett del.',
- lag:['Innleiing med påstand','Argument for','Motargument og tilbakevising','Avslutning'],
+ q:'Sorter avsnittene fra et debattinnlegg om skjermtid til riktig del.',
+ lag:['Innledning med påstand','Argument for','Motargument og tilbakevisning','Avslutning'],
  avsnitt:[
   {tekst:'Barn under tolv år bør ikke ha egen mobiltelefon.',lag:0},
-  {tekst:'Forsking viser at mykje skjermtid reduserer konsentrasjonsevna hos unge.',lag:1},
-  {tekst:'Nokon vil hevde at mobilen er nødvendig for tryggleik, men det finst enklare alternativ.',lag:2},
-  {tekst:'Samla sett er det gode grunnar til å avgrense tilgangen til mobilar for born.',lag:3}
+  {tekst:'Forskning viser at mye skjermtid reduserer konsentrasjonsevnen hos unge.',lag:1},
+  {tekst:'Noen vil hevde at mobilen er nødvendig for trygghet, men det finnes enklere alternativ.',lag:2},
+  {tekst:'Alt i alt er det gode grunner til å begrense tilgangen til mobiler for barn.',lag:3}
  ],
- regel:'Debattinnlegg: påstand → argument → motargument + tilbakevising → konklusjon.',
- eks:'Påstand tidleg · Argument med kjelde · Motargument tilbakevist · Konklusjon'},
+ regel:'Debattinnlegg: påstand → argument → motargument + tilbakevisning → konklusjon.',
+ eks:'Påstand tidlig · Argument med kilde · Motargument tilbakevist · Konklusjon'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'lett',
  q:'Hva er en ingress?',
  alt:['En til to setninger som innleder og presenterer temaet','Den lengste hoveddelen av teksten','Kildelista nederst i teksten','Avslutningen av teksten'],
  fasit:'En til to setninger som innleder og presenterer temaet',
  regel:'Ingressen kommer etter overskriften og gir leseren et raskt overblikk.',
- eks:'«Plasten i havet er en av vår tids største miljøtruslar. Her er det du treng å vite.»'},
+ eks:'«Plasten i havet er en av vår tids største miljøtrusler. Her er det du trenger å vite.»'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'medium',
  q:'Hva er feil med en avslutning i en fagartikkel?',
@@ -723,17 +723,17 @@ var BANKV2 = [
  q:'Klikk på det første ordet der et nytt avsnitt bør starte.',
  segments:[
   {id:'s0',tekst:'Klimaendringer er et av de største problemene vi står overfor i dag.'},
-  {id:'s1',tekst:'Gjennomsnittstemperaturen har stige med over éin grad sidan den industrielle revolusjonen.',first_word:'Gjennomsnittstemperaturen'},
-  {id:'s2',tekst:'For å stoppe oppvarminga må verdssamfunnet kutte utslepp drastisk.',first_word:'For'},
-  {id:'s3',tekst:'Mange land har allereie innført tiltak mot karbonutslepp.',first_word:'Mange'}
+  {id:'s1',tekst:'Gjennomsnittstemperaturen har steget med over én grad siden den industrielle revolusjonen.',first_word:'Gjennomsnittstemperaturen'},
+  {id:'s2',tekst:'For å stoppe oppvarmingen må verdenssamfunnet kutte utslipp drastisk.',first_word:'For'},
+  {id:'s3',tekst:'Mange land har allerede innført tiltak mot karbonutslipp.',first_word:'Mange'}
  ],
  fasit_breaks:['s2'],
- regel:'Nytt avsnitt ved nytt poeng. «For å stoppe …» skiftar frå problem til løysing.',
- eks:'Avsnitt 1: fakta om problemet · Avsnitt 2: hva som må gjerast'},
+ regel:'Nytt avsnitt ved nytt poeng. «For å stoppe …» skifter fra problem til løsning.',
+ eks:'Avsnitt 1: fakta om problemet · Avsnitt 2: hva som må gjøres'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'drag_kolonne',vanske:'medium',
  q:'Hvilken overskrift er faglig god, og hvilken er dårlig?',
- kolonner:['God fagleg overskrift','Dårleg overskrift'],
+ kolonner:['God faglig overskrift','Dårlig overskrift'],
  ord:[
   {tekst:'Klimaendringer: hva ungdom kan gjøre',fasit:0},
   {tekst:'DET ER VIKTIG Å REDDE PLANETEN VÅR!!!',fasit:1},
@@ -745,17 +745,17 @@ var BANKV2 = [
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'drag_kolonne',vanske:'vanskeleg',
  q:'Hva hører hjemme i et drøftende debattinnlegg og hva ikke?',
- kolonner:['Høyrer heime','Høyrer IKKE heime'],
+ kolonner:['Hører hjemme','Hører IKKE hjemme'],
  ord:[
   {tekst:'Argument for og mot påstanden',fasit:0},
-  {tekst:'Konklusjon med eiga vurdering',fasit:0},
+  {tekst:'Konklusjon med egen vurdering',fasit:0},
   {tekst:'Personlig fortelling om en gang du var lei',fasit:1},
-  {tekst:'Historia til mobiltelefonen frå 1973 til i dag',fasit:1},
-  {tekst:'Kjeldetilvising til forsking',fasit:0},
+  {tekst:'Historien til mobiltelefonen fra 1973 til i dag',fasit:1},
+  {tekst:'Kildetilvisning til forskning',fasit:0},
   {tekst:'Hvordan du lager en app',fasit:1}
  ],
- regel:'«Drøft» = argument for og mot + konklusjon. Personlege forteljingar og historikk utan kopling høyrer ikke heime.',
- eks:'Høyrer heime: argument, kjelde, konklusjon · Ikke: irrelevant historie'},
+ regel:'«Drøft» = argument for og mot + konklusjon. Personlige fortellinger og historikk uten tilknytning hører ikke hjemme.',
+ eks:'Hører hjemme: argument, kilde, konklusjon · Ikke: irrelevant historie'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'cloze',vanske:'lett',
  q:'Et godt avsnitt har: temasetning → ___ → avslutningssetning.',
@@ -763,7 +763,7 @@ var BANKV2 = [
  fasit:'utdypende setninger',
  fasit_v:['utdypende setninger','kommentarsetninger','forklaringer og eksempler','utdyping','kommentarer'],
  regel:'Etter temasetning kommer utdypende kommentarsetninger med forklaring, bevis og eksempler.',
- eks:'Temasetning → forklaring → bevis/kjelde → kommentar'},
+ eks:'Temasetning → forklaring → bevis/kilde → kommentar'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'cloze',vanske:'medium',
  q:'Fyll inn et overgangsord: «KI kan effektivisere arbeidet, ___ reiser det også etiske spørsmål.»',
@@ -773,15 +773,15 @@ var BANKV2 = [
  eks:'KI er nyttig, men vi må stille kritiske spørsmål.'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'sorter_rekke',vanske:'vanskeleg',
- q:'Set delane av et fagleg avsnitt i rett rekkjefølgje.',
+ q:'Sett delene av et faglig avsnitt i riktig rekkefølge.',
  items:[
-  {tekst:'Temasetning: presenterer hovudpoenget i avsnittet'},
-  {tekst:'Utdjuping: forklarer med fakta eller døme'},
-  {tekst:'Kjeldetilvising: støttar påstanden med dokumentasjon'},
-  {tekst:'Kommentar: oppsummerer og peikar mot neste avsnitt'}
+  {tekst:'Temasetning: presenterer hovedpoenget i avsnittet'},
+  {tekst:'Utdyping: forklarer med fakta eller eksempler'},
+  {tekst:'Kildetilvisning: støtter påstanden med dokumentasjon'},
+  {tekst:'Kommentar: oppsummerer og peker mot neste avsnitt'}
  ],
- regel:'Temasetning → utdjuping → kjelde → kommentar = standard avsnittstruktur.',
- eks:'Plast er farleg [tema] → 80 % av sjøfuglar [utdjuping] → (WWF, 2023) [kjelde] → Dette viser … [komm.]'},
+ regel:'Temasetning → utdyping → kilde → kommentar = standard avsnittstruktur.',
+ eks:'Plast er farlig [tema] → 80 % av sjøfugler [utdyping] → (WWF, 2023) [kilde] → Dette viser … [komm.]'},
 
 /* ═══════════════════════════════════════════════════
   10. KJELDEBRUK  (10 oppgåver)
