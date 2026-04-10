@@ -228,22 +228,22 @@ var BANKV2 = [
  q:'Hva er rett infinitivsform?',
  alt:['hope','hoppe','hoppa','hopa'],
  fasit:'hoppe',
- regel:'Etter kort vokal kjem dobbel konsonant: «hoppe» (kort o → pp).',
- eks:'hoppe, sitje, leggje, kaste'},
+ regel:'Etter kort vokal kommer dobbel konsonant: «hoppe» (kort o -> pp).',
+ eks:'hoppe, sitte, legge, kaste'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'medium',
  q:'Hvorfor skriver en «mat» med én t, men «matte» med dobbel t?',
  alt:['Det er tilfeldig','«Mat» har lang vokal, «matte» har kort vokal','«Mat» er nynorsk, «matte» er bokmål','Begge har kort vokal'],
  fasit:'«Mat» har lang vokal, «matte» har kort vokal',
- regel:'Lang vokal → éin konsonant. Kort vokal → dobbel konsonant.',
+ regel:'Lang vokal -> en konsonant. Kort vokal -> dobbel konsonant.',
  eks:'mat (lang a) vs. matte (kort a) · bil (lang i) vs. bille (kort i)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'drag_kolonne',vanske:'medium',
  q:'Sorter ordene: hva er rett skrevet, og hva er feil?',
- kolonner:['Rett skrive','Feil skrive'],
+ kolonner:['Rett skrevet','Feil skrevet'],
  ord:[
   {tekst:'hoppe',fasit:0},
-  {tekst:'sitje',fasit:0},
+  {tekst:'sitte',fasit:0},
   {tekst:'hoper',fasit:1},
   {tekst:'siter',fasit:1},
   {tekst:'kaffe',fasit:0},
@@ -251,32 +251,32 @@ var BANKV2 = [
   {tekst:'løpe',fasit:0},
   {tekst:'løppe',fasit:1}
  ],
- regel:'Kort vokal → dobbel konsonant: hoppe, sitje, kaffe. Lang vokal → éin: løpe.',
- eks:'hoppe (kort o) · løpe (lang ø) · kaffe (kort a)'},
+ regel:'Kort vokal -> dobbel konsonant: hoppe, sitte, kaffe. Lang vokal -> en: lope.',
+ eks:'hoppe (kort o) · lope (lang o) · kaffe (kort a)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'drag_kolonne',vanske:'vanskeleg',
  q:'Adjektiv – rett eller feil skrivemåte?',
- kolonner:['Rett skrive','Feil skrive'],
+ kolonner:['Rett skrevet','Feil skrevet'],
  ord:[
   {tekst:'stille',fasit:0},
   {tekst:'stile',fasit:1},
-  {tekst:'grøn',fasit:0},
-  {tekst:'grønn',fasit:1},
+  {tekst:'grønn',fasit:0},
+  {tekst:'gron',fasit:1},
   {tekst:'liten',fasit:0},
   {tekst:'litten',fasit:1},
   {tekst:'bitter',fasit:0},
   {tekst:'biter',fasit:1}
  ],
- regel:'Dobbel konsonant etter kort vokal: stille, bitter. Éin konsonant etter lang: liten, grøn.',
- eks:'stille (kort i) · grøn (lang ø) · liten (lang i)'},
+ regel:'Dobbel konsonant etter kort vokal: stille, bitter. En konsonant etter lang vokal: liten.',
+ eks:'stille (kort i) · gronn (kort o) · liten (lang i)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'lett',
  q:'Rett de fire rettskrivingsfeilene.',
- tekst:'Mange unggdomar er opptekne av sosiale medium. Familien bør samlast rundt midagsbordet og snakke om daagen. Prøv å leggje ned telefonen og sjå ut vinnduet.',
- errors:{'unggdomar':'ungdomar','midagsbordet':'middagsbordet','daagen':'dagen','vinnduet':'vindauget'},
- fasit:'ungdomar · middagsbordet · dagen · vindauget',
- regel:'Dobbel konsonant berre etter kort vokal. «Dag» har lang a → éin g. «Middag» har kort i → dd.',
- eks:'ungdomar (lang u) · middagsbordet (kort i) · dagen (lang a)'},
+ tekst:'Mange ungdommer er opptatt av sosiale medier. Familien bor samles rundt midagsbordet og snakke om daagen. Prov a legge ned telefonen og se ut vinnduet.',
+ errors:{'bor':'bor','midagsbordet':'middagsbordet','daagen':'dagen','vinnduet':'vinduet'},
+ fasit:'bor · middagsbordet · dagen · vinduet',
+ regel:'Dobbel konsonant brukes etter kort vokal. «Dag» har lang a -> en g. «Middag» har kort i -> dd.',
+ eks:'ungdommer (kort o) · middagsbordet (kort i) · dagen (lang a)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fillsel',vanske:'medium',
  q:'Vel rett form av verbet.',
@@ -284,28 +284,28 @@ var BANKV2 = [
   {pre:'Hun',alt:['hopper','hopperr'],fasit:'hopper',post:'over bekken.'},
   {pre:'Katten',alt:['sover','sovver'],fasit:'sover',post:'i sofaen.'},
   {pre:'Han',alt:['løper','løpper'],fasit:'løper',post:'fort.'},
-  {pre:'Vi',alt:['lagar','laggar'],fasit:'lagar',post:'middag.'}
+  {pre:'Vi',alt:['lager','lagger'],fasit:'lager',post:'middag.'}
  ],
- regel:'«Hoppar» (kort o → pp). «Sover» (lang o → éin v). «Løper» (lang ø → éin p).',
- eks:'hoppar (kort vokal) · sover (lang vokal) · løper (lang vokal)'},
+ regel:'«Hopper» (kort o -> pp). «Sover» (lang o -> en v). «Loper» (lang o -> en p).',
+ eks:'hopper (kort vokal) · sover (lang vokal) · loper (lang vokal)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'cloze',vanske:'lett',
  q:'Fyll inn: «Hun ___ på stolen» (å sitte, presens).',
- hint:'Presensforma av «å sitje» har berre éin konsonant.',
- fasit:'sit',fasit_v:['sit'],
- regel:'Infinitiv: sitje (dobbel t). Presens: sit (éin t).',
+ hint:'Presensformen av «å sitte» skrives med dobbel t.',
+ fasit:'sitter',fasit_v:['sitter'],
+ regel:'Infinitiv: sitte. Presens: sitter.',
  eks:'hun sitter, han sitter, de sitter'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'sann_usann_serie',vanske:'vanskeleg',
  q:'Er påstandene om dobbel konsonant sanne eller usanne?',
  paastandar:[
-  {tekst:'Etter kort vokal kjem alltid dobbel konsonant.',sann:true},
+  {tekst:'Etter kort vokal kommer ofte dobbel konsonant.',sann:true},
   {tekst:'«Bil» har dobbel l fordi i-en er kort.',sann:false},
   {tekst:'«Hoppe» har dobbel p fordi o-en er kort.',sann:true},
-  {tekst:'«Dag» har éin g fordi a-en er lang.',sann:true}
+  {tekst:'«Dag» har en g fordi a-en er lang.',sann:true}
  ],
- regel:'Lang vokal → éin konsonant. Kort vokal → dobbel konsonant. «Bil» har lang i.',
- eks:'bil (lang i, éin l) · ball (kort a, dobbel l)'},
+ regel:'Lang vokal -> en konsonant. Kort vokal -> dobbel konsonant. «Bil» har lang i.',
+ eks:'bil (lang i, en l) · ball (kort a, dobbel l)'},
 
 /* ═══════════════════════════════════════════════════
   4. KJ / SKJ-LYDEN  (6 oppgåver)
@@ -444,13 +444,13 @@ var BANKV2 = [
  q:'Dra hvert ord til riktig ordklasse: substantiv eller verb?',
  kolonner:['Substantiv','Verb'],
  ord:[
-  {tekst:'bok',fasit:0},{tekst:'spring',fasit:1},
-  {tekst:'hund',fasit:0},{tekst:'søv',fasit:1},
-  {tekst:'skulen',fasit:0},{tekst:'skriv',fasit:1},
-  {tekst:'glede',fasit:0},{tekst:'hoppar',fasit:1}
+  {tekst:'bok',fasit:0},{tekst:'løper',fasit:1},
+  {tekst:'hund',fasit:0},{tekst:'sover',fasit:1},
+  {tekst:'skole',fasit:0},{tekst:'skriver',fasit:1},
+  {tekst:'glede',fasit:0},{tekst:'hopper',fasit:1}
  ],
  regel:'Substantiv er navn på ting, personer, steder og begreper. Verb sier hva noen gjør eller er.',
- eks:'Substantiv: bok, hund, skulen. Verb: spring, søv, skriv.'},
+ eks:'Substantiv: bok, hund, skole. Verb: løper, sover, skriver.'},
 
 {kat:'ordklasser',kat_label:'Ordklasser',type:'drag_kolonne',vanske:'medium',
  q:'Dra hvert ord til riktig ordklasse: adjektiv eller adverb?',
@@ -459,9 +459,9 @@ var BANKV2 = [
   {tekst:'rask',fasit:0},{tekst:'raskt',fasit:1},
   {tekst:'vakker',fasit:0},{tekst:'alltid',fasit:1},
   {tekst:'glad',fasit:0},{tekst:'svært',fasit:1},
-  {tekst:'stor',fasit:0},{tekst:'sjeldan',fasit:1}
+  {tekst:'stor',fasit:0},{tekst:'sjelden',fasit:1}
  ],
- regel:'Adjektiv skildrar substantiv. Adverb modifiserer verb, adjektiv eller andre adverb.',
+ regel:'Adjektiv beskriver substantiv. Adverb modifiserer verb, adjektiv eller andre adverb.',
  eks:'rask gut (adj.) · spring raskt (adv.) · alltid glad (adv. + adj.)'},
 
 {kat:'ordklasser',kat_label:'Ordklasser',type:'drag_kolonne',vanske:'vanskeleg',
@@ -477,41 +477,41 @@ var BANKV2 = [
  eks:'Pronomen: hun, de, seg. Konjunksjon: og, men, eller.'},
 
 {kat:'ordklasser',kat_label:'Ordklasser',type:'klikk_marker',vanske:'lett',
- q:'Klikk på alle verba i setninga.',
+ q:'Klikk på alle verbene i setningen.',
  tekst:'Hunden løper fort og bjeffer høyt når naboen kommer.',
  maalordklasse:'verb',
- fasit_ord:['spring','bjeffer','kjem'],
+ fasit_ord:['løper','bjeffer','kommer'],
  regel:'Verb sier hva noen gjør, tenker eller er.',
- eks:'spring, bjeffer, kjem = handlingsverb'},
+ eks:'løper, bjeffer, kommer = handlingsverb'},
 
 {kat:'ordklasser',kat_label:'Ordklasser',type:'klikk_marker',vanske:'medium',
- q:'Klikk på alle substantiva i setninga.',
- tekst:'Læreren skreiv ei lang oppgave på tavla hver dag.',
+ q:'Klikk på alle substantivene i setningen.',
+ tekst:'Læreren skrev en lang oppgave på tavlen hver dag.',
  maalordklasse:'substantiv',
- fasit_ord:['læreren','oppgave','tavla','dag'],
+ fasit_ord:['læreren','oppgave','tavlen','dag'],
  regel:'Substantiv er navn på personer, ting, steder og begreper.',
- eks:'læreren (person), oppgave (ting), tavla (ting), dag (tid/begrep)'},
+ eks:'læreren (person), oppgave (ting), tavlen (ting), dag (tid/begrep)'},
 
 {kat:'ordklasser',kat_label:'Ordklasser',type:'mc',vanske:'lett',
- q:'Hva ordklasse hører «rask» til i «Han er en rask løper»?',
+ q:'Hvilken ordklasse hører «rask» til i «Han er en rask løper»?',
  alt:['Substantiv','Adjektiv','Verb','Adverb'],
  fasit:'Adjektiv',
  regel:'Adjektiv beskriver substantiv. Her beskriver «rask» substantivet «løper».',
  eks:'en rask løper · en stor bok · et rødt hus'},
 
 {kat:'ordklasser',kat_label:'Ordklasser',type:'mc',vanske:'medium',
- q:'Hva ordklasse er «fort» i «Han springer fort»?',
+ q:'Hvilken ordklasse er «fort» i «Han løper fort»?',
  alt:['Adjektiv','Adverb','Verb','Preposisjon'],
  fasit:'Adverb',
  regel:'Adverb sier hvordan, når eller hvor mye. Her sier «fort» hvordan han løper.',
  eks:'fort, sakte, alltid, aldri, svært'},
 
-{kat:'ordklasser',kat_label:'Ordklasser',type:'finn_feil',vanske:'medium',
+{kat:'ordklasser',kat_label:'Ordklasser',type:'klikk_marker',vanske:'medium',
  q:'Klikk på hvert ord som er et verb i setningen.',
  tekst:'Hun skrev brevet raskt og sendte det samme kvelden.',
- fasit_feil:['skreiv','sende'],
+ fasit_ord:['skrev','sendte'],
  regel:'Verb sier hva noen gjør. «Skrev» og «sendte» er handlingsverb i preteritum.',
- eks:'skreiv (å skrive) · sende (å sende)'},
+ eks:'skrev (å skrive) · sendte (å sende)'},
 
 {kat:'ordklasser',kat_label:'Ordklasser',type:'cloze',vanske:'lett',
  q:'«Raskt» i «Han sprang raskt» er et ___.',
@@ -521,7 +521,7 @@ var BANKV2 = [
  eks:'Han sprang raskt. Hun sang vakkert. De jobbet hardt.'},
 
 {kat:'ordklasser',kat_label:'Ordklasser',type:'mc',vanske:'vanskeleg',
- q:'Hva ordklasse er «fordi» i «Hun gikk hjem fordi hun var trøtt»?',
+ q:'Hvilken ordklasse er «fordi» i «Hun gikk hjem fordi hun var trøtt»?',
  alt:['Subjunksjon','Konjunksjon','Adverb','Preposisjon'],
  fasit:'Subjunksjon',
  regel:'Subjunksjonar innleier leddsetningar. «Fordi» innleier ei årsaks-leddsetning.',
@@ -553,10 +553,10 @@ var BANKV2 = [
 
 {kat:'setningsbygging',kat_label:'Setningsbygging',type:'mc',vanske:'lett',
  q:'Hva er problemet med: «Han gikk tur og det var kaldt og han hadde ikke lue og det var dumt.»?',
- alt:['For mange «og» – teksten bør delast opp','«Tur» er feil ord','«Kaldt» er feil','Det er ingen feil'],
- fasit:'For mange «og» – teksten bør delast opp',
- regel:'Unngå lange kjeder med «og». Del opp med punktum og variér setningsoppbygginga.',
- eks:'Han gjekk tur. Det var kaldt, og han angra på at han hadde gløymt lua.'},
+ alt:['For mange «og» - teksten bør deles opp','«Tur» er feil ord','«Kaldt» er feil','Det er ingen feil'],
+ fasit:'For mange «og» - teksten bør deles opp',
+ regel:'Unngå lange kjeder med «og». Del opp med punktum og varier setningsoppbyggingen.',
+ eks:'Han gikk tur. Det var kaldt, og han angret på at han hadde glemt lua.'},
 
 {kat:'setningsbygging',kat_label:'Setningsbygging',type:'mc',vanske:'medium',
  q:'Hva er den beste sammenslåingen av: «Brettspill er bra. Brettspill samler folk. Brettspill er sosialt.»?',
@@ -569,16 +569,16 @@ var BANKV2 = [
  q:'Hva er den beste faglige omskrivingen av: «Klimaendringer er et veldig stort problem og sånn, og det påvirker alle.»?',
  alt:['Klimaendringer er et alvorlig globalt problem som krever handling fra alle.','Klimaendringer er et veldig alvorlig og stort problem.','Klimaendringene er store og alle bør gjøre noe.','Klimaendringer er et problem som påvirker oss.'],
  fasit:'Klimaendringer er et alvorlig globalt problem som krever handling fra alle.',
- regel:'Fjern «og sånn», vage ord og samankopling. Bruk presist og variert ordval.',
- eks:'«veldig stort» → «alvorleg globalt» · «og sånn» → fjern'},
+ regel:'Fjern «og sånn», vage ord og samkobling. Bruk presist og variert ordvalg.',
+ eks:'«veldig stort» -> «alvorlig globalt» · «og sånn» -> fjern'},
 
 {kat:'setningsbygging',kat_label:'Setningsbygging',type:'sorter_rekke',vanske:'medium',
- q:'Sett delene i riktig rekkefølge for en faglig innledning.',
+ q:'Sett delene i riktig rekkefolge for en faglig innledning.',
  items:[
   {tekst:'Presentere temaet'},
-  {tekst:'Gje bakgrunnsinformasjon'},
+  {tekst:'Gi bakgrunnsinformasjon'},
   {tekst:'Formulere problemstilling'},
-  {tekst:'Varsle oppbygginga av teksten'}
+  {tekst:'Varsle oppbyggingen av teksten'}
  ],
  regel:'En god innledning: tema → bakgrunn → problemstilling → oppbyggingssignal.',
  eks:'Klimaendringar er … [tema] → Forsking viser … [bakgrunn] → Spørsmålet er … [problemstilling]'},
@@ -707,9 +707,9 @@ var BANKV2 = [
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'lett',
  q:'Hva er en ingress?',
- alt:['Éi til to setningar som innleier og presenterer temaet','Den lengste hovuddelen av teksten','Kjeldelista nedst i teksten','Avslutninga av teksten'],
- fasit:'Éi til to setningar som innleier og presenterer temaet',
- regel:'Ingressen kjem etter overskrifta og gir lesaren et raskt overblikk.',
+ alt:['En til to setninger som innleder og presenterer temaet','Den lengste hoveddelen av teksten','Kildelista nederst i teksten','Avslutningen av teksten'],
+ fasit:'En til to setninger som innleder og presenterer temaet',
+ regel:'Ingressen kommer etter overskriften og gir leseren et raskt overblikk.',
  eks:'«Plasten i havet er en av vår tids største miljøtruslar. Her er det du treng å vite.»'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'mc',vanske:'medium',
@@ -759,17 +759,17 @@ var BANKV2 = [
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'cloze',vanske:'lett',
  q:'Et godt avsnitt har: temasetning → ___ → avslutningssetning.',
- hint:'Hva kommer mellom temasetning og avslutning – det som utdyper hovedpoenget?',
- fasit:'utdjupande setningar',
- fasit_v:['utdjupande setningar','kommentarsetningar','forklaringar og døme','utdjuping','kommentarar'],
- regel:'Etter temasetning kjem utdjupande kommentarsetningar med forklaring, bevis og døme.',
+ hint:'Hva kommer mellom temasetning og avslutning - det som utdyper hovedpoenget?',
+ fasit:'utdypende setninger',
+ fasit_v:['utdypende setninger','kommentarsetninger','forklaringer og eksempler','utdyping','kommentarer'],
+ regel:'Etter temasetning kommer utdypende kommentarsetninger med forklaring, bevis og eksempler.',
  eks:'Temasetning → forklaring → bevis/kjelde → kommentar'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'cloze',vanske:'medium',
  q:'Fyll inn et overgangsord: «KI kan effektivisere arbeidet, ___ reiser det også etiske spørsmål.»',
- hint:'Du treng et ord som viser motsetnad.',
- fasit:'men',fasit_v:['men','likevel','samstundes'],
- regel:'«Men» og «likevel» signaliserer motsetnad og er sentrale i drøftande tekstar.',
+ hint:'Du trenger et ord som viser motsetning.',
+ fasit:'men',fasit_v:['men','likevel','samtidig'],
+ regel:'«Men» og «likevel» signaliserer motsetning og er sentrale i drøftende tekster.',
  eks:'KI er nyttig, men vi må stille kritiske spørsmål.'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'sorter_rekke',vanske:'vanskeleg',
@@ -922,8 +922,8 @@ var BANKV2 = [
  q:'Oppgåva er: «Analyser hvordan forfattaren brukar naturskildringar i novella.» Hva høyrer heime?',
  kolonner:['Høyrer heime','Høyrer IKKE heime'],
  ord:[
-  {tekst:'Hva funksjon har naturskildringa i teksten?',fasit:0},
-  {tekst:'Hva litterære verkemiddel brukar forfattaren?',fasit:0},
+  {tekst:'Hvilken funksjon har naturskildringa i teksten?',fasit:0},
+  {tekst:'Hvilke litterære verkemiddel brukar forfattaren?',fasit:0},
   {tekst:'Handlingsreferat: hva skjer i novella?',fasit:1},
   {tekst:'Forfattarens biografi og liv',fasit:1},
   {tekst:'Hvordan skapar naturskildringa stemning?',fasit:0},
@@ -945,7 +945,7 @@ var BANKV2 = [
 
 {kat:'oppgavetolking',kat_label:'Oppgavetolking',type:'cloze',vanske:'medium',
  q:'Oppgåva seier «analyser». Det tyder at du skal undersøkje ___ teksten er bygd opp og hva effekt grepa har.',
- hint:'Analyse handlar om å undersøkje en bestemt ting: oppbygginga. Hva spørjeord passar?',
+ hint:'Analyse handlar om å undersøkje en bestemt ting: oppbygginga. Hvilket spørjeord passar?',
  fasit:'hvordan',fasit_v:['hvordan'],
  regel:'Analyse = systematisk undersøking av hvordan noko er laga og hva det gjer med lesaren.',
  eks:'Hvordan brukar forfattaren metaforar? Hvordan skapar forteljarstemma nærleik?'},
@@ -962,10 +962,10 @@ var BANKV2 = [
   ═══════════════════════════════════════════════════ */
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'finn_feil',vanske:'lett',
  q:'Klikk på kvart ord som er for uformelt for en fagartikkel.',
- tekst:'Plast i havet er jo heilt farleg for dyr og sånn.',
- fasit_feil:['jo','heilt','sånn'],
- regel:'Fagartiklar unngår forsterkingsord («heilt»), fyllord («jo») og vage uttrykk («og sånn»).',
- eks:'Unngå: «jo, heilt, og sånn». Skriv: «Plast i havet er en dokumentert trussel mot dyrelivet.»'},
+ tekst:'Plast i havet er jo helt farlig for dyr og sånn.',
+ fasit_feil:['jo','helt','sånn'],
+ regel:'Fagartikler unngår forsterkningsord («helt»), fyllord («jo») og vage uttrykk («og sånn»).',
+ eks:'Unngå: «jo, helt, og sånn». Skriv: «Plast i havet er en dokumentert trussel mot dyrelivet.»'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'finn_feil',vanske:'medium',
  q:'Klikk på ordene som gjør teksten for subjektiv for en fagartikkel.',
@@ -976,8 +976,8 @@ var BANKV2 = [
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'finn_feil',vanske:'vanskeleg',
  q:'Klikk på orda som gjer argumentasjonen for kjensleladd.',
- tekst:'Kjeldene viser tydeleg at dette er ekstremt farleg, og alle forstår jo at vi må handle straks.',
- fasit_feil:['tydeleg','ekstremt','alle','forstår','jo','straks'],
+ tekst:'Kildene viser tydelig at dette er ekstremt farlig, og alle forstår jo at vi må handle straks.',
+ fasit_feil:['tydelig','ekstremt','alle','forstår','jo','straks'],
  regel:'Absolutte og kjensleladde ord bør bytast med nøytrale, etterprøvbare formuleringar.',
  eks:'Unngå: «alle forstår jo». Skriv: «Fleire studiar peikar i same retning.»'},
 
@@ -1106,7 +1106,7 @@ var BANKV2 = [
 
 {kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'cloze',vanske:'medium',
  q:'Fyll inn: «Matprisane stig, ___ mange familiar har dårlegare råd.»',
- hint:'Verknaden kjem etter årsaka. Hva ord viser konsekvens?',
+ hint:'Verknaden kjem etter årsaka. Hvilket ord viser konsekvens?',
  fasit:'derfor',fasit_v:['derfor'],
  regel:'«Derfor» er et årsaksadverb som viser at det som følgjer, er resultatet av årsaka.',
  eks:'Prisane steig, derfor handla folk mindre. Vegen var glatt, derfor køyrde hun sakte.'},
@@ -1117,7 +1117,7 @@ var BANKV2 = [
  questions:[
   {q:'Hva er den første årsaka?',alt:['Born les lite','Smalt ordforråd','Fagvanskar'],fasit:0},
   {q:'Hva er den mellomliggjande verknaden?',alt:['Borna les meir','De utviklar smalare ordforråd','Fagtekstane vert enklare'],fasit:1},
-  {q:'Hva ord markerer den siste verknaden?',alt:['når','gjer','derfor'],fasit:2}
+  {q:'Hvilket ord markerer den siste verknaden?',alt:['når','gjer','derfor'],fasit:2}
  ],
  regel:'Årsak–verknad kan vere ei kjede: A → B → C. «Derfor» signaliserer den endelege konsekvensen.',
  eks:'Lite lesing → smalt ordforråd → vanskeleg å forstå fagtekstar → fagvanskar'},

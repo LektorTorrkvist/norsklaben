@@ -163,11 +163,15 @@ function nlBoot() {
   document.addEventListener('click', function(e) {
     var tok = e.target.closest('.drag-ord-token');
     if (tok) {
+      if (tok.dataset.nlTouchDragged === '1') return;
       nlDragOrdMoveToAnswer(tok);
       return;
     }
     var picked = e.target.closest('.drag-ord-picked');
-    if (picked) nlDragOrdMoveToBank(picked);
+    if (picked) {
+      if (picked.dataset.nlTouchDragged === '1') return;
+      nlDragOrdMoveToBank(picked);
+    }
   });
 
   /* ── MC radio changes: auto-check in adaptive mode, else clear score ── */
@@ -1642,13 +1646,15 @@ function nlResetFillSel(tid, sid) {
 /* ── DRAG-ORD (V1 import, click-to-build) ── */
 function nlInitDragOrd() {
   document.querySelectorAll('.drag-ord-area').forEach(function(area) {
-    var bank = area.querySelector('.drag-ord-bank');
-    if (!bank) return;
-    bank.querySelectorAll('button').forEach(function(btn, i) {
+    area.querySelectorAll('.drag-ord-bank button, .drag-ord-answer button').forEach(function(btn, i) {
       if (!btn.dataset.order) btn.dataset.order = String(i);
       btn.classList.add('drag-ord-token');
       btn.classList.remove('drag-ord-picked');
       btn.type = 'button';
+      if (btn.dataset.nlTouchBoundDragOrd !== '1') {
+        nlAttachTouchDrag(btn, 'drag-ord');
+        btn.dataset.nlTouchBoundDragOrd = '1';
+      }
     });
   });
 }
@@ -2319,6 +2325,9 @@ function nlTouchPoint(ev) {
 }
 
 function nlTouchDropSelector(kind) {
+  if (kind === 'drag-ord') {
+    return '.drag-ord-answer, .drag-ord-bank';
+  }
   return kind === 'burger'
     ? '.burger-bucket-drop, .burger-bank'
     : '.sort-bucket-drop, .sort-bank';
@@ -2338,6 +2347,22 @@ function nlTouchCreateGhost(chip, p) {
 
 function nlTouchApplyTarget(kind, chip, target) {
   if (!target) return false;
+  if (kind === 'drag-ord') {
+    if (target.matches('.drag-ord-answer')) {
+      chip.classList.remove('drag-ord-token', 'picked');
+      chip.classList.add('drag-ord-picked');
+      target.appendChild(chip);
+      return true;
+    }
+    if (target.matches('.drag-ord-bank')) {
+      chip.classList.remove('drag-ord-picked', 'picked');
+      chip.classList.add('drag-ord-token');
+      target.appendChild(chip);
+      return true;
+    }
+    return false;
+  }
+
   if (kind === 'burger') {
     if (target.matches('.burger-bucket-drop') || target.matches('.burger-bank')) {
       chip.classList.remove('picked');
@@ -2412,7 +2437,7 @@ function nlAttachTouchDrag(chip, kind) {
     if (target !== _td.target) {
       if (_td.target) _td.target.classList.remove('drag-over');
       _td.target = target;
-      if (_td.target && _td.target.matches('.sort-bucket-drop, .burger-bucket-drop')) {
+      if (_td.target && _td.target.matches('.sort-bucket-drop, .burger-bucket-drop, .drag-ord-answer, .drag-ord-bank')) {
         _td.target.classList.add('drag-over');
       }
     }
@@ -4162,10 +4187,32 @@ function nlAdShowSummary() {
   var xpEl = document.getElementById('nl-ad-sum-xp');
   var retteEl = document.getElementById('nl-ad-sum-rette');
   var feilEl = document.getElementById('nl-ad-sum-feil');
+  var sumProgressFillEl = document.getElementById('nl-ad-sum-progress-fill');
+  var sumProgressTextEl = document.getElementById('nl-ad-sum-progress-text');
+  var sumStreakEl = document.getElementById('nl-ad-sum-streak');
+  var profProgressFillEl = document.getElementById('nl-ad-prof-progress-fill');
+  var profProgressTextEl = document.getElementById('nl-ad-prof-progress-text');
+  var profStreakEl = document.getElementById('nl-ad-prof-streak');
   if (poengEl) poengEl.textContent = totalPoints + '/' + totalMax;
   if (xpEl) xpEl.textContent = '+' + String(sessionXp);
   if (retteEl) retteEl.textContent = String(totalCorrect);
   if (feilEl) feilEl.textContent = String(totalWrong);
+  var progressWidth = profProgressFillEl ? String(profProgressFillEl.style.width || '0%') : '0%';
+  if (sumProgressFillEl) {
+    sumProgressFillEl.style.width = '0%';
+    setTimeout(function() { sumProgressFillEl.style.width = progressWidth; }, 60);
+  }
+  if (sumProgressTextEl) {
+    sumProgressTextEl.textContent = profProgressTextEl
+      ? String(profProgressTextEl.textContent || '').trim()
+      : (totalPoints + ' / ' + totalMax + ' poeng');
+  }
+  if (sumStreakEl) {
+    var defaultStreak = (document.documentElement && document.documentElement.lang === 'nb') ? '0 dager' : '0 dagar';
+    sumStreakEl.textContent = profStreakEl
+      ? String(profStreakEl.textContent || '').trim()
+      : defaultStreak;
+  }
 
   nlAdSaveSessionHistory({
     ts: new Date().toISOString(),

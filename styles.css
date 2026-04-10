@@ -1370,6 +1370,58 @@ nav a.active { font-weight: 700; }
   padding: 0 .5rem;
 }
 
+.adp-summary-progress-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .6rem;
+  align-items: end;
+  margin-bottom: .6rem;
+}
+
+.adp-summary-progress-wrap,
+.adp-summary-streak-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--rs);
+  background: #fff;
+  padding: .5rem .65rem;
+}
+
+.adp-summary-progress-bar {
+  height: 8px;
+  border-radius: 99px;
+  background: rgba(115, 85, 30, .16);
+  overflow: hidden;
+  margin: .28rem 0 .22rem;
+}
+
+#nl-ad-sum-progress-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #2c7a57 0%, #c18b2e 100%);
+  transition: width .45s cubic-bezier(.4,0,.2,1);
+}
+
+.adp-summary-progress-text {
+  display: block;
+  font-size: .78rem;
+  color: #6a522a;
+  font-variant-numeric: tabular-nums;
+}
+
+.adp-summary-streak-wrap {
+  text-align: center;
+  min-width: 122px;
+}
+
+.adp-summary-streak-wrap strong {
+  display: block;
+  margin-top: .18rem;
+  font-size: 1.02rem;
+  color: #8a3f18;
+}
+
 .adp-summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -2696,7 +2748,20 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: .7rem 0; }
   font-weight: 600;
   padding: .24rem .62rem;
   cursor: pointer;
+  touch-action: none;
+  user-select: none;
   transition: all .15s;
+}
+
+.drag-ord-bank.drag-over,
+.drag-ord-answer.drag-over {
+  border-color: var(--mid);
+  background: var(--plight);
+}
+
+.drag-ord-token.dragging,
+.drag-ord-picked.dragging {
+  opacity: .35;
 }
 
 .drag-ord-token:hover,
