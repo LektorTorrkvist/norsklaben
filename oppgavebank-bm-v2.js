@@ -4749,10 +4749,10 @@ function mtInit() {
 }
 
 function mtShouldAutoInit() {
-  if (typeof document === 'undefined') return false;
+  if (typeof window === 'undefined') return false;
   // Skrivelab has its own adaptive engine; avoid double-binding there.
-  var hasSkrivelabScript = !!document.querySelector('script[src*="skrivelab.js"], script[src*="skrivelab-bm.js"]');
-  return !hasSkrivelabScript;
+  var page = String((window.location && window.location.pathname) || '').toLowerCase();
+  return page.indexOf('skrivelab') === -1;
 }
 
 if (mtShouldAutoInit()) {
