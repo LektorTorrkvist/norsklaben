@@ -26,6 +26,7 @@ function nlBoot() {
   }
 
   nlSafeInit('ensure-bank-shell', nlEnsureBankShell);
+  nlSafeInit('import-bank-tasks', nlImportMTBankTasks);
   nlSafeInit('normalize-categories', nlNormalizeCategories);
   nlSafeInit('normalize-types-and-titles', nlNormalizeExerciseMetaFromType);
 
@@ -343,11 +344,11 @@ var nlCategoryIdsByGroup = [
 ];
 
 var nlGroupTitles = [
-  'Gruppe 1 - Grunnleggjande grammatikk',
-  'Gruppe 2 - Setning og avsnitt',
-  'Gruppe 3 - Tekst og sjanger',
-  'Gruppe 4 - Kjeldebruk',
-  'Gruppe 5 - Språk og stil'
+  'Grunnleggjande grammatikk',
+  'Setning og avsnitt',
+  'Tekst og sjanger',
+  'Kjeldebruk',
+  'Språk og stil'
 ];
 
 function nlEnsureBankShell() {
