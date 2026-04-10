@@ -955,7 +955,7 @@ function nlMtBuildExerciseCore(task, i, localIx) {
   return '<article class="ei">' + header +
     '<div class="ec">' +
     promptBoxHtml +
-    '<div class="inst">Denne oppgåvetypen er delvis importert. Svar i feltet under og bruk rettleiinga.</div>' +
+    '<div class="inst">Denne oppgavetypen er delvis importert. Svar i feltet under og bruk veiledningen.</div>' +
     '<div class="subinst"><strong>Type:</strong> ' + nlMtEscHtml(type || 'ukjent') + '</div>' +
     guideHtml +
     '<textarea id="' + fallbackId + '" class="write-area" rows="4" placeholder="Skriv svaret ditt her..."></textarea>' +
@@ -3785,7 +3785,7 @@ function nlAdMasteryData(pct) {
   if (pct >= 90) return {
     medal: '&#127942;',
     heading: 'Fantastisk innsats!',
-    comment: 'Du viser sterk meistring av stoffet. Hald fram slik, og utfordre deg selv med vanskeligere oppgaver neste gang!'
+    comment: 'Du viser sterk mestring av stoffet. Fortsett slik, og utfordre deg selv med vanskeligere oppgaver neste gang!'
   };
   if (pct >= 70) return {
     medal: '&#11088;',

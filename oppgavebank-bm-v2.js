@@ -63,19 +63,19 @@ var BANKV2 = [
   1. OG / Å  (10 oppgaver)
   ═══════════════════════════════════════════════════ */
 {kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'lett',
- q:'Vel rett ord: «Hun liker ___ danse.»',
+ q:'Velg rett ord: «Hun liker ___ danse.»',
  alt:['og','å'],fasit:'å',
  regel:'«Å» er infinitivsmerke og kommer foran et verb i infinitiv.',
  eks:'Hun liker å danse. Han prøver å lese.'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'lett',
- q:'Vel rett ord: «Han spiser brød ___ drikker melk.»',
+ q:'Velg rett ord: «Han spiser brød ___ drikker melk.»',
  alt:['og','å'],fasit:'og',
  regel:'«Og» er et bindeord som binder sammen to ledd eller setninger.',
  eks:'Han spiser brød og drikker melk. Hun leser og skriver.'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'fillsel',vanske:'medium',
- q:'Vel «og» eller «å» i hver setning.',
+ q:'Velg «og» eller «å» i hver setning.',
  items:[
   {pre:'Hun prøvde',alt:['og','å'],fasit:'å',post:'forstå oppgaven.'},
   {pre:'Katten',alt:['og','å'],fasit:'og',post:'hunden leker sammen.'},
@@ -184,7 +184,7 @@ var BANKV2 = [
 
 {kat:'sammensatt',kat_label:'Sammensatte ord',type:'drag_kolonne',vanske:'medium',
  q:'Hvilke ord er riktig skrevet, og hvilke er feil (særskrevne)?',
- kolonner:['Rett skrive','Feil (særskrive)'],
+ kolonner:['Rett skrevet','Feil (særskrevet)'],
  ord:[
   {tekst:'fotballbane',fasit:0},
   {tekst:'fotball bane',fasit:1},
@@ -207,9 +207,9 @@ var BANKV2 = [
  q:'Er påstandene om sammensatte ord sanne eller usanne?',
  paastandar:[
   {tekst:'Sammensatte ord skriver en alltid i ett på norsk.',sann:true},
-  {tekst:'«Lamme lår» og «lammelår» tyder det same.',sann:false},
+  {tekst:'«Lamme lår» og «lammelår» betyr det samme.',sann:false},
   {tekst:'Bindestrek brukes mellom et norsk ord og en forkorting (f.eks. barne-tv).',sann:true},
-  {tekst:'«Stor by» og «storby» tyder det same.',sann:false}
+  {tekst:'«Stor by» og «storby» betyr det samme.',sann:false}
  ],
  regel:'Særskriving kan endre betydningen. «Storby» = fast begrep. «Stor by» = en by som er stor.',
  eks:'lammelår (mat) vs. lamme lår (lår som ikke rører seg)'},
@@ -222,7 +222,7 @@ var BANKV2 = [
  eks:'barne-tv, e-post, 17-åring, IT-avdeling'},
 
 /* ═══════════════════════════════════════════════════
-  3. DOBBEL KONSONANT  (8 oppgåver)
+  3. DOBBEL KONSONANT  (8 oppgaver)
   ═══════════════════════════════════════════════════ */
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'lett',
  q:'Hva er rett infinitivsform?',
@@ -279,7 +279,7 @@ var BANKV2 = [
  eks:'ungdommer (kort o) · middagsbordet (kort i) · dagen (lang a)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fillsel',vanske:'medium',
- q:'Vel rett form av verbet.',
+ q:'Velg rett form av verbet.',
  items:[
   {pre:'Hun',alt:['hopper','hopperr'],fasit:'hopper',post:'over bekken.'},
   {pre:'Katten',alt:['sover','sovver'],fasit:'sover',post:'i sofaen.'},
@@ -308,7 +308,7 @@ var BANKV2 = [
  eks:'bil (lang i, en l) · ball (kort a, dobbel l)'},
 
 /* ═══════════════════════════════════════════════════
-  4. KJ / SKJ-LYDEN  (6 oppgåver)
+  4. KJ / SKJ-LYDEN  (6 oppgaver)
   ═══════════════════════════════════════════════════ */
 {kat:'kj_skj',kat_label:'Kj / skj-lyden',type:'mc',vanske:'lett',
  q:'Hva er rett skrivemåte av klesplagget med knapper?',
@@ -325,7 +325,7 @@ var BANKV2 = [
  eks:'kjønn (grammatikk) vs. skjønn (vakker)'},
 
 {kat:'kj_skj',kat_label:'Kj / skj-lyden',type:'fillsel',vanske:'lett',
- q:'Vel rett skrivemåte i hver setning.',
+ q:'Velg rett skrivemåte i hver setning.',
  items:[
   {pre:'Det var en',alt:['kjønn','skjønn'],fasit:'skjønn',post:'solnedgang.'},
   {pre:'Hun ville ikke',alt:['kjenne','skjenne'],fasit:'kjenne',post:'seg igjen.'},
@@ -359,8 +359,8 @@ var BANKV2 = [
 {kat:'kj_skj',kat_label:'Kj / skj-lyden',type:'cloze',vanske:'vanskeleg',
  q:'Fyll inn: «Hun ___ igjen lukta fra barndommen.» (å kjenne, preteritum)',
  hint:'Preteritum av «å kjenne». Skriv med «kj».',
- fasit:'kjende',fasit_v:['kjende','kjente'],
- regel:'«Å kjenne» → preteritum «kjende» (nynorsk). Skriv med «kj».',
+ fasit:'kjente',fasit_v:['kjente','kjende'],
+ regel:'«Å kjenne» → preteritum «kjente». Skriv med «kj».',
  eks:'Hun kjente igjen lukta. Han kjente seg igjen.'},
 
 /* ═══════════════════════════════════════════════════
@@ -377,7 +377,7 @@ var BANKV2 = [
  q:'Hvor setter du komma? «Siden hun var syk gikk hun hjem.»',
  alt:['Siden hun var syk, gikk hun hjem.','Siden, hun var syk gikk hun hjem.','Siden hun var, syk gikk hun hjem.','Ingen komma trengs.'],
  fasit:'Siden hun var syk, gikk hun hjem.',
- regel:'Komma etter framskuven leddsetning: [leddsetning], [hovudsetning].',
+ regel:'Komma etter fremskutt leddsetning: [leddsetning], [hovedsetning].',
  eks:'Fordi det regnet, tok vi bussen. Selv om hun var trøtt, gikk hun.'},
 
 {kat:'tegnsetting',kat_label:'Tegnsetting',type:'fix',vanske:'lett',
@@ -524,11 +524,11 @@ var BANKV2 = [
  q:'Hvilken ordklasse er «fordi» i «Hun gikk hjem fordi hun var trøtt»?',
  alt:['Subjunksjon','Konjunksjon','Adverb','Preposisjon'],
  fasit:'Subjunksjon',
- regel:'Subjunksjonar innleier leddsetningar. «Fordi» innleier ei årsaks-leddsetning.',
+ regel:'Subjunksjoner innleder leddsetninger. «Fordi» innleder en årsaks-leddsetning.',
  eks:'fordi, at, når, om, selv om, mens, siden, dersom'},
 
 /* ═══════════════════════════════════════════════════
-  7. SETNINGSBYGGING  (8 oppgåver)
+  7. SETNINGSBYGGING  (8 oppgaver)
   ═══════════════════════════════════════════════════ */
 {kat:'setningsbygging',kat_label:'Setningsbygging',type:'drag_ord',vanske:'lett',
  q:'Sett ordene i riktig rekkefølge (V2-regelen, tidsadverbial først).',
@@ -581,10 +581,10 @@ var BANKV2 = [
   {tekst:'Varsle oppbyggingen av teksten'}
  ],
  regel:'En god innledning: tema → bakgrunn → problemstilling → oppbyggingssignal.',
- eks:'Klimaendringar er … [tema] → Forsking viser … [bakgrunn] → Spørsmålet er … [problemstilling]'},
+ eks:'Klimaendringer er … [tema] → Forskning viser … [bakgrunn] → Spørsmålet er … [problemstilling]'},
 
 {kat:'setningsbygging',kat_label:'Setningsbygging',type:'fix',vanske:'vanskeleg',
- q:'Forbetr teksten: fjern gjentaking og munnlege uttrykk.',
+ q:'Forbedre teksten: fjern gjentakelse og muntlige uttrykk.',
  tekst:'Det er bra å trene fordi det er bra for helsa. Trening er bra og trening gjør at du blir sterkere og sånt.',
  errors:{'Det er bra å trene fordi det er bra for helsa.':'Regelmessig trening styrker helsa.','Trening er bra og trening gjør at du blir sterkere og sånt.':'Fysisk aktivitet forbedrer både kondisjon og muskelstyrke.'},
  fasit:'Regelmessig trening styrker helsa. Fysisk aktivitet forbedrer både kondisjon og muskelstyrke.',
@@ -592,7 +592,7 @@ var BANKV2 = [
  eks:'«bra» → «styrker helsa» · «sterkere og sånt» → «forbedrer kondisjon og muskelstyrke»'},
 
 /* ═══════════════════════════════════════════════════
-  8. BINDEORD  (10 oppgåver)
+  8. BINDEORD  (10 oppgaver)
   ═══════════════════════════════════════════════════ */
 {kat:'bindeord',kat_label:'Bindeord',type:'mc',vanske:'lett',
  q:'Velg riktig bindeord: «Hun var trøtt, ___ gikk hun hjem.»',
@@ -602,11 +602,11 @@ var BANKV2 = [
  eks:'Hun var trøtt, derfor gikk hun hjem.'},
 
 {kat:'bindeord',kat_label:'Bindeord',type:'mc',vanske:'lett',
- q:'Vel rett bindeord: «Det regnar, ___ vi går ut likevel.»',
+ q:'Velg rett bindeord: «Det regner, ___ vi går ut likevel.»',
  alt:['men','derfor','fordi','og'],
  fasit:'men',
  regel:'«Men» viser kontrast – to ting som går mot hverandre.',
- eks:'Det regnar, men vi går ut likevel.'},
+ eks:'Det regner, men vi går ut likevel.'},
 
 {kat:'bindeord',kat_label:'Bindeord',type:'mc',vanske:'medium',
  q:'Hva er forskjellen mellom «men» og «selv om»?',
@@ -627,14 +627,14 @@ var BANKV2 = [
  eks:'trente → derfor vant · selv om det regner → likevel'},
 
 {kat:'bindeord',kat_label:'Bindeord',type:'fillsel',vanske:'vanskeleg',
- q:'Vel det mest presise bindeordet.',
+ q:'Velg det mest presise bindeordet.',
  items:[
   {pre:'KI kan være nyttig,',alt:['men','og','derfor'],fasit:'men',post:'det reiser etiske spørsmål.'},
   {pre:'Hun øvde mye.',alt:['Dessuten','Likevel','Derfor'],fasit:'Dessuten',post:'leste hun teori hver kveld.'},
-  {pre:'Han studerte flittig,',alt:['altså','likevel','og'],fasit:'likevel',post:'strauk han på eksamen.'}
+  {pre:'Han studerte flittig,',alt:['altså','likevel','og'],fasit:'likevel',post:'strøk han på eksamen.'}
  ],
- regel:'Men = motsetnad. Dessutan = tillegg. Likevel = uventa kontrast.',
- eks:'nyttig, men etiske spørsmål · øvde, dessutan las teori · studerte, likevel strauk'},
+ regel:'Men = motsetning. Dessuten = tillegg. Likevel = uventet kontrast.',
+ eks:'nyttig, men etiske spørsmål · øvde, dessuten leste teori · studerte, likevel strøk'},
 
 {kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'medium',
  q:'Sett ordene i riktig rekkefølge (V2 etter «derfor»).',
@@ -648,11 +648,11 @@ var BANKV2 = [
  ord:['Likevel','møtte','han','opp','på','skolen','.'],
  fasit:'Likevel møtte han opp på skolen .',
  regel:'Etter «likevel» kommer verbet foran subjektet (V2-regelen).',
- eks:'Likevel møtte han … · Dessutan er det …'},
+ eks:'Likevel møtte han … · Dessuten er det …'},
 
 {kat:'bindeord',kat_label:'Bindeord',type:'drag_kolonne',vanske:'medium',
- q:'Sorter bindeorda etter funksjon: årsak eller kontrast?',
- kolonner:['Årsak / konsekvens','Kontrast / motsetnad'],
+ q:'Sorter bindeordene etter funksjon: årsak eller kontrast?',
+ kolonner:['Årsak / konsekvens','Kontrast / motsetning'],
  ord:[
   {tekst:'fordi',fasit:0},
   {tekst:'likevel',fasit:1},
@@ -667,8 +667,8 @@ var BANKV2 = [
 {kat:'bindeord',kat_label:'Bindeord',type:'cloze',vanske:'medium',
  q:'Fyll inn: «Sosiale medier kan være nyttige. ___, kan de ha negative konsekvenser.»',
  hint:'Du trenger et bindeord som viser kontrast.',
- fasit:'Likevel',fasit_v:['Likevel','Derimot','Trass i dette','På den andre sida'],
- regel:'«Likevel», «derimot» og «på den andre sida» viser kontrast.',
+ fasit:'Likevel',fasit_v:['Likevel','Derimot','Til tross for dette','På den andre siden'],
+ regel:'«Likevel», «derimot» og «på den andre siden» viser kontrast.',
  eks:'Sosiale medier er nyttige. Likevel kan de ha negative konsekvenser.'},
 
 {kat:'bindeord',kat_label:'Bindeord',type:'cloze',vanske:'vanskeleg',
@@ -784,184 +784,184 @@ var BANKV2 = [
  eks:'Plast er farlig [tema] → 80 % av sjøfugler [utdyping] → (WWF, 2023) [kilde] → Dette viser … [komm.]'},
 
 /* ═══════════════════════════════════════════════════
-  10. KJELDEBRUK  (10 oppgåver)
+  10. KILDEBRUK  (10 oppgaver)
   ═══════════════════════════════════════════════════ */
 {kat:'kildebruk',kat_label:'Kildebruk',type:'mc',vanske:'lett',
  q:'Hvordan skriver du en kildetilvisning i teksten?',
- alt:['(Etternamn, årstal)','[lenke til nettsida]','Forfatter: tittel','«sitat» – kjelde'],
- fasit:'(Etternamn, årstal)',
- regel:'Standardformat: (Etternamn, årstal) i parentes etter påstanden.',
- eks:'Plasten har auka med 40 % (Jensen, 2024).'},
+ alt:['(Etternavn, årstall)','[lenke til nettsiden]','Forfatter: tittel','«sitat» – kilde'],
+ fasit:'(Etternavn, årstall)',
+ regel:'Standardformat: (Etternavn, årstall) i parentes etter påstanden.',
+ eks:'Plasten har økt med 40 % (Jensen, 2024).'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'mc',vanske:'lett',
- q:'Hvor i teksten skal kjeldelista stå?',
- alt:['Heilt til slutt i dokumentet','I innleiinga','Midt i teksten','Rett etter første kjelde'],
- fasit:'Heilt til slutt i dokumentet',
- regel:'Kjeldelista kjem alltid aller sist, gjerne med overskrifta «Kjeldeliste».',
- eks:'Hovudtekst → avslutning → kjeldeliste'},
+ q:'Hvor i teksten skal kildelisten stå?',
+ alt:['Helt til slutt i dokumentet','I innledningen','Midt i teksten','Rett etter første kilde'],
+ fasit:'Helt til slutt i dokumentet',
+ regel:'Kildelisten kommer alltid aller sist, gjerne med overskriften «Kildeliste».',
+ eks:'Hovedtekst → avslutning → kildeliste'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'mc',vanske:'medium',
  q:'Hva er feil kildebruk?',
- alt:['Kopiere et avsnitt uten sitat og kjelde','Bruke en påstand med (Jensen, 2024)','Skrive «Ifølge Miljødirektoratet (2023)»','Ha kjeldeliste på slutten'],
- fasit:'Kopiere et avsnitt uten sitat og kjelde',
- regel:'Å kopiere utan å markere sitat og oppgi kjelde er plagiat.',
- eks:'Feil: kopiert tekst. Rett: «…» (Kjelde, årstal) eller parafrase (Kjelde, årstal).'},
+ alt:['Kopiere et avsnitt uten sitat og kilde','Bruke en påstand med (Jensen, 2024)','Skrive «Ifølge Miljødirektoratet (2023)»','Ha kildeliste på slutten'],
+ fasit:'Kopiere et avsnitt uten sitat og kilde',
+ regel:'Å kopiere uten å markere sitat og oppgi kilde er plagiat.',
+ eks:'Feil: kopiert tekst. Rett: «…» (Kilde, årstall) eller parafrase (Kilde, årstall).'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'sann_usann_serie',vanske:'lett',
- q:'Er påstandane om kildebruk sanne eller usanne?',
+ q:'Er påstandene om kildebruk sanne eller usanne?',
  paastandar:[
-  {tekst:'Kjeldelista skal vere sortert alfabetisk etter etternamn.',sann:true},
-  {tekst:'Wikipedia er alltid ei god kjelde å sitere i en fagartikkel.',sann:false},
-  {tekst:'Direkte sitat skal stå i hermeteikn med kjeldetilvising.',sann:true},
-  {tekst:'Man trenger ikke kjelde viss man skriver med eigne ord.',sann:false}
+  {tekst:'Kildelisten skal være sortert alfabetisk etter etternavn.',sann:true},
+  {tekst:'Wikipedia er alltid en god kilde å sitere i en fagartikkel.',sann:false},
+  {tekst:'Direkte sitat skal stå i hermetegn med kildetilvisning.',sann:true},
+  {tekst:'Man trenger ikke kilde hvis man skriver med egne ord.',sann:false}
  ],
- regel:'Alfabetisk kjeldeliste. Wikipedia er ikke citerbar. Omskriving treng også kjelde.',
- eks:'Omskriving: Di formulering (Kjelde, årstal). Sitat: «Ordrett» (Kjelde, årstal).'},
+ regel:'Alfabetisk kildeliste. Wikipedia er ikke siterbar. Omskriving trenger også kilde.',
+ eks:'Omskriving: Din formulering (Kilde, årstall). Sitat: «Ordrett» (Kilde, årstall).'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'sann_usann_serie',vanske:'medium',
- q:'Er påstandane om kjeldekritikk sanne eller usanne?',
+ q:'Er påstandene om kildekritikk sanne eller usanne?',
  paastandar:[
   {tekst:'En primærkilde er en original rapport eller en lov.',sann:true},
-  {tekst:'Sensasjonsoverskrifter er et teikn på påliteleg journalistikk.',sann:false},
-  {tekst:'En bør vurdere forfattarens kompetanse og mogleg agenda.',sann:true},
-  {tekst:'Fagfellevurderte tidsskrift har høg standard.',sann:true},
-  {tekst:'Alder på ei kjelde spelar aldri noka rolle.',sann:false}
+  {tekst:'Sensasjonsoverskrifter er et tegn på pålitelig journalistikk.',sann:false},
+  {tekst:'Man bør vurdere forfatterens kompetanse og mulig agenda.',sann:true},
+  {tekst:'Fagfellevurderte tidsskrift har høy standard.',sann:true},
+  {tekst:'Alder på en kilde spiller aldri noen rolle.',sann:false}
  ],
- regel:'Vurder: kven, hvor, når, hvorfor. Fagfellevurdering = kvalitetsstempel.',
+ regel:'Vurder: hvem, hvor, når, hvorfor. Fagfellevurdering = kvalitetsstempel.',
  eks:'Primærkilde: NOU-rapport. Sekundærkilde: avisomtale av rapporten.'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'drag_kolonne',vanske:'medium',
  q:'Hva trenger hermetegn (direkte sitat), og hva kan stå fritt med kildetilvisning (omskriving)?',
- kolonner:['Treng hermeteikn (sitat)','Kan stå fritt (omskriving)'],
+ kolonner:['Trenger hermetegn (sitat)','Kan stå fritt (omskriving)'],
  ord:[
-  {tekst:'«1,3 millionar tonn plast hamnar i havet kvart år»',fasit:0},
-  {tekst:'Forsking viser at plast er et aukande problem i verdshava.',fasit:1},
-  {tekst:'«Mikroplast trengjer inn i næringskjeda og skadar dyrelivet»',fasit:0},
-  {tekst:'Havpattedyr og fuglar er særleg utsette for plastforureining.',fasit:1}
+  {tekst:'«1,3 millioner tonn plast havner i havet hvert år»',fasit:0},
+  {tekst:'Forskning viser at plast er et økende problem i verdenshavene.',fasit:1},
+  {tekst:'«Mikroplast trenger inn i næringskjeden og skader dyrelivet»',fasit:0},
+  {tekst:'Havpattedyr og fugler er særlig utsatt for plastforurensning.',fasit:1}
  ],
  regel:'Sett hermetegn bare ved ordrett sitering. Egen omskriving trenger kilde, men ikke hermetegn.',
- eks:'Sitat: «Ordrett» (Kjelde, årstal). Omskriving: Di formulering (Kjelde, årstal).'},
+ eks:'Sitat: «Ordrett» (Kilde, årstall). Omskriving: Din formulering (Kilde, årstall).'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'drag_kolonne',vanske:'vanskeleg',
  q:'Hva er tegn på troverdig kilde, og hva er varselsignaler?',
- kolonner:['Teikn på truverdig kjelde','Varselteikn'],
+ kolonner:['Tegn på troverdig kilde','Varseltegn'],
  ord:[
-  {tekst:'Kjend forfattar med fagleg bakgrunn',fasit:0},
-  {tekst:'Sensasjonsoverskrift med utropsteikn',fasit:1},
-  {tekst:'Kjeldetilvisingar og publiseringsdato',fasit:0},
-  {tekst:'Anonym avsendar utan datoen',fasit:1},
-  {tekst:'Tilknyting til universitet eller forskingsmiljø',fasit:0},
-  {tekst:'Berre eitt synspunkt utan motargument',fasit:1}
+  {tekst:'Kjent forfatter med faglig bakgrunn',fasit:0},
+  {tekst:'Sensasjonsoverskrift med utropstegn',fasit:1},
+  {tekst:'Kildetilvisninger og publiseringsdato',fasit:0},
+  {tekst:'Anonym avsender uten dato',fasit:1},
+  {tekst:'Tilknytning til universitet eller forskningsmiljø',fasit:0},
+  {tekst:'Bare ett synspunkt uten motargument',fasit:1}
  ],
- regel:'Truverdig: kjend forfattar, kjelder, dato, institusjon. Varsel: anonym, sensasjon, einsidig.',
- eks:'Forskning.no: forfattar, fagredaksjon, kjelder. Anonym blogg: varselteikn.'},
+ regel:'Troverdig: kjent forfatter, kilder, dato, institusjon. Varsel: anonym, sensasjon, ensidig.',
+ eks:'Forskning.no: forfatter, fagredaksjon, kilder. Anonym blogg: varseltegn.'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'cloze',vanske:'medium',
- q:'Fyll inn det rette ordet: Villspor. (2023). Friluftsliv frå 1970 til i dag. ___ 15. mars 2026 frå: magasinetvillspor.no/…',
- hint:'Hvilket standardord brukes i kildelista for å fortelle at du har besøkt en nettside?',
- fasit:'Henta',fasit_v:['Henta','henta'],
- regel:'Standardfrasen i kjeldelista er «Henta [dato] frå:» for nettkjelder.',
- eks:'Jensen, K. (2024). Tittel. Henta 15. mars 2026 frå: lenke.no'},
+ q:'Fyll inn det rette ordet: Villspor. (2023). Friluftsliv fra 1970 til i dag. ___ 15. mars 2026 fra: magasinetvillspor.no/…',
+ hint:'Hvilket standardord brukes i kildelisten for å fortelle at du har besøkt en nettside?',
+ fasit:'Hentet',fasit_v:['Hentet','hentet'],
+ regel:'Standardfrasen i kildelisten er «Hentet [dato] fra:» for nettkilder.',
+ eks:'Jensen, K. (2024). Tittel. Hentet 15. mars 2026 fra: lenke.no'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'mc',vanske:'vanskeleg',
  q:'Hvilket av disse er et korrekt sitat med kildetilvisning?',
- alt:['«Det har aldri vore meir kunstsnø i skibakkane» (NRK, 2022).','NRK skreiv i 2022 at det er mykje kunstsnø.','Kunstsnø er mykje brukt (kjelda er NRK).','(NRK) Det er mykje kunstsnø.'],
- fasit:'«Det har aldri vore meir kunstsnø i skibakkane» (NRK, 2022).',
- regel:'Direkte sitat: hermeteikn rundt ordrett tekst, deretter (Kjelde, årstal) i parentes.',
- eks:'«Ordrett tekst» (Etternamn, årstal).'},
+ alt:['«Det har aldri vært mer kunstsnø i skibakkene» (NRK, 2022).','NRK skrev i 2022 at det er mye kunstsnø.','Kunstsnø er mye brukt (kilden er NRK).','(NRK) Det er mye kunstsnø.'],
+ fasit:'«Det har aldri vært mer kunstsnø i skibakkene» (NRK, 2022).',
+ regel:'Direkte sitat: hermetegn rundt ordrett tekst, deretter (Kilde, årstall) i parentes.',
+ eks:'«Ordrett tekst» (Etternavn, årstall).'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'mcset',vanske:'vanskeleg',
- q:'Les setninga og svar: «Ifølge NRK (2024) har snøsesongen vorte kortare de siste ti åra.»',
+ q:'Les setningen og svar: «Ifølge NRK (2024) har snøsesongen blitt kortere de siste ti årene.»',
  questions:[
   {q:'Hvilken type kildebruk er dette?',alt:['Direkte sitat','Parafrase/omskriving','Plagiat'],fasit:1},
   {q:'Er kildetilvisningen riktig plassert?',alt:['Ja','Nei – den bør stå etter punktum','Nei – den mangler hermetegn'],fasit:0},
   {q:'Hvilken type kilde er NRK?',alt:['Primærkilde','Sekundærkilde','Ikke en gyldig kilde'],fasit:1}
  ],
- regel:'Parafrase = eiga formulering med kjelde. NRK rapporterer om annan forsking = sekundærkjelde.',
- eks:'Parafrase: «Ifølge NRK (2024) …» – eigne ord, med kjelde.'},
+ regel:'Parafrase = egen formulering med kilde. NRK rapporterer om annen forskning = sekundærkilde.',
+ eks:'Parafrase: «Ifølge NRK (2024) …» – egne ord, med kilde.'},
 
 /* ═══════════════════════════════════════════════════
-  11. OPPGÅVETOLKING  (8 oppgåver)
+  11. OPPGAVETOLKING  (8 oppgaver)
   ═══════════════════════════════════════════════════ */
 {kat:'oppgavetolking',kat_label:'Oppgavetolking',type:'mc',vanske:'lett',
- q:'Hva betyr bestillingsordet «drøft» i ei norskoppgåve?',
- alt:['Presenter berre eitt synspunkt','Vis to sider og veg de mot hverandre','Skriv en kreativ tekst','Beskriv hvordan noko ser ut'],
- fasit:'Vis to sider og veg de mot hverandre',
+ q:'Hva betyr bestillingsordet «drøft» i en norskoppgave?',
+ alt:['Presenter bare ett synspunkt','Vis to sider og vei dem mot hverandre','Skriv en kreativ tekst','Beskriv hvordan noe ser ut'],
+ fasit:'Vis to sider og vei dem mot hverandre',
  regel:'«Drøft» = presenter argument for og mot, og trekk en konklusjon.',
- eks:'«Drøft om skulen bør forby mobilar» = argument for + mot + konklusjon.'},
+ eks:'«Drøft om skolen bør forby mobiler» = argument for + mot + konklusjon.'},
 
 {kat:'oppgavetolking',kat_label:'Oppgavetolking',type:'mc',vanske:'lett',
  q:'Hva betyr bestillingsordet «grei ut om»?',
- alt:['Ta tydeleg stilling','Forklar og informer grundig','Samanlikn to syn','Skriv kreativt'],
+ alt:['Ta tydelig stilling','Forklar og informer grundig','Sammenlign to syn','Skriv kreativt'],
  fasit:'Forklar og informer grundig',
- regel:'«Grei ut om» = forklarande og informerande skriving utan å ta stilling.',
- eks:'«Grei ut om årsaker til utanforskap» = forklar hvorfor det skjer.'},
+ regel:'«Grei ut om» = forklarende og informerende skriving uten å ta stilling.',
+ eks:'«Grei ut om årsaker til utenforskap» = forklar hvorfor det skjer.'},
 
 {kat:'oppgavetolking',kat_label:'Oppgavetolking',type:'mc',vanske:'medium',
- q:'Oppgåva seier: «Presenter hovudkaraktaren, og drøft hvordan forfattaren brukar kontrastar.» Kor mange delar har oppgåva?',
- alt:['Éin del','To delar','Tre delar','Fire delar'],
- fasit:'To delar',
- regel:'«Presenter … og drøft» = to bestillingsord = to delar. Telje alltid bestillingsorda.',
- eks:'Del 1: presenter hovudkaraktaren. Del 2: drøft bruken av kontrastar.'},
+ q:'Oppgaven sier: «Presenter hovedkarakteren, og drøft hvordan forfatteren bruker kontraster.» Hvor mange deler har oppgaven?',
+ alt:['Én del','To deler','Tre deler','Fire deler'],
+ fasit:'To deler',
+ regel:'«Presenter … og drøft» = to bestillingsord = to deler. Tell alltid bestillingsordene.',
+ eks:'Del 1: presenter hovedkarakteren. Del 2: drøft bruken av kontraster.'},
 
 {kat:'oppgavetolking',kat_label:'Oppgavetolking',type:'drag_kolonne',vanske:'lett',
- q:'Oppgåva er: «Drøft om skulen bør innføre mobilforbod.» Hva høyrer heime i svaret?',
- kolonner:['Passar til oppgåva','Passar IKKE'],
+ q:'Oppgaven er: «Drøft om skolen bør innføre mobilforbud.» Hva hører hjemme i svaret?',
+ kolonner:['Passer til oppgaven','Passer IKKE'],
  ord:[
-  {tekst:'Argument for mobilforbod',fasit:0},
-  {tekst:'Argument mot mobilforbod',fasit:0},
-  {tekst:'Konklusjon med eiga vurdering',fasit:0},
-  {tekst:'Historia til mobiltelefonen (1973–i dag)',fasit:1},
-  {tekst:'Hvordan en lagar en mobiltelefon',fasit:1},
-  {tekst:'Personleg forteljing om mobiltjuveri',fasit:1}
+  {tekst:'Argument for mobilforbud',fasit:0},
+  {tekst:'Argument mot mobilforbud',fasit:0},
+  {tekst:'Konklusjon med egen vurdering',fasit:0},
+  {tekst:'Historien til mobiltelefonen (1973–i dag)',fasit:1},
+  {tekst:'Hvordan man lager en mobiltelefon',fasit:1},
+  {tekst:'Personlig fortelling om mobiltyveri',fasit:1}
  ],
- regel:'«Drøft» = argument for + mot + konklusjon. Irrelevant historikk og personlege forteljingar høyrer ikke heime.',
- eks:'Høyrer heime: argument, kjelde, konklusjon. Ikke: historie om mobilen.'},
+ regel:'«Drøft» = argument for + mot + konklusjon. Irrelevant historikk og personlige fortellinger hører ikke hjemme.',
+ eks:'Hører hjemme: argument, kilde, konklusjon. Ikke: historie om mobilen.'},
 
 {kat:'oppgavetolking',kat_label:'Oppgavetolking',type:'drag_kolonne',vanske:'medium',
- q:'Oppgåva er: «Analyser hvordan forfattaren brukar naturskildringar i novella.» Hva høyrer heime?',
- kolonner:['Høyrer heime','Høyrer IKKE heime'],
+ q:'Oppgaven er: «Analyser hvordan forfatteren bruker naturskildringer i novellen.» Hva hører hjemme?',
+ kolonner:['Hører hjemme','Hører IKKE hjemme'],
  ord:[
-  {tekst:'Hvilken funksjon har naturskildringa i teksten?',fasit:0},
-  {tekst:'Hvilke litterære verkemiddel brukar forfattaren?',fasit:0},
-  {tekst:'Handlingsreferat: hva skjer i novella?',fasit:1},
-  {tekst:'Forfattarens biografi og liv',fasit:1},
-  {tekst:'Hvordan skapar naturskildringa stemning?',fasit:0},
-  {tekst:'«Jeg synest naturskildringa var fin»',fasit:1}
+  {tekst:'Hvilken funksjon har naturskildringen i teksten?',fasit:0},
+  {tekst:'Hvilke litterære virkemidler bruker forfatteren?',fasit:0},
+  {tekst:'Handlingsreferat: hva skjer i novellen?',fasit:1},
+  {tekst:'Forfatterens biografi og liv',fasit:1},
+  {tekst:'Hvordan skaper naturskildringen stemning?',fasit:0},
+  {tekst:'«Jeg synes naturskildringen var fin»',fasit:1}
  ],
- regel:'«Analyser» = undersøk hvordan noko er bygd opp og hva funksjon det har. Ikke referat eller personlege meiningar.',
- eks:'Analyse = verkemiddel + funksjon. Ikke = «jeg synest dette er fint».'},
+ regel:'«Analyser» = undersøk hvordan noe er bygd opp og hvilken funksjon det har. Ikke referat eller personlige meninger.',
+ eks:'Analyse = virkemidler + funksjon. Ikke = «jeg synes dette er fint».'},
 
 {kat:'oppgavetolking',kat_label:'Oppgavetolking',type:'sann_usann_serie',vanske:'medium',
- q:'Er påstandane om oppgavetolking sanne eller usanne?',
+ q:'Er påstandene om oppgavetolking sanne eller usanne?',
  paastandar:[
-  {tekst:'Bestillingsord er verba som fortel hva du skal gjere i oppgåva.',sann:true},
-  {tekst:'«Presenter» og «drøft» krev same type tekst.',sann:false},
-  {tekst:'«Samanlikn» betyr å peike på likskapar og skilnader.',sann:true},
-  {tekst:'«Reflekter» betyr å gjenfortelje hendingar i rekkjefølgje.',sann:false}
+  {tekst:'Bestillingsord er verbene som forteller hva du skal gjøre i oppgaven.',sann:true},
+  {tekst:'«Presenter» og «drøft» krever samme type tekst.',sann:false},
+  {tekst:'«Sammenlign» betyr å peke på likheter og forskjeller.',sann:true},
+  {tekst:'«Reflekter» betyr å gjenfortelle hendelser i rekkefølge.',sann:false}
  ],
- regel:'Presenter = gi oversyn. Drøft = veg argument. Samanlikn = likskapar/skilnader. Reflekter = tenkje over, vurdere.',
- eks:'Drøft ≠ presenter. Reflekter ≠ gjenfortel.'},
+ regel:'Presenter = gi oversikt. Drøft = vei argument. Sammenlign = likheter/forskjeller. Reflekter = tenke over, vurdere.',
+ eks:'Drøft ≠ presenter. Reflekter ≠ gjenfortell.'},
 
 {kat:'oppgavetolking',kat_label:'Oppgavetolking',type:'cloze',vanske:'medium',
- q:'Oppgåva seier «analyser». Det tyder at du skal undersøkje ___ teksten er bygd opp og hva effekt grepa har.',
- hint:'Analyse handlar om å undersøkje en bestemt ting: oppbygginga. Hvilket spørjeord passar?',
+ q:'Oppgaven sier «analyser». Det betyr at du skal undersøke ___ teksten er bygd opp og hvilken effekt grepene har.',
+ hint:'Analyse handler om å undersøke en bestemt ting: oppbyggingen. Hvilket spørreord passer?',
  fasit:'hvordan',fasit_v:['hvordan'],
- regel:'Analyse = systematisk undersøking av hvordan noko er laga og hva det gjer med lesaren.',
- eks:'Hvordan brukar forfattaren metaforar? Hvordan skapar forteljarstemma nærleik?'},
+ regel:'Analyse = systematisk undersøkelse av hvordan noe er laget og hva det gjør med leseren.',
+ eks:'Hvordan bruker forfatteren metaforer? Hvordan skaper fortellerstemmen nærhet?'},
 
 {kat:'oppgavetolking',kat_label:'Oppgavetolking',type:'mc',vanske:'vanskeleg',
- q:'Tre elevar svarar på «Drøft om teknologi gjer oss meir isolerte». Kven er på bomskot?',
- alt:['Elev A viser argument for og mot, og konkluderer.','Elev B skriv om historia til internett og teknologien.','Elev C bruker tre kjelder og veg side mot side.','Elev D startar personleg, drøftar og konkluderer.'],
- fasit:'Elev B skriv om historia til internett og teknologien.',
- regel:'«Drøft» = veg argument for og mot. Å skrive historikk er «grei ut», ikke drøfting.',
- eks:'Bomskot: svare med feil sjanger. «Grei ut»-svar der «drøft» var kravet.'},
+ q:'Tre elever svarer på «Drøft om teknologi gjør oss mer isolerte». Hvem er på bom?',
+ alt:['Elev A viser argument for og mot, og konkluderer.','Elev B skriver om historien til internett og teknologien.','Elev C bruker tre kilder og veier side mot side.','Elev D starter personlig, drøfter og konkluderer.'],
+ fasit:'Elev B skriver om historien til internett og teknologien.',
+ regel:'«Drøft» = vei argument for og mot. Å skrive historikk er «grei ut», ikke drøfting.',
+ eks:'Bom: svare med feil sjanger. «Grei ut»-svar der «drøft» var kravet.'},
 
 /* ═══════════════════════════════════════════════════
-  12. SPRÅK OG STIL  (10 oppgåver)
+  12. SPRÅK OG STIL  (10 oppgaver)
   ═══════════════════════════════════════════════════ */
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'finn_feil',vanske:'lett',
- q:'Klikk på kvart ord som er for uformelt for en fagartikkel.',
+ q:'Klikk på hvert ord som er for uformelt for en fagartikkel.',
  tekst:'Plast i havet er jo helt farlig for dyr og sånn.',
  fasit_feil:['jo','helt','sånn'],
  regel:'Fagartikler unngår forsterkningsord («helt»), fyllord («jo») og vage uttrykk («og sånn»).',
@@ -975,11 +975,11 @@ var BANKV2 = [
  eks:'Unngå: «Jeg synes dette er superviktig». Skriv: «Forskningen tyder på at temaet er viktig.»'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'finn_feil',vanske:'vanskeleg',
- q:'Klikk på orda som gjer argumentasjonen for kjensleladd.',
+ q:'Klikk på ordene som gjør argumentasjonen for følelsesladet.',
  tekst:'Kildene viser tydelig at dette er ekstremt farlig, og alle forstår jo at vi må handle straks.',
  fasit_feil:['tydelig','ekstremt','alle','forstår','jo','straks'],
- regel:'Absolutte og kjensleladde ord bør bytast med nøytrale, etterprøvbare formuleringar.',
- eks:'Unngå: «alle forstår jo». Skriv: «Fleire studiar peikar i same retning.»'},
+ regel:'Absolutte og følelsesladete ord bør byttes med nøytrale, etterprøvbare formuleringer.',
+ eks:'Unngå: «alle forstår jo». Skriv: «Flere studier peker i samme retning.»'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'mc',vanske:'lett',
  q:'Hvilken setning er skrevet i et saklig, faglig register?',
@@ -996,78 +996,78 @@ var BANKV2 = [
  eks:'«skikkelig krise» → «alvorlige konsekvenser» · «sliter mye» → «konsekvenser for dyrelivet»'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'drag_kolonne',vanske:'lett',
- q:'Sorter uttrykka: uformelle eller formelle?',
- kolonner:['Uformelle formuleringar','Formelle formuleringar'],
+ q:'Sorter uttrykkene: uformelle eller formelle?',
+ kolonner:['Uformelle formuleringer','Formelle formuleringer'],
  ord:[
   {tekst:'liksom',fasit:0},
   {tekst:'jo',fasit:0},
-  {tekst:'heilt sjukt',fasit:0},
+  {tekst:'helt sykt',fasit:0},
   {tekst:'det tyder på at',fasit:1},
-  {tekst:'forsking viser at',fasit:1},
+  {tekst:'forskning viser at',fasit:1},
   {tekst:'dokumenterte funn',fasit:1}
  ],
- regel:'Uformelle ord er munnlege og personlege. Formelle uttrykk er presise og faglege.',
- eks:'«jo/liksom» = uformelt · «forsking viser at» = formelt'},
+ regel:'Uformelle ord er muntlige og personlige. Formelle uttrykk er presise og faglige.',
+ eks:'«jo/liksom» = uformelt · «forskning viser at» = formelt'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'drag_kolonne',vanske:'vanskeleg',
- q:'Publiseringsportalen: hva formulering vert blokkert som for skråsikker, og hva passerer?',
- kolonner:['Blokkert – for skråsikker','Passerer – fagleg nøyansert'],
+ q:'Publiseringsportalen: hvilken formulering blir blokkert som for skråsikker, og hva passerer?',
+ kolonner:['Blokkert – for skråsikker','Passerer – faglig nyansert'],
  ord:[
-  {tekst:'Dette beviser definitivt at tiltaket verkar.',fasit:0},
-  {tekst:'Funna tyder på at tiltaket kan ha effekt.',fasit:1},
-  {tekst:'Alle forskarar er einige om dette.',fasit:0},
+  {tekst:'Dette beviser definitivt at tiltaket virker.',fasit:0},
+  {tekst:'Funnene tyder på at tiltaket kan ha effekt.',fasit:1},
+  {tekst:'Alle forskere er enige om dette.',fasit:0},
   {tekst:'Flere studier indikerer en mulig sammenheng.',fasit:1},
-  {tekst:'Det er et faktum at skulen sviktar ungdom.',fasit:0},
+  {tekst:'Det er et faktum at skolen svikter ungdom.',fasit:0},
   {tekst:'Man kan argumentere for at skolen trenger mer ressurser.',fasit:1}
  ],
  regel:'Faglig skriving uttrykker bare det man kan dokumentere. «Tyder på» og «indikerer» viser nøyaktighet.',
  eks:'Blokkert: «beviser definitivt». Passerer: «tyder på, indikerer, kan argumentere for».'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'cloze',vanske:'lett',
- q:'Byt ut «kjempeviktig» med et formelt ord: «Tiltaket var ___ for å redusere fråfall i skulen.»',
+ q:'Bytt ut «kjempeviktig» med et formelt ord: «Tiltaket var ___ for å redusere frafall i skolen.»',
  hint:'Presist og formelt – ikke «kjempe-» eller «super-».',
- fasit:'avgjerande',fasit_v:['avgjerande','kritisk','vesentleg','sentral','nødvendig','særleg viktig'],
- regel:'Uformelle forsterkarar som «kjempe-» erstattas med presise adjektiv.',
- eks:'«kjempeviktig» → «avgjerande» · «superbra» → «særleg vellykka»'},
+ fasit:'avgjørende',fasit_v:['avgjørende','kritisk','vesentlig','sentral','nødvendig','særlig viktig'],
+ regel:'Uformelle forsterkere som «kjempe-» erstattes med presise adjektiv.',
+ eks:'«kjempeviktig» → «avgjørende» · «superbra» → «særlig vellykket»'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'omskriv',vanske:'medium',
- q:'Skriv om setninga til fagleg stil.',
+ q:'Skriv om setningen til faglig stil.',
  tekst:'Jeg tror egentlig at skjermbruk er ganske dårlig for unge, for de blir jo helt oppslukte.',
- instruksjon:'Fjern personlege meiningsmarkørar og uformelle forsterkarar. Bruk nøytral, fagleg tone.',
+ instruksjon:'Fjern personlige meningsmarkører og uformelle forsterkere. Bruk nøytral, faglig tone.',
  maa_ha:['skjermbruk','unge'],
  maa_ikkje_ha:['jeg','tror','egentlig','ganske','jo','helt'],
- regel:'I fagtekst bør du prioritere nøytral ordbruk og etterprøvbare påstandar.',
- eks:'Mogleg svar: «Høg skjermbruk kan redusere konsentrasjon og søvnkvalitet hos unge.»'},
+ regel:'I fagtekst bør du prioritere nøytral ordbruk og etterprøvbare påstander.',
+ eks:'Mulig svar: «Høyt skjermbruk kan redusere konsentrasjon og søvnkvalitet hos unge.»'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'fillsel',vanske:'medium',
- q:'Vel den mest faglege formuleringa.',
+ q:'Velg den mest faglige formuleringen.',
  items:[
-  {pre:'',alt:['Det er jo klart at','Forsking tyder på at'],fasit:'Forsking tyder på at',post:'sosiale medium påverkar ungdom.'},
-  {pre:'Tiltaket har',alt:['supergode resultat','dokumenterte positive effektar'],fasit:'dokumenterte positive effektar',post:'.'},
-  {pre:'',alt:['Masse folk meiner at','Fleire studiar indikerer at'],fasit:'Fleire studiar indikerer at',post:'problemet aukar.'}
+  {pre:'',alt:['Det er jo klart at','Forskning tyder på at'],fasit:'Forskning tyder på at',post:'sosiale medier påvirker ungdom.'},
+  {pre:'Tiltaket har',alt:['supergode resultater','dokumenterte positive effekter'],fasit:'dokumenterte positive effekter',post:'.'},
+  {pre:'',alt:['Masse folk mener at','Flere studier indikerer at'],fasit:'Flere studier indikerer at',post:'problemet øker.'}
  ],
- regel:'Fagleg stil: «forsking tyder på», «dokumenterte effektar», «fleire studiar indikerer».',
- eks:'Uformelt → formelt: «jo klart» → «forsking tyder på»'},
+ regel:'Faglig stil: «forskning tyder på», «dokumenterte effekter», «flere studier indikerer».',
+ eks:'Uformelt → formelt: «jo klart» → «forskning tyder på»'},
 
 /* ═══════════════════════════════════════════════════
   13. ÅRSAK OG SAMMENHENG  (8 oppgaver)
   ═══════════════════════════════════════════════════ */
 {kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'mc',vanske:'lett',
  q:'Hvilken setning uttrykker en årsak–virkning-sammenheng?',
- alt:['Sola skin, og borna leikar ute.','Sola skin så sterkt at asfalten vert varm.','Sola skin. Borna leikar ute.','Sola skin, men det er kaldt.'],
- fasit:'Sola skin så sterkt at asfalten vert varm.',
- regel:'«Så … at» markerer at årsaka (solskin) fører til verknaden (varm asfalt).',
- eks:'«Hun las så mykje at hun vart trøytt.» = årsak–verknad'},
+ alt:['Sola skinner, og barna leker ute.','Sola skinner så sterkt at asfalten blir varm.','Sola skinner. Barna leker ute.','Sola skinner, men det er kaldt.'],
+ fasit:'Sola skinner så sterkt at asfalten blir varm.',
+ regel:'«Så … at» markerer at årsaken (solskinn) fører til virkningen (varm asfalt).',
+ eks:'«Hun leste så mye at hun ble trøtt.» = årsak–virkning'},
 
 {kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'mc',vanske:'medium',
  q:'Hvilken setning bruker det mest presise årsaksuttrykket?',
- alt:['Luftforureininga aukar, og folk vert sjukare.','Luftforureininga aukar. Folk vert sjukare.','Den aukande luftforureininga fører til fleire luftvegssjukdomar.','Luftforureininga aukar, men folk vert sjukare.'],
- fasit:'Den aukande luftforureininga fører til fleire luftvegssjukdomar.',
- regel:'«Fører til» viser eksplisitt hvordan A gir B. «Og» og to separate setningar er vagare.',
- eks:'Presist: «Røyking fører til større risiko.» Vagt: «Folk røykjer, og de vert sjuke.»'},
+ alt:['Luftforurensningen øker, og folk blir sykere.','Luftforurensningen øker. Folk blir sykere.','Den økende luftforurensningen fører til flere luftveissykdommer.','Luftforurensningen øker, men folk blir sykere.'],
+ fasit:'Den økende luftforurensningen fører til flere luftveissykdommer.',
+ regel:'«Fører til» viser eksplisitt hvordan A gir B. «Og» og to separate setninger er vagere.',
+ eks:'Presist: «Røyking fører til større risiko.» Vagt: «Folk røyker, og de blir syke.»'},
 
 {kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'drag_kolonne',vanske:'lett',
- q:'Sorter uttrykka: årsaksuttrykk eller kontrastuttrykk?',
+ q:'Sorter uttrykkene: årsaksuttrykk eller kontrastuttrykk?',
  kolonner:['Årsaksuttrykk','Kontrastuttrykk'],
  ord:[
   {tekst:'fordi',fasit:0},
@@ -1080,54 +1080,54 @@ var BANKV2 = [
   {tekst:'men',fasit:1}
  ],
  regel:'Fordi, derfor, ettersom, på grunn av = årsak. Likevel, derimot, trass i, men = kontrast.',
- eks:'«Hun kom for seint fordi bussen var forseinka.» «Bussen var forseinka, men hun kom likevel.»'},
+ eks:'«Hun kom for sent fordi bussen var forsinket.» «Bussen var forsinket, men hun kom likevel.»'},
 
 {kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'drag_kolonne',vanske:'medium',
- q:'Sorter: hva er årsaka og hva er verknaden?',
- kolonner:['Årsak','Verknad'],
+ q:'Sorter: hva er årsaken og hva er virkningen?',
+ kolonner:['Årsak','Virkning'],
  ord:[
-  {tekst:'Utslepp av klimagassar aukar',fasit:0},
-  {tekst:'Temperaturen på jorda stig',fasit:1},
-  {tekst:'Skogane vert hogde ned',fasit:0},
-  {tekst:'Dyreartar mistar leveområda sine',fasit:1},
-  {tekst:'Isen på polane smeltar',fasit:1},
-  {tekst:'Havnivået stig',fasit:1}
+  {tekst:'Utslipp av klimagasser øker',fasit:0},
+  {tekst:'Temperaturen på jorda stiger',fasit:1},
+  {tekst:'Skogene blir hugget ned',fasit:0},
+  {tekst:'Dyrearter mister leveområdene sine',fasit:1},
+  {tekst:'Isen på polene smelter',fasit:1},
+  {tekst:'Havnivået stiger',fasit:1}
  ],
- regel:'Årsaka utløyser endringa. Verknaden er resultatet. Spør: «hvorfor skjer dette?»',
- eks:'Utslepp aukar (årsak) → temperatur stig (verknad) → is smeltar (verknad)'},
+ regel:'Årsaken utløser endringen. Virkningen er resultatet. Spør: «hvorfor skjer dette?»',
+ eks:'Utslipp øker (årsak) → temperatur stiger (virkning) → is smelter (virkning)'},
 
 {kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'klikk_marker',vanske:'lett',
- q:'Klikk på ordet som markerer en årsakssamanheng.',
- tekst:'Mange artar er utryddingstruga fordi leveområda deira vert øydelagde av avskoging.',
+ q:'Klikk på ordet som markerer en årsakssammenheng.',
+ tekst:'Mange arter er utrydningstruet fordi leveområdene deres blir ødelagt av avskoging.',
  maalordklasse:'årsaksord',
  fasit_ord:['fordi'],
- regel:'«Fordi» knyter ei årsak til ei følgje: avskoging → utryddingstruga artar.',
- eks:'«fordi, sidan, ettersom» = årsaksord · «men, likevel, derimot» = kontrastord'},
+ regel:'«Fordi» knytter en årsak til en følge: avskoging → utrydningstruede arter.',
+ eks:'«fordi, siden, ettersom» = årsaksord · «men, likevel, derimot» = kontrastord'},
 
 {kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'cloze',vanske:'medium',
- q:'Fyll inn: «Matprisane stig, ___ mange familiar har dårlegare råd.»',
- hint:'Verknaden kjem etter årsaka. Hvilket ord viser konsekvens?',
+ q:'Fyll inn: «Matprisene stiger, ___ mange familier har dårligere råd.»',
+ hint:'Virkningen kommer etter årsaken. Hvilket ord viser konsekvens?',
  fasit:'derfor',fasit_v:['derfor'],
- regel:'«Derfor» er et årsaksadverb som viser at det som følgjer, er resultatet av årsaka.',
- eks:'Prisane steig, derfor handla folk mindre. Vegen var glatt, derfor køyrde hun sakte.'},
+ regel:'«Derfor» er et årsaksadverb som viser at det som følger, er resultatet av årsaken.',
+ eks:'Prisene steg, derfor handlet folk mindre. Veien var glatt, derfor kjørte hun sakte.'},
 
 {kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'mcset',vanske:'medium',
  q:'Les teksten og svar.',
- tekst:'Når born les lite, utviklar de et smalare ordforråd. Et smalt ordforråd gjer det vanskelegare å forstå fagtekstar. Derfor heng lesevanskar og fagvanskar ofte saman.',
+ tekst:'Når barn leser lite, utvikler de et smalere ordforråd. Et smalt ordforråd gjør det vanskeligere å forstå fagtekster. Derfor henger lesevansker og fagvansker ofte sammen.',
  questions:[
-  {q:'Hva er den første årsaka?',alt:['Born les lite','Smalt ordforråd','Fagvanskar'],fasit:0},
-  {q:'Hva er den mellomliggjande verknaden?',alt:['Borna les meir','De utviklar smalare ordforråd','Fagtekstane vert enklare'],fasit:1},
-  {q:'Hvilket ord markerer den siste verknaden?',alt:['når','gjer','derfor'],fasit:2}
+  {q:'Hva er den første årsaken?',alt:['Barn leser lite','Smalt ordforråd','Fagvansker'],fasit:0},
+  {q:'Hva er den mellomliggende virkningen?',alt:['Barna leser mer','De utvikler smalere ordforråd','Fagtekstene blir enklere'],fasit:1},
+  {q:'Hvilket ord markerer den siste virkningen?',alt:['når','gjør','derfor'],fasit:2}
  ],
- regel:'Årsak–verknad kan vere ei kjede: A → B → C. «Derfor» signaliserer den endelege konsekvensen.',
- eks:'Lite lesing → smalt ordforråd → vanskeleg å forstå fagtekstar → fagvanskar'},
+ regel:'Årsak–virkning kan være en kjede: A → B → C. «Derfor» signaliserer den endelige konsekvensen.',
+ eks:'Lite lesing → smalt ordforråd → vanskelig å forstå fagtekster → fagvansker'},
 
 {kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'finn_feil',vanske:'vanskeleg',
- q:'Klikk på det eine uttrykket som er feil brukt.',
- tekst:'Hun fekk gode karakterar trass i at hun jobba hardt hver dag.',
+ q:'Klikk på det ene uttrykket som er feil brukt.',
+ tekst:'Hun fikk gode karakterer til tross for at hun jobbet hardt hver dag.',
  fasit_feil:['trass'],
- regel:'«Trass i» markerer noko uventa. At hardt arbeid gir gode resultat er forventa → bruk «fordi».',
- eks:'Rett: «Hun fekk gode karakterar fordi hun jobba hardt.» Kontrast: «… dårlege trass i at hun jobba hardt.»'},
+ regel:'«Til tross for» markerer noe uventet. At hardt arbeid gir gode resultater er forventet → bruk «fordi».',
+ eks:'Rett: «Hun fikk gode karakterer fordi hun jobbet hardt.» Kontrast: «… dårlige til tross for at hun jobbet hardt.»'},
 
 /* ═══════════════════════════════════════════════════
    14. REFERANSEKJEDE  (8 oppgaver)
