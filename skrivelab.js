@@ -1413,7 +1413,11 @@ function nlImportMTBankTasks() {
   var imported = 0;
   var skipped = 0;
   var skippedReasons = {};
-  var stableBank = bank.slice().sort(function(a, b) {
+  var stableBank = bank.map(function(task, bankIndex) {
+    return { task: task, bankIndex: bankIndex };
+  }).sort(function(aWrap, bWrap) {
+    var a = aWrap.task;
+    var b = bWrap.task;
     var ak = String((a && a.kat) || '');
     var bk = String((b && b.kat) || '');
     if (ak !== bk) return ak < bk ? -1 : 1;
@@ -1428,7 +1432,9 @@ function nlImportMTBankTasks() {
     return 0;
   });
 
-  stableBank.forEach(function(task, i) {
+  stableBank.forEach(function(entry) {
+    var task = entry.task;
+    var bankIndex = entry.bankIndex;
     var cat = nlMtResolveCard(task && task.kat);
     if (!cat) return;
 
@@ -1451,7 +1457,7 @@ function nlImportMTBankTasks() {
     var exlist = document.querySelector('.card[data-cat="' + cat + '"] .exlist');
     if (!exlist) return;
 
-    var html = nlMtBuildExercise(task, i, counters[cat] + 1);
+    var html = nlMtBuildExercise(task, bankIndex, counters[cat] + 1);
     if (!html) return;
 
     exlist.insertAdjacentHTML('beforeend', html);
