@@ -1733,9 +1733,12 @@ var BANKV2 = [
  regel:'Parafrase = nye ord, samme mening. Krever kilde. Ikke bare synonymbytte – endre setningsstruktur.',
  eks:'Bytt ordvalg + setningsstruktur. Oppgi alltid kilden.'},
 
-{kat:'parafrase',kat_label:'Parafrase',type:'fix',vanske:'vanskeleg',
+{kat:'parafrase',kat_label:'Parafrase',type:'omskriv',vanske:'vanskeleg',
  q:'Rett parafrasefeilen: Teksten er for lik originalen. Skriv om med egne ord.',
  tekst:'Ungdom bruker i gjennomsnitt tre timer daglig på sosiale medier (Medietilsynet, 2024).',
+ instruksjon:'Skriv om med egne ord og ny setningsstruktur. Behold kilden.',
+ maa_ha:['Medietilsynet'],
+ maa_ikkje_ha:['bruker i gjennomsnitt tre timer daglig på sosiale medier'],
  errors:{'Ungdom bruker i gjennomsnitt tre timer daglig på sosiale medier':'Unge mennesker tilbringer omtrent tre timer hver dag på ulike sosiale plattformer'},
  fasit:'Unge mennesker tilbringer omtrent tre timer hver dag på ulike sosiale plattformer',
  regel:'En god parafrase endrer både ordvalg og setningsstruktur, ikke bare ett og annet ord.',
@@ -3569,12 +3572,14 @@ function mtCheckMc(btn) {
   MTS.answered = true;
   var t = MTS.current;
   var chosen = btn.getAttribute('data-val');
-  var correct = mtIsCorrect(chosen, t);
+  var chosenIdx = parseInt(btn.getAttribute('data-idx'), 10);
+  var correct = mtIsCorrect(chosen, t, chosenIdx);
   document.querySelectorAll('.mt-mc-btn').forEach(function (b) {
     b.disabled = true;
     var v = b.getAttribute('data-val');
+    var idx = parseInt(b.getAttribute('data-idx'), 10);
     if (v === chosen) b.className = 'mt-mc-btn ' + (correct ? 'mt-correct' : 'mt-wrong');
-    if (!correct && mtIsCorrect(v, t)) b.className = 'mt-mc-btn mt-correct';
+    if (!correct && mtIsCorrect(v, t, idx)) b.className = 'mt-mc-btn mt-correct';
   });
   mtFinish(correct, 1, correct ? 1 : 0, chosen, t);
 }
@@ -4049,7 +4054,24 @@ function mtCheckSr() {
    FELLES FASIT-SJEKK
 ══════════════════════════════════════════════════════ */
 
-function mtIsCorrect(val, t) {
+function mtResolveFasitText(t) {
+  if (!t) return '';
+  if (t.type === 'mc' && typeof t.fasit === 'number' && Array.isArray(t.alt)) {
+    var altText = t.alt[t.fasit];
+    if (typeof altText === 'string') return altText;
+  }
+  if (t.fasit === 0 || t.fasit) return String(t.fasit);
+  return '';
+}
+
+function mtIsCorrect(val, t, idx) {
+  if (t && t.type === 'mc' && typeof t.fasit === 'number') {
+    if (typeof idx === 'number' && !isNaN(idx)) return idx === t.fasit;
+    if (Array.isArray(t.alt) && typeof t.alt[t.fasit] !== 'undefined') {
+      return mtNorm(t.alt[t.fasit]) === mtNorm(val);
+    }
+    return false;
+  }
   var v = mtNorm(val);
   var variants = Array.isArray(t.fasit_v) && t.fasit_v.length ? t.fasit_v : [t.fasit];
   return variants.some(function (f) { return mtNorm(f) === v; });
@@ -4063,7 +4085,7 @@ function mtSmartFeedback(chosen, t) {
       if (mtNorm(vf.feil) === low) return vf.melding;
     }
   }
-  var fasit = t.fasit || '';
+  var fasit = mtResolveFasitText(t);
   var dist = mtLevenshtein(chosen, fasit);
   if (dist === 1) return 'Nesten! Sjekk stavingen n\u00f8ye.';
   if (dist === 2) return 'Du er veldig n\u00e6r! Sammenlign med fasiten.';
@@ -4148,7 +4170,8 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType) {
   } else {
     html += '<div class="mt-fb-heading">&#10007; ' + (isPartial ? 'Delvis riktig' : 'Feil') + '</div>';
     if (maxPts > 1 && typeof chosen === 'string') html += '<div class="mt-fb-detail">' + mtEsc(chosen) + '</div>';
-    if (!isPartial && t.fasit) html += '<div class="mt-fb-fasit">Riktig svar: <strong>' + mtEsc(t.fasit) + '</strong></div>';
+    var fasitText = mtResolveFasitText(t);
+    if (!isPartial && fasitText) html += '<div class="mt-fb-fasit">Riktig svar: <strong>' + mtEsc(fasitText) + '</strong></div>';
     if (extraMsg) html += '<div class="mt-fb-extra">' + mtEsc(extraMsg) + '</div>';
   }
   if (t.forklaring) html += '<div class="mt-fb-forklaring">' + mtEsc(t.forklaring) + '</div>';
@@ -4410,9 +4433,13 @@ function mtShowSummary() {
     }
 
     gp.innerHTML = gpHtml;
-    var actionsDiv = sumEl.querySelector('.adp-summary-actions');
-    if (actionsDiv) sumEl.insertBefore(gp, actionsDiv);
-    else sumEl.appendChild(gp);
+    var kpiGrid = sumEl.querySelector('.adp-summary-grid');
+    if (kpiGrid) sumEl.insertBefore(gp, kpiGrid);
+    else {
+      var actionsDiv = sumEl.querySelector('.adp-summary-actions');
+      if (actionsDiv) sumEl.insertBefore(gp, actionsDiv);
+      else sumEl.appendChild(gp);
+    }
   }
 
   var sumNewBtn = $mt('nl-ad-sum-new');

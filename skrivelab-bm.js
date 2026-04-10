@@ -242,23 +242,40 @@ function nlBoot() {
   /* ── Deep-link: ?kat=og_aa auto-selects category and starts ── */
   nlSafeInit('url-kat-autostart', function() {
     try {
-      if (nlUseV2Adaptive) return;
       var params = new URLSearchParams(window.location.search);
       var katParam = params.get('kat');
       if (!katParam) return;
       var requested = katParam.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
       if (!requested.length) return;
-      /* Deselect all, then select only requested */
-      nlAdSetAllCats(false);
-      requested.forEach(function(kat) {
-        var btn = document.querySelector('#nl-ad-cats .adp-cat[data-cat="' + kat + '"]');
-        if (btn) btn.classList.add('on');
-      });
-      /* Scroll to adaptive section */
-      var sec = document.getElementById('nl-adaptive');
-      if (sec) sec.scrollIntoView({ behavior:'smooth', block:'start' });
-      /* Auto-start after a short delay so UI is ready */
-      setTimeout(function() { nlAdStart(); }, 350);
+
+      if (nlUseV2Adaptive && typeof window.mtStart === 'function') {
+        /* V2: velg bare etterspurte kategorier og start direkte */
+        document.querySelectorAll('#nl-ad-cats .adp-cat').forEach(function(btn) {
+          btn.classList.remove('on');
+        });
+        requested.forEach(function(kat) {
+          var btn = document.querySelector('#nl-ad-cats .adp-cat[data-cat="' + kat + '"]');
+          if (btn) btn.classList.add('on');
+        });
+        var secV2 = document.getElementById('nl-adaptive');
+        if (secV2) secV2.scrollIntoView({ behavior:'smooth', block:'start' });
+        setTimeout(function() { window.mtStart(); }, 180);
+      } else {
+        /* Legacy: Deselect all, then select only requested */
+        nlAdSetAllCats(false);
+        requested.forEach(function(kat) {
+          var btn = document.querySelector('#nl-ad-cats .adp-cat[data-cat="' + kat + '"]');
+          if (btn) btn.classList.add('on');
+        });
+        /* Scroll to adaptive section */
+        var sec = document.getElementById('nl-adaptive');
+        if (sec) sec.scrollIntoView({ behavior:'smooth', block:'start' });
+        /* Auto-start after a short delay so UI is ready */
+        setTimeout(function() { nlAdStart(); }, 350);
+      }
+
+      var secAny = document.getElementById('nl-adaptive');
+      if (secAny) secAny.scrollIntoView({ behavior:'smooth', block:'start' });
       /* Clean URL without reload */
       if (window.history && window.history.replaceState) {
         window.history.replaceState({}, '', window.location.pathname);

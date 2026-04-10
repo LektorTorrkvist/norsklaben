@@ -1731,9 +1731,12 @@ var BANKV2 = [
  regel:'Parafrase = nye ord, same meining. Krev kjelde. Ikkje berre synonymbytte – endre setningsstruktur.',
  eks:'Byt ordval + setningsstruktur. Oppgi alltid kjelda.'},
 
-{kat:'parafrase',kat_label:'Parafrase',type:'fix',vanske:'vanskeleg',
+{kat:'parafrase',kat_label:'Parafrase',type:'omskriv',vanske:'vanskeleg',
  q:'Rett parafrasefeilen: Teksten er for lik originalen. Skriv om med eigne ord.',
  tekst:'Ungdom bruker i gjennomsnitt tre timer daglig på sosiale medier (Medietilsynet, 2024).',
+ instruksjon:'Skriv om med eigne ord og ny setningsstruktur. Behald kjelda.',
+ maa_ha:['Medietilsynet'],
+ maa_ikkje_ha:['bruker i gjennomsnitt tre timer daglig på sosiale medier'],
  errors:{'Ungdom bruker i gjennomsnitt tre timer daglig på sosiale medier':'Unge menneske tilbringer om lag tre timar kvar dag på ulike sosiale plattformer'},
  fasit:'Unge menneske tilbringer om lag tre timar kvar dag på ulike sosiale plattformer',
  regel:'Ein god parafrase endrar både ordval og setningsstruktur, ikkje berre eitt og anna ord.',
@@ -1792,18 +1795,18 @@ var BANKV2 = [
  eks:'«60 % les dagleg» (SSB, 2023). Eksperten sa: «…» (Hansen, 2023).'},
 
 {kat:'sitat',kat_label:'Sitat og sitatbruk',type:'drag_kolonne',vanske:'lett',
- q:'Sorter: Er det eit direkte sitat, eit indirekte sitat eller ein parafrase?',
- kolonner:['Direkte sitat','Indirekte sitat','Parafrase'],
+ q:'Sorter: Er det eit direkte sitat eller ei indirekte gjengiving (parafrase)?',
+ kolonner:['Direkte sitat','Indirekte gjengiving / parafrase'],
  ord:[
   {tekst:'FN skriv: «Plasten i havet truar livet under vatn» (2022).',fasit:0},
   {tekst:'FN hevdar at plasten i havet truar marint liv (2022).',fasit:1},
-  {tekst:'Ifølgje FN (2022) er havforureining eit aukande problem for dyrelivet.',fasit:2},
+  {tekst:'Ifølgje FN (2022) er havforureining eit aukande problem for dyrelivet.',fasit:1},
   {tekst:'«Vi må handle raskt» sa generalsekretæren (FN, 2022).',fasit:0},
   {tekst:'Generalsekretæren understreka at verda må handle fort (FN, 2022).',fasit:1},
-  {tekst:'FN-leiinga peikar på at det hastar med tiltak mot havforureining (2022).',fasit:2}
+  {tekst:'FN-leiinga peikar på at det hastar med tiltak mot havforureining (2022).',fasit:1}
  ],
- regel:'Direkte sitat: ordrett + « ». Indirekte sitat: refererer med «at» utan hermeteikn. Parafrase: heilt eigne ord.',
- eks:'Direkte: «…» · Indirekte: «sa at …» · Parafrase: eigne ord + kjelde'},
+ regel:'Direkte sitat: ordrett + « » + kjelde. Indirekte gjengiving / parafrase: eigne ord eller referat med «at» + kjelde.',
+ eks:'Direkte: «…» (kjelde) · Indirekte/parafrase: eigne ord eller «sa at …» + kjelde'},
 
 {kat:'sitat',kat_label:'Sitat og sitatbruk',type:'sann_usann_serie',vanske:'medium',
  q:'Er påstandane om sitat sanne eller usanne?',
@@ -3405,12 +3408,14 @@ function mtCheckMc(btn) {
   MTS.answered = true;
   var t = MTS.current;
   var chosen = btn.getAttribute('data-val');
-  var correct = mtIsCorrect(chosen, t);
+  var chosenIdx = parseInt(btn.getAttribute('data-idx'), 10);
+  var correct = mtIsCorrect(chosen, t, chosenIdx);
   document.querySelectorAll('.mt-mc-btn').forEach(function (b) {
     b.disabled = true;
     var v = b.getAttribute('data-val');
+    var idx = parseInt(b.getAttribute('data-idx'), 10);
     if (v === chosen) b.className = 'mt-mc-btn ' + (correct ? 'mt-correct' : 'mt-wrong');
-    if (!correct && mtIsCorrect(v, t)) b.className = 'mt-mc-btn mt-correct';
+    if (!correct && mtIsCorrect(v, t, idx)) b.className = 'mt-mc-btn mt-correct';
   });
   mtFinish(correct, 1, correct ? 1 : 0, chosen, t);
 }
@@ -3924,7 +3929,24 @@ function mtCheckSr() {
    FELLES FASIT-SJEKK
 ══════════════════════════════════════════════════════ */
 
-function mtIsCorrect(val, t) {
+function mtResolveFasitText(t) {
+  if (!t) return '';
+  if (t.type === 'mc' && typeof t.fasit === 'number' && Array.isArray(t.alt)) {
+    var altText = t.alt[t.fasit];
+    if (typeof altText === 'string') return altText;
+  }
+  if (t.fasit === 0 || t.fasit) return String(t.fasit);
+  return '';
+}
+
+function mtIsCorrect(val, t, idx) {
+  if (t && t.type === 'mc' && typeof t.fasit === 'number') {
+    if (typeof idx === 'number' && !isNaN(idx)) return idx === t.fasit;
+    if (Array.isArray(t.alt) && typeof t.alt[t.fasit] !== 'undefined') {
+      return mtNorm(t.alt[t.fasit]) === mtNorm(val);
+    }
+    return false;
+  }
   var v = mtNorm(val);
   var variants = Array.isArray(t.fasit_v) && t.fasit_v.length ? t.fasit_v : [t.fasit];
   return variants.some(function (f) { return mtNorm(f) === v; });
@@ -3941,7 +3963,7 @@ function mtSmartFeedback(chosen, t) {
     }
   }
   /* 2) Levenshtein-nærleik */
-  var fasit = t.fasit || '';
+  var fasit = mtResolveFasitText(t);
   var dist = mtLevenshtein(chosen, fasit);
   if (dist === 1) return 'Nesten! Sjekk stavinga nøye.';
   if (dist === 2) return 'Du er veldig nær! Samanlikn med fasiten.';
@@ -4052,7 +4074,8 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType) {
   } else {
     html += '<div class="mt-fb-heading">&#10007; ' + (isPartial ? 'Delvis rett' : 'Feil') + '</div>';
     if (maxPts > 1 && typeof chosen === 'string') html += '<div class="mt-fb-detail">' + mtEsc(chosen) + '</div>';
-    if (!isPartial && t.fasit) html += '<div class="mt-fb-fasit">Rett svar: <strong>' + mtEsc(t.fasit) + '</strong></div>';
+    var fasitText = mtResolveFasitText(t);
+    if (!isPartial && fasitText) html += '<div class="mt-fb-fasit">Rett svar: <strong>' + mtEsc(fasitText) + '</strong></div>';
     if (extraMsg) html += '<div class="mt-fb-extra">' + mtEsc(extraMsg) + '</div>';
   }
 
@@ -4369,10 +4392,14 @@ function mtShowSummary() {
     }
 
     gp.innerHTML = gpHtml;
-    /* Sett inn før summary-actions */
-    var actionsDiv = sumEl.querySelector('.adp-summary-actions');
-    if (actionsDiv) sumEl.insertBefore(gp, actionsDiv);
-    else sumEl.appendChild(gp);
+    /* Sett inn øvst i sluttskjermen, rett under kommentar */
+    var kpiGrid = sumEl.querySelector('.adp-summary-grid');
+    if (kpiGrid) sumEl.insertBefore(gp, kpiGrid);
+    else {
+      var actionsDiv = sumEl.querySelector('.adp-summary-actions');
+      if (actionsDiv) sumEl.insertBefore(gp, actionsDiv);
+      else sumEl.appendChild(gp);
+    }
   }
 
   /* «Start ny økt med svakaste kategoriar»-knapp */
