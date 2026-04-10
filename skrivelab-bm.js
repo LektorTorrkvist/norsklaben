@@ -3241,12 +3241,6 @@ function nlInitAdaptive() {
   var root = document.getElementById('nl-adaptive');
   if (!root) return;
 
-  // Ny oppgavebank-motor eier adaptiv modus på denne siden.
-  // Hopp over legacy-bindinger for å unngå dobbel rendering i samme modal.
-  if (typeof window !== 'undefined' && typeof window.mtStart === 'function' && typeof window.mtTriggerCheck === 'function') {
-    return;
-  }
-
   var catsWrap = document.getElementById('nl-ad-cats');
   if (!catsWrap) return;
 

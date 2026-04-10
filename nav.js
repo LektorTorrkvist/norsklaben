@@ -165,6 +165,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
   setupLanguageMemory();
 
+  function ensureOppgavebankNavLink() {
+    if (!nav) return;
+    if (nav.querySelector('a[href*="oppgavebank.html"]')) return;
+
+    var isNb = (document.documentElement.lang || '').toLowerCase().indexOf('nb') === 0;
+    var link = document.createElement('a');
+    link.href = 'oppgavebank.html';
+    link.textContent = isNb ? 'Oppgavebank' : 'Oppgåvebank';
+
+    var path = String((window.location && window.location.pathname) || '').toLowerCase();
+    if (path.indexOf('oppgavebank.html') !== -1) {
+      link.classList.add('active');
+    }
+
+    var firstLink = nav.querySelector('a[href*="skrivelab"]');
+    if (firstLink && firstLink.nextSibling) {
+      nav.insertBefore(link, firstLink.nextSibling);
+    } else {
+      nav.insertBefore(link, nav.firstChild);
+    }
+  }
+
+  ensureOppgavebankNavLink();
+
   function closeMobileNav() {
     if (!header || !navToggle) return;
     header.classList.remove('nl-nav-open');
