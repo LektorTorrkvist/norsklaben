@@ -2953,6 +2953,7 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: .7rem 0; }
   border-radius: var(--rs);
   padding: .5rem .7rem;
   cursor: grab;
+  touch-action: none;
   user-select: none;
   font-size: .86rem;
   transition: all .15s;
@@ -3012,6 +3013,7 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: .7rem 0; }
   font-weight: 600;
   color: var(--primary);
   cursor: grab;
+  touch-action: none;
   user-select: none;
   transition: all .15s;
 }
@@ -3052,7 +3054,7 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: .7rem 0; }
   align-content: flex-start;
   gap: .35rem;
   transition: all .15s;
-  touch-action: manipulation;
+  touch-action: none;
 }
 .sort-bucket-drop.drag-over { border-color: var(--mid); background: var(--plight); }
 
@@ -3088,6 +3090,7 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: .7rem 0; }
   font-weight: 600;
   color: #7f4300;
   cursor: grab;
+  touch-action: none;
   user-select: none;
   transition: all .15s;
 }
@@ -3144,11 +3147,76 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: .7rem 0; }
   align-content: flex-start;
   gap: .35rem;
   transition: all .15s;
-  touch-action: manipulation;
+  touch-action: none;
 }
 .burger-bucket-drop.drag-over {
   border-color: #b05a00;
   background: #ffedd5;
+}
+
+/* ─── WELCOME / MOTIVATIONAL MODAL ─── */
+.nl-welcome-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 10000;
+  display: flex; align-items: center; justify-content: center;
+  animation: nlWelcFadeIn .3s ease;
+}
+@keyframes nlWelcFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes nlWelcPop { from { transform: scale(.85) translateY(25px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+.nl-welcome-card {
+  background: #fff;
+  border-radius: 1.2rem;
+  padding: 2rem 2.2rem 1.6rem;
+  max-width: 420px;
+  width: 92vw;
+  text-align: center;
+  box-shadow: 0 16px 48px rgba(0,0,0,.25);
+  animation: nlWelcPop .4s ease .1s both;
+}
+.nl-welcome-emoji { font-size: 3rem; margin-bottom: .4rem; }
+.nl-welcome-title { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.5rem; margin: 0 0 .5rem; }
+.nl-welcome-msg { color: var(--tmuted); font-size: .92rem; line-height: 1.55; margin: 0 0 1rem; }
+.nl-welcome-stats {
+  display: flex; justify-content: center; gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.nl-welcome-stat {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: .6rem;
+  padding: .4rem .7rem;
+  font-size: .82rem;
+  color: var(--primary);
+  display: flex; align-items: center; gap: .3rem;
+}
+.nl-ws-icon { font-size: 1.05rem; }
+.nl-welcome-tips {
+  background: #fffbe6;
+  border: 1px solid #f5e6a3;
+  border-radius: .6rem;
+  padding: .7rem 1rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+.nl-welcome-tips h4 { margin: 0 0 .35rem; font-size: .82rem; color: #7f6600; }
+.nl-welcome-tips ul { margin: 0; padding-left: 1.2rem; list-style: disc; }
+.nl-welcome-tips li { font-size: .82rem; color: #665200; line-height: 1.5; }
+.nl-welcome-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: .7rem;
+  padding: .65rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+.nl-welcome-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26,61,43,.25);
 }
 
 .touch-drag-ghost {

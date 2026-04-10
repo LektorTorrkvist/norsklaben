@@ -13,6 +13,25 @@
 </head>
 <body>
 
+<!-- Motivational startup modal -->
+<div class="nl-welcome-overlay" id="nl-welcome-overlay" hidden>
+  <div class="nl-welcome-card">
+    <div class="nl-welcome-emoji" id="nl-welcome-emoji">🌱</div>
+    <h2 class="nl-welcome-title" id="nl-welcome-title">Velkommen tilbake!</h2>
+    <p class="nl-welcome-msg" id="nl-welcome-msg"></p>
+    <div class="nl-welcome-stats" id="nl-welcome-stats" hidden>
+      <div class="nl-welcome-stat"><span class="nl-ws-icon">⭐</span><strong id="nl-welcome-xp">0</strong> XP</div>
+      <div class="nl-welcome-stat"><span class="nl-ws-icon">🔥</span><strong id="nl-welcome-streak">0</strong> dager på rad</div>
+      <div class="nl-welcome-stat"><span class="nl-ws-icon">🏆</span>Nivå <strong id="nl-welcome-level">1</strong></div>
+    </div>
+    <div class="nl-welcome-tips" id="nl-welcome-tips" hidden>
+      <h4>💡 Tips: Øv litt ekstra på</h4>
+      <ul id="nl-welcome-tips-list"></ul>
+    </div>
+    <button type="button" class="nl-welcome-btn" id="nl-welcome-btn">La oss kjøre! 🚀</button>
+  </div>
+</div>
+
 <header>
   <a class="logo" href="index.html">Norsk<span>laben</span></a>
   <nav>
@@ -47,8 +66,8 @@
 <section class="adp" id="nl-adaptive" aria-labelledby="nl-adaptive-title">
   <div class="adp-inner">
     <div class="adp-head">
-      <h2 id="nl-adaptive-title">Adaptiv øvingsrekke</h2>
-      <p>Velg kategorier og nivå, så lager Skrivelab en økt fra den eksisterende oppgavebanken.</p>
+      <h2 id="nl-adaptive-title">Skrivemesteren - adaptive øvingsoppgaver for norskfaget</h2>
+      <p>Bli en skrivemester! Spill deg gjennom grammatikk, rettskriving og typiske skriveferdigheiter. Tjen XP og nå nye nivå!</p>
       <div class="adp-gamify adp-gamify-cockpit" id="nl-ad-gamify" aria-live="polite">
         <div class="adp-g-orbit" aria-hidden="true"></div>
 

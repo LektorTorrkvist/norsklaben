@@ -1090,7 +1090,9 @@ var BANKV2 = [
   {tekst:'Temperaturen på jorda stiger',fasit:1},
   {tekst:'Skogene blir hugget ned',fasit:0},
   {tekst:'Dyrearter mister leveområdene sine',fasit:1},
+  {tekst:'Forbruket av fossil energi vokser',fasit:0},
   {tekst:'Isen på polene smelter',fasit:1},
+  {tekst:'Jordbruk utvider seg inn i regnskogen',fasit:0},
   {tekst:'Havnivået stiger',fasit:1}
  ],
  regel:'Årsaken utløser endringen. Virkningen er resultatet. Spør: «hvorfor skjer dette?»',
@@ -1792,18 +1794,18 @@ var BANKV2 = [
  eks:'«60 % leser daglig» (SSB, 2023). Eksperten sa: «…» (Hansen, 2023).'},
 
 {kat:'sitat',kat_label:'Sitat og sitatbruk',type:'drag_kolonne',vanske:'lett',
- q:'Sorter: Er det et direkte sitat, et indirekte sitat eller en parafrase?',
- kolonner:['Direkte sitat','Indirekte sitat','Parafrase'],
+ q:'Sorter: Er det et direkte sitat eller en indirekte gjengivelse (parafrase)?',
+ kolonner:['Direkte sitat','Indirekte gjengivelse / parafrase'],
  ord:[
   {tekst:'FN skriver: «Plasten i havet truer livet under vann» (2022).',fasit:0},
   {tekst:'FN hevder at plasten i havet truer marint liv (2022).',fasit:1},
-  {tekst:'Ifølge FN (2022) er havforurensning et økende problem for dyrelivet.',fasit:2},
+  {tekst:'Ifølge FN (2022) er havforurensning et økende problem for dyrelivet.',fasit:1},
   {tekst:'«Vi må handle raskt» sa generalsekretæren (FN, 2022).',fasit:0},
   {tekst:'Generalsekretæren understreket at verden må handle fort (FN, 2022).',fasit:1},
-  {tekst:'FN-ledelsen peker på at det haster med tiltak mot havforurensning (2022).',fasit:2}
+  {tekst:'FN-ledelsen peker på at det haster med tiltak mot havforurensning (2022).',fasit:1}
  ],
- regel:'Direkte sitat: ordrett + « ». Indirekte sitat: refererer med «at» uten anførselstegn. Parafrase: helt egne ord.',
- eks:'Direkte: «…» · Indirekte: «sa at …» · Parafrase: egne ord + kilde'},
+ regel:'Direkte sitat: ordrett + « » + kilde. Indirekte gjengivelse / parafrase: egne ord eller referat med «at» + kilde.',
+ eks:'Direkte: «…» (kilde) · Indirekte/parafrase: egne ord eller «sa at …» + kilde'},
 
 {kat:'sitat',kat_label:'Sitat og sitatbruk',type:'sann_usann_serie',vanske:'medium',
  q:'Er påstandene om sitat sanne eller usanne?',
@@ -1830,7 +1832,7 @@ var BANKV2 = [
  questions:[
   {q:'Er det første sitatet korrekt?',alt:['Ja, det har anførselstegn og kilde','Nei, det blander indirekte og direkte sitat','Ja, men det mangler årstall'],fasit:0},
   {q:'Hva mangler i den andre setningen?',alt:['Ingenting','Anførselstegn rundt det direkte sitatet','Kildehenvisning'],fasit:1},
-  {q:'Hvilken type gjengivelse er den tredje setningen?',alt:['Direkte sitat','Indirekte sitat','Parafrase'],fasit:1}
+  {q:'Hvilken type gjengivelse er den tredje setningen?',alt:['Direkte sitat','Indirekte gjengivelse / parafrase','Sitat uten kilde'],fasit:1}
  ],
  regel:'Direkte sitat: «…» + kilde. Indirekte: «sa at …» + kilde. Kontroller at alle sitat er markert riktig.',
  eks:'OK: «…» (FN, 2022). Feil: sa: Vi må … (mangler « »). Indirekte: mener at …'},
@@ -1977,7 +1979,7 @@ var BANKV2 = [
  eks:'Faglig: «dokumenterer», «betydelig». Uformelt: «greien», «liksom».'},
 
 {kat:'ordval',kat_label:'Ordvalg og presisjon',type:'cloze',vanske:'medium',
- q:'Skriv inn et mer presist ord enn «ting»: «Ein viktig ___ er at elevane sov for lite.»',
+ q:'Skriv inn et mer presist ord enn «ting»: «En viktig ___ er at elevene sov for lite.»',
  hint:'Tenk på et faglig ord for et poeng eller funn.',
  fasit:'faktor',fasit_v:['faktor','Faktor','observasjon','funn','poeng'],
  regel:'Erstatt vage ord som «ting», «greie», «sak» med presise fagord.',
@@ -2012,7 +2014,7 @@ var BANKV2 = [
 {kat:'bruke_eksempel',kat_label:'Bruke eksempler',type:'fillsel',vanske:'medium',
  q:'Velg det beste eksempelet til påstanden.',
  items:[
-  {pre:'Påstand: «Plast i havet skadar dyrelivet.»',alt:['En skillpadde ble funnet med plastpose i magen.','Plast er dårlig.','Folk bør resirkulere.'],fasit:'En skillpadde ble funnet med plastpose i magen.',post:''},
+  {pre:'Påstand: «Plast i havet skader dyrelivet.»',alt:['En skillpadde ble funnet med plastpose i magen.','Plast er dårlig.','Folk bør resirkulere.'],fasit:'En skillpadde ble funnet med plastpose i magen.',post:''},
   {pre:'Påstand: «Ungdom leser mindre enn før.»',alt:['Lesing er kjedelig.','En undersøkelse viser at 15-åringer leser 30 min kortere per uke enn i 2013.','Alle vet dette.'],fasit:'En undersøkelse viser at 15-åringer leser 30 min kortere per uke enn i 2013.',post:''},
   {pre:'Påstand: «KI kan brukes i helsevesenet.»',alt:['KI er bra.','Ved Haukeland sykehus brukes KI-algoritmer til å analysere røntgenbilder.','Roboter overtar alt.'],fasit:'Ved Haukeland sykehus brukes KI-algoritmer til å analysere røntgenbilder.',post:''}
  ],

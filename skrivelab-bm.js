@@ -206,6 +206,7 @@ function nlBoot() {
   nlSafeInit('refresh-counts', nlRefreshCounts);
   nlSafeInit('init-adaptive', nlInitAdaptive);
   nlSafeInit('front-insights', nlRenderFrontInsights);
+  nlSafeInit('welcome-modal', nlShowWelcomeModal);
 
   // Safety net: if adaptive categories are still empty, rebuild once.
   nlSafeInit('adaptive-cats-fallback', function() {
@@ -1452,16 +1453,51 @@ function nlResetFillSel(tid, sid) {
 }
 
 /* ── DRAG-ORD (V1 import, click-to-build) ── */
+var _dragOrdBtn = null;
 function nlInitDragOrd() {
   document.querySelectorAll('.drag-ord-area').forEach(function(area) {
+    var bank = area.querySelector('.drag-ord-bank');
+    var answer = area.querySelector('.drag-ord-answer');
+
+    /* Make bank and answer zones accept HTML5 drops */
+    [bank, answer].forEach(function(zone) {
+      if (!zone || zone.dataset.nlDragOrdZone === '1') return;
+      zone.dataset.nlDragOrdZone = '1';
+      zone.addEventListener('dragover', function(e) {
+        e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+        zone.classList.add('drag-over');
+      });
+      zone.addEventListener('dragleave', function() { zone.classList.remove('drag-over'); });
+      zone.addEventListener('drop', function(e) {
+        e.preventDefault(); zone.classList.remove('drag-over');
+        if (!_dragOrdBtn) return;
+        _dragOrdBtn.classList.remove('dragging');
+        if (zone === answer) {
+          nlDragOrdMoveToAnswer(_dragOrdBtn);
+        } else {
+          nlDragOrdMoveToBank(_dragOrdBtn);
+        }
+        _dragOrdBtn = null;
+      });
+    });
+
     area.querySelectorAll('.drag-ord-bank button, .drag-ord-answer button').forEach(function(btn, i) {
       if (!btn.dataset.order) btn.dataset.order = String(i);
       btn.classList.add('drag-ord-token');
       btn.classList.remove('drag-ord-picked');
       btn.type = 'button';
-      if (btn.dataset.nlTouchBoundDragOrd !== '1') {
+      /* HTML5 drag support */
+      btn.draggable = true;
+      if (btn.dataset.nlDragOrdBound !== '1') {
+        btn.dataset.nlDragOrdBound = '1';
+        btn.addEventListener('dragstart', function(e) {
+          _dragOrdBtn = btn; btn.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        btn.addEventListener('dragend', function() {
+          btn.classList.remove('dragging'); _dragOrdBtn = null;
+        });
         nlAttachTouchDrag(btn, 'drag-ord');
-        btn.dataset.nlTouchBoundDragOrd = '1';
       }
     });
   });
@@ -2742,6 +2778,121 @@ function nlOpenManualQueueInMt(ei) {
 }
 
 /* ── ADAPTIVE PRACTICE ── */
+/* ── MOTIVATIONAL WELCOME MODAL ── */
+function nlShowWelcomeModal() {
+  var overlay = document.getElementById('nl-welcome-overlay');
+  if (!overlay) return;
+
+  var profile = null;
+  try {
+    var raw = window.localStorage.getItem('norsklaben-adaptive-profile-v1');
+    if (raw) profile = JSON.parse(raw);
+  } catch (e) {}
+
+  var data = null;
+  if (typeof mtLsGet === 'function') {
+    try { data = mtLsGet(); } catch (e) {}
+  }
+
+  var hasHistory = (profile && profile.sessions > 0) || (data && data.sessions && data.sessions.length > 0);
+
+  var emojiEl = document.getElementById('nl-welcome-emoji');
+  var titleEl = document.getElementById('nl-welcome-title');
+  var msgEl = document.getElementById('nl-welcome-msg');
+  var statsEl = document.getElementById('nl-welcome-stats');
+  var tipsEl = document.getElementById('nl-welcome-tips');
+  var tipsList = document.getElementById('nl-welcome-tips-list');
+
+  if (!hasHistory) {
+    /* First-time visitor */
+    if (emojiEl) emojiEl.textContent = '🌱';
+    if (titleEl) titleEl.textContent = 'Velkommen til Skrivelab!';
+    if (msgEl) msgEl.textContent = 'Her kan du øve på norsk skriving – grammatikk, rettskriving, tekststruktur og meir. Velg kategoriar, trykk «Start øvelse», og tjen XP for kvart rett svar!';
+  } else {
+    /* Returning student */
+    var xp = (profile && profile.xp) || (data && data.totalXP) || 0;
+    var streak = (profile && profile.streak) || 0;
+    var sessions = (profile && profile.sessions) || (data && data.sessions && data.sessions.length) || 0;
+
+    /* Level lookup */
+    var lvl = 1;
+    if (typeof MT_XP_LEVELS !== 'undefined') {
+      for (var i = MT_XP_LEVELS.length - 1; i >= 0; i--) {
+        if (xp >= MT_XP_LEVELS[i].xp) { lvl = i + 1; break; }
+      }
+    }
+
+    var greetings = [
+      'Bra å sjå deg igjen! 💪',
+      'Klar for ei ny økt? 🎯',
+      'Velkommen tilbake, mester!',
+      'Dags for norsk-trening! 📝'
+    ];
+    var greeting = greetings[Math.floor(Math.random() * greetings.length)];
+
+    var icons = ['🔥', '⚡', '🚀', '🎯', '💪'];
+    if (emojiEl) emojiEl.textContent = icons[Math.floor(Math.random() * icons.length)];
+    if (titleEl) titleEl.textContent = greeting;
+
+    var msgs = [];
+    if (sessions === 1) msgs.push('Du har fullført 1 økt så langt.');
+    else if (sessions > 1) msgs.push('Du har fullført ' + sessions + ' økter!');
+    if (streak >= 3) msgs.push('Imponerande ' + streak + '-dagars streak – hald fram!');
+    else if (streak === 2) msgs.push('2 dagar på rad – ein til og du har ein skikkeleg streak!');
+    if (msgEl) msgEl.textContent = msgs.join(' ') || 'Klar for å trene meir?';
+
+    /* Stats pills */
+    var xpEl = document.getElementById('nl-welcome-xp');
+    var streakEl = document.getElementById('nl-welcome-streak');
+    var levelEl = document.getElementById('nl-welcome-level');
+    if (xpEl) xpEl.textContent = xp;
+    if (streakEl) streakEl.textContent = streak;
+    if (levelEl) levelEl.textContent = lvl;
+    if (statsEl) statsEl.hidden = false;
+
+    /* Weak categories from feillogg */
+    if (typeof BANKV2 !== 'undefined' && typeof mtLsCatStats === 'function' && tipsList) {
+      var labelMap = {};
+      BANKV2.forEach(function(t) {
+        if (t && t.kat && t.kat_label && !labelMap[t.kat]) labelMap[t.kat] = t.kat_label;
+      });
+      var weak = [];
+      Object.keys(labelMap).forEach(function(kat) {
+        var s = mtLsCatStats(kat);
+        if (s.total >= 2 && s.pct < 70) weak.push({ label: labelMap[kat], pct: s.pct });
+      });
+      weak.sort(function(a, b) { return a.pct - b.pct; });
+      weak = weak.slice(0, 3);
+      if (weak.length) {
+        tipsList.innerHTML = '';
+        weak.forEach(function(w) {
+          var li = document.createElement('li');
+          li.textContent = w.label + ' (' + w.pct + ' % rett)';
+          tipsList.appendChild(li);
+        });
+        if (tipsEl) tipsEl.hidden = false;
+      }
+    }
+  }
+
+  overlay.hidden = false;
+
+  var btn = document.getElementById('nl-welcome-btn');
+  if (btn) {
+    btn.addEventListener('click', function() {
+      overlay.style.opacity = '0';
+      overlay.style.transition = 'opacity .25s ease';
+      setTimeout(function() { overlay.hidden = true; overlay.style.opacity = ''; }, 260);
+    });
+  }
+  /* Also close on overlay click (outside card) */
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) {
+      if (btn) btn.click();
+    }
+  });
+}
+
 var nlAdState = {
   active: false,
   list: [],
@@ -2842,6 +2993,27 @@ function nlAdSaveProfile(profile) {
   try {
     if (!window.localStorage) return;
     window.localStorage.setItem(NL_AD_PROFILE_KEY, JSON.stringify(profile || nlAdDefaultProfile()));
+  } catch (e) {}
+}
+
+/* Save incremental progress so XP isn't lost on page close */
+function nlAdSaveProgress() {
+  try {
+    if (!window.localStorage) return;
+    var pts = 0, maxPts = 0;
+    nlAdState.results.forEach(function(r) {
+      pts += r.points || 0;
+      maxPts += r.pointsMax || 0;
+    });
+    var snap = {
+      ts: new Date().toISOString(),
+      idx: nlAdState.idx,
+      total: nlAdState.list ? nlAdState.list.length : 0,
+      pts: pts,
+      maxPts: maxPts,
+      answered: nlAdState.results.size || 0
+    };
+    window.localStorage.setItem(NL_AD_PROFILE_KEY + '-progress', JSON.stringify(snap));
   } catch (e) {}
 }
 
@@ -3796,6 +3968,9 @@ function nlAdMasteryData(pct) {
     medal: '&#128170;',
     heading: 'Halvvegs der!',
     comment: 'Du har forstått mye, men det er nokre tema du bør øve mer på. Gå gjennom rettingane og prøv igjen – du kommer til å merke framgang!'
+  /* Clear incremental progress – full session is about to be saved */
+  try { window.localStorage.removeItem(NL_AD_PROFILE_KEY + '-progress'); } catch (e) {}
+
   };
   return {
     medal: '&#127793;',
@@ -3831,6 +4006,9 @@ function nlAdResultId(total, points, max) {
 }
 
 function nlAdShowSummary() {
+  /* Clear incremental progress – full session is about to be saved */
+  try { window.localStorage.removeItem(NL_AD_PROFILE_KEY + '-progress'); } catch (e) {}
+
   var summary = document.getElementById('nl-ad-summary');
   if (!summary) {
     nlAdReset();
@@ -4288,6 +4466,9 @@ function nlAdNext() {
     nlAdTriggerCheck();
     return;
   }
+
+  /* Save progress after each answered question */
+  nlAdSaveProgress();
 
   if (nlAdState.idx + 1 >= nlAdState.list.length) {
     nlAdShowSummary();
