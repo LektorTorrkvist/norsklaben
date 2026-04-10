@@ -1913,7 +1913,289 @@ var BANKV2 = [
   {q:'Kva hadde styrkja siste setning?',alt:['Bruke «ganske»','Fjerne setninga','Leggje til konkret tal og kjelde'],fasit:2}
  ],
  regel:'Prosentpoeng for differanse. Vage påstandar utan kjelde svekkjer teksten. Alltid konkret + kjelde.',
- eks:'75 % → 60 % = 15 prosentpoeng. «Skulane opplyser» → treng kjelde.'}
+ eks:'75 % → 60 % = 15 prosentpoeng. «Skulane opplyser» → treng kjelde.'},
+
+/* ═══════════════════════════════════════════════════
+   EKSTRA: 10 lukka omskrivingsoppgåver (fix-type)
+   ═══════════════════════════════════════════════════ */
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'fix',vanske:'lett',
+ q:'Rett dei tre verba som står i feil tid (skal vere fortid).',
+ tekst:'I går besøkte vi bestemor. Ho lagar pannekaker til oss. Vi sit i stova og ser på ein morosam film etter middag.',
+ errors:{'lagar':'laga','sit':'sat','ser':'såg'},
+ fasit:'laga · sat · såg',
+ regel:'Verb blir bøygde i rett tid. Forteljing om fortida brukar preteritum: lage → laga, sitje → sat, sjå → såg.',
+ eks:'lagar → laga · sit → sat · ser → såg'},
+
+{kat:'kj_skj',kat_label:'Kj- og skj-lyd',type:'fix',vanske:'lett',
+ q:'Rett dei tre stavefeila med kj- og skj-lyd.',
+ tekst:'Lise ville sjøpe ei ny sjorte i butikken. Ho sjende at det var mykje å velje mellom. Til slutt fann ho ei fin bluse i rett storleik.',
+ errors:{'sjøpe':'kjøpe','sjorte':'skjorte','sjende':'kjende'},
+ fasit:'kjøpe · skjorte · kjende',
+ regel:'Kj-lyden blir skriven «kj» (kjøpe, kjenne, kjøre). Skj-lyden blir skriven «skj» (skjorte, skjule, skjerm).',
+ eks:'kjøpe (kj-lyd) · kjenne (kj-lyd) · skjorte (skj-lyd)'},
+
+{kat:'bindeord',kat_label:'Bindeord',type:'fix',vanske:'medium',
+ q:'Rett dei tre feil brukte bindeorda.',
+ tekst:'Eleven øvde mykje, så han fekk dårleg karakter på prøven. Han var skuffa, og han bestemde seg for å prøve igjen. Dessutan las han pensum på nytt og klarte det betre neste gong.',
+ errors:{'mykje, så':'mykje, men','skuffa, og':'skuffa, difor','Dessutan':'Deretter'},
+ fasit:'mykje, men · skuffa, difor · Deretter',
+ regel:'Bindeord signaliserer tilhøvet mellom setningar: «men» = motsetnad, «difor» = årsak–verknad, «deretter» = rekkjefølgje.',
+ eks:'Han øvde, men fekk dårleg resultat (motsetnad) · Han var skuffa, difor prøvde han igjen (verknad)'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'fix',vanske:'medium',
+ q:'Byt ut dei fire uformelle uttrykka med sakleg språk.',
+ tekst:'Undersøkingar viser at mange dreg til syden om sommaren. Det er dritkult med sol og varme. Turistar chillar på stranda og tek selfiar. Konklusjonen er at ferie liksom er viktig for helsa.',
+ errors:{'dritkult':'svært populært','chillar':'slappar av','selfiar':'bilete av seg sjølve','liksom':'openbert'},
+ fasit:'svært populært · slappar av · bilete av seg sjølve · openbert',
+ regel:'Sakprosa brukar nøytralt, formelt språk. Slang og munnlege uttrykk høyrer heime i uformelle tekstar.',
+ eks:'«dritkult» → «svært populært» · «chillar» → «slappar av» · «liksom» → «openbert»'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
+ q:'Rett dei tre og/å-feila.',
+ tekst:'Klassen bestemde seg for og arrangere ein konsert. Alle måtte hugse og øve på songane. Læraren lova og hjelpe med lydanlegget.',
+ errors:{'for og arrangere':'for å arrangere','hugse og øve':'hugse å øve','lova og hjelpe':'lova å hjelpe'},
+ fasit:'for å arrangere · hugse å øve · lova å hjelpe',
+ regel:'Etter verb brukar ein infinitivsmerket «å», ikkje «og». Test: kan du setje inn «for» framfor? Då er det «å».',
+ eks:'bestemde seg for å · hugse å · lova å'},
+
+{kat:'samansett',kat_label:'Samansette ord',type:'fix',vanske:'medium',
+ q:'Rett dei fire særskrivingsfeila.',
+ tekst:'Ungdoms skulen arrangerte ein bok kveld i kultur huset. Elevar og foreldre var inviterte til ei koseleg lesestund med bolle sal.',
+ errors:{'Ungdoms skulen':'Ungdomsskulen','bok kveld':'bokkveld','kultur huset':'kulturhuset','bolle sal':'bollesal'},
+ fasit:'Ungdomsskulen · bokkveld · kulturhuset · bollesal',
+ regel:'Samansette substantiv blir skrivne i eitt ord på norsk: ungdomsskule, bokkveld, kulturhus.',
+ eks:'Ungdomsskulen (ungdom + skule) · kulturhuset (kultur + hus)'},
+
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'medium',
+ q:'Rett dei fire feila med einskild og dobbel konsonant.',
+ tekst:'Guten leikte med katen i hagen. Balen spratt over gjerdet og hamna hos naboen. Om nata drøymde han at han var fotballspelar.',
+ errors:{'Guten':'Gutten','katen':'katten','Balen':'Ballen','nata':'natta'},
+ fasit:'Gutten · katten · Ballen · natta',
+ regel:'Etter kort vokal skriv ein dobbel konsonant: gutt (kort u), katt (kort a), ball (kort a), natt (kort a).',
+ eks:'gutt (kort u → tt) · katt (kort a → tt) · ball (kort a → ll)'},
+
+{kat:'teiknsetting',kat_label:'Teiknsetting',type:'fix',vanske:'lett',
+ q:'Rett dei tre teiknsettingsfeila.',
+ tekst:'Kan du hjelpe meg med leksene. Mamma sa vi treng mjølk brød og ost frå butikken. Har du lyst til å bli med',
+ errors:{'leksene.':'leksene?','mjølk brød':'mjølk, brød','bli med':'bli med?'},
+ fasit:'leksene? · mjølk, brød · bli med?',
+ regel:'Spørsmål blir avslutta med spørsmålsteikn. Komma blir brukt mellom ledd i oppramsing (unnateke framfor «og»).',
+ eks:'Kan du hjelpe meg? (spørsmålsteikn) · mjølk, brød og ost (komma i oppramsing)'},
+
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'fix',vanske:'medium',
+ q:'Rett dei tre setningane med feil ordstilling (V2-regelen).',
+ tekst:'I går eg gjekk på kino med vener. Filmen var spennande, men litt lang. Etterpå vi åt pizza, og alle hadde det gøy. Diverre eg gløymde jakka mi på kinoen.',
+ errors:{'I går eg gjekk':'I går gjekk eg','Etterpå vi åt':'Etterpå åt vi','Diverre eg gløymde':'Diverre gløymde eg'},
+ fasit:'I går gjekk eg · Etterpå åt vi · Diverre gløymde eg',
+ regel:'I norske hovudsetningar står verbet alltid på andreplass (V2). Når setninga opnar med adverb, kjem verbet rett etter.',
+ eks:'I går gjekk eg (V2) · Etterpå åt vi (V2) · Diverre gløymde eg (V2)'},
+
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'fix',vanske:'lett',
+ q:'Byt ut dei tre upresise orda med meir passande fagord.',
+ tekst:'Forskaren fekk ein ting som viste at hypotesen var rett. Han var glad og fortalde om greiene til kollegaene. Dei sa at det var eit bra funn.',
+ errors:{'ein ting':'eit resultat','greiene':'funna','bra':'viktig'},
+ fasit:'eit resultat · funna · viktig',
+ regel:'I sakprosa bør du bruke presise ord: «ting» og «greier» er for vage – bruk fagtermar som «resultat» og «funn».',
+ eks:'«ein ting» → «eit resultat» · «greiene» → «funna» · «bra» → «viktig»'},
+
+/* ═══════════════════════════════════════════════════
+   EKSTRA: 30 lette oppgåver (4.–5. trinn)
+   ═══════════════════════════════════════════════════ */
+
+/* --- og/å (5) --- */
+{kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'lett',
+ q:'Vel rett: «Eg likar ___ ete is.»',
+ alt:['og','å'],fasit:1,
+ regel:'«Å» er infinitivsmerke og står framfor verb. «Og» bind saman to ting.',
+ eks:'Eg likar å ete. (å + verb) · Kake og is. (og bind saman)'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'lett',
+ q:'Vel rett: «Mamma ___ pappa er heime.»',
+ alt:['og','å'],fasit:0,
+ regel:'«Og» bind saman to ord eller setningar. «Å» kjem framfor verb.',
+ eks:'Mamma og pappa (og = bind saman) · likar å lese (å + verb)'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'lett',
+ q:'Vel rett: «Ho byrja ___ le.»',
+ alt:['og','å'],fasit:1,
+ regel:'Etter verb som «byrje», «slutte», «prøve» brukar vi «å» + nytt verb.',
+ eks:'byrja å le · slutta å gråte · prøvde å hoppe'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'cloze',vanske:'lett',
+ q:'Fyll inn «og» eller «å»: Per ___ Kari gjekk til skulen.',
+ hint:'Bind vi saman to namn, eller er det eit verb?',
+ fasit:'og',fasit_v:['og','Og'],
+ regel:'«Og» bind saman to namn, ting eller setningar.',
+ eks:'Per og Kari · eple og pærer · ho lo og han smilte'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'cloze',vanske:'lett',
+ q:'Fyll inn «og» eller «å»: Han likar ___ teikne.',
+ hint:'Kjem det eit verb etter?',
+ fasit:'å',fasit_v:['å','Å'],
+ regel:'«Å» er infinitivsmerke og står framfor verb (handlingsord).',
+ eks:'likar å teikne · gløymde å ete · prøvde å sove'},
+
+/* --- samansette ord (5) --- */
+{kat:'samansett',kat_label:'Samansette ord',type:'mc',vanske:'lett',
+ q:'Korleis skriv ein det rett?',
+ alt:['mot gang','motgang'],fasit:1,
+ regel:'Samansette ord blir alltid skrivne i eitt ord på norsk.',
+ eks:'motgang, medgang, fotball, iskrem'},
+
+{kat:'samansett',kat_label:'Samansette ord',type:'mc',vanske:'lett',
+ q:'Kva ord er rett skrive?',
+ alt:['hunde valp','hundevalp'],fasit:1,
+ regel:'Når to ord blir sette saman til eitt omgrep, skriv ein dei i eitt ord.',
+ eks:'hundevalp, kattemat, fuglebur'},
+
+{kat:'samansett',kat_label:'Samansette ord',type:'mc',vanske:'lett',
+ q:'Kva ord er rett?',
+ alt:['sjokoladekake','sjokolade kake'],fasit:0,
+ regel:'Samansette ord blir skrivne i eitt: sjokolade + kake = sjokoladekake.',
+ eks:'sjokoladekake, jordbærsyltetøy, pannekake'},
+
+{kat:'samansett',kat_label:'Samansette ord',type:'cloze',vanske:'lett',
+ q:'Skriv som eitt ord: fotball + bane = ___',
+ hint:'Set dei to orda saman utan mellomrom.',
+ fasit:'fotballbane',fasit_v:['fotballbane','Fotballbane'],
+ regel:'Set orda rett etter kvarandre utan mellomrom.',
+ eks:'fotball + bane = fotballbane · is + krem = iskrem'},
+
+{kat:'samansett',kat_label:'Samansette ord',type:'cloze',vanske:'lett',
+ q:'Skriv som eitt ord: is + krem = ___',
+ hint:'Set orda saman.',
+ fasit:'iskrem',fasit_v:['iskrem','Iskrem'],
+ regel:'Samansette ord blir skrivne i eitt utan mellomrom.',
+ eks:'iskrem, iskrembeger, ispinne'},
+
+/* --- dobbel konsonant (5) --- */
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'lett',
+ q:'Kva ord er rett stava?',
+ alt:['katt','kat'],fasit:0,
+ regel:'Etter kort vokal skriv ein dobbel konsonant: katt (kort a).',
+ eks:'katt, hatt, natt, ratt'},
+
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'lett',
+ q:'Kva ord er rett?',
+ alt:['balen','ballen'],fasit:1,
+ regel:'«Ball» har kort a, difor dobbel l: ballen.',
+ eks:'ballen, hallen'},
+
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'mc',vanske:'lett',
+ q:'Vel rett stavemåte:',
+ alt:['gutt','gut'],fasit:0,
+ regel:'«Gutt» har kort u, difor dobbel t.',
+ eks:'gutt, gutten, gutar'},
+
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'cloze',vanske:'lett',
+ q:'Fyll inn rett: Eg har ein ___ som heiter Pusur.',
+ hint:'Husdyr som seier mjau. Kort a-lyd.',
+ fasit:'katt',fasit_v:['katt','Katt'],
+ regel:'Etter kort vokal brukar ein dobbel konsonant.',
+ eks:'katt (kort a → tt) · hund (lang u → einskild d)'},
+
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'cloze',vanske:'lett',
+ q:'Fyll inn: Vi spelte ___ i friminuttet.',
+ hint:'Rund ting ein sparkar. Kort a-lyd.',
+ fasit:'ball',fasit_v:['ball','Ball','fotball'],
+ regel:'«Ball» har kort a-lyd, difor dobbel l.',
+ eks:'ball (kort a → ll) · bok (lang o → einskild k)'},
+
+/* --- ordklassar (5) --- */
+{kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'lett',
+ q:'Kva slags ord er «spring»?',
+ alt:['Substantiv (namnord)','Verb (handlingsord)','Adjektiv (eigenskapsord)'],fasit:1,
+ regel:'Verb er handlingsord – dei fortel kva nokon gjer: springe, hoppe, sove.',
+ eks:'spring, et, les – alle er verb'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'lett',
+ q:'Kva slags ord er «hund»?',
+ alt:['Substantiv (namnord)','Verb (handlingsord)','Adjektiv (eigenskapsord)'],fasit:0,
+ regel:'Substantiv er namnord – namn på ting, dyr og personar: hund, bok, jente.',
+ eks:'hund, katt, skule, ball – alle er substantiv'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'lett',
+ q:'Kva slags ord er «stor»?',
+ alt:['Substantiv (namnord)','Verb (handlingsord)','Adjektiv (eigenskapsord)'],fasit:2,
+ regel:'Adjektiv beskriv korleis noko er: stor, liten, raud, fin.',
+ eks:'stor, liten, pen, morosam – alle er adjektiv'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'lett',
+ q:'Kva av desse orda er eit verb?',
+ alt:['bok','hoppar','raud'],fasit:1,
+ regel:'Verb fortel kva nokon gjer. Test: «å ___» – fungerer det? Då er det eit verb.',
+ eks:'å hoppe (verb) · bok (substantiv) · raud (adjektiv)'},
+
+{kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'lett',
+ q:'Kva av desse orda er eit adjektiv?',
+ alt:['et','liten','skule'],fasit:1,
+ regel:'Adjektiv beskriv eigenskapar. Test: «noko er ___» – fungerer det? Då er det adjektiv.',
+ eks:'noko er liten (adjektiv) · et (verb) · skule (substantiv)'},
+
+/* --- teiknsetting (5) --- */
+{kat:'teiknsetting',kat_label:'Teiknsetting',type:'mc',vanske:'lett',
+ q:'Kva teikn passar: «Kva heiter du___»',
+ alt:['.','?','!'],fasit:1,
+ regel:'Spørsmål blir avslutta med spørsmålsteikn (?).',
+ eks:'Kva heiter du? · Kvar bur du? · Likar du is?'},
+
+{kat:'teiknsetting',kat_label:'Teiknsetting',type:'mc',vanske:'lett',
+ q:'Kva teikn passar: «Eg likar å lese___»',
+ alt:['.','?','!'],fasit:0,
+ regel:'Vanlege forteljande setningar blir avslutta med punktum (.).',
+ eks:'Eg likar å lese. · Ho bur i Bergen. · Vi åt frukost.'},
+
+{kat:'teiknsetting',kat_label:'Teiknsetting',type:'mc',vanske:'lett',
+ q:'Kva teikn passar: «Pass deg___»',
+ alt:['.','?','!'],fasit:2,
+ regel:'Utrop og åtvaringar blir avslutta med utropsteikn (!).',
+ eks:'Pass deg! · Stopp! · Hurra!'},
+
+{kat:'teiknsetting',kat_label:'Teiknsetting',type:'cloze',vanske:'lett',
+ q:'Skriv rett teikn etter setninga: «Kvar bur du»',
+ hint:'Er dette ei forteljing, eit spørsmål eller eit utrop?',
+ fasit:'?',fasit_v:['?'],
+ regel:'Spørsmål blir avslutta med spørsmålsteikn.',
+ eks:'Kvar bur du? · Kva gjer du? · Kven er det?'},
+
+{kat:'teiknsetting',kat_label:'Teiknsetting',type:'cloze',vanske:'lett',
+ q:'Skriv rett teikn etter setninga: «Hunden min er snill»',
+ hint:'Er dette ei forteljing, eit spørsmål eller eit utrop?',
+ fasit:'.',fasit_v:['.'],
+ regel:'Forteljande setningar blir avslutta med punktum.',
+ eks:'Hunden min er snill. · Katten søv. · Sola skin.'},
+
+/* --- setningsbygging (5) --- */
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'mc',vanske:'lett',
+ q:'Kva setning er rett?',
+ alt:['Hund brun er den.','Den brune hunden er fin.','Er brun hund den.'],fasit:1,
+ regel:'Ei norsk setning har vanlegvis rekkjefølgja subjekt – verb – objekt.',
+ eks:'Den brune hunden (subjekt) er (verb) fin (skildring).'},
+
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'mc',vanske:'lett',
+ q:'Vel den rette setninga:',
+ alt:['Likar eg is.','Eg likar is.','Is eg likar.'],fasit:1,
+ regel:'Vanleg rekkjefølgje på norsk: subjekt + verb + resten.',
+ eks:'Eg (subjekt) likar (verb) is (objekt).'},
+
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'mc',vanske:'lett',
+ q:'Kva setning er rett?',
+ alt:['Vi gjekk til skulen i dag.','Til i dag skulen vi gjekk.','Gjekk vi til dag i skulen.'],fasit:0,
+ regel:'Tid og stad kjem gjerne til slutt i setninga.',
+ eks:'Vi gjekk til skulen i dag. · Ho las boka i går.'},
+
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'mc',vanske:'lett',
+ q:'Vel rett setning:',
+ alt:['Katten sov på sofaen.','Sov katten sofaen på.','På katten sofaen sov.'],fasit:0,
+ regel:'Subjektet (den som gjer noko) kjem først, deretter verbet.',
+ eks:'Katten (subjekt) sov (verb) på sofaen (stad).'},
+
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'mc',vanske:'lett',
+ q:'Kva setning er rett?',
+ alt:['Boka las guten.','Guten las boka.','Las boka guten.'],fasit:1,
+ regel:'Den som gjer handlinga (subjektet) kjem vanlegvis først.',
+ eks:'Guten (subjekt) las (verb) boka (objekt).'}
 
 ]; // end BANKV2
 if (typeof window !== 'undefined') window.BANKV2 = BANKV2;

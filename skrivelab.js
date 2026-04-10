@@ -846,6 +846,14 @@ function nlMtBuildExerciseCore(task, i, localIx) {
     var fixErrors = task && task.errors || {};
     var fixId = 'fix-' + uniq;
     var scoreFixId = 'score-' + uniq;
+    /* Build "Foreslått versjon" — original text with all errors replaced */
+    var fixSuggested = fixTekst;
+    Object.keys(fixErrors).forEach(function(wrong) {
+      var right = String(fixErrors[wrong] || '').trim();
+      if (wrong === right || !wrong || !right) return;
+      fixSuggested = fixSuggested.replace(new RegExp(wrong.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'), right);
+    });
+    var fixFasitBody = nlMtEscHtml(fixSuggested);
     return '<article class="ei">' + header +
       '<div class="ec">' +
       promptBoxHtml +
@@ -853,8 +861,8 @@ function nlMtBuildExerciseCore(task, i, localIx) {
       guideHtml +
       '<div class="fix-area ibox" id="' + fixId + '" contenteditable="true" spellcheck="false" data-original="' + nlMtEscHtml(fixTekst) + '" data-errors="' + nlMtEscHtml(JSON.stringify(fixErrors)) + '">' + nlMtEscHtml(fixTekst) + '</div>' +
       '<div class="ex-controls"><button class="btn-check" data-check="fix" data-target="' + fixId + '" data-score="' + scoreFixId + '">Sjekk svar</button><button class="btn-reset" data-reset="fix" data-target="' + fixId + '" data-score="' + scoreFixId + '">Start på nytt</button><span id="' + scoreFixId + '" class="ex-score"></span></div>' +
-      '<button class="btn-fasit" data-fasit="fb-' + uniq + '">' + revealLabel + '</button>' +
-      '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">' + revealTitle + '</div><p class="fb-ans">' + revealBody + '</p>' + metaHtml + '</div></div>' +
+      '<button class="btn-fasit" data-fasit="fb-' + uniq + '">Vis foreslått versjon</button>' +
+      '<div class="fasit-box" id="fb-' + uniq + '"><div class="fb"><div class="fl">Foreslått versjon</div><p class="fb-ans">' + fixFasitBody + '</p>' + metaHtml + '</div></div>' +
       '</div></article>';
   }
 
@@ -1804,17 +1812,28 @@ function nlFixCorrects(val) {
 function nlMarkFixText(text, errors) {
   var html = nlEscHtml(text || '');
 
+  /* First pass: mark correctly-fixed words green */
   Object.keys(errors || {}).forEach(function(wrong) {
+    var w = String(wrong || '').trim();
+    if (!w) return;
     var rights = nlFixCorrects(errors[wrong]);
+    /* Skip entries where wrong === every correct variant (not a real error) */
+    var allSame = rights.every(function(r) { return r.toLowerCase() === w.toLowerCase(); });
+    if (allSame) return;
     rights.forEach(function(right) {
+      if (right.toLowerCase() === w.toLowerCase()) return;
       var rxRight = new RegExp(nlEscRe(right), 'gi');
       html = html.replace(rxRight, '<span class="fix-mark-ok">$&</span>');
     });
   });
 
+  /* Second pass: mark remaining wrong words red */
   Object.keys(errors || {}).forEach(function(wrong) {
     var w = String(wrong || '').trim();
     if (!w) return;
+    var rights = nlFixCorrects(errors[wrong]);
+    var allSame = rights.every(function(r) { return r.toLowerCase() === w.toLowerCase(); });
+    if (allSame) return;
     var rxWrong = new RegExp(nlEscRe(w), 'gi');
     html = html.replace(rxWrong, '<span class="fix-mark-err">$&</span>');
   });
@@ -1869,7 +1888,14 @@ function nlCheckFix(tid, sid) {
   } else {
     // Show direct inline feedback in the student's own text.
     el.innerHTML = nlMarkFixText(current, errors);
+    el.contentEditable = 'false';
     nlSetScore(sid, found + ' av ' + total + ' retta', found === total ? 'ok' : 'err');
+    /* Auto-reveal fasit ("Foreslått versjon") */
+    var fixEi = el.closest('.ei');
+    if (fixEi) {
+      var fasitBox = fixEi.querySelector('.fasit-box');
+      if (fasitBox) fasitBox.classList.add('show');
+    }
   }
 }
 
@@ -1877,6 +1903,13 @@ function nlResetFix(tid, sid) {
   var el = document.getElementById(tid);
   if (el) {
     el.innerText = el.dataset.original || '';
+    el.contentEditable = 'true';
+  }
+  /* Hide fasit box on reset */
+  var fixEi = el && el.closest('.ei');
+  if (fixEi) {
+    var fasitBox = fixEi.querySelector('.fasit-box');
+    if (fasitBox) fasitBox.classList.remove('show');
   }
   nlClearScore(sid);
 }
@@ -3110,12 +3143,34 @@ function nlShowWelcomeModal() {
     else if (streak === 2) msgs.push('2 dagar p\u00e5 rad \u2013 ein til og du har ein skikkeleg streak!');
     if (msgEl) msgEl.textContent = msgs.join(' ') || 'Klar for \u00e5 trene meir?';
 
+    /* Level showcase box */
+    var lvlBoxEl = document.getElementById('nl-welcome-level-box');
+    var lvlIconEl = document.getElementById('nl-welcome-lvl-icon');
+    var lvlNameEl = document.getElementById('nl-welcome-lvl-name');
+    var lvlFillEl = document.getElementById('nl-welcome-lvl-fill');
+    var lvlXpEl = document.getElementById('nl-welcome-lvl-xp');
+    if (lvlBoxEl && typeof MT_XP_LEVELS !== 'undefined') {
+      var lvlDef = MT_XP_LEVELS[lvl - 1] || MT_XP_LEVELS[0];
+      var nextDef = MT_XP_LEVELS[lvl] || null;
+      if (lvlIconEl) lvlIconEl.textContent = lvlDef.icon || '\uD83C\uDF31';
+      if (lvlNameEl) lvlNameEl.textContent = lvlDef.name || 'Ordl\u00e6rling';
+      if (nextDef) {
+        var range = nextDef.xp - lvlDef.xp;
+        var prog = xp - lvlDef.xp;
+        var pct = range > 0 ? Math.min(100, Math.round(prog / range * 100)) : 100;
+        if (lvlFillEl) lvlFillEl.style.width = pct + '%';
+        if (lvlXpEl) lvlXpEl.textContent = xp + ' / ' + nextDef.xp + ' XP';
+      } else {
+        if (lvlFillEl) lvlFillEl.style.width = '100%';
+        if (lvlXpEl) lvlXpEl.textContent = xp + ' XP \u2014 Maks niv\u00e5!';
+      }
+      lvlBoxEl.hidden = false;
+    }
+
     var xpEl = document.getElementById('nl-welcome-xp');
     var streakEl = document.getElementById('nl-welcome-streak');
-    var levelEl = document.getElementById('nl-welcome-level');
     if (xpEl) xpEl.textContent = xp;
     if (streakEl) streakEl.textContent = streak;
-    if (levelEl) levelEl.textContent = lvl;
     if (statsEl) statsEl.hidden = false;
 
     if (typeof BANKV2 !== 'undefined' && typeof mtLsCatStats === 'function' && tipsList) {
@@ -4277,6 +4332,51 @@ function nlAdResultId(total, points, max) {
   return 'NL-' + stamp + '-P' + points + 'of' + max + '-N' + total;
 }
 
+/* ── LEVEL-UP MODAL WITH FIREWORKS ── */
+function nlGetLevelIndex(xp) {
+  if (typeof MT_XP_LEVELS === 'undefined') return 0;
+  var lvl = 0;
+  for (var i = MT_XP_LEVELS.length - 1; i >= 0; i--) {
+    if (xp >= MT_XP_LEVELS[i].xp) { lvl = i; break; }
+  }
+  return lvl;
+}
+
+function nlLevelUpModal(lvlIdx) {
+  var lvl = (typeof MT_XP_LEVELS !== 'undefined' && MT_XP_LEVELS[lvlIdx]) ? MT_XP_LEVELS[lvlIdx] : null;
+  if (!lvl) return;
+  var overlay = document.getElementById('nl-levelup-overlay');
+  if (!overlay) return;
+  var iconEl = document.getElementById('nl-levelup-icon');
+  var nameEl = document.getElementById('nl-levelup-name');
+  var msgEl = document.getElementById('nl-levelup-msg');
+  if (iconEl) iconEl.textContent = lvl.icon || '\uD83C\uDF89';
+  if (nameEl) nameEl.textContent = lvl.name;
+  if (msgEl) msgEl.textContent = 'Du har nådd nivå ' + (lvlIdx + 1) + ' – ' + lvl.name + '! Fantastisk innsats!';
+  overlay.hidden = false;
+  /* Spawn firework particles */
+  var fw = document.getElementById('nl-levelup-fireworks');
+  if (fw) {
+    fw.innerHTML = '';
+    var colors = ['#f5c542','#e91e63','#1D6FD1','#1A7A50','#c8832a','#7b2fbe','#00bcd4','#ff5722'];
+    for (var i = 0; i < 50; i++) {
+      var p = document.createElement('span');
+      p.className = 'nl-fw-spark';
+      p.style.setProperty('--fw-angle', (Math.random() * 360) + 'deg');
+      p.style.setProperty('--fw-dist', (40 + Math.random() * 80) + 'px');
+      p.style.setProperty('--fw-delay', (Math.random() * 0.4) + 's');
+      p.style.background = colors[i % colors.length];
+      fw.appendChild(p);
+    }
+  }
+  var closeBtn = document.getElementById('nl-levelup-close');
+  if (closeBtn) {
+    closeBtn.onclick = function() { overlay.hidden = true; };
+  }
+  /* Auto-close after 6s */
+  setTimeout(function() { overlay.hidden = true; }, 6000);
+}
+
 /* ── CONFETTI + BONUS XP ON SET COMPLETION ── */
 function nlConfettiBurst(bonusXp) {
   var wrap = document.createElement('div');
@@ -4368,6 +4468,10 @@ function nlAdShowSummary() {
 
   var pct = totalMax ? Math.round((totalPoints / totalMax) * 100) : 0;
   var mastery = nlAdMasteryData(pct);
+
+  /* Level-up detection: capture level BEFORE awarding XP */
+  var preXp = ((nlAdState.profile || nlAdLoadProfile()).xp) || 0;
+  var preLvl = nlGetLevelIndex(preXp);
   var sessionXp = nlAdAwardXp(totalPoints, totalMax, pct);
 
   /* Bonus XP + confetti for completing a full set */
@@ -4382,6 +4486,13 @@ function nlAdShowSummary() {
     nlAdSaveProfile(prof);
     nlAdRenderProfile(prof);
     setTimeout(function() { nlConfettiBurst(bonusXp); }, 400);
+  }
+
+  /* Check if level changed → show level-up modal */
+  var postXp = ((nlAdState.profile || nlAdLoadProfile()).xp) || 0;
+  var postLvl = nlGetLevelIndex(postXp);
+  if (postLvl > preLvl) {
+    setTimeout(function() { nlLevelUpModal(postLvl); }, 900);
   }
 
   // Medal & heading
