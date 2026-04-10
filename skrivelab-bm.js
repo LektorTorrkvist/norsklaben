@@ -4084,6 +4084,9 @@ function nlGetLevelIndex(xp) {
 function nlLevelUpModal(lvlIdx) {
   var lvl = (typeof MT_XP_LEVELS !== 'undefined' && MT_XP_LEVELS[lvlIdx]) ? MT_XP_LEVELS[lvlIdx] : null;
   if (!lvl) return;
+  /* Dismiss welcome modal if still visible */
+  var welc = document.getElementById('nl-welcome-overlay');
+  if (welc && !welc.hidden) { welc.hidden = true; welc.style.opacity = ''; }
   var overlay = document.getElementById('nl-levelup-overlay');
   if (!overlay) return;
   var iconEl = document.getElementById('nl-levelup-icon');
@@ -4108,17 +4111,11 @@ function nlLevelUpModal(lvlIdx) {
       fw.appendChild(p);
     }
   }
-  function nlCloseLevelUp() {
+  /* Auto-dismiss after 2s */
+  setTimeout(function() {
     overlay.classList.add('nl-lvl-fadeout');
     setTimeout(function() { overlay.hidden = true; overlay.classList.remove('nl-lvl-fadeout'); }, 500);
-  }
-  var closeBtn = document.getElementById('nl-levelup-close');
-  if (closeBtn) {
-    closeBtn.onclick = nlCloseLevelUp;
-  }
-  overlay.onclick = function(e) { if (e.target === overlay) nlCloseLevelUp(); };
-  /* Auto-close after 4s */
-  setTimeout(nlCloseLevelUp, 4000);
+  }, 1500);
 }
 
 /* ── CONFETTI + BONUS XP ON SET COMPLETION ── */
