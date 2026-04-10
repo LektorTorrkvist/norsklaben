@@ -516,7 +516,7 @@ var BANKV2 = [
 {kat:'ordklassar',kat_label:'Ordklassar',type:'cloze',vanske:'lett',
  q:'«Raskt» i «Han sprang raskt» er eit ___.',
  hint:'Ordet seier noko om korleis han sprang – det endrar verbet.',
- fasit:'adverb',fasit_v:['adverb'],
+ fasit:'adverb',fasit_v:['adverb','biord'],
  regel:'Adverb modifiserer verb. Her modifiserer «raskt» verbet «sprang».',
  eks:'Han sprang raskt. Ho song vakkert. Dei jobba hardt.'},
 
@@ -1426,7 +1426,7 @@ var BANKV2 = [
 {kat:'fagartikkel',kat_label:'Fagartikkel',type:'cloze',vanske:'lett',
  q:'Skriv inn rett ord: «___ Helsedirektoratet (2023) har fysisk aktivitet minka blant ungdom.»',
  hint:'Eit ord som viser til ei namngitt kjelde.',
- fasit:'Ifølgje',fasit_v:['Ifølgje','ifølgje','Ifølge','ifølge'],
+ fasit:'Ifølgje',fasit_v:['Ifølgje','ifølgje','Ifølge','ifølge','I følgje','I følge'],
  regel:'«Ifølgje» + kjelde innleier eit kjeldefesta argument i fagprosa.',
  eks:'Ifølgje SSB … / Ifølgje Helsedirektoratet … / Ifølgje forskarane …'},
 
@@ -1820,7 +1820,7 @@ var BANKV2 = [
 {kat:'sitat',kat_label:'Sitat og sitatbruk',type:'cloze',vanske:'lett',
  q:'Skriv inn rett teikn: Direkte sitat vert markerte med ___ i norsk.',
  hint:'Kva teikn brukar vi rundt ordrett gjengiving?',
- fasit:'hermeteikn',fasit_v:['hermeteikn','« »','«»','anførselsteikn','anførselsmerke'],
+ fasit:'hermeteikn',fasit_v:['hermeteikn','« »','«»','anførselsteikn','anførselsmerke','anførselstegn','hermetegn','guillemets'],
  regel:'I norsk brukar vi guillemets (« ») som hermeteikn for direkte sitat.',
  eks:'«Forsking viser at …» (SSB, 2023).'},
 

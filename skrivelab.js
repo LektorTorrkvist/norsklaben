@@ -427,6 +427,18 @@ function nlMtFasitText(v) {
   return String(v);
 }
 
+/* Resolve fasit for display: MC index → actual alt text */
+function nlMtResolveFasitDisplay(task) {
+  if (!task) return '';
+  var type = String(task.type || '').toLowerCase();
+  var alts = Array.isArray(task.alt) ? task.alt : [];
+  if ((type === 'mc' || type === 'mcset') && alts.length) {
+    var idx = nlMtResolveMcAnswerIndex(task, alts);
+    if (idx >= 0 && idx < alts.length) return String(alts[idx]);
+  }
+  return nlMtFasitText(task.fasit);
+}
+
 function nlMtHasFasitValue(v) {
   if (v == null) return false;
   if (Array.isArray(v)) {
@@ -638,7 +650,7 @@ function nlMtBuildExercise(task, i, localIx) {
   var attrs = ' data-mt-index="' + String(i) + '"';
   if (task && task.regel) attrs += ' data-regel="' + nlMtEscHtml(task.regel) + '"';
   if (task && task.eks) attrs += ' data-eks="' + nlMtEscHtml(task.eks) + '"';
-  var ft = nlMtFasitText(task && task.fasit);
+  var ft = nlMtResolveFasitDisplay(task);
   if (ft) attrs += ' data-fasit-text="' + nlMtEscHtml(ft) + '"';
   return attrs ? html.replace('<article class="ei">', '<article class="ei"' + attrs + '>') : html;
 }
@@ -648,7 +660,7 @@ function nlMtBuildExerciseCore(task, i, localIx) {
   var promptRaw = nlMtPickPrompt(task);
   var titleText = nlMtCleanPromptForTitle(promptRaw);
   var q = nlMtEscHtml(titleText);
-  var fasit = nlMtEscHtml(nlMtFasitText(task && task.fasit));
+  var fasit = nlMtEscHtml(nlMtResolveFasitDisplay(task));
   var hasFasit = nlMtHasFasitValue(task && task.fasit) || nlMtHasFasitValue(task && task.fasit_v);
   var hasHint = nlMtHasFasitValue(task && task.hint);
   var guideHtml = nlMtBuildGuideHtml(task, { includeHint: hasFasit || !hasHint });

@@ -516,7 +516,7 @@ var BANKV2 = [
 {kat:'ordklasser',kat_label:'Ordklasser',type:'cloze',vanske:'lett',
  q:'«Raskt» i «Han sprang raskt» er et ___.',
  hint:'Ordet sier noe om hvordan han sprang – det endrer verbet.',
- fasit:'adverb',fasit_v:['adverb'],
+ fasit:'adverb',fasit_v:['adverb','biord'],
  regel:'Adverb modifiserer verb. Her modifiserer «raskt» verbet «sprang».',
  eks:'Han sprang raskt. Hun sang vakkert. De jobbet hardt.'},
 
@@ -1428,7 +1428,7 @@ var BANKV2 = [
 {kat:'fagartikkel',kat_label:'Fagartikkel',type:'cloze',vanske:'lett',
  q:'Skriv inn riktig ord: «___ Helsedirektoratet (2023) har fysisk aktivitet minket blant ungdom.»',
  hint:'Et ord som viser til en navngitt kilde.',
- fasit:'Ifølge',fasit_v:['Ifølge','ifølge','I følge'],
+ fasit:'Ifølge',fasit_v:['Ifølge','ifølge','I følge','Ifølgje','ifølgje'],
  regel:'«Ifølge» + kilde innleder et kildefestet argument i fagprosa.',
  eks:'Ifølge SSB … / Ifølge Helsedirektoratet … / Ifølge forskerne …'},
 
@@ -1822,7 +1822,7 @@ var BANKV2 = [
 {kat:'sitat',kat_label:'Sitat og sitatbruk',type:'cloze',vanske:'lett',
  q:'Skriv inn riktig tegn: Direkte sitat markeres med ___ på norsk.',
  hint:'Hva slags tegn bruker vi rundt ordrett gjengivelse?',
- fasit:'anførselstegn',fasit_v:['anførselstegn','« »','«»','hermetegn'],
+ fasit:'anførselstegn',fasit_v:['anførselstegn','« »','«»','hermetegn','hermeteikn','anførselsteikn','guillemets'],
  regel:'På norsk bruker vi guillemets (« ») som anførselstegn for direkte sitat.',
  eks:'«Forskning viser at …» (SSB, 2023).'},
 
