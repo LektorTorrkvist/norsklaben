@@ -3261,6 +3261,7 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: .7rem 0; }
   display: flex; align-items: center; justify-content: center;
   animation: nlWelcFadeIn .3s ease;
 }
+.nl-welcome-overlay[hidden] { display: none !important; }
 @keyframes nlWelcFadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes nlWelcPop { from { transform: scale(.85) translateY(25px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
 .nl-welcome-card {
@@ -3365,7 +3366,10 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: .7rem 0; }
   z-index: 10001;
   display: flex; align-items: center; justify-content: center;
   animation: nlWelcFadeIn .3s ease;
+  transition: opacity .5s ease;
 }
+.nl-levelup-overlay[hidden] { display: none !important; }
+.nl-levelup-overlay.nl-lvl-fadeout { opacity: 0; }
 .nl-levelup-card {
   position: relative;
   background: #fff;

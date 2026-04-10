@@ -3201,17 +3201,17 @@ function nlShowWelcomeModal() {
 
   var btn = document.getElementById('nl-welcome-btn');
   if (btn) {
-    btn.addEventListener('click', function() {
+    btn.onclick = function() {
       overlay.style.opacity = '0';
       overlay.style.transition = 'opacity .25s ease';
       setTimeout(function() { overlay.hidden = true; overlay.style.opacity = ''; }, 260);
-    });
+    };
   }
-  overlay.addEventListener('click', function(e) {
+  overlay.onclick = function(e) {
     if (e.target === overlay) {
-      if (btn) btn.click();
+      if (btn) btn.onclick();
     }
-  });
+  };
 }
 
 /* ── ADAPTIVE PRACTICE ── */
@@ -4369,12 +4369,17 @@ function nlLevelUpModal(lvlIdx) {
       fw.appendChild(p);
     }
   }
+  function nlCloseLevelUp() {
+    overlay.classList.add('nl-lvl-fadeout');
+    setTimeout(function() { overlay.hidden = true; overlay.classList.remove('nl-lvl-fadeout'); }, 500);
+  }
   var closeBtn = document.getElementById('nl-levelup-close');
   if (closeBtn) {
-    closeBtn.onclick = function() { overlay.hidden = true; };
+    closeBtn.onclick = nlCloseLevelUp;
   }
-  /* Auto-close after 6s */
-  setTimeout(function() { overlay.hidden = true; }, 6000);
+  overlay.onclick = function(e) { if (e.target === overlay) nlCloseLevelUp(); };
+  /* Auto-close after 4s */
+  setTimeout(nlCloseLevelUp, 4000);
 }
 
 /* ── CONFETTI + BONUS XP ON SET COMPLETION ── */
@@ -4488,10 +4493,10 @@ function nlAdShowSummary() {
     setTimeout(function() { nlConfettiBurst(bonusXp); }, 400);
   }
 
-  /* Check if level changed → show level-up modal */
+  /* Check if level changed → show level-up modal (only during active practice) */
   var postXp = ((nlAdState.profile || nlAdLoadProfile()).xp) || 0;
   var postLvl = nlGetLevelIndex(postXp);
-  if (postLvl > preLvl) {
+  if (postLvl > preLvl && nlAdState.active) {
     setTimeout(function() { nlLevelUpModal(postLvl); }, 900);
   }
 
