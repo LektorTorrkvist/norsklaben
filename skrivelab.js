@@ -11,6 +11,8 @@ if (typeof window !== 'undefined') {
 
 function nlBoot() {
 
+  var nlUseV2Adaptive = (typeof window !== 'undefined' && typeof window.mtStart === 'function');
+
   if (document.body) {
     document.body.classList.add('nl-js-collapsible');
   }
@@ -233,17 +235,32 @@ function nlBoot() {
 
   nlSafeInit('init-bank-modal', nlInitBankModal);
   nlSafeInit('refresh-counts', nlRefreshCounts);
-  nlSafeInit('init-adaptive', nlInitAdaptive);
-  nlSafeInit('front-insights', nlRenderFrontInsights);
-  nlSafeInit('welcome-modal', nlShowWelcomeModal);
+  if (!nlUseV2Adaptive) {
+    nlSafeInit('init-adaptive', nlInitAdaptive);
+    nlSafeInit('front-insights', nlRenderFrontInsights);
+    nlSafeInit('welcome-modal', nlShowWelcomeModal);
+  } else {
+    nlSafeInit('bind-v2-retry', function() {
+      var retryBtn = document.getElementById('nl-ad-retry');
+      if (!retryBtn || retryBtn.dataset.nlV2Bound === '1') return;
+      retryBtn.dataset.nlV2Bound = '1';
+      retryBtn.addEventListener('click', function() {
+        if (typeof window.mtStartFeillogg === 'function') {
+          window.mtStartFeillogg();
+        }
+      });
+    });
+  }
 
   // Safety net: if adaptive categories are still empty, rebuild once.
-  nlSafeInit('adaptive-cats-fallback', function() {
-    var catsWrap = document.getElementById('nl-ad-cats');
-    if (!catsWrap) return;
-    if (catsWrap.querySelector('.adp-cat')) return;
-    nlInitAdaptive();
-  });
+  if (!nlUseV2Adaptive) {
+    nlSafeInit('adaptive-cats-fallback', function() {
+      var catsWrap = document.getElementById('nl-ad-cats');
+      if (!catsWrap) return;
+      if (catsWrap.querySelector('.adp-cat')) return;
+      nlInitAdaptive();
+    });
+  }
 
   if (typeof window !== 'undefined') {
     window.__nlSkrivelabBootDone = true;
@@ -252,6 +269,7 @@ function nlBoot() {
   /* ── Deep-link: ?kat=og_aa auto-selects category and starts ── */
   nlSafeInit('url-kat-autostart', function() {
     try {
+      if (nlUseV2Adaptive) return;
       var params = new URLSearchParams(window.location.search);
       var katParam = params.get('kat');
       if (!katParam) return;
@@ -286,6 +304,7 @@ if (document.readyState === 'loading') {
 window.addEventListener('pageshow', function() {
   try { nlResetExerciseVisibilityState(); } catch (err) {}
   try {
+    if (typeof window !== 'undefined' && typeof window.mtStart === 'function') return;
     var catsWrap = document.getElementById('nl-ad-cats');
     if (catsWrap && !catsWrap.querySelector('.adp-cat')) {
       nlInitAdaptive();

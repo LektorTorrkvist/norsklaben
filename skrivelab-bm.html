@@ -276,9 +276,6 @@
 
 
   <script src="nav.js"></script>
-  <script>
-    window.__NL_FORCE_SKRIVELAB_UI = true;
-  </script>
   <script src="oppgavebank-bm-v2.js?v=20260410f"></script>
   <script src="skrivelab-bm.js?v=20260410f"></script>
   <script>
@@ -314,6 +311,10 @@
       if (adStartBtn && adStartBtn.dataset.nlFallbackBound !== '1') {
         adStartBtn.dataset.nlFallbackBound = '1';
         adStartBtn.addEventListener('click', function() {
+          if (typeof window.mtStart === 'function') {
+            window.mtStart();
+            return;
+          }
           if (typeof nlAdStart === 'function') {
             try {
               nlAdStart();
