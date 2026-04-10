@@ -4801,11 +4801,19 @@ function mtInit() {
   mtUpdateHeaderProfile(initXP, initStreak.current || 0);
 }
 
-/* Auto-init ved DOMContentLoaded */
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', mtInit);
-} else {
-  mtInit();
+function mtShouldAutoInit() {
+  if (typeof document === 'undefined') return false;
+  // Skrivelab has its own adaptive engine; avoid double-binding there.
+  var hasSkrivelabScript = !!document.querySelector('script[src*="skrivelab.js"], script[src*="skrivelab-bm.js"]');
+  return !hasSkrivelabScript;
+}
+
+if (mtShouldAutoInit()) {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', mtInit);
+  } else {
+    mtInit();
+  }
 }
 
 /* Eksporter for inline onclick */
