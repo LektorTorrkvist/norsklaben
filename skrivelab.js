@@ -1252,8 +1252,11 @@ function nlMtValidateTaskForImport(task) {
 
   if (!supported[type]) return { ok: false, reason: 'unsupported-type' };
   if (!hasPrompt) return { ok: false, reason: 'missing-prompt' };
-  if (!hasExplanation) return { ok: false, reason: 'missing-fasitforklaring' };
-  if (!hasExample) return { ok: false, reason: 'missing-example' };
+  // New bank entries may temporarily miss one of these fields.
+  // Keep importing tasks that are otherwise valid so categories and adaptive mode stay usable.
+  if (!hasExplanation || !hasExample) {
+    // Intentionally non-blocking quality signal.
+  }
 
   if (type === 'mc') {
     var alts = Array.isArray(task && task.alt) ? task.alt : [];
@@ -3608,7 +3611,7 @@ function nlInitAdaptive() {
     var groupCards = Array.prototype.slice.call(grp.querySelectorAll('.grid .card[data-cat]'));
     if (!groupCards.length) return;
 
-    var groupTitleEl = grp.querySelector('.glabel h2');
+    var groupTitleEl = grp.querySelector('.glabel');
     var groupTitle = groupTitleEl ? groupTitleEl.textContent.trim() : ('Gruppe ' + (gi + 1));
 
     var groupBox = document.createElement('div');
@@ -3923,6 +3926,10 @@ function nlAdTake(pool, n, out) {
 }
 
 function nlAdBuildList(cats, level, count) {
+  var wantedLevel = String(level || 'adaptiv').toLowerCase();
+  if (wantedLevel === 'medium') wantedLevel = 'middels';
+  if (wantedLevel === 'vanskeleg' || wantedLevel === 'vanskelig') wantedLevel = 'vidarekomande';
+
   var all = [];
   cats.forEach(function(cat) {
     Array.prototype.forEach.call(document.querySelectorAll('.main .card[data-cat="' + cat + '"] .ei'), function(ei) {
@@ -3933,7 +3940,7 @@ function nlAdBuildList(cats, level, count) {
         ei.dataset.adCatId = card ? (card.dataset.cat || '') : '';
         ei.dataset.adCat = cnEl ? cnEl.textContent.trim() : '';
         var grp = ei.closest('.grp');
-        var grpH2 = grp ? grp.querySelector('.glabel h2') : null;
+        var grpH2 = grp ? grp.querySelector('.glabel') : null;
         ei.dataset.adGrp = grpH2 ? grpH2.textContent.trim() : '';
         all.push(ei);
       }
@@ -3942,10 +3949,10 @@ function nlAdBuildList(cats, level, count) {
 
   if (!all.length) return [];
 
-  if (level !== 'adaptiv') {
+  if (wantedLevel !== 'adaptiv') {
     var filtered = all.filter(function(ei) {
       var d = nlAdDifficulty(ei);
-      return d === level;
+      return d === wantedLevel;
     });
     if (filtered.length) {
       return nlAdShuffle(filtered).slice(0, Math.min(count, filtered.length));
