@@ -2670,6 +2670,63 @@ function mtOpenSessionUi() {
   if (summary) summary.hidden = true;
   if (body) body.innerHTML = '';
   if (actions) actions.style.display = 'flex';
+  mtUpdateWindowHeader();
+}
+
+function mtBuildManualNavHtml(currentTask) {
+  if (!MTS.manualMode || !Array.isArray(MTS.manualQueue) || MTS.manualQueue.length <= 1) return '';
+
+  var t = currentTask || MTS.current || MTS.manualQueue[0];
+  if (!t) return '';
+
+  var currentIx = MTS.manualQueue.indexOf(t);
+  if (currentIx < 0) currentIx = 0;
+  var sameCat = [];
+  MTS.manualQueue.forEach(function (task, i) {
+    if (task && t && task.kat === t.kat) sameCat.push({ i: i, task: task });
+  });
+  var options = sameCat.length > 1 ? sameCat : MTS.manualQueue.map(function (task, i) {
+    return { i: i, task: task };
+  });
+  if (options.length <= 1) return '';
+
+  var optsHtml = options.map(function (o, pos) {
+    var selected = o.i === currentIx ? ' selected' : '';
+    var label = (pos + 1) + '. ' + mtTaskLabel(o.task);
+    return '<option value="' + o.i + '"' + selected + '>' + mtEsc(label) + '</option>';
+  }).join('');
+
+  return '<div class="mt-manual-nav-head" style="display:flex;align-items:center;gap:.45rem;min-width:260px;max-width:58%">' +
+    '<label for="mt-manual-task-select" style="font-size:.74rem;font-weight:700;color:var(--tmid);white-space:nowrap">Vel oppgåve i kategorien</label>' +
+    '<select id="mt-manual-task-select" class="gram-blank" onchange="mtManualJump(this.value)" aria-label="Vel oppgåve i kategorien" style="width:100%;font-size:.84rem;padding:.34rem .52rem;border:1.5px solid var(--b2,#ddd);border-radius:8px">' +
+      optsHtml +
+    '</select>' +
+  '</div>';
+}
+
+function mtUpdateWindowHeader(currentTask) {
+  var titleEl = $mt('nl-ad-win-title');
+  if (titleEl) {
+    titleEl.textContent = MTS.manualMode
+      ? 'Skrivemeisteren - manuell modus'
+      : 'Skrivemeisteren - adaptive øvingsoppgåver';
+  }
+
+  var head = titleEl ? titleEl.parentElement : null;
+  if (!head) return;
+
+  var oldNav = head.querySelector('.mt-head-manual-nav-wrap');
+  if (oldNav && oldNav.parentNode) oldNav.parentNode.removeChild(oldNav);
+
+  var navHtml = mtBuildManualNavHtml(currentTask);
+  if (!navHtml) return;
+
+  var wrap = document.createElement('div');
+  wrap.className = 'mt-head-manual-nav-wrap';
+  wrap.innerHTML = navHtml;
+  var closeBtn = $mt('nl-ad-win-close');
+  if (closeBtn && closeBtn.parentNode === head) head.insertBefore(wrap, closeBtn);
+  else head.appendChild(wrap);
 }
 
 /* ─── SESJON ─────────────────────────────────────── */
@@ -3060,6 +3117,7 @@ function mtServeNext() {
 function mtRenderTask(t, isRetry) {
   var body = $mt('nl-ad-win-body');
   if (!body) return;
+  mtUpdateWindowHeader(t);
 
   /* Vanskebadge */
   var vMap = { lett: 'Lett', medium: 'Medium', vanskeleg: 'Vanskeleg' };
@@ -3091,34 +3149,6 @@ function mtRenderTask(t, isRetry) {
   /* Oppgåve-input (bygt per type) */
   var inputHTML = mtBuildInput(t);
 
-  /* Enkel veljar i manuell modus: byt mellom oppgåver i same kategori */
-  var manualNavHTML = '';
-  if (MTS.manualMode && Array.isArray(MTS.manualQueue) && MTS.manualQueue.length > 1) {
-    var currentIx = MTS.manualQueue.indexOf(t);
-    if (currentIx < 0) currentIx = 0;
-    var sameCat = [];
-    MTS.manualQueue.forEach(function (task, i) {
-      if (task && t && task.kat === t.kat) sameCat.push({ i: i, task: task });
-    });
-    var options = sameCat.length > 1 ? sameCat : MTS.manualQueue.map(function (task, i) {
-      return { i: i, task: task };
-    });
-    if (options.length > 1) {
-      var optsHtml = options.map(function (o, pos) {
-        var selected = o.i === currentIx ? ' selected' : '';
-        var label = (pos + 1) + '. ' + mtTaskLabel(o.task);
-        return '<option value="' + o.i + '"' + selected + '>' + mtEsc(label) + '</option>';
-      }).join('');
-      manualNavHTML =
-        '<div class="mt-manual-nav" style="margin:.5rem 0 .7rem">' +
-          '<label for="mt-manual-task-select" style="display:block;font-size:.78rem;font-weight:700;color:var(--tmid);margin-bottom:.35rem">Vel oppgåve i kategorien</label>' +
-          '<select id="mt-manual-task-select" class="gram-blank" onchange="mtManualJump(this.value)" style="width:100%;font-size:.9rem;padding:.48rem .62rem;border:1.5px solid var(--b2,#ddd);border-radius:8px">' +
-            optsHtml +
-          '</select>' +
-        '</div>';
-    }
-  }
-
   body.innerHTML =
     '<div class="mt-card">' +
       '<div class="mt-live">' +
@@ -3142,7 +3172,6 @@ function mtRenderTask(t, isRetry) {
         '<span class="mt-badge mt-badge-' + (t.vanske || 'lett') + '">' + vLabel + '</span>' +
         retryBadge +
       '</div>' +
-      manualNavHTML +
       ruleFirst +
       '<p class="mt-question">' + mtEsc(t.q || t.sporsmal || '') + '</p>' +
       tekstHTML +
@@ -3522,7 +3551,7 @@ function mtCheckOpen() {
   /* Gibberish-sjekk → 0 XP */
   if (mtIsGibberish(val)) {
     el.className = 'mt-text-input mt-textarea mt-inp-wrong';
-    mtFinish(false, 1, 0, val, t, 'Svaret ser ikkje ut til å vere eit skikkeleg forsøk. Prøv å skrive eit ordentleg svar.', true);
+    mtFinish(false, 1, 0, val, t, 'Svaret ser ikkje ut til å vere eit skikkeleg forsøk. Prøv å skrive eit ordentleg svar.', true, true);
     return;
   }
 
@@ -3536,7 +3565,7 @@ function mtCheckOpen() {
   }
 
   el.className = 'mt-text-input mt-textarea mt-inp-neutral';
-  mtFinish(true, 1, 1, val, t, extra, true);
+  mtFinish(true, 1, 1, val, t, extra, true, true);
 }
 
 /* ── fix ── */
@@ -3877,7 +3906,7 @@ function mtCheckOmskriv() {
     if (lower.indexOf(kw.toLowerCase()) !== -1) ok = false;
   });
 
-  el.className = 'mt-text-input mt-textarea ' + (ok ? 'mt-inp-correct' : 'mt-inp-wrong');
+  el.className = 'mt-text-input mt-textarea mt-inp-neutral';
 
   var extra = null;
   if (!ok && missing.length) extra = 'Hugs å bruke: ' + missing.join(', ');
@@ -3890,7 +3919,7 @@ function mtCheckOmskriv() {
     extra = (extra ? extra + ' ' : '') + 'Bra, du brukte fagomgrepet «' + fagord[0] + '».';
   }
 
-  mtFinish(ok, 1, ok ? 1 : 0, val, t, extra);
+  mtFinish(ok, 1, ok ? 1 : 0, val, t, extra, true, true);
 }
 
 /* ── sorter_rekke ── */
@@ -3979,7 +4008,7 @@ function mtSmartFeedback(chosen, t) {
    TILBAKEMELDING OG POENG
 ══════════════════════════════════════════════════════ */
 
-function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType) {
+function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQualitativeMode) {
   /* Oppdater poeng */
   MTS.score += pts;
   MTS.maxScore += maxPts;
@@ -4056,15 +4085,19 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType) {
 
   var html = '';
 
-  if (isOpenType) {
-    /* Opne svar: vis modellsvar */
-    html += '<div class="mt-fb-heading">&#128221; Takk for svaret!</div>';
+  var qualitativeMode = !!forceQualitativeMode || !!isOpenType;
+
+  if (qualitativeMode) {
+    html += '<div class="mt-fb-heading">&#128221; Fagleg tilbakemelding</div>';
+    if (extraMsg) html += '<div class="mt-fb-extra">' + mtEsc(extraMsg) + '</div>';
+    if (t.regel) html += '<div class="mt-fb-rule"><strong>&#128218; Regel:</strong> ' + mtEsc(t.regel) + '</div>';
     if (t.eksempel_svak || t.eksempel_god) {
       html += '<div class="mt-fb-models">';
       if (t.eksempel_svak) html += '<div class="mt-fb-model mt-fb-model-weak"><div class="mt-fb-model-label">Kan bli betre</div>' + mtEsc(t.eksempel_svak) + '</div>';
       if (t.eksempel_god) html += '<div class="mt-fb-model mt-fb-model-good"><div class="mt-fb-model-label">Sterk formulering</div>' + mtEsc(t.eksempel_god) + '</div>';
       html += '</div>';
     }
+    if (t.eks) html += '<div class="mt-fb-eks"><strong>&#128221; Døme:</strong> ' + mtEsc(t.eks) + '</div>';
   } else if (correct) {
     html += '<div class="mt-fb-heading">&#10003; Rett!</div>';
     if (maxPts > 1) html += '<div class="mt-fb-detail">' + mtEsc(String(chosen)) + '</div>';

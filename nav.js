@@ -167,20 +167,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function ensureOppgavebankNavLink() {
     if (!nav) return;
-    if (nav.querySelector('a[href*="oppgavebank.html"]')) return;
-
-    var isNb = (document.documentElement.lang || '').toLowerCase().indexOf('nb') === 0;
-    var link = document.createElement('a');
-    link.href = 'oppgavebank.html';
-    link.textContent = isNb ? 'Oppgavebank' : 'Oppgåvebank';
-
     var path = String((window.location && window.location.pathname) || '').toLowerCase();
-    if (path.indexOf('oppgavebank.html') !== -1) {
+    var docLang = (document.documentElement.lang || '').toLowerCase();
+    var isBm = path.indexOf('-bm.html') !== -1 || docLang.indexOf('nb') === 0;
+    var targetHref = isBm ? 'oppgavebank-bm.html' : 'oppgavebank.html';
+    var targetText = isBm ? 'Oppgavebank' : 'Oppgåvebank';
+
+    var link = nav.querySelector('a[data-nl-nav="oppgavebank"]') ||
+      nav.querySelector('a[href*="oppgavebank.html"], a[href*="oppgavebank-bm.html"]');
+
+    if (!link) {
+      link = document.createElement('a');
+    }
+
+    link.setAttribute('data-nl-nav', 'oppgavebank');
+    link.href = targetHref;
+    link.textContent = targetText;
+
+    if (path.indexOf('oppgavebank.html') !== -1 || path.indexOf('oppgavebank-bm.html') !== -1) {
       link.classList.add('active');
+    } else {
+      link.classList.remove('active');
     }
 
     var firstLink = nav.querySelector('a[href*="skrivelab"]');
-    if (firstLink && firstLink.nextSibling) {
+    if (firstLink) {
       nav.insertBefore(link, firstLink.nextSibling);
     } else {
       nav.insertBefore(link, nav.firstChild);

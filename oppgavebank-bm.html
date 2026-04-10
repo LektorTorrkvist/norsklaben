@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="nn">
+<html lang="nb">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Oppgåvebank – Norsklaben</title>
-<meta name="description" content="Oversikt over alle øvingsoppgåver i Skrivemeisteren – vel kategori, øv direkte eller del lenker med elevar.">
+<title>Oppgavebank – Norsklaben</title>
+<meta name="description" content="Oversikt over alle øvingsoppgaver i Skrivemeisteren – velg kategori, øv direkte eller del lenker med elever.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -12,63 +12,38 @@
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#1A3D2B">
 <style>
-/* ── Oppgavebank page styles ── */
 .ob-hero { text-align:center; padding:2.8rem 1.2rem 1.6rem; }
 .ob-hero h1 { font-family:'Playfair Display',serif; font-size:2.2rem; margin:0 0 .4rem; color:var(--fg); }
 .ob-hero p { max-width:560px; margin:.2rem auto 0; color:#5a6a5e; font-size:1.05rem; line-height:1.5; }
-
 .ob-wrap { max-width:960px; margin:0 auto; padding:0 1rem 3rem; }
-
-/* AI scan placeholder */
-.ob-ai { background:linear-gradient(135deg,#f0f7f2 0%,#e8f3ec 100%); border:1.5px dashed #9fc4a8;
-  border-radius:1rem; padding:1.4rem 1.6rem; margin-bottom:2rem; text-align:center; }
+.ob-ai { background:linear-gradient(135deg,#f0f7f2 0%,#e8f3ec 100%); border:1.5px dashed #9fc4a8; border-radius:1rem; padding:1.4rem 1.6rem; margin-bottom:2rem; text-align:center; }
 .ob-ai-icon { font-size:1.8rem; margin-bottom:.3rem; }
 .ob-ai h3 { font-family:'Playfair Display',serif; font-size:1.15rem; margin:0 0 .3rem; color:var(--fg); }
 .ob-ai p { font-size:.92rem; color:#5a6a5e; margin:0; line-height:1.45; }
-
-/* Category grid */
 .ob-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:1rem; margin-bottom:1.6rem; }
-
-.ob-card { background:#fff; border:1px solid #dce6df; border-radius:.85rem;
-  padding:1.1rem 1.2rem; transition:box-shadow .15s,transform .15s; position:relative; }
+.ob-card { background:#fff; border:1px solid #dce6df; border-radius:.85rem; padding:1.1rem 1.2rem; transition:box-shadow .15s,transform .15s; position:relative; }
 .ob-card:hover { box-shadow:0 4px 14px rgba(26,61,43,.1); transform:translateY(-2px); }
-
 .ob-card-head { display:flex; align-items:center; gap:.55rem; margin-bottom:.55rem; }
 .ob-card-icon { font-size:1.4rem; flex-shrink:0; }
 .ob-card-title { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:600; color:var(--fg); margin:0; }
-
 .ob-card-meta { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.6rem; }
 .ob-tag { font-size:.72rem; padding:.18rem .5rem; border-radius:9px; font-weight:600; }
 .ob-tag-total { background:#e8f3ec; color:#1A7A50; }
 .ob-tag-lett { background:#dff0e5; color:#1b7040; }
 .ob-tag-medium { background:#fef3dc; color:#8a6d1b; }
 .ob-tag-hard { background:#fde8e8; color:#a03030; }
-
 .ob-card-types { font-size:.78rem; color:#7a8a7e; margin-bottom:.7rem; line-height:1.4; }
-
 .ob-card-actions { display:flex; gap:.45rem; flex-wrap:wrap; }
-.ob-btn { display:inline-flex; align-items:center; gap:.3rem; padding:.35rem .7rem;
-  border-radius:.5rem; font-size:.8rem; font-weight:600; text-decoration:none;
-  border:1px solid #c2d8c8; background:#f6faf7; color:var(--fg); cursor:pointer; transition:background .12s; }
+.ob-btn { display:inline-flex; align-items:center; gap:.3rem; padding:.35rem .7rem; border-radius:.5rem; font-size:.8rem; font-weight:600; text-decoration:none; border:1px solid #c2d8c8; background:#f6faf7; color:var(--fg); cursor:pointer; transition:background .12s; }
 .ob-btn:hover { background:#e4f0e8; }
 .ob-btn-primary { background:var(--primary); color:#fff; border-color:var(--primary); }
 .ob-btn-primary:hover { background:#155a3a; }
 .ob-btn-copy { font-size:.75rem; }
-
-/* Anchor highlight */
 .ob-card:target { box-shadow:0 0 0 3px var(--primary); }
-
-/* Group headings */
-.ob-group-title { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--fg);
-  margin:1.8rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid #dce6df; }
+.ob-group-title { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--fg); margin:1.8rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid #dce6df; }
 .ob-group-title:first-of-type { margin-top:0; }
-
-/* Toast */
-.ob-toast { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%) translateY(20px);
-  background:#1A3D2B; color:#fff; padding:.55rem 1.2rem; border-radius:.6rem;
-  font-size:.88rem; font-weight:600; opacity:0; transition:opacity .25s,transform .25s; z-index:9000; pointer-events:none; }
+.ob-toast { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%) translateY(20px); background:#1A3D2B; color:#fff; padding:.55rem 1.2rem; border-radius:.6rem; font-size:.88rem; font-weight:600; opacity:0; transition:opacity .25s,transform .25s; z-index:9000; pointer-events:none; }
 .ob-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
 @media(max-width:600px) {
   .ob-hero h1 { font-size:1.65rem; }
   .ob-grid { grid-template-columns:1fr; }
@@ -76,15 +51,14 @@
 </style>
 </head>
 <body>
-
 <header>
-  <a class="logo" href="index.html">Norsk<span>laben</span></a>
+  <a class="logo" href="index-bm.html">Norsk<span>laben</span></a>
   <nav>
-    <a href="skrivelab.html">Skrivelab</a>
-    <a href="oppgavebank.html" class="active">Oppgåvebank</a>
+    <a href="skrivelab-bm.html">Skrivelab</a>
+    <a href="oppgavebank-bm.html" class="active">Oppgavebank</a>
     <a href="nynorsklab.html">Nynorsklab</a>
-    <a href="verktoyskasse.html">Verktøykasse</a>
-    <a href="undervisingsbank.html">Undervisingsbank</a>
+    <a href="verktoyskasse-bm.html">Verktøykasse</a>
+    <a href="undervisingsbank-bm.html">Undervisningsbank</a>
     <div class="nav-dropdown">
       <button class="nav-dropbtn" type="button" aria-expanded="false">Leikekassa</button>
       <div class="nav-dropmenu">
@@ -92,48 +66,36 @@
         <a href="vurderingslab.html">Vurderingslab</a>
       </div>
     </div>
-    <div class="lang-toggle" aria-label="Vel målform">
-      <a href="oppgavebank.html" class="active" title="Nynorsk">NN</a>
-      <a href="oppgavebank-bm.html" title="Bokmål">BM</a>
+    <div class="lang-toggle" aria-label="Velg målform">
+      <a href="oppgavebank.html" title="Nynorsk">NN</a>
+      <a href="oppgavebank-bm.html" class="active" title="Bokmål">BM</a>
     </div>
   </nav>
 </header>
-
 <div class="ob-hero">
-  <h1>📚 Oppgåvebank</h1>
-  <p>Oversikt over alle øvingsoppgåver i Skrivemeisteren. Vel ein kategori for å øve, eller del lenkja med elevane dine.</p>
+  <h1>📚 Oppgavebank</h1>
+  <p>Oversikt over alle øvingsoppgaver i Skrivemeisteren. Velg en kategori for å øve, eller del lenken med elevene dine.</p>
 </div>
-
 <div class="ob-wrap">
-
-  <!-- Future AI scan section -->
   <div class="ob-ai" id="ob-ai-scan">
     <div class="ob-ai-icon">🤖</div>
-    <h3>Tekstskanning (kjem snart)</h3>
-    <p>Lim inn ein elevtekst og få forslag til øvingskategoriar basert på feila i teksten. Kobles til Skrivemeisteren for målretta øving.</p>
+    <h3>Tekstskanning (kommer snart)</h3>
+    <p>Lim inn en elevtekst og få forslag til øvingskategorier basert på feil i teksten. Kobles til Skrivemeisteren for målrettet øving.</p>
   </div>
-
   <div id="ob-content">
-    <p style="text-align:center;color:#999;padding:2rem 0;">Lastar oppgåver …</p>
+    <p style="text-align:center;color:#999;padding:2rem 0;">Laster oppgaver …</p>
   </div>
-
 </div>
-
 <div class="ob-toast" id="ob-toast"></div>
-
 <footer></footer>
-
-<script src="oppgavebank-v2.js"></script>
+<script src="oppgavebank-bm-v2.js"></script>
 <script src="nav.js"></script>
 <script>
 (function() {
   'use strict';
-
   var BANK = (typeof BANKV2 !== 'undefined') ? BANKV2 : [];
   var container = document.getElementById('ob-content');
   if (!BANK.length || !container) return;
-
-  /* ── Icon map per category ── */
   var ICONS = {
     og_aa:'✏️', sammensatt:'🔗', dobbel_konsonant:'🔤', kj_skj:'👅',
     tegnsetting:'❗', ordklasser:'🏷️', setningsbygging:'🧱', bindeord:'🔗',
@@ -144,24 +106,19 @@
     tal_og_statistikk:'📊', ordval:'💡', bruke_eksempel:'📌',
     tilpass_til_lesaran:'👥'
   };
-
-  /* ── Thematic groups ── */
   var GROUPS = [
     { title:'Rettskriving og grammatikk', cats:['og_aa','sammensatt','dobbel_konsonant','kj_skj','tegnsetting','ordklasser','setningsbygging'] },
     { title:'Tekst og struktur', cats:['bindeord','tekststruktur','aarsak_sammenheng','referansekjede','logisk_struktur'] },
     { title:'Sjanger og stil', cats:['spraak_stil','sjangerkompetanse','fagartikkel','debattinnlegg','novelle','overskrift_ingress'] },
-    { title:'Kjeldebruk og fagskriving', cats:['kildebruk','oppgavetolking','parafrase','sitat','bruke_eksempel'] },
-    { title:'Ordval, tilpassing og tal', cats:['ordval','tilpass_til_lesaran','tal_og_statistikk'] }
+    { title:'Kildebruk og fagskriving', cats:['kildebruk','oppgavetolking','parafrase','sitat','bruke_eksempel'] },
+    { title:'Ordvalg, tilpassing og tall', cats:['ordval','tilpass_til_lesaran','tal_og_statistikk'] }
   ];
-
   var TYPE_LABELS = {
-    mc:'Fleirval', cloze:'Fullfør', fix:'Fiks tekst', fillsel:'Nedtrekk',
+    mc:'Flervalg', cloze:'Fullfør', fix:'Fiks tekst', fillsel:'Nedtrekk',
     drag_kolonne:'Dra-kolonne', drag_ord:'Dra-ord', finn_feil:'Finn feil',
     klikk_marker:'Klikk-markør', sann_usann_serie:'Sant/usant', burger_sort:'Burgersortering',
-    sorter_rekke:'Sorter rekkje', avsnitt_klikk:'Avsnittsklikk', mcset:'Fleirvalssett', omskriv:'Omskriving', rank:'Rangering'
+    sorter_rekke:'Sorter rekkefølge', avsnitt_klikk:'Avsnittsklikk', mcset:'Flervalssett', omskriv:'Omskriving', rank:'Rangering'
   };
-
-  /* ── Build stats per category ── */
   var catData = {};
   BANK.forEach(function(t) {
     if (!t.kat) return;
@@ -174,11 +131,8 @@
     var ty = t.type || 'ukjent';
     d.types[ty] = 1;
   });
-
-  /* ── Render ── */
   var html = '';
   var seenCats = {};
-
   GROUPS.forEach(function(g) {
     var groupHtml = '';
     g.cats.forEach(function(kat) {
@@ -190,8 +144,6 @@
     html += '<h2 class="ob-group-title">' + esc(g.title) + '</h2>';
     html += '<div class="ob-grid">' + groupHtml + '</div>';
   });
-
-  /* Catch any categories not in GROUPS */
   var extraHtml = '';
   Object.keys(catData).forEach(function(kat) {
     if (seenCats[kat]) return;
@@ -199,13 +151,10 @@
     extraHtml += buildCard(kat, catData[kat]);
   });
   if (extraHtml) {
-    html += '<h2 class="ob-group-title">Andre kategoriar</h2>';
+    html += '<h2 class="ob-group-title">Andre kategorier</h2>';
     html += '<div class="ob-grid">' + extraHtml + '</div>';
   }
-
   container.innerHTML = html;
-
-  /* ── Copy-link buttons ── */
   container.addEventListener('click', function(e) {
     var btn = e.target.closest('.ob-btn-copy');
     if (!btn) return;
@@ -215,7 +164,6 @@
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url).then(function() { showToast('Lenke kopiert!'); });
     } else {
-      /* Fallback */
       var ta = document.createElement('textarea');
       ta.value = url;
       ta.style.cssText = 'position:fixed;left:-999px';
@@ -225,17 +173,13 @@
       document.body.removeChild(ta);
     }
   });
-
-  /* ── Helpers ── */
   function buildCard(kat, d) {
     var icon = ICONS[kat] || '📋';
     var typeList = Object.keys(d.types).map(function(t) { return TYPE_LABELS[t]||t; }).join(', ');
-
     var anchor = 'kat-' + kat;
     var manualQuery = '?kat=' + encodeURIComponent(kat) + '&mode=manual';
-    var exLink = 'skrivelab.html' + manualQuery + '#nl-adaptive';
-    var shareUrl = location.origin + location.pathname.replace(/[^/]*$/, '') + 'skrivelab.html' + manualQuery + '#nl-adaptive';
-
+    var exLink = 'skrivelab-bm.html' + manualQuery + '#nl-adaptive';
+    var shareUrl = location.origin + location.pathname.replace(/[^/]*$/, '') + 'skrivelab-bm.html' + manualQuery + '#nl-adaptive';
     var s = '';
     s += '<div class="ob-card" id="' + anchor + '">';
     s += '<div class="ob-card-head">';
@@ -243,12 +187,12 @@
     s += '<h3 class="ob-card-title">' + esc(d.label) + '</h3>';
     s += '</div>';
     s += '<div class="ob-card-meta">';
-    s += '<span class="ob-tag ob-tag-total">' + d.total + ' oppgåver</span>';
+    s += '<span class="ob-tag ob-tag-total">' + d.total + ' oppgaver</span>';
     if (d.lett) s += '<span class="ob-tag ob-tag-lett">' + d.lett + ' lette</span>';
     if (d.medium) s += '<span class="ob-tag ob-tag-medium">' + d.medium + ' medium</span>';
-    if (d.hard) s += '<span class="ob-tag ob-tag-hard">' + d.hard + ' vanskelege</span>';
+    if (d.hard) s += '<span class="ob-tag ob-tag-hard">' + d.hard + ' vanskelige</span>';
     s += '</div>';
-    s += '<div class="ob-card-types">Oppgåvetypar: ' + esc(typeList) + '</div>';
+    s += '<div class="ob-card-types">Oppgavetyper: ' + esc(typeList) + '</div>';
     s += '<div class="ob-card-actions">';
     s += '<a class="ob-btn ob-btn-primary" href="' + exLink + '">▶ Øv no</a>';
     s += '<button type="button" class="ob-btn ob-btn-copy" data-url="' + esc(shareUrl) + '">🔗 Kopier lenke</button>';
@@ -257,13 +201,11 @@
     s += '</div>';
     return s;
   }
-
   function esc(s) {
     var d = document.createElement('div');
     d.textContent = s;
     return d.innerHTML;
   }
-
   function showToast(msg) {
     var t = document.getElementById('ob-toast');
     if (!t) return;
@@ -271,8 +213,6 @@
     t.classList.add('show');
     setTimeout(function() { t.classList.remove('show'); }, 2000);
   }
-
-  /* ── Highlight card if hash targets one ── */
   function checkHash() {
     if (location.hash) {
       var el = document.querySelector(location.hash);
@@ -283,9 +223,7 @@
   }
   checkHash();
   window.addEventListener('hashchange', checkHash);
-
 })();
 </script>
-
 </body>
 </html>

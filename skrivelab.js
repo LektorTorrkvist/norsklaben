@@ -27,6 +27,8 @@ function nlBoot() {
     }
   }
 
+  nlSafeInit('ensure-bank-ob-styles', nlEnsureBankObStyles);
+
   nlSafeInit('ensure-bank-shell', nlEnsureBankShell);
   nlSafeInit('import-bank-tasks', nlImportMTBankTasks);
   nlSafeInit('normalize-categories', nlNormalizeCategories);
@@ -34,6 +36,21 @@ function nlBoot() {
 
   /* ── Card open/close + exercise modal (delegated for robustness) ── */
   document.addEventListener('click', function(e) {
+    var catStartBtn = e.target.closest('.nl-ob-start-cat');
+    if (catStartBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      var cat = String(catStartBtn.getAttribute('data-cat') || '').trim();
+      if (!cat) return;
+      var firstEi = document.querySelector('.main .card[data-cat="' + cat + '"] .exlist > .ei');
+      if (!firstEi) {
+        if (window.alert) window.alert('Ingen oppgåver er klare i denne kategorien enno.');
+        return;
+      }
+      nlSafeInit('open-bank-category', function() { nlOpenManualQueueInMt(firstEi); });
+      return;
+    }
+
     var cardHead = e.target.closest('.ch');
     if (cardHead) {
       var card = cardHead.closest('.card');
@@ -274,9 +291,11 @@ function nlBoot() {
       if (!katParam) return;
       var requested = katParam.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
       if (!requested.length) return;
+      var modeParam = String(params.get('mode') || '').toLowerCase();
+      var wantsManual = (modeParam === 'manual' || modeParam === 'manuell' || modeParam === 'mt');
 
       if (nlUseV2Adaptive && typeof window.mtStart === 'function') {
-        /* V2: vel berre dei etterspurde kategoriane og start direkte */
+        /* V2: vel berre dei etterspurde kategoriane */
         document.querySelectorAll('#nl-ad-cats .adp-cat').forEach(function(btn) {
           btn.classList.remove('on');
         });
@@ -286,7 +305,18 @@ function nlBoot() {
         });
         var secV2 = document.getElementById('nl-adaptive');
         if (secV2) secV2.scrollIntoView({ behavior:'smooth', block:'start' });
-        setTimeout(function() { window.mtStart(); }, 180);
+        if (wantsManual) {
+          setTimeout(function() {
+            var firstCat = requested[0];
+            var firstEi = firstCat
+              ? document.querySelector('.main .card[data-cat="' + firstCat + '"] .exlist > .ei')
+              : null;
+            if (firstEi) nlOpenManualQueueInMt(firstEi);
+            else window.mtStart();
+          }, 180);
+        } else {
+          setTimeout(function() { window.mtStart(); }, 180);
+        }
       } else {
         /* Legacy: Deselect all, then select only requested */
         nlAdSetAllCats(false);
@@ -388,6 +418,32 @@ var nlGroupTitles = [
   'Språk og stil'
 ];
 
+function nlEnsureBankObStyles() {
+  if (document.getElementById('nl-ob-bank-css')) return;
+  var s = document.createElement('style');
+  s.id = 'nl-ob-bank-css';
+  s.textContent = [
+    '.nl-bank-scan{max-width:960px;margin:0 auto 1.2rem;padding:0 1rem}',
+    '.nl-bank-scan .ob-ai{background:linear-gradient(135deg,#f0f7f2 0%,#e8f3ec 100%);border:1.5px dashed #9fc4a8;border-radius:1rem;padding:1.1rem 1.2rem;text-align:center}',
+    '.nl-bank-scan .ob-ai-icon{font-size:1.6rem;margin-bottom:.2rem}',
+    '.nl-bank-scan .ob-ai h3{font-family:"Playfair Display",serif;font-size:1.05rem;margin:0 0 .2rem;color:var(--fg,var(--primary,#1A3D2B))}',
+    '.nl-bank-scan .ob-ai p{font-size:.88rem;color:#5a6a5e;margin:0;line-height:1.4}',
+    '.main .grp .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem}',
+    '.main .card[data-cat]{background:#fff;border:1px solid #dce6df;border-radius:.85rem;padding:1rem 1rem .85rem;transition:box-shadow .15s,transform .15s}',
+    '.main .card[data-cat]:hover{box-shadow:0 4px 14px rgba(26,61,43,.10);transform:translateY(-2px)}',
+    '.main .card[data-cat] .ch{background:transparent;border:none;padding:0;width:100%;text-align:left;cursor:pointer;display:block}',
+    '.main .card[data-cat] .cn{display:block;font-family:"Playfair Display",serif;font-size:1.05rem;font-weight:600;color:var(--fg,var(--primary,#1A3D2B));margin:0 0 .45rem}',
+    '.main .card[data-cat] .exc{display:inline-block;font-size:.72rem;padding:.18rem .5rem;border-radius:9px;font-weight:600;background:#e8f3ec;color:#1A7A50;margin:0 0 .45rem}',
+    '.main .card[data-cat] .cd{display:block;font-size:.78rem;color:#7a8a7e;line-height:1.4;margin:0 0 .65rem}',
+    '.main .card[data-cat] .nl-ob-actions{display:flex;gap:.45rem;flex-wrap:wrap;margin:0 0 .5rem}',
+    '.main .card[data-cat] .nl-ob-start-cat{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .7rem;border-radius:.5rem;font-size:.8rem;font-weight:600;border:1px solid var(--primary,#1A3D2B);background:var(--primary,#1A3D2B);color:#fff;cursor:pointer}',
+    '.main .card[data-cat] .nl-ob-start-cat:hover{background:#155a3a;border-color:#155a3a}',
+    '.main .card[data-cat] .exlist{margin-top:.25rem}',
+    '@media(max-width:600px){.main .grp .grid{grid-template-columns:1fr}}'
+  ].join('\n');
+  document.head.appendChild(s);
+}
+
 function nlEnsureBankShell() {
   var paused = document.querySelector('section[aria-labelledby="nl-bank-paused-title"]');
   if (paused && paused.parentNode) paused.parentNode.removeChild(paused);
@@ -399,6 +455,18 @@ function nlEnsureBankShell() {
     var footer = document.querySelector('footer');
     if (footer && footer.parentNode) footer.parentNode.insertBefore(mainEl, footer);
     else document.body.appendChild(mainEl);
+  }
+
+  if (!mainEl.querySelector('.nl-bank-scan')) {
+    var scanWrap = document.createElement('section');
+    scanWrap.className = 'nl-bank-scan';
+    scanWrap.innerHTML =
+      '<div class="ob-ai" id="ob-ai-scan">' +
+        '<div class="ob-ai-icon">🤖</div>' +
+        '<h3>Tekstscanning (kjem snart)</h3>' +
+        '<p>Lim inn ein elevtekst og få forslag til øvingskategoriar basert på feila i teksten. Koplast til Skrivemeisteren for målretta øving.</p>' +
+      '</div>';
+    mainEl.appendChild(scanWrap);
   }
 
   if (mainEl.querySelector('.card[data-cat]')) return;
@@ -445,7 +513,17 @@ function nlEnsureBankShell() {
       var exlist = document.createElement('div');
       exlist.className = 'exlist';
 
+      var actions = document.createElement('div');
+      actions.className = 'nl-ob-actions';
+      var startBtn = document.createElement('button');
+      startBtn.type = 'button';
+      startBtn.className = 'nl-ob-start-cat';
+      startBtn.setAttribute('data-cat', catId);
+      startBtn.textContent = '▶ Øv no';
+      actions.appendChild(startBtn);
+
       card.appendChild(header);
+      card.appendChild(actions);
       card.appendChild(exlist);
       grid.appendChild(card);
     });

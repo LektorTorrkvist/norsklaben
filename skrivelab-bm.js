@@ -247,9 +247,11 @@ function nlBoot() {
       if (!katParam) return;
       var requested = katParam.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
       if (!requested.length) return;
+      var modeParam = String(params.get('mode') || '').toLowerCase();
+      var wantsManual = (modeParam === 'manual' || modeParam === 'manuell' || modeParam === 'mt');
 
       if (nlUseV2Adaptive && typeof window.mtStart === 'function') {
-        /* V2: velg bare etterspurte kategorier og start direkte */
+        /* V2: velg bare etterspurte kategorier */
         document.querySelectorAll('#nl-ad-cats .adp-cat').forEach(function(btn) {
           btn.classList.remove('on');
         });
@@ -259,7 +261,18 @@ function nlBoot() {
         });
         var secV2 = document.getElementById('nl-adaptive');
         if (secV2) secV2.scrollIntoView({ behavior:'smooth', block:'start' });
-        setTimeout(function() { window.mtStart(); }, 180);
+        if (wantsManual) {
+          setTimeout(function() {
+            var firstCat = requested[0];
+            var firstEi = firstCat
+              ? document.querySelector('.main .card[data-cat="' + firstCat + '"] .exlist > .ei')
+              : null;
+            if (firstEi) nlOpenManualQueueInMt(firstEi);
+            else window.mtStart();
+          }, 180);
+        } else {
+          setTimeout(function() { window.mtStart(); }, 180);
+        }
       } else {
         /* Legacy: Deselect all, then select only requested */
         nlAdSetAllCats(false);

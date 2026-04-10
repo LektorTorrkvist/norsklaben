@@ -2891,6 +2891,63 @@ function mtOpenSessionUi() {
   if (summary) summary.hidden = true;
   if (body) body.innerHTML = '';
   if (actions) actions.style.display = 'flex';
+  mtUpdateWindowHeader();
+}
+
+function mtBuildManualNavHtml(currentTask) {
+  if (!MTS.manualMode || !Array.isArray(MTS.manualQueue) || MTS.manualQueue.length <= 1) return '';
+
+  var t = currentTask || MTS.current || MTS.manualQueue[0];
+  if (!t) return '';
+
+  var currentIx = MTS.manualQueue.indexOf(t);
+  if (currentIx < 0) currentIx = 0;
+  var sameCat = [];
+  MTS.manualQueue.forEach(function (task, i) {
+    if (task && t && task.kat === t.kat) sameCat.push({ i: i, task: task });
+  });
+  var options = sameCat.length > 1 ? sameCat : MTS.manualQueue.map(function (task, i) {
+    return { i: i, task: task };
+  });
+  if (options.length <= 1) return '';
+
+  var optsHtml = options.map(function (o, pos) {
+    var selected = o.i === currentIx ? ' selected' : '';
+    var label = (pos + 1) + '. ' + mtTaskLabel(o.task);
+    return '<option value="' + o.i + '"' + selected + '>' + mtEsc(label) + '</option>';
+  }).join('');
+
+  return '<div class="mt-manual-nav-head" style="display:flex;align-items:center;gap:.45rem;min-width:260px;max-width:58%">' +
+    '<label for="mt-manual-task-select" style="font-size:.74rem;font-weight:700;color:var(--tmid);white-space:nowrap">Velg oppgave i kategorien</label>' +
+    '<select id="mt-manual-task-select" class="gram-blank" onchange="mtManualJump(this.value)" aria-label="Velg oppgave i kategorien" style="width:100%;font-size:.84rem;padding:.34rem .52rem;border:1.5px solid var(--b2,#ddd);border-radius:8px">' +
+      optsHtml +
+    '</select>' +
+  '</div>';
+}
+
+function mtUpdateWindowHeader(currentTask) {
+  var titleEl = $mt('nl-ad-win-title');
+  if (titleEl) {
+    titleEl.textContent = MTS.manualMode
+      ? 'Skrivemesteren - manuell modus'
+      : 'Skrivemesteren - adaptive øvingsoppgaver';
+  }
+
+  var head = titleEl ? titleEl.parentElement : null;
+  if (!head) return;
+
+  var oldNav = head.querySelector('.mt-head-manual-nav-wrap');
+  if (oldNav && oldNav.parentNode) oldNav.parentNode.removeChild(oldNav);
+
+  var navHtml = mtBuildManualNavHtml(currentTask);
+  if (!navHtml) return;
+
+  var wrap = document.createElement('div');
+  wrap.className = 'mt-head-manual-nav-wrap';
+  wrap.innerHTML = navHtml;
+  var closeBtn = $mt('nl-ad-win-close');
+  if (closeBtn && closeBtn.parentNode === head) head.insertBefore(wrap, closeBtn);
+  else head.appendChild(wrap);
 }
 
 /* ─── SESJON ─────────────────────────────────────── */
@@ -3281,6 +3338,7 @@ function mtServeNext() {
 function mtRenderTask(t, isRetry) {
   var body = $mt('nl-ad-win-body');
   if (!body) return;
+  mtUpdateWindowHeader(t);
 
   var vMap = { lett: 'Lett', medium: 'Medium', vanskelig: 'Vanskelig', vanskeleg: 'Vanskelig' };
   var vLabel = vMap[t.vanske] || '';
@@ -3680,7 +3738,7 @@ function mtCheckOpen() {
   /* Gibberish-sjekk → 0 XP */
   if (mtIsGibberish(val)) {
     el.className = 'mt-text-input mt-textarea mt-inp-wrong';
-    mtFinish(false, 1, 0, val, t, 'Svaret ser ikke ut til å være et ordentlig forsøk. Prøv å skrive et skikkelig svar.', true);
+    mtFinish(false, 1, 0, val, t, 'Svaret ser ikke ut til å være et ordentlig forsøk. Prøv å skrive et skikkelig svar.', true, true);
     return;
   }
 
@@ -3694,7 +3752,7 @@ function mtCheckOpen() {
   }
 
   el.className = 'mt-text-input mt-textarea mt-inp-neutral';
-  mtFinish(true, 1, 1, val, t, extra, true);
+  mtFinish(true, 1, 1, val, t, extra, true, true);
 }
 
 function mtCheckFix() {
@@ -4006,7 +4064,7 @@ function mtCheckOmskriv() {
   (t.maa_ikkje_ha || []).forEach(function (kw) {
     if (lower.indexOf(kw.toLowerCase()) !== -1) ok = false;
   });
-  el.className = 'mt-text-input mt-textarea ' + (ok ? 'mt-inp-correct' : 'mt-inp-wrong');
+  el.className = 'mt-text-input mt-textarea mt-inp-neutral';
   var extra = null;
   if (!ok && missing.length) extra = 'Husk \u00e5 bruke: ' + missing.join(', ');
 
@@ -4018,7 +4076,7 @@ function mtCheckOmskriv() {
     extra = (extra ? extra + ' ' : '') + 'Bra, du brukte fagbegrepet «' + fagord[0] + '».';
   }
 
-  mtFinish(ok, 1, ok ? 1 : 0, val, t, extra);
+  mtFinish(ok, 1, ok ? 1 : 0, val, t, extra, true, true);
 }
 
 var _srDrag = -1;
@@ -4100,7 +4158,7 @@ function mtSmartFeedback(chosen, t) {
    TILBAKEMELDING OG POENG
 ══════════════════════════════════════════════════════ */
 
-function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType) {
+function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQualitativeMode) {
   MTS.score += pts;
   MTS.maxScore += maxPts;
   if (correct) MTS.streak++; else MTS.streak = 0;
@@ -4154,14 +4212,19 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType) {
   var cls = correct ? 'mt-fb-correct' : (isPartial ? 'mt-fb-partial' : 'mt-fb-wrong');
   fb.className = 'mt-feedback ' + cls;
   var html = '';
-  if (isOpenType) {
-    html += '<div class="mt-fb-heading">&#128221; Takk for svaret!</div>';
+  var qualitativeMode = !!forceQualitativeMode || !!isOpenType;
+
+  if (qualitativeMode) {
+    html += '<div class="mt-fb-heading">&#128221; Faglig tilbakemelding</div>';
+    if (extraMsg) html += '<div class="mt-fb-extra">' + mtEsc(extraMsg) + '</div>';
+    if (t.regel) html += '<div class="mt-fb-rule"><strong>&#128218; Regel:</strong> ' + mtEsc(t.regel) + '</div>';
     if (t.eksempel_svak || t.eksempel_god) {
       html += '<div class="mt-fb-models">';
       if (t.eksempel_svak) html += '<div class="mt-fb-model mt-fb-model-weak"><div class="mt-fb-model-label">Kan bli bedre</div>' + mtEsc(t.eksempel_svak) + '</div>';
       if (t.eksempel_god) html += '<div class="mt-fb-model mt-fb-model-good"><div class="mt-fb-model-label">Sterk formulering</div>' + mtEsc(t.eksempel_god) + '</div>';
       html += '</div>';
     }
+    if (t.eks) html += '<div class="mt-fb-eks"><strong>&#128221; Eksempel:</strong> ' + mtEsc(t.eks) + '</div>';
   } else if (correct) {
     html += '<div class="mt-fb-heading">&#10003; Riktig!</div>';
     if (maxPts > 1) html += '<div class="mt-fb-detail">' + mtEsc(String(chosen)) + '</div>';
