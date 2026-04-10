@@ -3732,9 +3732,6 @@ function nlAdStartFeillogg() {
   }
 
   if (!cats.length) {
-    if (typeof window !== 'undefined' && typeof window.mtStartFeillogg === 'function') {
-      try { window.mtStartFeillogg(); return; } catch (e) {}
-    }
     alert('Ingen tidlegare feil å øve på enno.');
     return;
   }
@@ -5068,6 +5065,9 @@ function nlAdNext() {
 }
 
 function nlAdStart() {
+  var winTitle = document.getElementById('nl-ad-win-title');
+  if (winTitle) winTitle.textContent = 'Skrivemeisteren - adaptive øvingsoppgåver';
+
   var si = document.getElementById('search-input');
   var activeChip = document.querySelector('.chip.active');
 

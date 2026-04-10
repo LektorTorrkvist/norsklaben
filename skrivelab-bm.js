@@ -3472,9 +3472,6 @@ function nlAdStartFeillogg() {
   }
 
   if (!cats.length) {
-    if (typeof window !== 'undefined' && typeof window.mtStartFeillogg === 'function') {
-      try { window.mtStartFeillogg(); return; } catch (e) {}
-    }
     alert('Ingen tidligere feil å øve på ennå.');
     return;
   }
@@ -4802,6 +4799,9 @@ function nlAdNext() {
 }
 
 function nlAdStart() {
+  var winTitle = document.getElementById('nl-ad-win-title');
+  if (winTitle) winTitle.textContent = 'Skrivemesteren - adaptive øvingsoppgaver';
+
   var si = document.getElementById('search-input');
   var activeChip = document.querySelector('.chip.active');
 
