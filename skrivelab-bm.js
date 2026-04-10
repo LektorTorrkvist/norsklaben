@@ -1976,7 +1976,7 @@ function nlCheckWrite(tid, sid) {
   }
 
   var words = text.split(/\s+/).filter(Boolean).length;
-  if (words < 8) {
+  if (words < 4) {
     nlSetScore(sid, 'For kort svar enno. Prøv minst 1-2 hele setninger.', 'err');
     return;
   }
@@ -1992,9 +1992,21 @@ function nlCheckWrite(tid, sid) {
   var studentSet = {};
   nlTokenize(text).forEach(function(w) { studentSet[w] = 1; });
 
-  if (!keyTerms.length) {
-    if (words >= 25) nlSetScore(sid, 'Svar registrert. God lengd - bruk fasit for eigenkontroll.', 'ok');
-    else nlSetScore(sid, 'Svar registrert. Bygg gjerne ut svaret litt før du samanliknar med fasit.');
+  /* Open-ended task: no key terms or very few → pedagogical feedback + always OK */
+  if (keyTerms.length <= 2) {
+    var openMsg = 'Bra forsøk! ';
+    if (words >= 20) openMsg = 'Godt og utfyllande svar! ';
+    if (fasitText) {
+      openMsg += 'Sjå eksempel på god formulering i fasiten under.';
+    } else {
+      openMsg += 'Samanlikn gjerne med ein medelev.';
+    }
+    nlSetScore(sid, openMsg, 'ok');
+    /* Auto-reveal fasit so the student sees the example */
+    if (ei) {
+      var fasitBox = ei.querySelector('.fasit-box');
+      if (fasitBox) fasitBox.style.display = 'block';
+    }
     return;
   }
 
@@ -4005,6 +4017,36 @@ function nlAdResultId(total, points, max) {
   return 'NL-' + stamp + '-P' + points + 'of' + max + '-N' + total;
 }
 
+/* ── CONFETTI + BONUS XP ON SET COMPLETION ── */
+function nlConfettiBurst(bonusXp) {
+  var wrap = document.createElement('div');
+  wrap.className = 'nl-confetti-wrap';
+  var colors = ['#1A7A50', '#1D6FD1', '#c8832a', '#C0392B', '#7b2fbe', '#f5c542', '#e91e63', '#00bcd4'];
+  var count = 60;
+  for (var i = 0; i < count; i++) {
+    var piece = document.createElement('div');
+    piece.className = 'nl-confetti-piece';
+    piece.style.left = (Math.random() * 100) + '%';
+    piece.style.background = colors[i % colors.length];
+    piece.style.setProperty('--dur', (2 + Math.random() * 1.5) + 's');
+    piece.style.setProperty('--delay', (Math.random() * 0.6) + 's');
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    wrap.appendChild(piece);
+  }
+  document.body.appendChild(wrap);
+  setTimeout(function() { if (wrap.parentNode) wrap.remove(); }, 4500);
+
+  if (bonusXp) {
+    var label = document.createElement('div');
+    label.className = 'nl-confetti-bonus';
+    label.textContent = '🎉 +' + bonusXp + ' bonus-XP!';
+    document.body.appendChild(label);
+    setTimeout(function() { if (label.parentNode) label.remove(); }, 2500);
+  }
+}
+
 function nlAdShowSummary() {
   /* Clear incremental progress – full session is about to be saved */
   try { window.localStorage.removeItem(NL_AD_PROFILE_KEY + '-progress'); } catch (e) {}
@@ -4068,6 +4110,20 @@ function nlAdShowSummary() {
   var mastery = nlAdMasteryData(pct);
   var sessionXp = nlAdAwardXp(totalPoints, totalMax, pct);
 
+  /* Bonus XP + confetti for completing a full set */
+  var setSize = nlAdState.list.length;
+  var bonusXp = 0;
+  if (setSize >= 8) bonusXp = 50;
+  else if (setSize >= 5) bonusXp = 25;
+  if (bonusXp > 0) {
+    sessionXp += bonusXp;
+    var prof = nlAdState.profile || nlAdLoadProfile();
+    prof.xp = (prof.xp || 0) + bonusXp;
+    nlAdSaveProfile(prof);
+    nlAdRenderProfile(prof);
+    setTimeout(function() { nlConfettiBurst(bonusXp); }, 400);
+  }
+
   // Medal & heading
   var medalEl = document.getElementById('nl-ad-sum-medal');
   var headingEl = document.getElementById('nl-ad-sum-heading');
@@ -4096,16 +4152,18 @@ function nlAdShowSummary() {
   var xpEl = document.getElementById('nl-ad-sum-xp');
   var retteEl = document.getElementById('nl-ad-sum-rette');
   var feilEl = document.getElementById('nl-ad-sum-feil');
-  var sumProgressFillEl = document.getElementById('nl-ad-sum-progress-fill');
-  var sumProgressTextEl = document.getElementById('nl-ad-sum-progress-text');
-  var sumStreakEl = document.getElementById('nl-ad-sum-streak');
-  var profProgressFillEl = document.getElementById('nl-ad-prof-progress-fill');
-  var profProgressTextEl = document.getElementById('nl-ad-prof-progress-text');
-  var profStreakEl = document.getElementById('nl-ad-prof-streak');
   if (poengEl) poengEl.textContent = totalPoints + '/' + totalMax;
   if (xpEl) xpEl.textContent = '+' + String(sessionXp);
   if (retteEl) retteEl.textContent = String(totalCorrect);
   if (feilEl) feilEl.textContent = String(totalWrong);
+
+  /* ── Språkmeister-boks (level progress) ── */
+  var sumProgressFillEl = document.getElementById('nl-ad-sum-progress-fill');
+  var sumProgressTextEl = document.getElementById('nl-ad-sum-progress-text');
+  var sumLvlIconEl = document.getElementById('nl-ad-sum-lvl-icon');
+  var sumLvlNameEl = document.getElementById('nl-ad-sum-lvl-name');
+  var profProgressFillEl = document.getElementById('nl-ad-prof-progress-fill');
+  var profProgressTextEl = document.getElementById('nl-ad-prof-progress-text');
   var progressWidth = profProgressFillEl ? String(profProgressFillEl.style.width || '0%') : '0%';
   if (sumProgressFillEl) {
     sumProgressFillEl.style.width = '0%';
@@ -4116,11 +4174,39 @@ function nlAdShowSummary() {
       ? String(profProgressTextEl.textContent || '').trim()
       : (totalPoints + ' / ' + totalMax + ' poeng');
   }
+  /* Level name + icon from profile hero */
+  var profLvlNameEl = document.getElementById('nl-ad-prof-level-name');
+  var profLvlIconEl = document.getElementById('nl-ad-prof-level-icon');
+  if (sumLvlNameEl && profLvlNameEl) sumLvlNameEl.textContent = profLvlNameEl.textContent || 'Ordlærling';
+  if (sumLvlIconEl && profLvlIconEl) sumLvlIconEl.textContent = profLvlIconEl.textContent || '\uD83C\uDF31';
+
+  /* ── Streak-boks ── */
+  var sumStreakEl = document.getElementById('nl-ad-sum-streak');
+  var sumStreakRecordEl = document.getElementById('nl-ad-sum-streak-record');
+  var sumStreakDotsEl = document.getElementById('nl-ad-sum-streak-dots');
+  var profStreakEl = document.getElementById('nl-ad-prof-streak');
   if (sumStreakEl) {
     var defaultStreak = (document.documentElement && document.documentElement.lang === 'nb') ? '0 dager' : '0 dagar';
     sumStreakEl.textContent = profStreakEl
       ? String(profStreakEl.textContent || '').trim()
       : defaultStreak;
+  }
+  /* Streak record + dots from MTS data */
+  var mtsData = null;
+  if (typeof mtLsGet === 'function') { try { mtsData = mtLsGet(); } catch(e) {} }
+  if (mtsData && mtsData.streak) {
+    if (sumStreakRecordEl) sumStreakRecordEl.textContent = String(mtsData.streak.rekord || 0);
+    if (sumStreakDotsEl) {
+      var days = mtsData.streak.dagar || [];
+      var last7 = days.slice(-7);
+      sumStreakDotsEl.innerHTML = '';
+      for (var di = 0; di < 7; di++) {
+        var dot = document.createElement('span');
+        dot.className = 'adp-sum-streak-dot' + (di < last7.length ? ' active' : '');
+        dot.title = di < last7.length ? last7[di] : '';
+        sumStreakDotsEl.appendChild(dot);
+      }
+    }
   }
 
   nlAdSaveSessionHistory({
