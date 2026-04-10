@@ -220,6 +220,32 @@ function nlBoot() {
     window.__nlSkrivelabBootDone = true;
   }
 
+  /* ── Deep-link: ?kat=og_aa auto-selects category and starts ── */
+  nlSafeInit('url-kat-autostart', function() {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var katParam = params.get('kat');
+      if (!katParam) return;
+      var requested = katParam.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+      if (!requested.length) return;
+      /* Deselect all, then select only requested */
+      nlAdSetAllCats(false);
+      requested.forEach(function(kat) {
+        var btn = document.querySelector('#nl-ad-cats .adp-cat[data-cat="' + kat + '"]');
+        if (btn) btn.classList.add('on');
+      });
+      /* Scroll to adaptive section */
+      var sec = document.getElementById('nl-adaptive');
+      if (sec) sec.scrollIntoView({ behavior:'smooth', block:'start' });
+      /* Auto-start after a short delay so UI is ready */
+      setTimeout(function() { nlAdStart(); }, 350);
+      /* Clean URL without reload */
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    } catch(_) {}
+  });
+
 } // end nlBoot
 
 if (document.readyState === 'loading') {
@@ -4292,10 +4318,10 @@ function nlAdShowSummary() {
   if (sumLvlNameEl && profLvlNameEl) sumLvlNameEl.textContent = profLvlNameEl.textContent || 'Ordlærling';
   if (sumLvlIconEl && profLvlIconEl) sumLvlIconEl.textContent = profLvlIconEl.textContent || '\uD83C\uDF31';
 
-  /* ── Streak-boks ── */
+  /* ── Streak-boks med grøne/raude klossar ── */
   var sumStreakEl = document.getElementById('nl-ad-sum-streak');
   var sumStreakRecordEl = document.getElementById('nl-ad-sum-streak-record');
-  var sumStreakDotsEl = document.getElementById('nl-ad-sum-streak-dots');
+  var sumStreakBlocksEl = document.getElementById('nl-ad-sum-streak-blocks');
   var profStreakEl = document.getElementById('nl-ad-prof-streak');
   if (sumStreakEl) {
     var defaultStreak = (document.documentElement && document.documentElement.lang === 'nb') ? '0 dager' : '0 dagar';
@@ -4303,22 +4329,23 @@ function nlAdShowSummary() {
       ? String(profStreakEl.textContent || '').trim()
       : defaultStreak;
   }
-  /* Streak record + dots from MTS data */
+  /* Streak record from MTS data */
   var mtsData = null;
   if (typeof mtLsGet === 'function') { try { mtsData = mtLsGet(); } catch(e) {} }
   if (mtsData && mtsData.streak) {
     if (sumStreakRecordEl) sumStreakRecordEl.textContent = String(mtsData.streak.rekord || 0);
-    if (sumStreakDotsEl) {
-      var days = mtsData.streak.dagar || [];
-      var last7 = days.slice(-7);
-      sumStreakDotsEl.innerHTML = '';
-      for (var di = 0; di < 7; di++) {
-        var dot = document.createElement('span');
-        dot.className = 'adp-sum-streak-dot' + (di < last7.length ? ' active' : '');
-        dot.title = di < last7.length ? last7[di] : '';
-        sumStreakDotsEl.appendChild(dot);
-      }
-    }
+  }
+  /* Green/red blocks from session results */
+  if (sumStreakBlocksEl) {
+    sumStreakBlocksEl.innerHTML = '';
+    nlAdState.list.forEach(function(ei, idx) {
+      var res = nlAdState.results.get(ei);
+      var ok = res && res.correct;
+      var block = document.createElement('span');
+      block.className = 'adp-sum-block ' + (ok ? 'ok' : 'err');
+      block.title = (idx + 1) + '. ' + (res ? (res.title || '') : '') + ' – ' + (ok ? 'Rett' : 'Feil');
+      sumStreakBlocksEl.appendChild(block);
+    });
   }
 
   nlAdSaveSessionHistory({

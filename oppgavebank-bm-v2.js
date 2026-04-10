@@ -162,7 +162,7 @@ var BANKV2 = [
 {kat:'sammensatt',kat_label:'Sammensatte ord',type:'mc',vanske:'medium',
  q:'«Ananas ringer» i stedet for «ananasringer» – hva betyr særskrivingen?',
  alt:['Ringer laget av ananas','At ananasfrukten ringer med telefon','Samme betydning begge veier','At ringen er formet som en ananas'],
- fasit:'At ananasfrukta ringer med telefon',
+ fasit:'At ananasfrukten ringer med telefon',
  regel:'Særskriving kan gi helt ny betydning. «Ananasringer» = mat. «Ananas ringer» = frukt med telefon.',
  eks:'ananasringer (mat) vs. ananas ringer (absurd betydning)'},
 
