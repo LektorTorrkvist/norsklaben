@@ -2804,12 +2804,28 @@ function mtStart() {
 }
 
 function mtStartManualQueue(taskIndexes, startIndex) {
-  var idxs = Array.isArray(taskIndexes) ? taskIndexes : [];
-  var tasks = idxs.map(function (idx) {
-    return BANKV2[Number(idx)];
-  }).filter(function (task) {
-    return !!task;
+  var input = Array.isArray(taskIndexes) ? taskIndexes : [];
+  var tasks = [];
+
+  input.forEach(function (entry) {
+    if (entry == null) return;
+
+    if (typeof entry === 'number' || (typeof entry === 'string' && String(entry).trim() !== '')) {
+      var byIndex = BANKV2[Number(entry)];
+      if (byIndex) tasks.push(byIndex);
+      return;
+    }
+
+    if (typeof entry === 'object') {
+      var idx = BANKV2.indexOf(entry);
+      if (idx >= 0) tasks.push(BANKV2[idx]);
+    }
   });
+
+  if (!tasks.length && typeof startIndex === 'number' && startIndex >= 0 && startIndex < BANKV2.length) {
+    tasks = [BANKV2[startIndex]];
+  }
+
   if (!tasks.length) {
     alert('Fann ingen manuelle oppgåver å starte.');
     return;

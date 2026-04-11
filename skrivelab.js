@@ -3279,6 +3279,15 @@ function nlNormalizeExerciseMetaFromType() {
 function nlRefreshCounts() {
   var cards = document.querySelectorAll('.card').length;
   var oppg = document.querySelectorAll('.ei').length;
+  if (typeof window !== 'undefined' && Array.isArray(window.BANKV2) && window.BANKV2.length) {
+    var catMap = {};
+    window.BANKV2.forEach(function(t) {
+      if (!t || !t.kat) return;
+      catMap[String(t.kat)] = true;
+    });
+    cards = Object.keys(catMap).length;
+    oppg = window.BANKV2.length;
+  }
   var catsEl = document.getElementById('nl-stat-categories');
   var oppgEl = document.getElementById('nl-stat-tasks');
 

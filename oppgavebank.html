@@ -101,7 +101,7 @@
 .ob-task-link:hover { color:#1a5f42; text-decoration:underline; }
 
 /* Anchor highlight */
-.ob-card:target { box-shadow:0 0 0 3px var(--primary); }
+.ob-card.ob-target { box-shadow:0 0 0 3px var(--primary); }
 
 /* Group headings */
 .ob-group-title { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--fg);
@@ -227,12 +227,12 @@
 
   /* ── Thematic groups ── */
   var GROUPS = [
+    { title:'Langsvar og refleksjonsoppgåver', cats:['djupneoppgaver'] },
     { title:'Rettskriving og grammatikk', cats:['og_aa','sammensatt','dobbel_konsonant','kj_skj','tegnsetting','ordklasser','setningsbygging'] },
     { title:'Tekst og struktur', cats:['bindeord','tekststruktur','aarsak_sammenheng','referansekjede','logisk_struktur'] },
     { title:'Sjanger og stil', cats:['spraak_stil','sjangerkompetanse','fagartikkel','debattinnlegg','novelle','overskrift_ingress'] },
     { title:'Kjeldebruk og fagskriving', cats:['kildebruk','oppgavetolking','parafrase','sitat','bruke_eksempel'] },
-    { title:'Ordval, tilpassing og tal', cats:['ordval','tilpass_til_lesaran','tal_og_statistikk'] },
-    { title:'Djupneskriving', cats:['djupneoppgaver'] }
+    { title:'Ordval, tilpassing og tal', cats:['ordval','tilpass_til_lesaran','tal_og_statistikk'] }
   ];
 
   var TYPE_LABELS = {
@@ -362,6 +362,7 @@
     if (!Array.isArray(tasks) || !tasks.length) return '';
     var items = tasks.map(function(t, i) {
       var q = String((t && (t.q || t.sporsmal || t.tekst)) || ('Oppgåve ' + (i + 1))).replace(/\s+/g, ' ').trim();
+      q = q.replace(/^(?:\d+[\.)]\s*)+/, '');
       if (q.length > 135) q = q.slice(0, 132) + '...';
       return '<li class="ob-task-item"><button type="button" class="ob-task-link" data-kat="' + esc(kat) + '">' + esc((i + 1) + '. ' + q) + '</button></li>';
     }).join('');
@@ -410,12 +411,26 @@
     setTimeout(function() { t.classList.remove('show'); }, 2000);
   }
 
+  var obHashFlashTimer = null;
+  function flashCardTarget(el) {
+    if (!el || !el.classList || !el.classList.contains('ob-card')) return;
+    document.querySelectorAll('.ob-card.ob-target').forEach(function(card) {
+      card.classList.remove('ob-target');
+    });
+    el.classList.add('ob-target');
+    if (obHashFlashTimer) clearTimeout(obHashFlashTimer);
+    obHashFlashTimer = setTimeout(function() {
+      el.classList.remove('ob-target');
+    }, 1400);
+  }
+
   /* ── Highlight card if hash targets one ── */
   function checkHash() {
     if (location.hash) {
       var el = document.querySelector(location.hash);
       if (el && el.classList.contains('ob-card')) {
         el.scrollIntoView({ behavior:'smooth', block:'center' });
+        flashCardTarget(el);
       }
     }
 

@@ -39,7 +39,7 @@
 .ob-btn-primary { background:var(--primary); color:#fff; border-color:var(--primary); }
 .ob-btn-primary:hover { background:#155a3a; }
 .ob-btn-copy { font-size:.75rem; }
-.ob-card:target { box-shadow:0 0 0 3px var(--primary); }
+.ob-card.ob-target { box-shadow:0 0 0 3px var(--primary); }
 .ob-group-title { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--fg); margin:1.8rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid #dce6df; }
 .ob-group-title:first-of-type { margin-top:0; }
 .ob-toast { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%) translateY(20px); background:#1A3D2B; color:#fff; padding:.55rem 1.2rem; border-radius:.6rem; font-size:.88rem; font-weight:600; opacity:0; transition:opacity .25s,transform .25s; z-index:9000; pointer-events:none; }
@@ -213,11 +213,24 @@
     t.classList.add('show');
     setTimeout(function() { t.classList.remove('show'); }, 2000);
   }
+  var obHashFlashTimer = null;
+  function flashCardTarget(el) {
+    if (!el || !el.classList || !el.classList.contains('ob-card')) return;
+    document.querySelectorAll('.ob-card.ob-target').forEach(function(card) {
+      card.classList.remove('ob-target');
+    });
+    el.classList.add('ob-target');
+    if (obHashFlashTimer) clearTimeout(obHashFlashTimer);
+    obHashFlashTimer = setTimeout(function() {
+      el.classList.remove('ob-target');
+    }, 1400);
+  }
   function checkHash() {
     if (location.hash) {
       var el = document.querySelector(location.hash);
       if (el && el.classList.contains('ob-card')) {
         el.scrollIntoView({ behavior:'smooth', block:'center' });
+        flashCardTarget(el);
       }
     }
   }

@@ -95,6 +95,29 @@
 </footer>
 
 <script src="nav.js"></script>
+<script src="oppgavebank-bm-v2.js?v=20260410f"></script>
+<script>
+(function() {
+  var catsEl = document.getElementById('skrivelab-cats-count');
+  var tasksEl = document.getElementById('skrivelab-tasks-count');
+  if (!catsEl || !tasksEl) return;
+
+  var bank = (typeof BANKV2 !== 'undefined' && Array.isArray(BANKV2)) ? BANKV2 : [];
+  if (!bank.length) return;
+
+  var catMap = {};
+  bank.forEach(function(t) {
+    if (!t || !t.kat) return;
+    catMap[String(t.kat)] = true;
+  });
+
+  var catCount = Object.keys(catMap).length;
+  var taskCount = bank.length;
+
+  catsEl.textContent = catCount + ' kategorier';
+  tasksEl.textContent = taskCount + ' oppgaver';
+})();
+</script>
 
 </body>
 </html>
