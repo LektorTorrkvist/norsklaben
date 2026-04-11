@@ -3245,11 +3245,13 @@ function mtBuildInput(t) {
 
   /* ── mc ── */
   case 'mc': {
-    var alts = t.ikkje_stokk ? t.alt : mtShuffle(t.alt);
+    var alts = t.ikkje_stokk
+      ? t.alt.map(function(a, i) { return { txt: a, idx: i }; })
+      : mtShuffle(t.alt.map(function(a, i) { return { txt: a, idx: i }; }));
     var h = '<div class="mt-mc-grid">';
-    alts.forEach(function (a, i) {
-      h += '<button class="mt-mc-btn" data-val="' + mtEsc(a) + '" data-idx="' + i + '" onclick="mtCheckMc(this)">'
-        + '<span class="mt-mc-key">' + (i + 1) + '</span>' + mtEsc(a) + '</button>';
+    alts.forEach(function (o, i) {
+      h += '<button class="mt-mc-btn" data-val="' + mtEsc(o.txt) + '" data-idx="' + o.idx + '" onclick="mtCheckMc(this)">' 
+        + '<span class="mt-mc-key">' + (i + 1) + '</span>' + mtEsc(o.txt) + '</button>';
     });
     return h + '</div>';
   }

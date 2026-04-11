@@ -1277,18 +1277,23 @@ nav a.active { font-weight: 700; }
   font-family: 'Playfair Display', serif;
   font-size: 1.08rem;
   color: var(--text);
+  line-height: 1.32;
+  flex: 1 1 320px;
 }
 
 .mt-head-manual-nav-wrap {
   flex-basis: 100%;
   width: 100%;
+  margin-top: .42rem;
+  padding-top: .28rem;
+  border-top: 1px solid #ece7de;
 }
 
 .mt-manual-nav-head {
   display: grid;
-  gap: .32rem;
+  gap: .44rem;
   width: 100%;
-  margin-top: .1rem;
+  margin-top: .08rem;
 }
 
 .mt-manual-nav-head label {
@@ -4011,8 +4016,10 @@ footer strong { color: rgba(255,255,255,.8); }
   .adp-summary-actions { justify-content: stretch; }
   .adp-summary-actions .adp-btn { flex: 1 1 auto; }
   .adp-win-card { width: min(100%, 620px); max-height: 94vh; padding: .7rem; }
-  .adp-win-head { align-items: flex-start; gap: .55rem; }
+  .adp-win-head { align-items: flex-start; gap: .68rem; }
   .adp-win-close { padding: .36rem .62rem; font-size: .78rem; }
+  .mt-head-manual-nav-wrap { margin-top: .5rem; padding-top: .34rem; }
+  .mt-manual-nav-head { gap: .5rem; }
   .mt-manual-nav-head .gram-blank { font-size: .82rem; }
   header {
     padding: .65rem 1.25rem;
