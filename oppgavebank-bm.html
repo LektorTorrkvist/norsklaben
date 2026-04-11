@@ -39,6 +39,49 @@
 .ob-btn-primary { background:var(--primary); color:#fff; border-color:var(--primary); }
 .ob-btn-primary:hover { background:#155a3a; }
 .ob-btn-copy { font-size:.75rem; }
+.ob-card-drop { margin-top:.75rem; border-top:1px solid #e4ebe6; padding-top:.62rem; }
+.ob-task-drop { background:#f9fcfa; border:1px solid #dce6df; border-radius:.55rem; }
+.ob-task-drop summary {
+  list-style:none;
+  cursor:pointer;
+  font-size:.78rem;
+  font-weight:700;
+  color:var(--primary);
+  padding:.42rem .58rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.5rem;
+}
+.ob-task-drop summary::-webkit-details-marker { display:none; }
+.ob-task-drop summary::after {
+  content:'▾';
+  font-size:.85rem;
+  color:#4f6f5d;
+  transition:transform .14s ease;
+}
+.ob-task-drop[open] summary::after { transform:rotate(180deg); }
+.ob-task-list {
+  margin:0;
+  padding:.15rem .58rem .62rem 1.1rem;
+  display:grid;
+  gap:.34rem;
+}
+.ob-task-item {
+  font-size:.77rem;
+  color:#30483a;
+  line-height:1.45;
+}
+.ob-task-link {
+  border:none;
+  background:transparent;
+  color:inherit;
+  font:inherit;
+  text-align:left;
+  padding:0;
+  cursor:pointer;
+}
+.ob-task-link:hover { color:#1a5f42; text-decoration:underline; }
 .ob-card.ob-target { box-shadow:0 0 0 3px var(--primary); }
 .ob-group-title { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--fg); margin:1.8rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid #dce6df; }
 .ob-group-title:first-of-type { margin-top:0; }
@@ -104,9 +147,10 @@
     sjangerkompetanse:'📝', fagartikkel:'📰', debattinnlegg:'💬',
     overskrift_ingress:'📰', novelle:'📕', parafrase:'🔄', sitat:'💎',
     tal_og_statistikk:'📊', ordval:'💡', bruke_eksempel:'📌',
-    tilpass_til_lesaran:'👥'
+    tilpass_til_lesaran:'👥', djupneoppgaver:'🧠'
   };
   var GROUPS = [
+    { title:'Langsvar og refleksjonsoppgaver', cats:['djupneoppgaver'] },
     { title:'Rettskriving og grammatikk', cats:['og_aa','sammensatt','dobbel_konsonant','kj_skj','tegnsetting','ordklasser','setningsbygging'] },
     { title:'Tekst og struktur', cats:['bindeord','tekststruktur','aarsak_sammenheng','referansekjede','logisk_struktur'] },
     { title:'Sjanger og stil', cats:['spraak_stil','sjangerkompetanse','fagartikkel','debattinnlegg','novelle','overskrift_ingress'] },
@@ -122,7 +166,7 @@
   var catData = {};
   BANK.forEach(function(t) {
     if (!t.kat) return;
-    if (!catData[t.kat]) catData[t.kat] = { label:t.kat_label||t.kat, lett:0, medium:0, hard:0, total:0, types:{} };
+    if (!catData[t.kat]) catData[t.kat] = { label:t.kat_label||t.kat, lett:0, medium:0, hard:0, total:0, types:{}, tasks:[] };
     var d = catData[t.kat];
     d.total++;
     if (t.vanske === 'lett') d.lett++;
@@ -130,6 +174,7 @@
     else d.hard++;
     var ty = t.type || 'ukjent';
     d.types[ty] = 1;
+    d.tasks.push(t);
   });
   var html = '';
   var seenCats = {};
@@ -156,6 +201,22 @@
   }
   container.innerHTML = html;
   container.addEventListener('click', function(e) {
+    var openBtn = e.target.closest('.ob-btn-open');
+    if (openBtn) {
+      e.preventDefault();
+      var katOpen = String(openBtn.dataset.kat || '').trim();
+      if (katOpen) openCategoryModal(katOpen, { updateUrl: true, scrollToCard: false });
+      return;
+    }
+
+    var taskBtn = e.target.closest('.ob-task-link');
+    if (taskBtn) {
+      e.preventDefault();
+      var taskKat = String(taskBtn.dataset.kat || '').trim();
+      if (taskKat) openCategoryModal(taskKat, { updateUrl: true, scrollToCard: false });
+      return;
+    }
+
     var btn = e.target.closest('.ob-btn-copy');
     if (!btn) return;
     e.preventDefault();
@@ -178,8 +239,9 @@
     var typeList = Object.keys(d.types).map(function(t) { return TYPE_LABELS[t]||t; }).join(', ');
     var anchor = 'kat-' + kat;
     var manualQuery = '?kat=' + encodeURIComponent(kat) + '&mode=manual';
-    var exLink = 'skrivelab-bm.html' + manualQuery + '#nl-adaptive';
-    var shareUrl = location.origin + location.pathname.replace(/[^/]*$/, '') + 'skrivelab-bm.html' + manualQuery + '#nl-adaptive';
+    var localLink = location.pathname + manualQuery + '#' + anchor;
+    var shareUrl = location.origin + localLink;
+    var taskListHtml = buildTaskListHtml(kat, d.tasks || []);
     var s = '';
     s += '<div class="ob-card" id="' + anchor + '">';
     s += '<div class="ob-card-head">';
@@ -194,13 +256,54 @@
     s += '</div>';
     s += '<div class="ob-card-types">Oppgavetyper: ' + esc(typeList) + '</div>';
     s += '<div class="ob-card-actions">';
-    s += '<a class="ob-btn ob-btn-primary" href="' + exLink + '">▶ Øv no</a>';
+    s += '<button type="button" class="ob-btn ob-btn-primary ob-btn-open" data-kat="' + esc(kat) + '">▶ Øv no</button>';
     s += '<button type="button" class="ob-btn ob-btn-copy" data-url="' + esc(shareUrl) + '">🔗 Kopier lenke</button>';
-    s += '<a class="ob-btn" href="#' + anchor + '">⚓ Anker</a>';
+    s += '<a class="ob-btn" href="' + localLink + '">⚓ Anker</a>';
     s += '</div>';
+    s += '<div class="ob-card-drop">' + taskListHtml + '</div>';
     s += '</div>';
     return s;
   }
+
+  function buildTaskListHtml(kat, tasks) {
+    if (!Array.isArray(tasks) || !tasks.length) return '';
+    var items = tasks.map(function(t, i) {
+      var q = String((t && (t.q || t.sporsmal || t.tekst)) || ('Oppgave ' + (i + 1))).replace(/\s+/g, ' ').trim();
+      q = q.replace(/^(?:\d+[\.)]\s*)+/, '');
+      if (q.length > 135) q = q.slice(0, 132) + '...';
+      return '<li class="ob-task-item"><button type="button" class="ob-task-link" data-kat="' + esc(kat) + '">' + esc((i + 1) + '. ' + q) + '</button></li>';
+    }).join('');
+
+    return '<details class="ob-task-drop"><summary>Se alle oppgavene i kategorien</summary><ol class="ob-task-list">' + items + '</ol></details>';
+  }
+
+  function openCategoryModal(kat, opts) {
+    var cfg = opts || {};
+    var tasks = BANK.filter(function(t) { return t && t.kat === kat; });
+    if (!tasks.length) {
+      showToast('Ingen oppgaver funnet i denne kategorien.');
+      return;
+    }
+
+    if (typeof window.mtStartManualQueue !== 'function') {
+      showToast('Modalmotoren er ikke klar ennå. Prøv igjen.');
+      return;
+    }
+
+    if (cfg.updateUrl !== false && window.history && window.history.replaceState) {
+      var anchor = 'kat-' + kat;
+      var nextUrl = location.pathname + '?kat=' + encodeURIComponent(kat) + '&mode=manual#' + anchor;
+      window.history.replaceState({}, '', nextUrl);
+    }
+
+    if (cfg.scrollToCard !== false) {
+      var card = document.getElementById('kat-' + kat);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    window.mtStartManualQueue(tasks);
+  }
+
   function esc(s) {
     var d = document.createElement('div');
     d.textContent = s;
@@ -232,6 +335,15 @@
         el.scrollIntoView({ behavior:'smooth', block:'center' });
         flashCardTarget(el);
       }
+    }
+
+    var params = new URLSearchParams(window.location.search);
+    var katFromUrl = String(params.get('kat') || '').trim();
+    var mode = String(params.get('mode') || '').toLowerCase();
+    if (katFromUrl && (mode === 'manual' || mode === 'manuell' || mode === 'mt')) {
+      setTimeout(function() {
+        openCategoryModal(katFromUrl, { updateUrl: false, scrollToCard: false });
+      }, 120);
     }
   }
   checkHash();
