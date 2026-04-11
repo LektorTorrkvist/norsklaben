@@ -2917,9 +2917,9 @@ function mtBuildManualNavHtml(currentTask) {
     return '<option value="' + o.i + '"' + selected + '>' + mtEsc(label) + '</option>';
   }).join('');
 
-  return '<div class="mt-manual-nav-head" style="display:flex;align-items:center;gap:.45rem;min-width:260px;max-width:58%">' +
-    '<label for="mt-manual-task-select" style="font-size:.74rem;font-weight:700;color:var(--tmid);white-space:nowrap">Velg oppgave i kategorien</label>' +
-    '<select id="mt-manual-task-select" class="gram-blank" onchange="mtManualJump(this.value)" aria-label="Velg oppgave i kategorien" style="width:100%;font-size:.84rem;padding:.34rem .52rem;border:1.5px solid var(--b2,#ddd);border-radius:8px">' +
+  return '<div class="mt-manual-nav-head">' +
+    '<label for="mt-manual-task-select">Velg oppgave i kategorien</label>' +
+    '<select id="mt-manual-task-select" class="gram-blank" onchange="mtManualJump(this.value)" aria-label="Velg oppgave i kategorien">' +
       optsHtml +
     '</select>' +
   '</div>';
@@ -2945,9 +2945,7 @@ function mtUpdateWindowHeader(currentTask) {
   var wrap = document.createElement('div');
   wrap.className = 'mt-head-manual-nav-wrap';
   wrap.innerHTML = navHtml;
-  var closeBtn = $mt('nl-ad-win-close');
-  if (closeBtn && closeBtn.parentNode === head) head.insertBefore(wrap, closeBtn);
-  else head.appendChild(wrap);
+  head.appendChild(wrap);
 }
 
 /* ─── SESJON ─────────────────────────────────────── */
@@ -4233,8 +4231,6 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQu
   } else {
     html += '<div class="mt-fb-heading">&#10007; ' + (isPartial ? 'Delvis riktig' : 'Feil') + '</div>';
     if (maxPts > 1 && typeof chosen === 'string') html += '<div class="mt-fb-detail">' + mtEsc(chosen) + '</div>';
-    var fasitText = mtResolveFasitText(t);
-    if (!isPartial && fasitText) html += '<div class="mt-fb-fasit">Riktig svar: <strong>' + mtEsc(fasitText) + '</strong></div>';
     if (extraMsg) html += '<div class="mt-fb-extra">' + mtEsc(extraMsg) + '</div>';
   }
   if (t.forklaring) html += '<div class="mt-fb-forklaring">' + mtEsc(t.forklaring) + '</div>';

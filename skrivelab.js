@@ -308,11 +308,22 @@ function nlBoot() {
         if (wantsManual) {
           setTimeout(function() {
             var firstCat = requested[0];
-            var firstEi = firstCat
-              ? document.querySelector('.main .card[data-cat="' + firstCat + '"] .exlist > .ei')
+            var resolvedCat = firstCat;
+            if (resolvedCat && !document.querySelector('.main .card[data-cat="' + resolvedCat + '"]')) {
+              var mappedCat = (typeof nlMtResolveCard === 'function') ? nlMtResolveCard(resolvedCat) : '';
+              if (mappedCat) resolvedCat = mappedCat;
+            }
+            var firstEi = resolvedCat
+              ? document.querySelector('.main .card[data-cat="' + resolvedCat + '"] .exlist > .ei')
               : null;
             if (firstEi) nlOpenManualQueueInMt(firstEi);
-            else window.mtStart();
+            else if (typeof window.mtStartManualQueue === 'function' && Array.isArray(window.BANKV2)) {
+              var manualTasks = window.BANKV2.filter(function(t) {
+                return t && requested.indexOf(String(t.kat || '').trim()) !== -1;
+              });
+              if (manualTasks.length) window.mtStartManualQueue(manualTasks);
+              else window.mtStart();
+            } else window.mtStart();
           }, 180);
         } else {
           setTimeout(function() { window.mtStart(); }, 180);

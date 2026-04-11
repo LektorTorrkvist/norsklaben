@@ -2198,7 +2198,47 @@ var BANKV2 = [
  q:'Kva setning er rett?',
  alt:['Boka las guten.','Guten las boka.','Las boka guten.'],fasit:1,
  regel:'Den som gjer handlinga (subjektet) kjem vanlegvis først.',
- eks:'Guten (subjekt) las (verb) boka (objekt).'}
+ eks:'Guten (subjekt) las (verb) boka (objekt).'},
+
+{kat:'teiknsetting',kat_label:'Teiknsetting',type:'fillsel',vanske:'medium',
+ q:'Set inn dei fem komma som manglar.',
+ items:[
+  {pre:'Når timen var ferdig',alt:[',',';',' .'],fasit:',',post:'pakka elevane saman bøkene sine.'},
+  {pre:'Læraren sa',alt:[',',':',' .'],fasit:',',post:'de må levere innan fredag.'},
+  {pre:'Fordi teksten var uklar',alt:[',','?',' .'],fasit:',',post:'bad ho elevane om å skrive om innleiinga.'},
+  {pre:'Ho tok med seg penn',alt:[',','-',' .'],fasit:',',post:'notatbok og vassflaske.'},
+  {pre:'Etter friminuttet',alt:[',','!',' .'],fasit:',',post:'starta klassen med lesing.'}
+ ],
+ regel:'Set komma etter innleiande leddsetning, ved utsegnsverb før sitatsetning, og mellom ord i oppramsing.',
+ eks:'Når timen var ferdig, pakka elevane saman. Ho tok med penn, notatbok og vassflaske.'},
+
+{kat:'teiknsetting',kat_label:'Teiknsetting',type:'fillsel',vanske:'medium',
+ q:'Vel rett teikn i kvar setning.',
+ items:[
+  {pre:'Korleis kan vi forbetre innleiinga',alt:['?','.','!'],fasit:'?',post:''},
+  {pre:'Kjeldekritikk er viktig',alt:['.','?','!'],fasit:'.',post:''},
+  {pre:'Pass på at du grunngjev påstandane',alt:['!','.','?'],fasit:'!',post:''},
+  {pre:'Læraren spurde',alt:[': ',',','.'],fasit:',',post:'om elevane hadde brukt kjelder.'},
+  {pre:'Når du siterer',alt:[',',';','.'],fasit:',',post:'må du oppgje kjelde.'}
+ ],
+ regel:'Spørsmål får ?, utrop får !, og vanlege utsegner får punktum. Komma markerer pause og grammatisk skilje.',
+ eks:'Læraren spurde, om elevane hadde brukt kjelder. Når du siterer, må du oppgje kjelde.'},
+
+{kat:'djupneoppgaver',kat_label:'Djupneoppgåver',type:'open',vanske:'vanskeleg',
+ q:'Skriv eit reflekterande avsnitt (10-30 min): Korleis påverkar sosiale medium måten ungdom les og skriv på?',
+ hint:'Ta med minst eitt konkret døme, eitt motargument og ei kort avslutting.',
+ regel:'Bygg resonnering med tydeleg påstand, grunngjeving og nyansering. Bruk fagomgrep og presise overgangar.',
+ eksempel_svak:'Sosiale medium er både bra og dårleg. Mange bruker det mykje. Det påverkar skriving.',
+ eksempel_god:'Sosiale medium effektiviserer kommunikasjon, men premierer ofte korte og raske ytringar. For elevar kan det styrkje kreativitet i idéfasen, samstundes som djup lesing blir utfordra. Ei medviten veksling mellom raske og langsame skriveformer kan difor gi betre læringsutbytte.',
+ eks:'Start med ein klar hovudpåstand, bruk døme frå kvardagen, og avslutt med ei fagleg vurdering.'},
+
+{kat:'djupneoppgaver',kat_label:'Djupneoppgåver',type:'open',vanske:'vanskeleg',
+ q:'Skriv eit drøftande miniinnlegg (10-30 min): Bør kunstig intelligens vere tillate i norsk skriftleg arbeid?',
+ hint:'Presenter to tydelege argument for og to mot, og ta stilling til slutt.',
+ regel:'Ei god drøfting viser fleire perspektiv før konklusjon. Bruk koplingsord som «på den eine sida», «samtidig» og «difor».',
+ eksempel_svak:'KI kan vere bra, men også litt dumt. Eg synest det kjem an på.',
+ eksempel_god:'På den eine sida kan KI støtte elevar i idéutvikling og struktur, særleg i tidleg skrivefase. Samtidig kan ukritisk bruk svekkje eiga språkleg meistring og kjeldekritikk. Difor bør KI vere tillate som støtteverktøy, men med krav om open bruk og tydeleg elevansvar.',
+ eks:'Gjer argumenta konkrete med eksempel frå skulearbeid og skriv ein tydeleg konklusjon.'}
 
 ]; // end BANKV2
 if (typeof window !== 'undefined') window.BANKV2 = BANKV2;
@@ -2696,9 +2736,9 @@ function mtBuildManualNavHtml(currentTask) {
     return '<option value="' + o.i + '"' + selected + '>' + mtEsc(label) + '</option>';
   }).join('');
 
-  return '<div class="mt-manual-nav-head" style="display:flex;align-items:center;gap:.45rem;min-width:260px;max-width:58%">' +
-    '<label for="mt-manual-task-select" style="font-size:.74rem;font-weight:700;color:var(--tmid);white-space:nowrap">Vel oppgåve i kategorien</label>' +
-    '<select id="mt-manual-task-select" class="gram-blank" onchange="mtManualJump(this.value)" aria-label="Vel oppgåve i kategorien" style="width:100%;font-size:.84rem;padding:.34rem .52rem;border:1.5px solid var(--b2,#ddd);border-radius:8px">' +
+  return '<div class="mt-manual-nav-head">' +
+    '<label for="mt-manual-task-select">Vel oppgåve i kategorien</label>' +
+    '<select id="mt-manual-task-select" class="gram-blank" onchange="mtManualJump(this.value)" aria-label="Vel oppgåve i kategorien">' +
       optsHtml +
     '</select>' +
   '</div>';
@@ -2724,9 +2764,7 @@ function mtUpdateWindowHeader(currentTask) {
   var wrap = document.createElement('div');
   wrap.className = 'mt-head-manual-nav-wrap';
   wrap.innerHTML = navHtml;
-  var closeBtn = $mt('nl-ad-win-close');
-  if (closeBtn && closeBtn.parentNode === head) head.insertBefore(wrap, closeBtn);
-  else head.appendChild(wrap);
+  head.appendChild(wrap);
 }
 
 /* ─── SESJON ─────────────────────────────────────── */
@@ -4053,6 +4091,10 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQu
     earnedXP += fagBonus;
   }
 
+  if (qualitativeMode && t && t.kat === 'djupneoppgaver' && elapsed >= 600000) {
+    earnedXP += 75;
+  }
+
   MTS.sessionXP += earnedXP;
 
   if (correct && earnedXP > 0) {
@@ -4107,8 +4149,6 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQu
   } else {
     html += '<div class="mt-fb-heading">&#10007; ' + (isPartial ? 'Delvis rett' : 'Feil') + '</div>';
     if (maxPts > 1 && typeof chosen === 'string') html += '<div class="mt-fb-detail">' + mtEsc(chosen) + '</div>';
-    var fasitText = mtResolveFasitText(t);
-    if (!isPartial && fasitText) html += '<div class="mt-fb-fasit">Rett svar: <strong>' + mtEsc(fasitText) + '</strong></div>';
     if (extraMsg) html += '<div class="mt-fb-extra">' + mtEsc(extraMsg) + '</div>';
   }
 
