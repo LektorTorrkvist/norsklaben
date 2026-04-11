@@ -213,7 +213,8 @@
     if (taskBtn) {
       e.preventDefault();
       var taskKat = String(taskBtn.dataset.kat || '').trim();
-      if (taskKat) openCategoryModal(taskKat, { updateUrl: true, scrollToCard: false });
+      var taskIdx = parseInt(taskBtn.dataset.taskIdx, 10);
+      if (taskKat) openCategoryModal(taskKat, { updateUrl: true, scrollToCard: false, startIdx: isFinite(taskIdx) ? taskIdx : 0 });
       return;
     }
 
@@ -279,7 +280,7 @@
         .replace(/\s+/g, ' ')
         .trim();
       if (q.length > 135) q = q.slice(0, 132) + '...';
-      return '<li class="ob-task-item"><button type="button" class="ob-task-link" data-kat="' + esc(kat) + '">' + esc((i + 1) + '. ' + q) + '</button></li>';
+      return '<li class="ob-task-item"><button type="button" class="ob-task-link" data-kat="' + esc(kat) + '" data-task-idx="' + i + '">' + esc((i + 1) + '. ' + q) + '</button></li>';
     }).join('');
 
     return '<details class="ob-task-drop"><summary>Se alle oppgavene i kategorien</summary><ol class="ob-task-list">' + items + '</ol></details>';
@@ -307,6 +308,12 @@
     if (cfg.scrollToCard !== false) {
       var card = document.getElementById('kat-' + kat);
       if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    /* Reorder so the chosen task is first */
+    var idx = cfg.startIdx || 0;
+    if (idx > 0 && idx < tasks.length) {
+      tasks = tasks.slice(idx).concat(tasks.slice(0, idx));
     }
 
     window.mtStartManualQueue(tasks);

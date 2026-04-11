@@ -4646,6 +4646,8 @@ function nlAdShowSummary() {
 
   var actions = document.getElementById('nl-ad-actions');
   if (actions) actions.style.display = 'none';
+  var headerClose = document.getElementById('nl-ad-win-close');
+  if (headerClose) headerClose.style.display = 'none';
 
   var p = document.getElementById('nl-ad-progress');
   var scoreVal = document.getElementById('nl-ad-score-val');
@@ -4947,6 +4949,8 @@ function nlAdStart() {
   if (reset) reset.hidden = false;
   if (summary) summary.hidden = true;
   if (actions) actions.style.display = 'flex';
+  var headerClose = document.getElementById('nl-ad-win-close');
+  if (headerClose) headerClose.style.display = '';
 }
 
 function nlAdReset() {

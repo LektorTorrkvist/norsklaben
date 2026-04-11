@@ -2895,6 +2895,7 @@ function mtResetSessionState(opts) {
   MTS.showRule = false;
   MTS.sessionXP = 0;
   MTS.baseXP = mtXpGetTotal();
+  MTS._leveledUpLive = false;
   MTS._uiCache = { score: 0, xp: 0, streak: 0 };
 }
 
@@ -2903,11 +2904,13 @@ function mtOpenSessionUi() {
   var summary = $mt('nl-ad-summary');
   var body = $mt('nl-ad-win-body');
   var actions = $mt('nl-ad-actions');
+  var headerClose = $mt('nl-ad-win-close');
   var card = win ? win.querySelector('.adp-win-card') : null;
   if (win) win.hidden = false;
   if (summary) summary.hidden = true;
   if (body) body.innerHTML = '';
   if (actions) actions.style.display = 'flex';
+  if (headerClose) headerClose.style.display = '';
   if (card) card.classList.toggle('mt-manual-mode', !!MTS.manualMode);
   mtUpdateWindowHeader();
 }
@@ -3408,11 +3411,14 @@ function mtRenderTask(t, isRetry) {
           '</div>' +
         '</div>' +
         '<div class="mt-live-bar"><span id="mt-live-bar-fill"></span></div>' +
-        '<div class="mt-live-mastery">' +
-          '<div class="mt-live-mastery-head"><span id="mt-live-mastery-icon">&#127793;</span><strong id="mt-live-mastery-name">Ordlærling</strong><span id="mt-live-mastery-trophies">0/12 troféer</span></div>' +
-          '<div class="mt-live-mastery-bar"><span id="mt-live-mastery-fill"></span></div>' +
-          '<div class="mt-live-mastery-text" id="mt-live-mastery-text">Til neste nivå: 80 XP</div>' +
-        '</div>' +
+        '<details class="mt-live-mastery-toggle">' +
+          '<summary class="mt-live-mastery-summary"><span id="mt-live-mastery-icon">&#127793;</span> <strong id="mt-live-mastery-name">Ordlærling</strong></summary>' +
+          '<div class="mt-live-mastery">' +
+            '<div class="mt-live-mastery-head"><span id="mt-live-mastery-trophies">0/12 troféer</span></div>' +
+            '<div class="mt-live-mastery-bar"><span id="mt-live-mastery-fill"></span></div>' +
+            '<div class="mt-live-mastery-text" id="mt-live-mastery-text">Til neste nivå: 80 XP</div>' +
+          '</div>' +
+        '</details>' +
       '</div>' +
       '<div class="mt-badges">' +
         '<span class="mt-badge mt-badge-cat">' + mtEsc(t.kat_label || t.kat) + '</span>' +
@@ -4395,6 +4401,21 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQu
 
   MTS.sessionXP += earnedXP;
 
+  /* Real-time level-up check */
+  if (earnedXP > 0) {
+    var prevTotalXP = MTS.baseXP + MTS.sessionXP - earnedXP;
+    var newTotalXP = MTS.baseXP + MTS.sessionXP;
+    var prevLvl = mtXpLevel(prevTotalXP);
+    var curLvl = mtXpLevel(newTotalXP);
+    if (curLvl.index > prevLvl.index) {
+      MTS._leveledUpLive = true;
+      var masteryToggle = document.querySelector('.mt-live-mastery-toggle');
+      if (masteryToggle) masteryToggle.open = true;
+      mtFxLevelUpFlash();
+      mtFxModalConfetti();
+    }
+  }
+
   if (correct && earnedXP > 0) {
     var xpAnchor = ($mt('mt-live-xp') && $mt('mt-live-xp').parentElement) || document.querySelector('#nl-ad-win-body .mt-live-kpis') || $mt('nl-ad-win-body');
     mtFxSpawnFloat(xpAnchor, '+' + earnedXP + ' XP', MTS.streak >= 5 || earnedXP >= 20);
@@ -4501,7 +4522,7 @@ function mtShowSummary() {
   /* Registrer daglig streak */
   var streak = mtStreakRegister();
   mtUpdateHeaderProfile(newTotalXP, streak.current);
-  if (leveledUp) {
+  if (leveledUp && !MTS._leveledUpLive) {
     mtFxLevelUpFlash();
     mtFxModalConfetti();
   }
@@ -4695,13 +4716,9 @@ function mtShowSummary() {
     }
 
     gp.innerHTML = gpHtml;
-    var kpiGrid = sumEl.querySelector('.adp-summary-grid');
-    if (kpiGrid) sumEl.insertBefore(gp, kpiGrid);
-    else {
-      var actionsDiv = sumEl.querySelector('.adp-summary-actions');
-      if (actionsDiv) sumEl.insertBefore(gp, actionsDiv);
-      else sumEl.appendChild(gp);
-    }
+    var actionsDiv = sumEl.querySelector('.adp-summary-actions');
+    if (actionsDiv) sumEl.insertBefore(gp, actionsDiv);
+    else sumEl.appendChild(gp);
   }
 
   var sumNewBtn = $mt('nl-ad-sum-new');
@@ -4729,9 +4746,11 @@ function mtShowSummary() {
   var summary = $mt('nl-ad-summary');
   var actions = $mt('nl-ad-actions');
   var body = $mt('nl-ad-win-body');
+  var headerClose = $mt('nl-ad-win-close');
   if (summary) summary.hidden = false;
   if (actions) actions.style.display = 'none';
   if (body) body.innerHTML = '';
+  if (headerClose) headerClose.style.display = 'none';
 
   if (summary) summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -4768,18 +4787,24 @@ function mtBindMcKeys() {
     '.mt-live-top { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:.42rem; }',
     '.mt-live-progress { font-size:.82rem; font-weight:700; color:var(--text,#1a1a18); }',
     '.mt-live-kpis { display:flex; gap:6px; flex-wrap:wrap; }',
-    '.mt-live-pill { font-size:.72rem; padding:2px 8px; border-radius:999px; background:#f3f1ec; color:var(--tmid,#4a4a46); border:1px solid #e6e1d7; }',
-    '.mt-live-pill strong { color:var(--text,#1a1a18); font-weight:700; }',
+    '.mt-live-pill { font-size:.66rem; padding:1px 7px; border-radius:999px; background:#f7f6f3; color:var(--tmid,#6a6a66); border:1px solid #ece8e0; }',
+    '.mt-live-pill strong { color:var(--tmid,#4a4a46); font-weight:600; }',
     '.mt-live-bar { height:6px; border-radius:999px; background:#ebe6dc; overflow:hidden; }',
     '#mt-live-bar-fill { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--mid,#2E6B4F),var(--accent,#C8832A)); transition:width .35s ease; }',
-    '.mt-live-mastery { margin-top:.45rem; border:1px solid #e3d4b2; border-radius:8px; background:linear-gradient(145deg,#fff9ea,#fdf1d5); padding:.42rem .55rem; }',
-    '.mt-live-mastery-head { display:flex; align-items:center; gap:7px; font-size:.78rem; color:#6b4a00; }',
-    '#mt-live-mastery-icon { font-size:.98rem; }',
-    '#mt-live-mastery-name { font-size:.82rem; font-weight:700; color:#5f4311; margin-right:auto; }',
-    '#mt-live-mastery-trophies { font-size:.72rem; background:rgba(255,255,255,.55); border:1px solid rgba(193,139,46,.35); border-radius:999px; padding:1px 7px; }',
-    '.mt-live-mastery-bar { margin-top:.28rem; height:5px; border-radius:99px; overflow:hidden; background:rgba(115,85,30,.16); }',
+    '.mt-live-mastery { margin-top:.25rem; border:1px solid #e3d4b2; border-radius:8px; background:linear-gradient(145deg,#fff9ea,#fdf1d5); padding:.35rem .55rem; }',
+    '.mt-live-mastery-toggle { margin-top:.35rem; }',
+    '.mt-live-mastery-summary { cursor:pointer; font-size:.76rem; color:#6b4a00; list-style:none; display:flex; align-items:center; gap:5px; padding:2px 0; }',
+    '.mt-live-mastery-summary::-webkit-details-marker { display:none; }',
+    '.mt-live-mastery-summary::before { content:"\\25B6"; font-size:.55rem; transition:transform .15s; }',
+    '.mt-live-mastery-toggle[open] > .mt-live-mastery-summary::before { transform:rotate(90deg); }',
+    '.mt-live-mastery-summary strong { font-size:.78rem; font-weight:700; color:#5f4311; }',
+    '.mt-live-mastery-head { display:flex; align-items:center; gap:7px; font-size:.72rem; color:#6b4a00; }',
+    '#mt-live-mastery-icon { font-size:.88rem; }',
+    '#mt-live-mastery-name { font-size:.78rem; font-weight:700; color:#5f4311; }',
+    '#mt-live-mastery-trophies { font-size:.68rem; background:rgba(255,255,255,.55); border:1px solid rgba(193,139,46,.35); border-radius:999px; padding:1px 7px; }',
+    '.mt-live-mastery-bar { margin-top:.2rem; height:4px; border-radius:99px; overflow:hidden; background:rgba(115,85,30,.16); }',
     '#mt-live-mastery-fill { display:block; height:100%; width:0; border-radius:99px; background:linear-gradient(90deg,#2c7a57,#c18b2e); transition:width .35s ease; }',
-    '#mt-live-mastery-text { margin-top:.2rem; font-size:.7rem; color:#6f5a33; }',
+    '#mt-live-mastery-text { margin-top:.15rem; font-size:.66rem; color:#6f5a33; }',
     '.mt-badges { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:.6rem; }',
     '.mt-badge { font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; padding:3px 10px; border-radius:99px; font-weight:600; }',
     '.mt-badge-cat { background:var(--alight,#fff3e0); color:var(--accent,#7a3800); }',
@@ -5054,6 +5079,8 @@ window.mtStart = mtStart;
 window.mtStartManualQueue = mtStartManualQueue;
 window.mtAbort = mtAbort;
 window.mtStartFeillogg = mtStartFeillogg;
+window.mtFeilloggGet = mtFeilloggGet;
+window.mtBadgesCountRetryWin = mtBadgesCountRetryWin;
 window.mtTriggerCheck = mtTriggerCheck;
 window.mtNext = mtNext;
 window.mtCheckMc = mtCheckMc;
