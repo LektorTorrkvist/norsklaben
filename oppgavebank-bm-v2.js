@@ -2518,6 +2518,13 @@ function mtEsc(s) {
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/\n/g, '<br>');
 }
 
+function mtTaskLabel(task) {
+  var txt = String((task && (task.q || task.sporsmal)) || 'Oppgave').replace(/\s+/g, ' ').trim();
+  if (!txt) txt = 'Oppgave';
+  if (txt.length > 96) txt = txt.slice(0, 93) + '...';
+  return txt;
+}
+
 function mtNorm(s) { return String(s).trim().toLowerCase(); }
 
 function mtLevenshtein(a, b) {
