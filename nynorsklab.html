@@ -34,8 +34,8 @@
   <h1>Nynorsklab</h1>
   <p>Adaptiv øving i nynorsk grammatikk med emneval, vanskegrad og automatisk progresjon.</p>
   <div class="hero-stats">
-    <div><div class="stat-n">8</div><div class="stat-l">Kategoriar</div></div>
-    <div><div class="stat-n">100+</div><div class="stat-l">Oppgåver</div></div>
+    <div><div class="stat-n" id="nn-stat-categories">0</div><div class="stat-l">Kategoriar</div></div>
+    <div><div class="stat-n" id="nn-stat-tasks">0</div><div class="stat-l">Oppgåver</div></div>
     <div><div class="stat-n">Adaptiv</div><div class="stat-l">Løype</div></div>
   </div>
 </div>
@@ -216,5 +216,22 @@
 
 <script src="nav.js"></script>
 <script src="nynorsklab.js"></script>
+<script>
+(function() {
+  var catsEl = document.getElementById('nn-stat-categories');
+  var tasksEl = document.getElementById('nn-stat-tasks');
+  if (!catsEl || !tasksEl) return;
+  if (typeof BANK === 'undefined' || !Array.isArray(BANK) || !BANK.length) return;
+
+  var catMap = {};
+  BANK.forEach(function(t) {
+    if (!t || !t.emne) return;
+    catMap[String(t.emne)] = true;
+  });
+
+  catsEl.textContent = String(Object.keys(catMap).length);
+  tasksEl.textContent = String(BANK.length);
+})();
+</script>
 </body>
 </html>

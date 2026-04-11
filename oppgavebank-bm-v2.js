@@ -2454,6 +2454,19 @@ var BANKV2 = [
 ]; // end BANKV2
 if (typeof window !== 'undefined') window.BANKV2 = BANKV2;
 
+BANKV2.push({
+ kat:'fagartikkel',
+ kat_label:'Fagartikkel',
+ type:'open',
+ vanske:'viderekommende',
+ q:'Langsvarsoppgave: Skriv et refleksjonsnotat etter at du har skrevet en fagartikkel.',
+ tekst:'Skriv et sammenhengende refleksjonsnotat (ca. 200-300 ord) om arbeidsprosessen din. Bruk disse spørsmålene aktivt i svaret: 1) Hvordan valgte og avgrenset du temaet? 2) Hvilke kilder brukte du, og hvordan vurderte du troverdigheten? 3) Hvordan bygde du opp fagartikkelen med innledning, hoveddel og avslutning? 4) Hvilke språklige grep brukte du for å forklare fagstoff tydelig for leseren? 5) Hva ville du forbedret dersom du skulle skrevet teksten på nytt?',
+ hint:'Målet er å vise metabevissthet: Beskriv konkrete valg, begrunn dem og pek på forbedringsmuligheter.',
+ fasit:'Et godt refleksjonsnotat viser både hva du gjorde, hvorfor du gjorde det, og hva du ville forbedret neste gang.',
+ regel:'Refleksjon handler om å koble prosess, faglige valg og læring. Bruk konkrete eksempler fra egen tekst.',
+ eksempel_god:'Jeg valgte temaet etter at jeg undersøkte hvilke kilder som faktisk var tilgjengelige. I neste versjon ville jeg strammet inn problemstillingen tidligere og brukt mer tid på overgangene mellom avsnitt.'
+});
+
 /* ─── STATE ──────────────────────────────────────── */
 var MTS = {
   pool: [],

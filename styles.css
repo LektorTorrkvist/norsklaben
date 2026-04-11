@@ -373,6 +373,68 @@ nav a.active { font-weight: 700; }
 }
 .lbtn:hover { background: var(--mid); }
 
+/* ─── INDEX: OPPGAVEBANK NOTE ─── */
+.index-ob-note {
+  max-width: 980px;
+  margin: 0 auto 1.2rem;
+  padding: 0 2rem;
+}
+
+.index-ob-note-inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, #fff9ef 0%, #f7efe2 100%);
+  border: 1.5px solid #e8d9bf;
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem;
+}
+
+.index-ob-note-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #ecd9bc;
+  font-size: 1.25rem;
+}
+
+.index-ob-note-text h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin-bottom: .2rem;
+}
+
+.index-ob-note-text p {
+  color: var(--tmid);
+  font-size: .92rem;
+  line-height: 1.55;
+}
+
+.index-ob-note-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  font-size: .86rem;
+  font-weight: 700;
+  padding: .58rem .88rem;
+  border-radius: var(--rs);
+  white-space: nowrap;
+}
+
+.index-ob-note-btn:hover {
+  background: var(--mid);
+}
+
 /* ─── INDEX: HOW-TO ─── */
 .how {
   background: var(--card);

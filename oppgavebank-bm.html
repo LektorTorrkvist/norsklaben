@@ -288,7 +288,10 @@
 
   function openCategoryModal(kat, opts) {
     var cfg = opts || {};
-    var tasks = BANK.filter(function(t) { return t && t.kat === kat; });
+    var sourceBank = (typeof window !== 'undefined' && Array.isArray(window.BANKV2) && window.BANKV2.length)
+      ? window.BANKV2
+      : BANK;
+    var tasks = sourceBank.filter(function(t) { return t && t.kat === kat; });
     if (!tasks.length) {
       showToast('Ingen oppgaver funnet i denne kategorien.');
       return;

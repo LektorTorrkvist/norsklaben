@@ -147,6 +147,10 @@
 <div class="ob-hero">
   <h1>📚 Oppgåvebank</h1>
   <p>Oversikt over alle øvingsoppgåver i Skrivemeisteren. Vel ein kategori for å øve, eller del lenkja med elevane dine.</p>
+  <div class="hero-stats">
+    <div><div class="stat-n" id="ob-stat-categories">0</div><div class="stat-l">Kategoriar</div></div>
+    <div><div class="stat-n" id="ob-stat-tasks">0</div><div class="stat-l">Oppgåver</div></div>
+  </div>
 </div>
 
 <div class="ob-wrap">
@@ -212,6 +216,16 @@
   var BANK = (typeof BANKV2 !== 'undefined') ? BANKV2 : [];
   var container = document.getElementById('ob-content');
   if (!BANK.length || !container) return;
+
+  var catCounter = {};
+  BANK.forEach(function(t) {
+    if (!t || !t.kat) return;
+    catCounter[String(t.kat)] = true;
+  });
+  var obCatsEl = document.getElementById('ob-stat-categories');
+  var obTasksEl = document.getElementById('ob-stat-tasks');
+  if (obCatsEl) obCatsEl.textContent = String(Object.keys(catCounter).length);
+  if (obTasksEl) obTasksEl.textContent = String(BANK.length);
 
   /* ── Icon map per category ── */
   var ICONS = {
