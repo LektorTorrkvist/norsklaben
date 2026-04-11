@@ -27,6 +27,8 @@ function nlBoot() {
     }
   }
 
+  nlSafeInit('ensure-bank-ob-styles', nlEnsureBankObStyles);
+
   nlSafeInit('ensure-bank-shell', nlEnsureBankShell);
   nlSafeInit('import-bank-tasks', nlImportMTBankTasks);
   nlSafeInit('normalize-categories', nlNormalizeCategories);
@@ -34,6 +36,21 @@ function nlBoot() {
 
   /* ── Card open/close + exercise modal (delegated for robustness) ── */
   document.addEventListener('click', function(e) {
+    var catStartBtn = e.target.closest('.nl-ob-start-cat');
+    if (catStartBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      var cat = String(catStartBtn.getAttribute('data-cat') || '').trim();
+      if (!cat) return;
+      var firstEi = document.querySelector('.main .card[data-cat="' + cat + '"] .exlist > .ei');
+      if (!firstEi) {
+        if (window.alert) window.alert('Ingen oppgaver er klare i denne kategorien ennå.');
+        return;
+      }
+      nlSafeInit('open-bank-category', function() { nlOpenManualQueueInMt(firstEi); });
+      return;
+    }
+
     var cardHead = e.target.closest('.ch');
     if (cardHead) {
       var card = cardHead.closest('.card');
@@ -218,10 +235,43 @@ function nlBoot() {
       if (!retryBtn || retryBtn.dataset.nlV2Bound === '1') return;
       retryBtn.dataset.nlV2Bound = '1';
       retryBtn.addEventListener('click', function() {
-        if (typeof window.mtStartFeillogg === 'function') {
-          window.mtStartFeillogg();
+        if (typeof window.mtStartFeillogg !== 'function') return;
+        /* Sjekk om det finst feil å øve på først */
+        var logg = (typeof window.mtFeilloggGet === 'function') ? window.mtFeilloggGet() : [];
+        if (!logg || !logg.length) {
+          alert('Ingen tidligere feil å øve på ennå.');
+          return;
         }
+        /* Skjul skrivelab-eige UI før vi opnar v2-modalen */
+        var mainEl = document.querySelector('.main');
+        var adaptivePanel = document.getElementById('nl-adaptive');
+        if (mainEl) mainEl.style.display = 'none';
+        if (adaptivePanel) adaptivePanel.style.display = 'none';
+        window.mtStartFeillogg();ar logg = (typeof window.mtFeilloggGet === 'function') ? window.mtFeilloggGet() : [];
+        if (!logg || !logg.length) {
+          alert('Ingen tidligere feil å øve på ennå.');
+          return;
+        }
+        /* Skjul skrivelab-eige UI før vi opnar v2-modalen */
+        var mainEl = document.querySelector('.main');
+        var adaptivePanel = document.getElementById('nl-adaptive');
+        if (mainEl) mainEl.style.display = 'none';
+        if (adaptivePanel) adaptivePanel.style.display = 'none';
+        window.mtStartFeillogg();
       });
+    });
+
+    /* Wrap mtAbort slik at skrivelab-UI kjem tilbake etter lukking */
+    nlSafeInit('wrap-v2-abort', function() {
+      var origAbort = window.mtAbort;
+      if (typeof origAbort !== 'function') return;
+      window.mtAbort = function() {
+        origAbort();
+        var mainEl = document.querySelector('.main');
+        var adaptivePanel = document.getElementById('nl-adaptive');
+        if (mainEl) mainEl.style.display = '';
+        if (adaptivePanel) adaptivePanel.style.display = '';
+      };
     });
   }
 
@@ -384,6 +434,32 @@ var nlGroupTitles = [
   'Språk og stil'
 ];
 
+function nlEnsureBankObStyles() {
+  if (document.getElementById('nl-ob-bank-css')) return;
+  var s = document.createElement('style');
+  s.id = 'nl-ob-bank-css';
+  s.textContent = [
+    '.nl-bank-scan{max-width:960px;margin:0 auto 1.2rem;padding:0 1rem}',
+    '.nl-bank-scan .ob-ai{background:linear-gradient(135deg,#f0f7f2 0%,#e8f3ec 100%);border:1.5px dashed #9fc4a8;border-radius:1rem;padding:1.1rem 1.2rem;text-align:center}',
+    '.nl-bank-scan .ob-ai-icon{font-size:1.6rem;margin-bottom:.2rem}',
+    '.nl-bank-scan .ob-ai h3{font-family:"Playfair Display",serif;font-size:1.05rem;margin:0 0 .2rem;color:var(--fg,var(--primary,#1A3D2B))}',
+    '.nl-bank-scan .ob-ai p{font-size:.88rem;color:#5a6a5e;margin:0;line-height:1.4}',
+    '.main .grp .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem}',
+    '.main .card[data-cat]{background:#fff;border:1px solid #dce6df;border-radius:.85rem;padding:1rem 1rem .85rem;transition:box-shadow .15s,transform .15s}',
+    '.main .card[data-cat]:hover{box-shadow:0 4px 14px rgba(26,61,43,.10);transform:translateY(-2px)}',
+    '.main .card[data-cat] .ch{background:transparent;border:none;padding:0;width:100%;text-align:left;cursor:pointer;display:block}',
+    '.main .card[data-cat] .cn{display:block;font-family:"Playfair Display",serif;font-size:1.05rem;font-weight:600;color:var(--fg,var(--primary,#1A3D2B));margin:0 0 .45rem}',
+    '.main .card[data-cat] .exc{display:inline-block;font-size:.72rem;padding:.18rem .5rem;border-radius:9px;font-weight:600;background:#e8f3ec;color:#1A7A50;margin:0 0 .45rem}',
+    '.main .card[data-cat] .cd{display:block;font-size:.78rem;color:#7a8a7e;line-height:1.4;margin:0 0 .65rem}',
+    '.main .card[data-cat] .nl-ob-actions{display:flex;gap:.45rem;flex-wrap:wrap;margin:0 0 .5rem}',
+    '.main .card[data-cat] .nl-ob-start-cat{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .7rem;border-radius:.5rem;font-size:.8rem;font-weight:600;border:1px solid var(--primary,#1A3D2B);background:var(--primary,#1A3D2B);color:#fff;cursor:pointer}',
+    '.main .card[data-cat] .nl-ob-start-cat:hover{background:#155a3a;border-color:#155a3a}',
+    '.main .card[data-cat] .exlist{margin-top:.25rem}',
+    '@media(max-width:600px){.main .grp .grid{grid-template-columns:1fr}}'
+  ].join('\n');
+  document.head.appendChild(s);
+}
+
 function nlEnsureBankShell() {
   var paused = document.querySelector('section[aria-labelledby="nl-bank-paused-title"]');
   if (paused && paused.parentNode) paused.parentNode.removeChild(paused);
@@ -441,7 +517,18 @@ function nlEnsureBankShell() {
       var exlist = document.createElement('div');
       exlist.className = 'exlist';
 
+      var actions = document.createElement('div');
+      actions.className = 'nl-ob-actions';
+
+      var startBtn = document.createElement('button');
+      startBtn.type = 'button';
+      startBtn.className = 'nl-ob-start-cat';
+      startBtn.setAttribute('data-cat', catId);
+      startBtn.textContent = '▶ Start øvelse';
+      actions.appendChild(startBtn);
+
       card.appendChild(header);
+      card.appendChild(actions);
       card.appendChild(exlist);
       grid.appendChild(card);
     });
@@ -4307,11 +4394,11 @@ function nlLevelUpModal(lvlIdx) {
       fw.appendChild(p);
     }
   }
-  /* Auto-dismiss after 2s */
+  /* Auto-dismiss after 5s */
   setTimeout(function() {
     overlay.classList.add('nl-lvl-fadeout');
     setTimeout(function() { overlay.hidden = true; overlay.classList.remove('nl-lvl-fadeout'); }, 500);
-  }, 1500);
+  }, 4500);
 }
 
 /* ── CONFETTI + BONUS XP ON SET COMPLETION ── */

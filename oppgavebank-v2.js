@@ -2476,6 +2476,23 @@ function mtAutosaveFlush() {
   mtDraftSet(MTS.current, el.value || '');
 }
 
+function mtFlashAutosaveBadge(el) {
+  if (!el) return;
+  var row = el.closest('.mt-input-row') || el.closest('.mt-omskriv');
+  if (!row) return;
+  var badge = row.querySelector('.mt-autosave-badge');
+  if (!badge) {
+    badge = document.createElement('span');
+    badge.className = 'mt-autosave-badge';
+    badge.textContent = 'Lagra \u2713';
+    row.style.position = 'relative';
+    row.insertBefore(badge, row.firstChild);
+  }
+  badge.classList.add('mt-show');
+  clearTimeout(badge._hideTimer);
+  badge._hideTimer = setTimeout(function() { badge.classList.remove('mt-show'); }, 1800);
+}
+
 function mtAutosaveBind(task) {
   mtAutosaveStop();
   if (!task) return;
@@ -2492,6 +2509,7 @@ function mtAutosaveBind(task) {
   var saveNow = function() {
     if (!MTS.active || MTS.answered) return;
     mtDraftSet(task, el.value || '');
+    mtFlashAutosaveBadge(el);
   };
 
   el.addEventListener('blur', saveNow);
@@ -3142,11 +3160,22 @@ function mtFxGlowHeaderStreak() {
   setTimeout(function () { pill.classList.remove('streak-glow'); }, 2200);
 }
 
-function mtFxLevelUpFlash() {
+function mtFxLevelUpFlash(lvlInfo) {
   var fx = document.createElement('div');
   fx.className = 'level-up-flash';
+  if (lvlInfo && lvlInfo.current) {
+    var inner = document.createElement('div');
+    inner.className = 'level-up-flash-inner';
+    inner.innerHTML = '<span class="level-up-flash-icon">' + (lvlInfo.current.icon || '\uD83C\uDF89') + '</span>' +
+      '<span class="level-up-flash-title">Nytt niv\u00e5!</span>' +
+      '<span class="level-up-flash-name">' + mtEsc(lvlInfo.current.name) + '</span>';
+    fx.appendChild(inner);
+  }
   document.body.appendChild(fx);
-  setTimeout(function () { fx.remove(); }, 1900);
+  setTimeout(function () {
+    fx.classList.add('level-up-flash-out');
+    setTimeout(function () { fx.remove(); }, 600);
+  }, 4400);
 }
 
 function mtFxModalConfetti() {
@@ -4441,7 +4470,7 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQu
       MTS._leveledUpLive = true;
       var masteryToggle = document.querySelector('.mt-live-mastery-toggle');
       if (masteryToggle) masteryToggle.open = true;
-      mtFxLevelUpFlash();
+      mtFxLevelUpFlash(curLvl);
       mtFxModalConfetti();
     }
   }
@@ -4609,7 +4638,7 @@ function mtShowSummary() {
   var streak = mtStreakRegister();
   mtUpdateHeaderProfile(newTotalXP, streak.current);
   if (leveledUp && !MTS._leveledUpLive) {
-    mtFxLevelUpFlash();
+    mtFxLevelUpFlash(newLvl);
     mtFxModalConfetti();
   }
 
@@ -4949,6 +4978,11 @@ function mtBindMcKeys() {
     '.mt-inp-correct { border-color:#1A7A50 !important; background:rgba(26,122,80,.06) !important; }',
     '.mt-inp-wrong { border-color:#C0392B !important; background:rgba(192,57,43,.06) !important; }',
     '.mt-inp-neutral { border-color:var(--accent,#e5822a) !important; }',
+
+    /* ─── Autosave indicator ─── */
+    '.mt-input-row { position:relative; }',
+    '.mt-autosave-badge { position:absolute; top:4px; right:10px; font-size:.72rem; color:#1A7A50; font-weight:600; opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:2; }',
+    '.mt-autosave-badge.mt-show { opacity:1; }',
 
     /* ─── Fillsel ─── */
     '.mt-fillsel { background:var(--bg,#f8f7f4); border-radius:8px; padding:.7rem .9rem; margin-top:.6rem; }',

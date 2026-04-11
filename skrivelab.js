@@ -262,10 +262,43 @@ function nlBoot() {
       if (!retryBtn || retryBtn.dataset.nlV2Bound === '1') return;
       retryBtn.dataset.nlV2Bound = '1';
       retryBtn.addEventListener('click', function() {
-        if (typeof window.mtStartFeillogg === 'function') {
-          window.mtStartFeillogg();
+        if (typeof window.mtStartFeillogg !== 'function') return;
+        /* Sjekk om det finst feil å øve på først */
+        var logg = (typeof window.mtFeilloggGet === 'function') ? window.mtFeilloggGet() : [];
+        if (!logg || !logg.length) {
+          alert('Ingen tidlegare feil å øve på enno.');
+          return;
         }
+        /* Skjul skrivelab-eige UI før vi opnar v2-modalen */
+        var mainEl = document.querySelector('.main');
+        var adaptivePanel = document.getElementById('nl-adaptive');
+        if (mainEl) mainEl.style.display = 'none';
+        if (adaptivePanel) adaptivePanel.style.display = 'none';
+        window.mtStartFeillogg();ar logg = (typeof window.mtFeilloggGet === 'function') ? window.mtFeilloggGet() : [];
+        if (!logg || !logg.length) {
+          alert('Ingen tidlegare feil å øve på enno.');
+          return;
+        }
+        /* Skjul skrivelab-eige UI før vi opnar v2-modalen */
+        var mainEl = document.querySelector('.main');
+        var adaptivePanel = document.getElementById('nl-adaptive');
+        if (mainEl) mainEl.style.display = 'none';
+        if (adaptivePanel) adaptivePanel.style.display = 'none';
+        window.mtStartFeillogg();
       });
+    });
+
+    /* Wrap mtAbort slik at skrivelab-UI kjem tilbake etter lukking */
+    nlSafeInit('wrap-v2-abort', function() {
+      var origAbort = window.mtAbort;
+      if (typeof origAbort !== 'function') return;
+      window.mtAbort = function() {
+        origAbort();
+        var mainEl = document.querySelector('.main');
+        var adaptivePanel = document.getElementById('nl-adaptive');
+        if (mainEl) mainEl.style.display = '';
+        if (adaptivePanel) adaptivePanel.style.display = '';
+      };
     });
   }
 
@@ -4638,11 +4671,11 @@ function nlLevelUpModal(lvlIdx) {
       fw.appendChild(p);
     }
   }
-  /* Auto-dismiss after 2s */
+  /* Auto-dismiss after 5s */
   setTimeout(function() {
     overlay.classList.add('nl-lvl-fadeout');
     setTimeout(function() { overlay.hidden = true; overlay.classList.remove('nl-lvl-fadeout'); }, 500);
-  }, 1500);
+  }, 4500);
 }
 
 /* ── CONFETTI + BONUS XP ON SET COMPLETION ── */

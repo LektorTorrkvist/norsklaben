@@ -137,6 +137,42 @@
   </div>
 </div>
 <div class="ob-toast" id="ob-toast"></div>
+
+<div class="adp-win" id="nl-ad-win" hidden>
+  <div class="adp-win-bg" id="nl-ad-win-bg"></div>
+  <div class="adp-win-card" role="dialog" aria-modal="true" aria-labelledby="nl-ad-win-title">
+    <div class="adp-win-head">
+      <h3 id="nl-ad-win-title">Skrivemesteren - manuell modus</h3>
+      <button class="adp-win-close" id="nl-ad-win-close" aria-label="Lukk økta">Lukk</button>
+    </div>
+
+    <div class="adp-win-body" id="nl-ad-win-body"></div>
+
+    <section class="adp-summary" id="nl-ad-summary" hidden aria-live="polite">
+      <div class="adp-summary-medal" id="nl-ad-sum-medal"></div>
+      <h4 id="nl-ad-sum-heading">Økt fullført!</h4>
+      <div class="adp-summary-comment" id="nl-ad-sum-comment"></div>
+      <div class="adp-summary-grid">
+        <div class="adp-summary-kpi"><span class="adp-summary-lbl">Poeng</span><strong id="nl-ad-sum-poeng">0/0</strong></div>
+        <div class="adp-summary-kpi kpi-xp"><span class="adp-summary-lbl">XP i økta</span><strong id="nl-ad-sum-xp">+0</strong></div>
+        <div class="adp-summary-kpi kpi-ok"><span class="adp-summary-lbl">Rette</span><strong id="nl-ad-sum-rette">0</strong></div>
+        <div class="adp-summary-kpi kpi-err"><span class="adp-summary-lbl">Feil</span><strong id="nl-ad-sum-feil">0</strong></div>
+      </div>
+      <div class="adp-summary-strengths" id="nl-ad-sum-strengths"></div>
+      <div class="adp-summary-corrections" id="nl-ad-sum-retting"></div>
+      <div class="adp-summary-actions">
+        <button class="adp-btn adp-btn-pri" id="nl-ad-sum-new">Start ny økt</button>
+        <button class="adp-btn" id="nl-ad-sum-close">Lukk</button>
+      </div>
+    </section>
+
+    <div class="adp-run-actions" id="nl-ad-actions">
+      <button class="adp-btn" id="nl-ad-check">Sjekk svar</button>
+      <button class="adp-btn adp-btn-pri" id="nl-ad-next">Neste oppgave →</button>
+    </div>
+  </div>
+</div>
+
 <footer></footer>
 <script src="oppgavebank-bm-v2.js"></script>
 <script src="nav.js"></script>
