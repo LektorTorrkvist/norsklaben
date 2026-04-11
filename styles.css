@@ -4131,6 +4131,18 @@ footer strong { color: rgba(255,255,255,.8); }
   .grid { grid-template-columns: 1fr; }
   .cols { grid-template-columns: 1fr; }
   .lab-cards { padding: 2rem 1.25rem; }
+  .index-ob-note {
+    padding: 0 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .index-ob-note-inner {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+    gap: .65rem;
+  }
+  .index-ob-note-btn {
+    width: 100%;
+  }
   .how { padding: 2rem 1.25rem; }
   .sort-buckets { grid-template-columns: repeat(2, 1fr); }
   .burger-buckets { grid-template-columns: 1fr; }

@@ -2493,7 +2493,11 @@ var MTS = {
 
   showRule: false,
   selectedCats: [],
-  active: false
+  active: false,
+
+  /* autosave for langsvar */
+  _autosaveTimer: null,
+  _autosaveKey: ''
 };
 
 /* ─── HJELPEFUNKSJONER ───────────────────────────── */
@@ -2619,6 +2623,137 @@ function mtLsCatStats(kat) {
   });
   var total = rett + feil;
   return { rett: rett, feil: feil, total: total, pct: total > 0 ? Math.round(rett / total * 100) : -1 };
+}
+
+function mtDraftTaskKey(task) {
+  if (!task) return '';
+  return [
+    'draft',
+    String(task.kat || ''),
+    String(task.type || ''),
+    String(task.q || task.sporsmal || ''),
+    String(task.tekst || ''),
+    String(task.instruksjon || '')
+  ].join('|');
+}
+
+function mtDraftGet(task) {
+  var key = mtDraftTaskKey(task);
+  if (!key) return '';
+  var data = mtLsGet();
+  var drafts = (data && data.drafts && typeof data.drafts === 'object') ? data.drafts : null;
+  if (!drafts || !drafts[key]) return '';
+  var entry = drafts[key];
+  if (typeof entry === 'string') return entry;
+  if (entry && typeof entry.text === 'string') return entry.text;
+  return '';
+}
+
+function mtDraftSet(task, text) {
+  var key = mtDraftTaskKey(task);
+  if (!key) return;
+  var data = mtLsGet();
+  if (!data.drafts || typeof data.drafts !== 'object' || Array.isArray(data.drafts)) data.drafts = {};
+
+  var raw = String(text || '');
+  if (!raw.trim()) {
+    delete data.drafts[key];
+    mtLsSet(data);
+    return;
+  }
+
+  data.drafts[key] = { text: raw, updatedAt: new Date().toISOString() };
+
+  var keys = Object.keys(data.drafts);
+  if (keys.length > 200) {
+    keys.sort(function(a, b) {
+      var ta = Date.parse((data.drafts[a] && data.drafts[a].updatedAt) || 0) || 0;
+      var tb = Date.parse((data.drafts[b] && data.drafts[b].updatedAt) || 0) || 0;
+      return ta - tb;
+    });
+    var overflow = keys.length - 200;
+    for (var i = 0; i < overflow; i++) delete data.drafts[keys[i]];
+  }
+
+  mtLsSet(data);
+}
+
+function mtAutosaveStop() {
+  if (MTS._autosaveTimer) {
+    clearInterval(MTS._autosaveTimer);
+    MTS._autosaveTimer = null;
+  }
+  MTS._autosaveKey = '';
+}
+
+function mtAutosaveFlush() {
+  if (!MTS.current || MTS.answered) return;
+  var el = $mt('mt-open-inp') || $mt('mt-omskriv-inp');
+  if (!el || el.disabled) return;
+  mtDraftSet(MTS.current, el.value || '');
+}
+
+function mtAutosaveBind(task) {
+  mtAutosaveStop();
+  if (!task) return;
+  if (task.type !== 'open' && task.type !== 'omskriv') return;
+
+  var el = $mt('mt-open-inp') || $mt('mt-omskriv-inp');
+  if (!el) return;
+
+  var draft = mtDraftGet(task);
+  if (draft && !String(el.value || '').trim()) {
+    el.value = draft;
+  }
+
+  var saveNow = function() {
+    if (!MTS.active || MTS.answered) return;
+    mtDraftSet(task, el.value || '');
+  };
+
+  el.addEventListener('blur', saveNow);
+  MTS._autosaveTimer = setInterval(saveNow, 15000);
+  MTS._autosaveKey = mtDraftTaskKey(task);
+}
+
+function mtCopyLongAnswer(btn) {
+  var el = $mt('mt-open-inp') || $mt('mt-omskriv-inp');
+  if (!el) return;
+  var text = String(el.value || '');
+  if (!text.trim()) {
+    if (btn) {
+      var oldEmpty = btn.textContent;
+      btn.textContent = 'Ingen tekst';
+      setTimeout(function () { btn.textContent = oldEmpty; }, 1200);
+    }
+    return;
+  }
+
+  function onCopied() {
+    if (!btn) return;
+    var old = btn.textContent;
+    btn.textContent = 'Kopiert';
+    setTimeout(function () { btn.textContent = old; }, 1200);
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(onCopied).catch(function () {
+      try {
+        el.focus();
+        el.select();
+        document.execCommand('copy');
+        onCopied();
+      } catch (e) {}
+    });
+    return;
+  }
+
+  try {
+    el.focus();
+    el.select();
+    document.execCommand('copy');
+    onCopied();
+  } catch (e) {}
 }
 
 /* ─── XP / NIVÅ ──────────────────────────────────── */
@@ -2906,6 +3041,7 @@ function mtResetSessionState(opts) {
   MTS.selectedCats = Array.isArray(cfg.selectedCats) ? cfg.selectedCats.slice() : [];
   MTS.active = true;
   MTS.showRule = false;
+  mtAutosaveStop();
   MTS.sessionXP = 0;
   MTS.baseXP = mtXpGetTotal();
   MTS._leveledUpLive = false;
@@ -3069,6 +3205,8 @@ function mtStartManualQueue(taskIndexes, startIndex) {
 }
 
 function mtAbort() {
+  mtAutosaveFlush();
+  mtAutosaveStop();
   MTS.active = false;
   MTS.pool = [];
   var win = $mt('nl-ad-win');
@@ -3461,6 +3599,7 @@ function mtRenderTask(t, isRetry) {
   if (t.type === 'mc') mtBindMcKeys();
 
   mtBindTouchDragTokens(t.type);
+  mtAutosaveBind(t);
 
   mtUpdateProgress();
 }
@@ -3664,6 +3803,7 @@ function mtBuildInput(t) {
   case 'open':
     return '<div class="mt-input-row">' +
       '<textarea id="mt-open-inp" class="mt-text-input mt-textarea" rows="3" spellcheck="false" placeholder="Skriv svaret ditt her\u2026"></textarea>' +
+      '<button type="button" class="mt-btn-secondary" onclick="mtCopyLongAnswer(this)">&#128203; Kopier tekst</button>' +
       '</div>';
 
   case 'fix':
@@ -3790,6 +3930,7 @@ function mtBuildInput(t) {
       '<div class="mt-context-text">' + mtEsc(t.tekst) + '</div>' +
       '<p class="mt-instruction">' + mtEsc(t.instruksjon || 'Skriv om teksten.') + '</p>' +
       '<textarea id="mt-omskriv-inp" class="mt-text-input mt-textarea" rows="4" spellcheck="false" placeholder="Skriv omskrivingen din her\u2026"></textarea>' +
+      '<button type="button" class="mt-btn-secondary" onclick="mtCopyLongAnswer(this)">&#128203; Kopier tekst</button>' +
       '</div>';
 
   case 'sorter_rekke': {
@@ -3947,6 +4088,8 @@ function mtCheckOpen() {
   MTS.answered = true;
   var t = MTS.current;
   el.disabled = true;
+  mtDraftSet(t, '');
+  mtAutosaveStop();
 
   /* Gibberish-sjekk → 0 XP */
   if (mtIsGibberish(val)) {
@@ -4270,6 +4413,8 @@ function mtCheckOmskriv() {
   MTS.answered = true;
   var t = MTS.current;
   el.disabled = true;
+  mtDraftSet(t, '');
+  mtAutosaveStop();
   var lower = val.toLowerCase();
   var ok = true;
   var missing = [];
@@ -4523,6 +4668,7 @@ function mtNext() {
 ══════════════════════════════════════════════════════ */
 
 function mtShowSummary() {
+  mtAutosaveStop();
   MTS.active = false;
 
   /* Lagre XP til localStorage */

@@ -364,6 +364,22 @@
     var sc = document.getElementById('score-' + id);
     if (sc) { sc.textContent = ''; sc.style.color = ''; sc.classList.remove('ok', 'err'); }
   }
+
+  (function() {
+    var catsEl = document.getElementById('nl-stat-categories');
+    var tasksEl = document.getElementById('nl-stat-tasks');
+    if (!catsEl || !tasksEl) return;
+    if (typeof BANKV2 === 'undefined' || !Array.isArray(BANKV2) || !BANKV2.length) return;
+
+    var catMap = {};
+    BANKV2.forEach(function(t) {
+      if (!t || !t.kat) return;
+      catMap[String(t.kat)] = true;
+    });
+
+    catsEl.textContent = String(Object.keys(catMap).length);
+    tasksEl.textContent = String(BANKV2.length);
+  })();
   </script>
 
 </body>
