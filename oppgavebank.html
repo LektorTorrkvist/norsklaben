@@ -361,8 +361,16 @@
   function buildTaskListHtml(kat, tasks) {
     if (!Array.isArray(tasks) || !tasks.length) return '';
     var items = tasks.map(function(t, i) {
-      var q = String((t && (t.q || t.sporsmal || t.tekst)) || ('Oppgåve ' + (i + 1))).replace(/\s+/g, ' ').trim();
-      q = q.replace(/^(?:\d+[\.)]\s*)+/, '');
+      var raw = String((t && (t.q || t.sporsmal || t.tekst)) || ('Oppgåve ' + (i + 1)));
+      var q = raw
+        .split(/\r?\n+/)
+        .map(function(line) {
+          return String(line).replace(/^\s*(?:\d+[\.)]\s*)+/, '').trim();
+        })
+        .filter(Boolean)
+        .join(' ')
+        .replace(/\s+/g, ' ')
+        .trim();
       if (q.length > 135) q = q.slice(0, 132) + '...';
       return '<li class="ob-task-item"><button type="button" class="ob-task-link" data-kat="' + esc(kat) + '">' + esc((i + 1) + '. ' + q) + '</button></li>';
     }).join('');

@@ -1930,22 +1930,6 @@ var BANKV2 = [
  eks:'tingen → poenget / utfordringen / årsaken'},
 
 {kat:'ordval',kat_label:'Ordvalg og presisjon',type:'mc',vanske:'medium',
-
-{kat:'djupneoppgaver',kat_label:'Langsvar og refleksjonsoppgaver',type:'open',vanske:'vanskeleg',
- q:'Skriv et reflekterende avsnitt (10-30 min): Hvordan påvirker sosiale medier måten ungdom leser og skriver på?',
- hint:'Ta med minst ett konkret eksempel, ett motargument og en kort avslutning.',
- regel:'Bygg resonnering med tydelig påstand, begrunnelse og nyansering. Bruk fagbegreper og presise overganger.',
- eksempel_svak:'Sosiale medier er både bra og dårlig. Mange bruker det mye. Det påvirker skriving.',
- eksempel_god:'Sosiale medier effektiviserer kommunikasjon, men belønner ofte korte og raske ytringer. For elever kan det styrke kreativitet i idéfasen, samtidig som dyp lesing blir utfordret. En bevisst veksling mellom raske og langsomme skriveformer kan derfor gi bedre læringsutbytte.',
- eks:'Start med en tydelig hovedpåstand, bruk eksempler fra hverdagen, og avslutt med en faglig vurdering.'},
-
-{kat:'djupneoppgaver',kat_label:'Langsvar og refleksjonsoppgaver',type:'open',vanske:'vanskeleg',
- q:'Skriv et drøftende miniinnlegg (10-30 min): Bør kunstig intelligens være tillatt i norsk skriftlig arbeid?',
- hint:'Presenter to tydelige argumenter for og to mot, og ta stilling til slutt.',
- regel:'En god drøfting viser flere perspektiver før konklusjon. Bruk koblingsord som «på den ene siden», «samtidig» og «derfor».',
- eksempel_svak:'KI kan være bra, men også litt dumt. Jeg synes det kommer an på.',
- eksempel_god:'På den ene siden kan KI støtte elever i idéutvikling og struktur, særlig i tidlig skrivefase. Samtidig kan ukritisk bruk svekke egen språkmestring og kildekritikk. Derfor bør KI være tillatt som støtteverktøy, men med krav om åpen bruk og tydelig elevansvar.',
- eks:'Gjør argumentene konkrete med eksempler fra skolearbeid og skriv en tydelig konklusjon.'},
  q:'Hva betyr «å drøfte» i en oppgavetekst?',
  alt:['Bare beskrive noe','Se på flere sider, veie argumenter og ta stilling','Gi et kort svar','Skrive en personlig mening uten begrunnelse'],
  fasit:'Se på flere sider, veie argumenter og ta stilling',
@@ -2012,6 +1996,22 @@ var BANKV2 = [
  maa_ikkje_ha:['greier','liksom','folk sier'],
  regel:'Fagspråk: konkrete ord, kildefestede tall og objektive formuleringer.',
  eks:'«greier» → «faktorer som skjermtid» · «liksom» → fjern · «folk sier» → «forskning viser»'},
+
+{kat:'djupneoppgaver',kat_label:'Langsvar og refleksjonsoppgaver',type:'open',vanske:'vanskeleg',
+ q:'Skriv et reflekterende avsnitt (10-30 min): Hvordan påvirker sosiale medier måten ungdom leser og skriver på?',
+ hint:'Ta med minst ett konkret eksempel, ett motargument og en kort avslutning.',
+ regel:'Bygg resonnering med tydelig påstand, begrunnelse og nyansering. Bruk fagbegreper og presise overganger.',
+ eksempel_svak:'Sosiale medier er både bra og dårlig. Mange bruker det mye. Det påvirker skriving.',
+ eksempel_god:'Sosiale medier effektiviserer kommunikasjon, men belønner ofte korte og raske ytringer. For elever kan det styrke kreativitet i idéfasen, samtidig som dyp lesing blir utfordret. En bevisst veksling mellom raske og langsomme skriveformer kan derfor gi bedre læringsutbytte.',
+ eks:'Start med en tydelig hovedpåstand, bruk eksempler fra hverdagen, og avslutt med en faglig vurdering.'},
+
+{kat:'djupneoppgaver',kat_label:'Langsvar og refleksjonsoppgaver',type:'open',vanske:'vanskeleg',
+ q:'Skriv et drøftende miniinnlegg (10-30 min): Bør kunstig intelligens være tillatt i norsk skriftlig arbeid?',
+ hint:'Presenter to tydelige argumenter for og to mot, og ta stilling til slutt.',
+ regel:'En god drøfting viser flere perspektiver før konklusjon. Bruk koblingsord som «på den ene siden», «samtidig» og «derfor».',
+ eksempel_svak:'KI kan være bra, men også litt dumt. Jeg synes det kommer an på.',
+ eksempel_god:'På den ene siden kan KI støtte elever i idéutvikling og struktur, særlig i tidlig skrivefase. Samtidig kan ukritisk bruk svekke egen språkmestring og kildekritikk. Derfor bør KI være tillatt som støtteverktøy, men med krav om åpen bruk og tydelig elevansvar.',
+ eks:'Gjør argumentene konkrete med eksempler fra skolearbeid og skriv en tydelig konklusjon.'},
 
 /* ═══════════════════════════════════════════════════
    25. BRUKE EKSEMPLER  (8 oppgaver, kun BM)
@@ -2903,10 +2903,12 @@ function mtOpenSessionUi() {
   var summary = $mt('nl-ad-summary');
   var body = $mt('nl-ad-win-body');
   var actions = $mt('nl-ad-actions');
+  var card = win ? win.querySelector('.adp-win-card') : null;
   if (win) win.hidden = false;
   if (summary) summary.hidden = true;
   if (body) body.innerHTML = '';
   if (actions) actions.style.display = 'flex';
+  if (card) card.classList.toggle('mt-manual-mode', !!MTS.manualMode);
   mtUpdateWindowHeader();
 }
 
@@ -3439,7 +3441,167 @@ function mtRenderTask(t, isRetry) {
 
   if (t.type === 'mc') mtBindMcKeys();
 
+  mtBindTouchDragTokens(t.type);
+
   mtUpdateProgress();
+}
+
+var _mtTouchDrag = null;
+function mtTouchPoint(ev) {
+  if (!ev) return null;
+  var t = (ev.touches && ev.touches[0]) || (ev.changedTouches && ev.changedTouches[0]);
+  if (!t) return null;
+  return { x: t.clientX, y: t.clientY };
+}
+
+function mtTouchDropSelector(kind) {
+  if (kind === 'dk') return '#mt-dk-bank, .mt-dk-placed';
+  if (kind === 'bs') return '#mt-bs-bank, .mt-bs-placed';
+  if (kind === 'sr') return '#mt-sr-list, #mt-sr-list .mt-sr-token';
+  return '';
+}
+
+function mtBindTouchDragTokens(taskType) {
+  var type = String(taskType || '').toLowerCase();
+  if (type === 'drag_kolonne') {
+    document.querySelectorAll('.mt-dk-token').forEach(function(el) { mtAttachTouchDragToken(el, 'dk'); });
+    return;
+  }
+  if (type === 'burger_sort') {
+    document.querySelectorAll('.mt-bs-token').forEach(function(el) { mtAttachTouchDragToken(el, 'bs'); });
+    return;
+  }
+  if (type === 'sorter_rekke') {
+    document.querySelectorAll('.mt-sr-token').forEach(function(el) { mtAttachTouchDragToken(el, 'sr'); });
+  }
+}
+
+function mtAttachTouchDragToken(el, kind) {
+  if (!el || el.dataset.mtTouchBound === '1') return;
+  el.dataset.mtTouchBound = '1';
+  el.style.touchAction = 'none';
+
+  el.addEventListener('touchstart', function(ev) {
+    if (MTS.answered) return;
+    var p = mtTouchPoint(ev);
+    if (!p) return;
+    _mtTouchDrag = {
+      kind: kind,
+      el: el,
+      startX: p.x,
+      startY: p.y,
+      active: false,
+      target: null,
+      ghost: null
+    };
+  }, { passive: true });
+
+  el.addEventListener('touchmove', function(ev) {
+    if (!_mtTouchDrag || _mtTouchDrag.el !== el) return;
+    var p = mtTouchPoint(ev);
+    if (!p) return;
+
+    var dx = p.x - _mtTouchDrag.startX;
+    var dy = p.y - _mtTouchDrag.startY;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (!_mtTouchDrag.active && dist < 8) return;
+
+    if (!_mtTouchDrag.active) {
+      _mtTouchDrag.active = true;
+      el.classList.add('dragging');
+      var g = el.cloneNode(true);
+      g.style.cssText = 'position:fixed;left:0;top:0;transform:translate(-50%,-50%);pointer-events:none;opacity:.88;z-index:9999;max-width:90vw';
+      document.body.appendChild(g);
+      _mtTouchDrag.ghost = g;
+    }
+
+    ev.preventDefault();
+
+    if (_mtTouchDrag.ghost) {
+      _mtTouchDrag.ghost.style.left = p.x + 'px';
+      _mtTouchDrag.ghost.style.top = p.y + 'px';
+    }
+
+    var hit = document.elementFromPoint(p.x, p.y);
+    var selector = mtTouchDropSelector(kind);
+    var target = hit && selector ? hit.closest(selector) : null;
+
+    if (kind === 'sr' && target === el) target = null;
+
+    if (target !== _mtTouchDrag.target) {
+      if (_mtTouchDrag.target) _mtTouchDrag.target.classList.remove('drag-over');
+      _mtTouchDrag.target = target;
+      if (_mtTouchDrag.target) _mtTouchDrag.target.classList.add('drag-over');
+    }
+  }, { passive: false });
+
+  el.addEventListener('touchend', function(ev) {
+    if (!_mtTouchDrag || _mtTouchDrag.el !== el) return;
+    if (_mtTouchDrag.active) {
+      ev.preventDefault();
+      mtTouchApplyDrop(el, kind, _mtTouchDrag.target);
+      el.dataset.mtTouchDragged = '1';
+      setTimeout(function() { el.dataset.mtTouchDragged = ''; }, 60);
+    }
+    mtTouchCleanup();
+  }, { passive: false });
+
+  el.addEventListener('touchcancel', function() {
+    if (_mtTouchDrag && _mtTouchDrag.el === el) mtTouchCleanup();
+  }, { passive: true });
+}
+
+function mtTouchApplyDrop(el, kind, target) {
+  if (!el || !target) return;
+
+  if (kind === 'dk') {
+    if (target.id === 'mt-dk-bank') {
+      target.appendChild(el);
+      el.setAttribute('data-placed', '-1');
+      return;
+    }
+    if (target.classList.contains('mt-dk-placed')) {
+      target.appendChild(el);
+      var id = target.id || '';
+      var ci = id.replace('mt-dk-placed-', '');
+      el.setAttribute('data-placed', String(ci));
+    }
+    return;
+  }
+
+  if (kind === 'bs') {
+    if (target.id === 'mt-bs-bank') {
+      target.appendChild(el);
+      el.setAttribute('data-placed', '-1');
+      return;
+    }
+    if (target.classList.contains('mt-bs-placed')) {
+      target.appendChild(el);
+      var id = target.id || '';
+      var bi = id.replace('mt-bs-placed-', '');
+      el.setAttribute('data-placed', String(bi));
+    }
+    return;
+  }
+
+  if (kind === 'sr') {
+    var list = document.getElementById('mt-sr-list');
+    if (!list) return;
+    if (target.classList.contains('mt-sr-token')) {
+      list.insertBefore(el, target);
+    } else {
+      list.appendChild(el);
+    }
+  }
+}
+
+function mtTouchCleanup() {
+  if (!_mtTouchDrag) return;
+  if (_mtTouchDrag.target) _mtTouchDrag.target.classList.remove('drag-over');
+  if (_mtTouchDrag.ghost && _mtTouchDrag.ghost.parentNode) _mtTouchDrag.ghost.parentNode.removeChild(_mtTouchDrag.ghost);
+  if (_mtTouchDrag.el) _mtTouchDrag.el.classList.remove('dragging');
+  _mtTouchDrag = null;
 }
 
 /* ─── Bygg input-HTML per type ─────────────────── */
@@ -3898,6 +4060,7 @@ var _dkDrag = -1;
 function mtDkDragStart(ev, idx) { _dkDrag = idx; ev.dataTransfer.effectAllowed = 'move'; }
 function mtDkMove(el) {
   if (MTS.answered) return;
+  if (el && el.dataset && el.dataset.mtTouchDragged === '1') return;
   var p = parseInt(el.getAttribute('data-placed'), 10);
   if (p === -1) { var c = document.getElementById('mt-dk-placed-0'); if (c) { c.appendChild(el); el.setAttribute('data-placed', '0'); } }
   else if (p === 0) { var c = document.getElementById('mt-dk-placed-1'); if (c) { c.appendChild(el); el.setAttribute('data-placed', '1'); } }
@@ -3975,6 +4138,7 @@ var _bsDrag = -1;
 function mtBsDragStart(ev, idx) { _bsDrag = idx; ev.dataTransfer.effectAllowed = 'move'; }
 function mtBsClick(el) {
   if (MTS.answered) return;
+  if (el && el.dataset && el.dataset.mtTouchDragged === '1') return;
   var t = MTS.current;
   var p = parseInt(el.getAttribute('data-placed'), 10);
   var nB = (t.lag || []).length;
@@ -4115,6 +4279,7 @@ var _srDrag = -1;
 function mtSrDragStart(ev, idx) { _srDrag = idx; ev.dataTransfer.effectAllowed = 'move'; }
 function mtSrClick(el) {
   if (MTS.answered) return;
+  if (el && el.dataset && el.dataset.mtTouchDragged === '1') return;
   var list = document.getElementById('mt-sr-list');
   if (!list) return;
   if (el.nextSibling) list.insertBefore(el.nextSibling, el);
@@ -4224,6 +4389,10 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQu
     earnedXP += fagBonus;
   }
 
+  if ((!!forceQualitativeMode || !!isOpenType) && t && t.kat === 'djupneoppgaver' && elapsed >= 600000) {
+    earnedXP += 75;
+  }
+
   MTS.sessionXP += earnedXP;
 
   if (correct && earnedXP > 0) {
@@ -4245,10 +4414,6 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQu
   fb.className = 'mt-feedback ' + cls;
   var html = '';
   var qualitativeMode = !!forceQualitativeMode || !!isOpenType;
-
-  if (qualitativeMode && t && t.kat === 'djupneoppgaver' && elapsed >= 600000) {
-    earnedXP += 75;
-  }
 
   if (qualitativeMode) {
     html += '<div class="mt-fb-heading">&#128221; Faglig tilbakemelding</div>';

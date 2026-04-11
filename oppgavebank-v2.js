@@ -3253,7 +3253,167 @@ function mtRenderTask(t, isRetry) {
   /* Tastaturnavigering for mc */
   if (t.type === 'mc') mtBindMcKeys();
 
+  mtBindTouchDragTokens(t.type);
+
   mtUpdateProgress();
+}
+
+var _mtTouchDrag = null;
+function mtTouchPoint(ev) {
+  if (!ev) return null;
+  var t = (ev.touches && ev.touches[0]) || (ev.changedTouches && ev.changedTouches[0]);
+  if (!t) return null;
+  return { x: t.clientX, y: t.clientY };
+}
+
+function mtTouchDropSelector(kind) {
+  if (kind === 'dk') return '#mt-dk-bank, .mt-dk-placed';
+  if (kind === 'bs') return '#mt-bs-bank, .mt-bs-placed';
+  if (kind === 'sr') return '#mt-sr-list, #mt-sr-list .mt-sr-token';
+  return '';
+}
+
+function mtBindTouchDragTokens(taskType) {
+  var type = String(taskType || '').toLowerCase();
+  if (type === 'drag_kolonne') {
+    document.querySelectorAll('.mt-dk-token').forEach(function(el) { mtAttachTouchDragToken(el, 'dk'); });
+    return;
+  }
+  if (type === 'burger_sort') {
+    document.querySelectorAll('.mt-bs-token').forEach(function(el) { mtAttachTouchDragToken(el, 'bs'); });
+    return;
+  }
+  if (type === 'sorter_rekke') {
+    document.querySelectorAll('.mt-sr-token').forEach(function(el) { mtAttachTouchDragToken(el, 'sr'); });
+  }
+}
+
+function mtAttachTouchDragToken(el, kind) {
+  if (!el || el.dataset.mtTouchBound === '1') return;
+  el.dataset.mtTouchBound = '1';
+  el.style.touchAction = 'none';
+
+  el.addEventListener('touchstart', function(ev) {
+    if (MTS.answered) return;
+    var p = mtTouchPoint(ev);
+    if (!p) return;
+    _mtTouchDrag = {
+      kind: kind,
+      el: el,
+      startX: p.x,
+      startY: p.y,
+      active: false,
+      target: null,
+      ghost: null
+    };
+  }, { passive: true });
+
+  el.addEventListener('touchmove', function(ev) {
+    if (!_mtTouchDrag || _mtTouchDrag.el !== el) return;
+    var p = mtTouchPoint(ev);
+    if (!p) return;
+
+    var dx = p.x - _mtTouchDrag.startX;
+    var dy = p.y - _mtTouchDrag.startY;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (!_mtTouchDrag.active && dist < 8) return;
+
+    if (!_mtTouchDrag.active) {
+      _mtTouchDrag.active = true;
+      el.classList.add('dragging');
+      var g = el.cloneNode(true);
+      g.style.cssText = 'position:fixed;left:0;top:0;transform:translate(-50%,-50%);pointer-events:none;opacity:.88;z-index:9999;max-width:90vw';
+      document.body.appendChild(g);
+      _mtTouchDrag.ghost = g;
+    }
+
+    ev.preventDefault();
+
+    if (_mtTouchDrag.ghost) {
+      _mtTouchDrag.ghost.style.left = p.x + 'px';
+      _mtTouchDrag.ghost.style.top = p.y + 'px';
+    }
+
+    var hit = document.elementFromPoint(p.x, p.y);
+    var selector = mtTouchDropSelector(kind);
+    var target = hit && selector ? hit.closest(selector) : null;
+
+    if (kind === 'sr' && target === el) target = null;
+
+    if (target !== _mtTouchDrag.target) {
+      if (_mtTouchDrag.target) _mtTouchDrag.target.classList.remove('drag-over');
+      _mtTouchDrag.target = target;
+      if (_mtTouchDrag.target) _mtTouchDrag.target.classList.add('drag-over');
+    }
+  }, { passive: false });
+
+  el.addEventListener('touchend', function(ev) {
+    if (!_mtTouchDrag || _mtTouchDrag.el !== el) return;
+    if (_mtTouchDrag.active) {
+      ev.preventDefault();
+      mtTouchApplyDrop(el, kind, _mtTouchDrag.target);
+      el.dataset.mtTouchDragged = '1';
+      setTimeout(function() { el.dataset.mtTouchDragged = ''; }, 60);
+    }
+    mtTouchCleanup();
+  }, { passive: false });
+
+  el.addEventListener('touchcancel', function() {
+    if (_mtTouchDrag && _mtTouchDrag.el === el) mtTouchCleanup();
+  }, { passive: true });
+}
+
+function mtTouchApplyDrop(el, kind, target) {
+  if (!el || !target) return;
+
+  if (kind === 'dk') {
+    if (target.id === 'mt-dk-bank') {
+      target.appendChild(el);
+      el.setAttribute('data-placed', '-1');
+      return;
+    }
+    if (target.classList.contains('mt-dk-placed')) {
+      target.appendChild(el);
+      var id = target.id || '';
+      var ci = id.replace('mt-dk-placed-', '');
+      el.setAttribute('data-placed', String(ci));
+    }
+    return;
+  }
+
+  if (kind === 'bs') {
+    if (target.id === 'mt-bs-bank') {
+      target.appendChild(el);
+      el.setAttribute('data-placed', '-1');
+      return;
+    }
+    if (target.classList.contains('mt-bs-placed')) {
+      target.appendChild(el);
+      var id = target.id || '';
+      var bi = id.replace('mt-bs-placed-', '');
+      el.setAttribute('data-placed', String(bi));
+    }
+    return;
+  }
+
+  if (kind === 'sr') {
+    var list = document.getElementById('mt-sr-list');
+    if (!list) return;
+    if (target.classList.contains('mt-sr-token')) {
+      list.insertBefore(el, target);
+    } else {
+      list.appendChild(el);
+    }
+  }
+}
+
+function mtTouchCleanup() {
+  if (!_mtTouchDrag) return;
+  if (_mtTouchDrag.target) _mtTouchDrag.target.classList.remove('drag-over');
+  if (_mtTouchDrag.ghost && _mtTouchDrag.ghost.parentNode) _mtTouchDrag.ghost.parentNode.removeChild(_mtTouchDrag.ghost);
+  if (_mtTouchDrag.el) _mtTouchDrag.el.classList.remove('dragging');
+  _mtTouchDrag = null;
 }
 
 /* ─── Bygg input-HTML per type ─────────────────── */
@@ -3742,6 +3902,7 @@ var _dkDrag = -1;
 function mtDkDragStart(ev, idx) { _dkDrag = idx; ev.dataTransfer.effectAllowed = 'move'; }
 function mtDkMove(el) {
   if (MTS.answered) return;
+  if (el && el.dataset && el.dataset.mtTouchDragged === '1') return;
   var colCount = 0;
   if (MTS.current && Array.isArray(MTS.current.kolonner) && MTS.current.kolonner.length) colCount = MTS.current.kolonner.length;
   if (!colCount) colCount = document.querySelectorAll('.mt-dk-col').length;
@@ -3837,6 +3998,7 @@ var _bsDrag = -1;
 function mtBsDragStart(ev, idx) { _bsDrag = idx; ev.dataTransfer.effectAllowed = 'move'; }
 function mtBsClick(el) {
   if (MTS.answered) return;
+  if (el && el.dataset && el.dataset.mtTouchDragged === '1') return;
   var t = MTS.current;
   var p = parseInt(el.getAttribute('data-placed'), 10);
   var nB = (t.lag || []).length;
@@ -3985,6 +4147,7 @@ var _srDrag = -1;
 function mtSrDragStart(ev, idx) { _srDrag = idx; ev.dataTransfer.effectAllowed = 'move'; }
 function mtSrClick(el) {
   if (MTS.answered) return;
+  if (el && el.dataset && el.dataset.mtTouchDragged === '1') return;
   var list = document.getElementById('mt-sr-list');
   if (!list) return;
   /* Flytt til neste posisjon (roter nedover) */

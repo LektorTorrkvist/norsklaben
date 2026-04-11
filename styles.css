@@ -4017,6 +4017,22 @@ footer strong { color: rgba(255,255,255,.8); }
 /* ─── UTILITIES ─── */
 .hidden { display: none !important; }
 
+/* Better touch drag behavior on mobile/iPad for drag-based tasks */
+.mt-dk-token,
+.mt-bs-token,
+.mt-sr-token,
+.mt-do-token,
+.drag-ord-token,
+.drag-ord-picked,
+.sort-chip,
+.burger-chip,
+.rank-item {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
 /* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
   .adp { padding: 0 1.25rem; }
