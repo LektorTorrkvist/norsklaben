@@ -2706,10 +2706,12 @@ function mtOpenSessionUi() {
   var summary = $mt('nl-ad-summary');
   var body = $mt('nl-ad-win-body');
   var actions = $mt('nl-ad-actions');
+  var card = win ? win.querySelector('.adp-win-card') : null;
   if (win) win.hidden = false;
   if (summary) summary.hidden = true;
   if (body) body.innerHTML = '';
   if (actions) actions.style.display = 'flex';
+  if (card) card.classList.toggle('mt-manual-mode', !!MTS.manualMode);
   mtUpdateWindowHeader();
 }
 

@@ -1322,6 +1322,17 @@ nav a.active { font-weight: 700; }
   cursor: pointer;
 }
 
+.adp-win-card.mt-manual-mode {
+  padding-bottom: 3.6rem;
+}
+
+.adp-win-card.mt-manual-mode .adp-win-close {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 4;
+}
+
 .adp-win-body {
   margin-top: .75rem;
 }
@@ -4018,6 +4029,8 @@ footer strong { color: rgba(255,255,255,.8); }
   .adp-win-card { width: min(100%, 620px); max-height: 94vh; padding: .7rem; }
   .adp-win-head { align-items: flex-start; gap: .68rem; }
   .adp-win-close { padding: .36rem .62rem; font-size: .78rem; }
+  .adp-win-card.mt-manual-mode { padding-bottom: 3.2rem; }
+  .adp-win-card.mt-manual-mode .adp-win-close { left: .7rem; bottom: .7rem; }
   .mt-head-manual-nav-wrap { margin-top: .5rem; padding-top: .34rem; }
   .mt-manual-nav-head { gap: .5rem; }
   .mt-manual-nav-head .gram-blank { font-size: .82rem; }

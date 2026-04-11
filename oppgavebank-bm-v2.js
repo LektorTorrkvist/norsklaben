@@ -1930,6 +1930,22 @@ var BANKV2 = [
  eks:'tingen → poenget / utfordringen / årsaken'},
 
 {kat:'ordval',kat_label:'Ordvalg og presisjon',type:'mc',vanske:'medium',
+
+{kat:'djupneoppgaver',kat_label:'Langsvar og refleksjonsoppgaver',type:'open',vanske:'vanskeleg',
+ q:'Skriv et reflekterende avsnitt (10-30 min): Hvordan påvirker sosiale medier måten ungdom leser og skriver på?',
+ hint:'Ta med minst ett konkret eksempel, ett motargument og en kort avslutning.',
+ regel:'Bygg resonnering med tydelig påstand, begrunnelse og nyansering. Bruk fagbegreper og presise overganger.',
+ eksempel_svak:'Sosiale medier er både bra og dårlig. Mange bruker det mye. Det påvirker skriving.',
+ eksempel_god:'Sosiale medier effektiviserer kommunikasjon, men belønner ofte korte og raske ytringer. For elever kan det styrke kreativitet i idéfasen, samtidig som dyp lesing blir utfordret. En bevisst veksling mellom raske og langsomme skriveformer kan derfor gi bedre læringsutbytte.',
+ eks:'Start med en tydelig hovedpåstand, bruk eksempler fra hverdagen, og avslutt med en faglig vurdering.'},
+
+{kat:'djupneoppgaver',kat_label:'Langsvar og refleksjonsoppgaver',type:'open',vanske:'vanskeleg',
+ q:'Skriv et drøftende miniinnlegg (10-30 min): Bør kunstig intelligens være tillatt i norsk skriftlig arbeid?',
+ hint:'Presenter to tydelige argumenter for og to mot, og ta stilling til slutt.',
+ regel:'En god drøfting viser flere perspektiver før konklusjon. Bruk koblingsord som «på den ene siden», «samtidig» og «derfor».',
+ eksempel_svak:'KI kan være bra, men også litt dumt. Jeg synes det kommer an på.',
+ eksempel_god:'På den ene siden kan KI støtte elever i idéutvikling og struktur, særlig i tidlig skrivefase. Samtidig kan ukritisk bruk svekke egen språkmestring og kildekritikk. Derfor bør KI være tillatt som støtteverktøy, men med krav om åpen bruk og tydelig elevansvar.',
+ eks:'Gjør argumentene konkrete med eksempler fra skolearbeid og skriv en tydelig konklusjon.'},
  q:'Hva betyr «å drøfte» i en oppgavetekst?',
  alt:['Bare beskrive noe','Se på flere sider, veie argumenter og ta stilling','Gi et kort svar','Skrive en personlig mening uten begrunnelse'],
  fasit:'Se på flere sider, veie argumenter og ta stilling',
@@ -4229,6 +4245,10 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQu
   fb.className = 'mt-feedback ' + cls;
   var html = '';
   var qualitativeMode = !!forceQualitativeMode || !!isOpenType;
+
+  if (qualitativeMode && t && t.kat === 'djupneoppgaver' && elapsed >= 600000) {
+    earnedXP += 75;
+  }
 
   if (qualitativeMode) {
     html += '<div class="mt-fb-heading">&#128221; Faglig tilbakemelding</div>';
