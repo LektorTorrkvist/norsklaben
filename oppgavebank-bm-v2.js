@@ -3652,8 +3652,8 @@ function mtTouchPoint(ev) {
 }
 
 function mtTouchDropSelector(kind) {
-  if (kind === 'dk') return '#mt-dk-bank, .mt-dk-placed';
-  if (kind === 'bs') return '#mt-bs-bank, .mt-bs-placed';
+  if (kind === 'dk') return '#mt-dk-bank, .mt-dk-placed, .mt-dk-col';
+  if (kind === 'bs') return '#mt-bs-bank, .mt-bs-placed, .mt-bs-col';
   if (kind === 'sr') return '#mt-sr-list, #mt-sr-list .mt-sr-token';
   return '';
 }
@@ -3708,7 +3708,7 @@ function mtAttachTouchDragToken(el, kind) {
       _mtTouchDrag.active = true;
       el.classList.add('dragging');
       var g = el.cloneNode(true);
-      g.style.cssText = 'position:fixed;left:0;top:0;transform:translate(-50%,-50%);pointer-events:none;opacity:.88;z-index:9999;max-width:90vw';
+      g.style.cssText = 'position:fixed;left:0;top:0;transform:translate(-50%,-110%);pointer-events:none;opacity:.88;z-index:9999;max-width:90vw';
       document.body.appendChild(g);
       _mtTouchDrag.ghost = g;
     }
@@ -3735,13 +3735,19 @@ function mtAttachTouchDragToken(el, kind) {
 
   el.addEventListener('touchend', function(ev) {
     if (!_mtTouchDrag || _mtTouchDrag.el !== el) return;
-    if (_mtTouchDrag.active) {
-      ev.preventDefault();
+    var wasDrag = _mtTouchDrag.active;
+    ev.preventDefault();
+    if (wasDrag) {
       mtTouchApplyDrop(el, kind, _mtTouchDrag.target);
-      el.dataset.mtTouchDragged = '1';
-      setTimeout(function() { el.dataset.mtTouchDragged = ''; }, 60);
     }
     mtTouchCleanup();
+    if (!wasDrag && !MTS.answered) {
+      if (kind === 'dk') mtDkMove(el);
+      else if (kind === 'bs') mtBsClick(el);
+      else if (kind === 'sr') mtSrClick(el);
+    }
+    el.dataset.mtTouchDragged = '1';
+    setTimeout(function() { el.dataset.mtTouchDragged = ''; }, 400);
   }, { passive: false });
 
   el.addEventListener('touchcancel', function() {
@@ -3758,9 +3764,13 @@ function mtTouchApplyDrop(el, kind, target) {
       el.setAttribute('data-placed', '-1');
       return;
     }
-    if (target.classList.contains('mt-dk-placed')) {
-      target.appendChild(el);
-      var id = target.id || '';
+    var dkTarget = target;
+    if (target.classList.contains('mt-dk-col')) {
+      dkTarget = target.querySelector('.mt-dk-placed') || target;
+    }
+    if (dkTarget.classList.contains('mt-dk-placed')) {
+      dkTarget.appendChild(el);
+      var id = dkTarget.id || '';
       var ci = id.replace('mt-dk-placed-', '');
       el.setAttribute('data-placed', String(ci));
     }
