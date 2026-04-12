@@ -432,16 +432,22 @@
 })();
 </script>
 <script>
-  // Dynamisk API URL - fungerer på både PC (localhost) og mobil (IP-adresse)
-  const protocol = window.location.protocol;
-  const host = window.location.hostname;
-  window.NL_API_BASE = `${protocol}//${host}:3000`;
-  
-  // Dynamisk last tekstanalyse.js
-  const textanalyseScript = document.createElement('script');
-  textanalyseScript.src = `${protocol}//${host}:3000/tekstanalyse.js`;
-  textanalyseScript.onerror = () => console.warn('Kunne ikkje laste tekstanalyse API');
-  document.body.appendChild(textanalyseScript);
+(function(){
+  var p = new URLSearchParams(window.location.search);
+  var api = p.get('api');
+  if (api) {
+    if (!/^https?:\/\//.test(api)) api = 'http://' + api;
+    try { localStorage.setItem('nl_api_base', api); } catch(e){}
+  } else {
+    try { api = localStorage.getItem('nl_api_base'); } catch(e){}
+  }
+  if (!api) api = 'http://localhost:3000';
+  window.NL_API_BASE = api;
+  var s = document.createElement('script');
+  s.src = api + '/tekstanalyse.js';
+  s.onerror = function(){ console.warn('Tekstanalyse API ikkje tilgjengeleg på ' + api); };
+  document.body.appendChild(s);
+})();
 </script>
 </body>
 </html>
