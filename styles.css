@@ -4113,7 +4113,6 @@ footer strong { color: rgba(255,255,255,.8); }
   touch-action: none;
   -webkit-user-select: none;
   user-select: none;
-  -webkit-user-drag: none;
 }
 
 /* ─── RESPONSIVE ─── */

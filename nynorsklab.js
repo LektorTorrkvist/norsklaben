@@ -103,7 +103,7 @@ const BANK = [
  regel:'«Natt» har omlyd i fleirtal: natt → netter → nettene.',
  eksempel:'ei natt → natta → netter → nettene',kontrast_bm:'nettene'},
 {emne:'substantiv',emne_label:'Substantiv – bøying',type:'cloze',vanske:'lett',
- sporsmal:'Skriv «eple» i bestemt form eintal.',setning:'___ er stor og raud.',
+ sporsmal:'Skriv «eple» i bestemt form eintal.',setning:'___ er stort og raudt.',
  fasit:'Eplet',fasit_variant:['Eplet','eplet'],
  regel:'Inkjekjønnsord får -et i bestemt form eintal: eit eple → eplet.',
  eksempel:'eit eple → eplet, eit bord → bordet',kontrast_bm:'Eplet'},

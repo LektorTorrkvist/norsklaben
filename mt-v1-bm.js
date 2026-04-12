@@ -2576,20 +2576,42 @@ function kmSjekk(){
   MTS.answered=true;
   const t=MTS.tasks[MTS.idx];
   const src=t.fasit_ord||t.fasit_v||t.fasit_feil||[];
-  const targets=(Array.isArray(src)?src:[src]).map(w=>String(w).replace(/[.,!?;:«»"()]/g,'').toLowerCase());
-  const words=document.querySelectorAll('.km-word');
+  const rawTargets=(Array.isArray(src)?src:[src]);
+  const words=Array.from(document.querySelectorAll('.km-word'));
+  /* Bygg frase-til-ordindeks-mapping (støttar fleirordsfrasar) */
+  const targetPhrases=[];
+  rawTargets.forEach(function(phrase){
+    const cleanPhrase=String(phrase).replace(/[.,!?;:«»"()]/g,'').toLowerCase();
+    const phraseWords=cleanPhrase.split(/\s+/).filter(Boolean);
+    for(let i=0;i<=words.length-phraseWords.length;i++){
+      let match=true;
+      for(let j=0;j<phraseWords.length;j++){
+        if(words[i+j].dataset.clean!==phraseWords[j]){match=false;break;}
+      }
+      if(match){
+        const indices=[];
+        for(let k=0;k<phraseWords.length;k++) indices.push(i+k);
+        targetPhrases.push({indices});
+        break;
+      }
+    }
+  });
+  const targetIndices={};
+  targetPhrases.forEach(function(tp){tp.indices.forEach(function(idx){targetIndices[idx]=true;});});
   let hits=0, falsePos=0;
-  words.forEach(el=>{
-    const clean=el.dataset.clean;
-    const target=targets.includes(clean);
+  words.forEach(function(el,i){
+    const isTarget=!!targetIndices[i];
     const sel=el.classList.contains('km-sel');
-    if(target&&sel){ el.style.background='rgba(26,122,80,.14)'; el.style.borderColor='#1A7A50'; el.style.color='#155f3e'; hits++; }
-    else if(target&&!sel){ el.style.background='rgba(176,90,0,.14)'; el.style.borderColor='#B05A00'; el.style.color='#7a4800'; }
-    else if(!target&&sel){ el.style.background='rgba(192,57,43,.14)'; el.style.borderColor='#C0392B'; el.style.color='#8a2319'; falsePos++; }
+    if(isTarget&&sel){ el.style.background='rgba(26,122,80,.14)'; el.style.borderColor='#1A7A50'; el.style.color='#155f3e'; }
+    else if(isTarget&&!sel){ el.style.background='rgba(176,90,0,.14)'; el.style.borderColor='#B05A00'; el.style.color='#7a4800'; }
+    else if(!isTarget&&sel){ el.style.background='rgba(192,57,43,.14)'; el.style.borderColor='#C0392B'; el.style.color='#8a2319'; falsePos++; }
     el.style.cursor='default';
   });
-  const correct=hits===targets.length&&falsePos===0;
-  if(!t.fasit) t.fasit=targets.join(', ');
+  targetPhrases.forEach(function(tp){
+    if(tp.indices.every(function(idx){return words[idx].classList.contains('km-sel');})) hits++;
+  });
+  const correct=hits===targetPhrases.length&&falsePos===0;
+  if(!t.fasit) t.fasit=rawTargets.join(', ');
   mtFinish(correct,null,t);
 }
 function kmReset(){

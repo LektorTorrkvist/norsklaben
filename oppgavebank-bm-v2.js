@@ -1739,8 +1739,6 @@ var BANKV2 = [
  instruksjon:'Skriv om med egne ord og ny setningsstruktur. Behold kilden.',
  maa_ha:['Medietilsynet'],
  maa_ikkje_ha:['bruker i gjennomsnitt tre timer daglig på sosiale medier'],
- errors:{'Ungdom bruker i gjennomsnitt tre timer daglig på sosiale medier':'Unge mennesker tilbringer omtrent tre timer hver dag på ulike sosiale plattformer'},
- fasit:'Unge mennesker tilbringer omtrent tre timer hver dag på ulike sosiale plattformer',
  regel:'En god parafrase endrer både ordvalg og setningsstruktur, ikke bare ett og annet ord.',
  eks:'«bruker i gjennomsnitt» → «tilbringer omtrent» · «sosiale medier» → «sosiale plattformer»'},
 
@@ -2290,6 +2288,87 @@ var BANKV2 = [
  regel:'«Å» er infinitivsmerke og står foran verb (handlingsord).',
  eks:'liker å tegne · glemte å spise · prøvde å sove'},
 
+/* --- og/å rett teksten (10 lengre oppgaver) --- */
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
+ q:'Rett de 5 og/å-feilene i teksten. Noen «og» og «å» er allerede riktige.',
+ tekst:'Læreren ba oss om og lese teksten og svare på spørsmålene. Jeg prøvde og konsentrere meg, men det var vanskelig og la merke til detaljene. Maria og Jonas klarte og bli ferdige først, og de fikk lov til og gå ut i friminuttet.',
+ errors:{'om og lese':'om å lese','prøvde og konsentrere':'prøvde å konsentrere','vanskelig og la':'vanskelig å la','klarte og bli':'klarte å bli','lov til og gå':'lov til å gå'},
+ fasit:'om å lese · prøvde å konsentrere · vanskelig å la · klarte å bli · lov til å gå',
+ regel:'«Å» er infinitivsmerke og står foran verb. Test: sett inn «for» foran – passer det? Da er det «å».',
+ eks:'ba oss om å lese · prøvde å konsentrere · vanskelig å la merke til'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
+ q:'Rett de 4 og/å-feilene i teksten. Noen «og» og «å» er allerede riktige.',
+ tekst:'Familien min pleier og reise til hytta om sommeren. Vi liker å bade og fiske. Pappa forsøkte og reparere brygga, men det var umulig og finne de riktige verktøyene. Jeg og søsteren min gikk heller en tur og plukket bær.',
+ errors:{'pleier og reise':'pleier å reise','forsøkte og reparere':'forsøkte å reparere','umulig og finne':'umulig å finne'},
+ fasit:'pleier å reise · forsøkte å reparere · umulig å finne',
+ regel:'Etter hjelpeverb og uttrykk som «pleier», «forsøkte», «umulig» bruker vi «å» + verb.',
+ eks:'pleier å reise · forsøkte å reparere · umulig å finne'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'vanskeleg',
+ q:'Rett de 6 og/å-feilene i teksten. Pass på: flere «og» er riktige!',
+ tekst:'Det er viktig og huske og gjøre leksene sine. Morten og Ane bestemte seg for og starte en lesegruppe og hjelpe hverandre. De begynte og møtes hver tirsdag og torsdag, og etter hvert klarte de og forbedre resultatene sine betraktelig.',
+ errors:{'viktig og huske':'viktig å huske','huske og gjøre':'huske å gjøre','for og starte':'for å starte','og hjelpe hverandre':'å hjelpe hverandre','begynte og møtes':'begynte å møtes','klarte de og forbedre':'klarte de å forbedre'},
+ fasit:'viktig å huske · huske å gjøre · for å starte · å hjelpe hverandre · begynte å møtes · klarte de å forbedre',
+ regel:'«Å» står foran verb (infinitiv). «Og» binder sammen ord eller setninger. Mange feil oppstår der begge kan «høres riktige ut».',
+ eks:'viktig å huske å gjøre · bestemte seg for å starte · begynte å møtes'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
+ q:'Rett de 4 og/å-feilene i teksten.',
+ tekst:'Eleven ønsket og skrive en god tekst og imponere læreren. Hun brukte tid og energi på og finne gode kilder, og klarte til slutt og levere en tekst hun var stolt av.',
+ errors:{'ønsket og skrive':'ønsket å skrive','og imponere læreren':'å imponere læreren','på og finne':'på å finne','klarte til slutt og levere':'klarte til slutt å levere'},
+ fasit:'ønsket å skrive · å imponere · på å finne · klarte til slutt å levere',
+ regel:'Foran verb bruker vi «å». «Og» binder sammen ting eller setninger, ikke verb i infinitiv.',
+ eks:'ønsket å skrive · brukte tid på å finne'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'vanskeleg',
+ q:'Rett de 5 og/å-feilene. Teksten har også mange riktige «og» – ikke endre dem!',
+ tekst:'Trening handler om og pushe seg selv og bli bedre. Lars og Emilie trener styrke og kondisjon tre ganger i uka. De har lært og varme opp skikkelig, og de husker alltid og tøye ut etterpå. Treneren har bedt dem om og føre treningsdagbok.',
+ errors:{'om og pushe':'om å pushe','og bli bedre':'å bli bedre','lært og varme':'lært å varme','husker alltid og tøye':'husker alltid å tøye','om og føre':'om å føre'},
+ fasit:'om å pushe · å bli bedre · lært å varme · husker alltid å tøye · om å føre',
+ regel:'Etter uttrykk som «handler om», «har lært», «husker», «bedt om» brukes alltid «å» + verb.',
+ eks:'handler om å pushe · har lært å varme opp · husker å tøye ut'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
+ q:'Rett de 4 og/å-feilene i teksten.',
+ tekst:'Vi ble enige om og dele oppgavene mellom oss. Noen skulle lage mat og andre skulle dekke bordet og rydde. Det var lett og bli enige, men vanskeligere og faktisk gjennomføre planen. Til slutt fikk vi det til og og hadde en fin kveld.',
+ errors:{'om og dele':'om å dele','lett og bli':'lett å bli','vanskeligere og faktisk':'vanskeligere å faktisk'},
+ fasit:'om å dele · lett å bli · vanskeligere å faktisk',
+ regel:'Etter «enige om», «lett» og «vanskelig» brukes «å» + verb.',
+ eks:'enige om å dele · lett å bli enige · vanskelig å gjennomføre'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'vanskeleg',
+ q:'Rett de 5 og/å-feilene i denne avisartikkel-teksten.',
+ tekst:'Kommunen planlegger og bygge en ny skole og et nytt bibliotek. Målet er og gi elevene bedre fasiliteter og tilgang til moderne teknologi. Foreldre og lærere har bedt politikerne om og prioritere prosjektet og sikre finansiering. De håper og kunne starte byggingen allerede neste år.',
+ errors:{'planlegger og bygge':'planlegger å bygge','er og gi':'er å gi','om og prioritere':'om å prioritere','og sikre finansiering':'å sikre finansiering','håper og kunne':'håper å kunne'},
+ fasit:'planlegger å bygge · er å gi · om å prioritere · å sikre · håper å kunne',
+ regel:'Foran verb i infinitiv brukes «å». «Og» binder sammen ting (skole og bibliotek) eller setningsledd.',
+ eks:'planlegger å bygge · målet er å gi · håper å kunne starte'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
+ q:'Rett de 4 og/å-feilene i teksten. Noen «og» er riktige.',
+ tekst:'Katten og hunden lever fredelig sammen. De har lært og respektere hverandre og dele matskålene. Eieren pleier og mate dem morgen og kveld, og hun glemmer aldri og gi dem friskt vann.',
+ errors:{'lært og respektere':'lært å respektere','og dele matskålene':'å dele matskålene','pleier og mate':'pleier å mate','glemmer aldri og gi':'glemmer aldri å gi'},
+ fasit:'lært å respektere · å dele · pleier å mate · glemmer aldri å gi',
+ regel:'Etter verb som «har lært», «pleier», «glemmer» brukes «å» + infinitiv.',
+ eks:'har lært å respektere · pleier å mate · glemmer å gi'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'vanskeleg',
+ q:'Rett de 6 og/å-feilene. Vær nøye – mange «og» er riktige!',
+ tekst:'Regjeringen oppfordrer folk og bedrifter til og spare strøm og redusere forbruket. Det er mulig og gjøre hverdagen mer miljøvennlig uten og ofre komfort. Man kan begynne med og skru av lys og apparater som ikke er i bruk, og gradvis venne seg til og bruke mindre energi.',
+ errors:{'til og spare':'til å spare','og redusere forbruket':'å redusere forbruket','mulig og gjøre':'mulig å gjøre','uten og ofre':'uten å ofre','med og skru':'med å skru','til og bruke':'til å bruke'},
+ fasit:'til å spare · å redusere · mulig å gjøre · uten å ofre · med å skru · til å bruke',
+ regel:'Etter preposisjoner som «til», «uten», «med» + verb brukes alltid «å». «Og» binder sammen substantiver (folk og bedrifter, lys og apparater).',
+ eks:'oppfordrer til å spare · uten å ofre · begynne med å skru av'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
+ q:'Rett de 4 og/å-feilene i teksten.',
+ tekst:'Elevene fikk beskjed om og jobbe stille og konsentrert. De fleste klarte og følge instruksene, men noen syntes det var kjedelig og sitte stille så lenge. Læreren lovte og gi dem en pause hvis de jobbet bra, og det motiverte hele klassen.',
+ errors:{'om og jobbe':'om å jobbe','klarte og følge':'klarte å følge','kjedelig og sitte':'kjedelig å sitte','lovte og gi':'lovte å gi'},
+ fasit:'om å jobbe · klarte å følge · kjedelig å sitte · lovte å gi',
+ regel:'Etter verb og uttrykk som «fikk beskjed om», «klarte», «syntes det var kjedelig», «lovte» brukes «å» + verb.',
+ eks:'beskjed om å jobbe · klarte å følge · lovte å gi'},
+
 /* --- sammensatte ord (5) --- */
 {kat:'sammensatt',kat_label:'Sammensatte ord',type:'mc',vanske:'lett',
  q:'Hvordan skrives det riktig?',
@@ -2462,7 +2541,6 @@ BANKV2.push({
  q:'Langsvarsoppgave: Skriv et refleksjonsnotat etter at du har skrevet en fagartikkel.',
  tekst:'Skriv et sammenhengende refleksjonsnotat (ca. 200-300 ord) om arbeidsprosessen din. Bruk disse spørsmålene aktivt i svaret: 1) Hvordan valgte og avgrenset du temaet? 2) Hvilke kilder brukte du, og hvordan vurderte du troverdigheten? 3) Hvordan bygde du opp fagartikkelen med innledning, hoveddel og avslutning? 4) Hvilke språklige grep brukte du for å forklare fagstoff tydelig for leseren? 5) Hva ville du forbedret dersom du skulle skrevet teksten på nytt?',
  hint:'Målet er å vise metabevissthet: Beskriv konkrete valg, begrunn dem og pek på forbedringsmuligheter.',
- fasit:'Et godt refleksjonsnotat viser både hva du gjorde, hvorfor du gjorde det, og hva du ville forbedret neste gang.',
  regel:'Refleksjon handler om å koble prosess, faglige valg og læring. Bruk konkrete eksempler fra egen tekst.',
  eksempel_god:'Jeg valgte temaet etter at jeg undersøkte hvilke kilder som faktisk var tilgjengelige. I neste versjon ville jeg strammet inn problemstillingen tidligere og brukt mer tid på overgangene mellom avsnitt.'
 });
@@ -3903,16 +3981,20 @@ function mtBuildInput(t) {
   }
 
   case 'drag_kolonne': {
+    var cols = Array.isArray(t.kolonner) && t.kolonner.length ? t.kolonner : ['Kolonne 1', 'Kolonne 2'];
     var items = mtShuffle(t.ord.map(function (o, i) { return { tekst: typeof o === 'string' ? o : o.tekst, fasit: typeof o === 'string' ? null : o.fasit, _i: i }; }));
-    var k0 = mtEsc(t.kolonner[0]), k1 = mtEsc(t.kolonner[1]);
     var tokens = items.map(function (o) {
       return '<div class="mt-dk-token" draggable="true" data-i="' + o._i + '" data-fasit="' + o.fasit + '" data-placed="-1" onclick="mtDkMove(this)" ondragstart="mtDkDragStart(event,' + o._i + ')">' + mtEsc(o.tekst) + '</div>';
     }).join('');
+    var isRW = cols.length === 2 && /\b(riktig|rett|korrekt)\b/i.test(cols[0]+' '+cols[1]) && /\b(feil|gal|galt)\b/i.test(cols[0]+' '+cols[1]);
+    var colsHtml = cols.map(function (label, ci) {
+      var rwCls = isRW ? ' mt-dk-col-rw-' + ci : '';
+      return '<div class="mt-dk-col mt-dk-col-' + ci + rwCls + '" ondragover="event.preventDefault()" ondrop="mtDkDropCol(event,' + ci + ')"><div class="mt-dk-col-label">' + mtEsc(label) + '</div><div id="mt-dk-placed-' + ci + '" class="mt-dk-placed"></div></div>';
+    }).join('');
     return '<div class="mt-dk">' +
       '<div id="mt-dk-bank" class="mt-dk-bank" ondragover="event.preventDefault()" ondrop="mtDkDropBank(event)">' + tokens + '</div>' +
-      '<div class="mt-dk-cols">' +
-      '<div class="mt-dk-col mt-dk-col-0" ondragover="event.preventDefault()" ondrop="mtDkDropCol(event,0)"><div class="mt-dk-col-label">' + k0 + '</div><div id="mt-dk-placed-0" class="mt-dk-placed"></div></div>' +
-      '<div class="mt-dk-col mt-dk-col-1" ondragover="event.preventDefault()" ondrop="mtDkDropCol(event,1)"><div class="mt-dk-col-label">' + k1 + '</div><div id="mt-dk-placed-1" class="mt-dk-placed"></div></div>' +
+      '<div class="mt-dk-cols" style="grid-template-columns:repeat(' + cols.length + ',1fr)">' +
+      colsHtml +
       '</div></div>';
   }
 
@@ -5151,9 +5233,9 @@ function mtBindMcKeys() {
     '.mt-dk { margin-top:.6rem; }',
     '.mt-dk-bank { display:flex; flex-wrap:wrap; gap:8px; padding:.5rem; background:var(--bg,#f8f7f4); border-radius:8px; min-height:40px; margin-bottom:.7rem; }',
     '.mt-dk-cols { display:grid; grid-template-columns:1fr 1fr; gap:10px; }',
-    '.mt-dk-col { border:2px dashed var(--border,#d5d2cb); border-radius:8px; min-height:70px; padding:.5rem; }',
-    '.mt-dk-col-0 { background:rgba(232,246,240,.5); border-color:rgba(130,201,168,.5); }',
-    '.mt-dk-col-1 { background:rgba(255,240,237,.5); border-color:rgba(240,160,144,.5); }',
+    '.mt-dk-col { border:2px dashed var(--border,#d5d2cb); border-radius:8px; min-height:70px; padding:.5rem; background:rgba(245,243,238,.5); }',
+    '.mt-dk-col-rw-0 { background:rgba(232,246,240,.5); border-color:rgba(130,201,168,.5); }',
+    '.mt-dk-col-rw-1 { background:rgba(255,240,237,.5); border-color:rgba(240,160,144,.5); }',
     '.mt-dk-col-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--tmuted,#8a8a84); margin-bottom:5px; }',
     '.mt-dk-placed { display:flex; flex-wrap:wrap; gap:6px; }',
     '.mt-dk-token { background:#fff; border:1.5px solid var(--border,#d5d2cb); border-radius:6px; font-size:.82rem; padding:6px 14px; cursor:grab; user-select:none; transition:all .12s; }',
