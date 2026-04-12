@@ -1971,12 +1971,12 @@ var BANKV2 = [
  eks:'Ungdomsskulen (ungdom + skule) · kulturhuset (kultur + hus)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'medium',
- q:'Rett dei fire feila med einskild og dobbel konsonant.',
+ q:'Rett dei tre feila med einskild og dobbel konsonant.',
  tekst:'Guten leikte med katen i hagen. Balen spratt over gjerdet og hamna hos naboen. Om nata drøymde han at han var fotballspelar.',
- errors:{'Guten':'Gutten','katen':'katten','Balen':'Ballen','nata':'natta'},
- fasit:'Gutten · katten · Ballen · natta',
- regel:'Etter kort vokal skriv ein dobbel konsonant: gutt (kort u), katt (kort a), ball (kort a), natt (kort a).',
- eks:'gutt (kort u → tt) · katt (kort a → tt) · ball (kort a → ll)'},
+ errors:{'katen':'katten','Balen':'Ballen','nata':'natta'},
+ fasit:'katten · Ballen · natta',
+ regel:'Etter kort vokal skriv ein dobbel konsonant: katt (kort a), ball (kort a), natt (kort a). NB: «guten» er korrekt nynorsk (lang vokal).',
+ eks:'katt (kort a → tt) · ball (kort a → ll) · natt (kort a → tt)'},
 
 {kat:'teiknsetting',kat_label:'Teiknsetting',type:'fix',vanske:'lett',
  q:'Rett dei tre teiknsettingsfeila.',
@@ -2306,7 +2306,7 @@ function mtTaskLabel(task) {
   return txt;
 }
 
-function mtNorm(s) { return String(s).trim().toLowerCase(); }
+function mtNorm(s) { return String(s).trim().toLowerCase().replace(/[\xAB\xBB\u201C\u201D]/g, '"').replace(/[\u2018\u2019]/g, "'"); }
 
 /* Levenshtein-avstand */
 function mtLevenshtein(a, b) {
@@ -2992,7 +2992,10 @@ function mtStartManualQueue(taskIndexes, startIndex) {
 
   var start = Number(startIndex);
   if (!Number.isFinite(start) || start < 0 || start >= tasks.length) start = 0;
-  var ordered = tasks.slice(start).concat(tasks.slice(0, start));
+  var startTask = tasks[start];
+  var rest = tasks.filter(function (_, i) { return i !== start; });
+  rest = mtShuffle(rest);
+  var ordered = [startTask].concat(rest);
   var cats = [];
   ordered.forEach(function (task) {
     if (cats.indexOf(task.kat) === -1) cats.push(task.kat);
@@ -3951,17 +3954,35 @@ function mtCheckOpen() {
     return;
   }
 
+  /* Sjekk maa_ha / maa_ikkje_ha (EIL) */
+  var lower = val.toLowerCase();
+  var missing = [];
+  var forbidden = [];
+  (t.maa_ha || []).forEach(function (kw) {
+    if (lower.indexOf(kw.toLowerCase()) === -1) missing.push(kw);
+  });
+  (t.maa_ikkje_ha || []).forEach(function (kw) {
+    if (lower.indexOf(kw.toLowerCase()) !== -1) forbidden.push(kw);
+  });
+  var eilOk = missing.length === 0 && forbidden.length === 0;
+  var hasEil = (t.maa_ha && t.maa_ha.length) || (t.maa_ikkje_ha && t.maa_ikkje_ha.length);
+
   /* Fagord-bonus */
   var fagord = mtDetectFagord(val);
   var extra = null;
-  if (fagord.length >= 2) {
+  if (missing.length) {
+    extra = 'Hugs å bruke: ' + missing.join(', ');
+  } else if (forbidden.length) {
+    extra = 'Unngå desse orda: ' + forbidden.join(', ');
+  } else if (fagord.length >= 2) {
     extra = 'Flott fagspråk! Du brukte: ' + fagord.join(', ');
   } else if (fagord.length === 1) {
     extra = 'Bra, du brukte fagomgrepet «' + fagord[0] + '».';
   }
 
-  el.className = 'mt-text-input mt-textarea mt-inp-neutral';
-  mtFinish(true, 1, 1, val, t, extra, true, true);
+  var correct = hasEil ? eilOk : true;
+  el.className = 'mt-text-input mt-textarea ' + (correct ? 'mt-inp-neutral' : 'mt-inp-wrong');
+  mtFinish(correct, 1, correct ? 1 : 0, val, t, extra, true, true);
 }
 
 /* ── fix ── */
@@ -3978,7 +3999,8 @@ function mtCheckFix() {
   var hits = 0;
   keys.forEach(function (wrong) {
     var right = errors[wrong];
-    if (val.indexOf(right) !== -1 && val.indexOf(wrong) === -1) hits++;
+    var cleaned = val.split(right).join('\x00');
+    if (val.indexOf(right) !== -1 && cleaned.indexOf(wrong) === -1) hits++;
   });
   var correct = hits === keys.length;
   var partial = !correct && hits > 0;
@@ -4057,21 +4079,55 @@ function mtCheckKm() {
   MTS.answered = true;
   var t = MTS.current;
   var src = t.fasit_ord || t.fasit_v || t.fasit_feil || [];
-  var targets = (Array.isArray(src) ? src : [src]).map(function (w) { return String(w).replace(/[.,!?;:\xAB\xBB"()]/g, '').toLowerCase(); });
+  var rawTargets = Array.isArray(src) ? src : [src];
   var words = document.querySelectorAll('.mt-km-word');
-  var hits = 0, falsePos = 0;
-  words.forEach(function (el) {
-    var clean = el.dataset.clean;
-    var target = targets.indexOf(clean) !== -1;
+  var wordArr = Array.prototype.slice.call(words);
+
+  /* Bygg frase-til-ordindeks-mapping (støttar fleirordsfrasar) */
+  var targetPhrases = [];
+  rawTargets.forEach(function (phrase) {
+    var cleanPhrase = String(phrase).replace(/[.,!?;:\xAB\xBB"()]/g, '').toLowerCase();
+    var phraseWords = cleanPhrase.split(/\s+/).filter(Boolean);
+    for (var i = 0; i <= wordArr.length - phraseWords.length; i++) {
+      var match = true;
+      for (var j = 0; j < phraseWords.length; j++) {
+        if (wordArr[i + j].dataset.clean !== phraseWords[j]) { match = false; break; }
+      }
+      if (match) {
+        var indices = [];
+        for (var k = 0; k < phraseWords.length; k++) indices.push(i + k);
+        targetPhrases.push({ indices: indices, phrase: cleanPhrase });
+        break;
+      }
+    }
+  });
+
+  var targetIndices = {};
+  targetPhrases.forEach(function (tp) {
+    tp.indices.forEach(function (idx) { targetIndices[idx] = true; });
+  });
+
+  var falsePos = 0;
+  wordArr.forEach(function (el, i) {
+    var isTarget = !!targetIndices[i];
     var sel = el.classList.contains('mt-km-sel');
-    if (target && sel) { el.className = 'mt-km-word mt-km-hit'; hits++; }
-    else if (target && !sel) { el.className = 'mt-km-word mt-km-missed'; }
-    else if (!target && sel) { el.className = 'mt-km-word mt-km-false'; falsePos++; }
+    if (isTarget && sel) { el.className = 'mt-km-word mt-km-hit'; }
+    else if (isTarget && !sel) { el.className = 'mt-km-word mt-km-missed'; }
+    else if (!isTarget && sel) { el.className = 'mt-km-word mt-km-false'; falsePos++; }
     el.style.cursor = 'default';
   });
-  var maxPts = targets.length;
+
+  var hits = 0;
+  targetPhrases.forEach(function (tp) {
+    var allSel = tp.indices.every(function (idx) {
+      return wordArr[idx].classList.contains('mt-km-hit');
+    });
+    if (allSel) hits++;
+  });
+
+  var maxPts = targetPhrases.length;
   var pts = Math.max(0, hits - falsePos);
-  if (!t.fasit) t.fasit = targets.join(', ');
+  if (!t.fasit) t.fasit = rawTargets.join(', ');
   mtFinish(hits === maxPts && falsePos === 0, maxPts, pts, hits + ' av ' + maxPts + ' rette', t);
 }
 
@@ -4680,6 +4736,18 @@ function mtShowSummary() {
   if (retteEl) retteEl.textContent = String(rett);
   if (feilEl) feilEl.textContent = String(feil);
   if (xpEl)   xpEl.textContent = '+' + MTS.sessionXP;
+
+  /* Tidssignatur for skryte-seksjon */
+  var _timeEl = $mt('nl-ad-sum-time');
+  var _idEl = $mt('nl-ad-sum-id');
+  if (_timeEl) {
+    try { _timeEl.textContent = new Intl.DateTimeFormat('nn-NO', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date()); }
+    catch(e) { _timeEl.textContent = new Date().toLocaleString(); }
+  }
+  if (_idEl) {
+    var _d = new Date();
+    _idEl.textContent = 'MT-' + total + '-' + MTS.score + '/' + MTS.maxScore + '-' + String(_d.getFullYear()).slice(2) + String(_d.getMonth()+1).padStart(2,'0') + String(_d.getDate()).padStart(2,'0');
+  }
 
   /* Kommentar */
   var commentEl = $mt('nl-ad-sum-comment');
