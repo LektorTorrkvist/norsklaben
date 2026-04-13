@@ -2528,7 +2528,182 @@ var BANKV2 = [
  q:'Hvilken setning er riktig?',
  alt:['Boken leste gutten.','Gutten leste boken.','Leste boken gutten.'],fasit:1,
  regel:'Den som gjør handlingen (subjektet) kommer vanligvis først.',
- eks:'Gutten (subjekt) leste (verb) boken (objekt).'}
+ eks:'Gutten (subjekt) leste (verb) boken (objekt).'},
+
+/* ═══════════════════════════════════════════════════
+   OG / Å  –  «Rett i teksten»  (8 oppgaver)
+   Tekstene inneheld BÅDE riktige og-konstruksjonar
+   OG infinitivsfeil, slik at elvane må tenke.
+   ═══════════════════════════════════════════════════ */
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'lett',
+ q:'Rett de to og/å-feilene. Vær nøye – noen «og» er riktige!',
+ tekst:'Mora og barna bestemte seg for og ta en tur i skogen. Det var viktig og komme seg ut, og alle likte å gå på tur.',
+ errors:{'for og ta':'for å ta','viktig og komme seg':'viktig å komme seg'},
+ fasit:'for å ta · viktig å komme seg',
+ regel:'Etter preposisjonen «for» og adjektivet «viktig» brukes «å» + infinitiv. «Og» binder «mora og barna» – det er riktig.',
+ eks:'bestemte seg for å ta · viktig å komme seg ut'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'lett',
+ q:'Rett de to og/å-feilene i teksten.',
+ tekst:'Han prøvde og lage mat, men det ble ikke bra. Søstera og mamma hjalp til, og de klarte og redde middagen.',
+ errors:{'prøvde og lage':'prøvde å lage','klarte og redde':'klarte å redde'},
+ fasit:'prøvde å lage · klarte å redde',
+ regel:'«Å» etter verb som «prøve» og «klare»: de styrer infinitiv. «Og» mellom «søstera og mamma» er bindeord – riktig.',
+ eks:'prøvde å lage mat · klarte å redde middagen'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
+ q:'Rett de tre og/å-feilene. Noen «og» i teksten er riktige – la dem stå!',
+ tekst:'Klassen og læreren bestemte seg for og holde en debatt om skolematen. Elevene fikk anledning til og si meningene sine, og læreren forsøkte og få alle til å delta.',
+ errors:{'for og holde':'for å holde','til og si':'til å si','forsøkte og få':'forsøkte å få'},
+ fasit:'for å holde · til å si · forsøkte å få',
+ regel:'Etter «for», «til» og verb som «forsøke» brukes «å» + infinitiv. «Klassen og læreren» – bindeord ✓.',
+ eks:'for å holde debatt · anledning til å si · forsøkte å få'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
+ q:'Rett de tre og/å-feilene. Pass på – «og» mellom to substantiv er riktig!',
+ tekst:'Barne- og ungdomsteateret inviterte elever og lærere til og se en ny forestilling. Det var spennende og viktig og oppleve teater, og alle fikk muligheten og skrive anmeldelse etterpå.',
+ errors:{'til og se':'til å se','viktig og oppleve':'viktig å oppleve','muligheten og skrive':'muligheten å skrive'},
+ fasit:'til å se · viktig å oppleve · muligheten å skrive',
+ regel:'«Til», «viktig» og «mulighet» styrer infinitiv med «å». «Elever og lærere» er bindeord – riktig.',
+ eks:'til å se · viktig å oppleve · muligheten å skrive'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
+ q:'Rett de fire og/å-feilene. Teksten har også riktige «og» – la dem stå.',
+ tekst:'Politikerne ønsker og satse mer på fornybar energi og kutte utslippene. Det er viktig og handle raskt, siden sol og vindkraft allerede er kostnadseffektive løsninger. Ingen partier våger og ta regningen alene, og noen er villige til og inngå kompromiss.',
+ errors:{'ønsker og satse':'ønsker å satse','viktig og handle':'viktig å handle','våger og ta':'våger å ta','til og inngå':'til å inngå'},
+ fasit:'ønsker å satse · viktig å handle · våger å ta · til å inngå',
+ regel:'«Ønsker», «viktig», «våge» og «til» styrer infinitiv med «å». «Energi og kutte» er to parallelle infinitiver – «og» er bindeord der.',
+ eks:'ønsker å satse · viktig å handle raskt · til å inngå kompromiss'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
+ q:'Rett de fire og/å-feilene. Vær nøye – teksten inneholder mange riktige «og».',
+ tekst:'Elevene og læreren diskuterte bærekraft. De ønsket og lage en presentasjon og vise funnene for resten av skolen. Det var krevende og samle god informasjon og kildefeste alt. Alle gledet seg til og presentere, og noen håpet og vekke interesse hos medelevene.',
+ errors:{'ønsket og lage':'ønsket å lage','krevende og samle':'krevende å samle','til og presentere':'til å presentere','håpet og vekke':'håpet å vekke'},
+ fasit:'ønsket å lage · krevende å samle · til å presentere · håpet å vekke',
+ regel:'Etter «ønske», «krevende», «til» og «håpe» brukes «å». «Og vise», «og kildefeste» er parallelle infinitiver – «og» er bindeord.',
+ eks:'ønsket å lage · krevende å samle · til å presentere'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'vanskeleg',
+ q:'Rett de fem og/å-feilene. Mange «og» i teksten er korrekte – ikke endre dem!',
+ tekst:'Legen og sykepleieren samarbeidet godt om og gi pasienten den beste behandlingen. Pasienten prøvde og hvile, men det var vanskelig og sove i den støyende korridoren. Det var viktig og drikke nok vann og ta medisinene jevnlig. Til slutt forsøkte de og gi ham et eget rom, og det hjalp.',
+ errors:{'om og gi':'om å gi','prøvde og hvile':'prøvde å hvile','vanskelig og sove':'vanskelig å sove','viktig og drikke':'viktig å drikke','forsøkte og gi':'forsøkte å gi'},
+ fasit:'om å gi · prøvde å hvile · vanskelig å sove · viktig å drikke · forsøkte å gi',
+ regel:'«Og ta medisinene» er riktig – det er eit parallelt infinitiv til «å drikke». «Om», «prøve», «vanskelig», «viktig» og «forsøke» krev «å».',
+ eks:'viktig å drikke nok vann og ta medisinene (begge infinitiver, «og» binder)'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'vanskeleg',
+ q:'Rett de fem og/å-feilene. Vær særlig nøye med preposisjoner.',
+ tekst:'Velgerne og politikerne er enige om og sørge for et trygt og rettferdig samfunn. Unge er ivrige etter og påvirke politikken, og de har rett til og delta i den demokratiske prosessen. Det er mulig og engasjere seg i mange partier og organisasjoner. Politikerne bør forsøke og representere alle grupper og lytte til innbyggerne.',
+ errors:{'om og sørge':'om å sørge','etter og påvirke':'etter å påvirke','til og delta':'til å delta','mulig og engasjere':'mulig å engasjere','forsøke og representere':'forsøke å representere'},
+ fasit:'om å sørge · etter å påvirke · til å delta · mulig å engasjere · forsøke å representere',
+ regel:'Etter «om», «etter», «til», «mulig» og verb som «forsøke» brukes «å». «Og lytte» er riktig – det binder to parallelle verb etter «bør».',
+ eks:'enige om å sørge · ivrig etter å påvirke · rett til å delta'},
+
+/* ═══════════════════════════════════════════════════
+   DOBBEL KONSONANT  –  «Rett i teksten»  (6 oppgaver)
+   Tekstene har korrekte enkelt- og dobbeltkonsonantar
+   i tillegg til feilene, slik at elvane må vurdere.
+   ═══════════════════════════════════════════════════ */
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'lett',
+ q:'Rett de to rettskrivingsfeilene.',
+ tekst:'Guten kastet balen til kompisene og løp bort mot mål. Gutten med den røde trøya skrek høyt da han scoret.',
+ errors:{'Guten':'Gutten','balen':'ballen'},
+ fasit:'Gutten · ballen',
+ regel:'Kort vokal → dobbel konsonant: gutt (kort u → tt), ball (kort a → ll). «Gutten» lenger ned er allerede riktig – la det stå.',
+ eks:'gutt (kort u) → gutten · ball (kort a) → ballen'},
+
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'lett',
+ q:'Rett de to rettskrivingsfeilene. «Gaten» og «hagen» er riktige – la dem stå.',
+ tekst:'Katten sate seg i vinduskarmen og stirret ut på gaten. Det var naten til jul, og det lå snø i hagen.',
+ errors:{'sate':'satte','naten':'natten'},
+ fasit:'satte · natten',
+ regel:'Preteritum av «å sette» er «satte» (kort a → tt). «Natt» har kort a → tt i bøying. «Gate» og «hage» har lang vokal → enkel konsonant.',
+ eks:'å sette → satte (kort a) · natt → natten (kort a) · gate → gaten (lang a)'},
+
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'medium',
+ q:'Rett de tre rettskrivingsfeilene. «Maten», «hagen» og «solen» er riktige.',
+ tekst:'Familien sate seg til bords og spiste midagsmat. Etter maten hopet ungene opp og sprang ut i hagen der solen skinte.',
+ errors:{'sate':'satte','midagsmat':'middagsmat','hopet':'hoppet'},
+ fasit:'satte · middagsmat · hoppet',
+ regel:'«Sette» → «satte» (kort a). «Middag» har kort i → dd. «Hoppe» → «hoppet» (kort o → pp). «Maten» og «hagen» har langvokal – riktige som de er.',
+ eks:'å sette → satte · middag (kort i) → middagsmat · å hoppe → hoppet'},
+
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'medium',
+ q:'Rett de tre rettskrivingsfeilene. «Hopper» og «løper» er riktige – la dem stå.',
+ tekst:'Mange ungdomer er opptatt av trening. De hopper og løper for å holde seg i form, og noen tar seg en kop kaffe etterpå. Koppen er gjerne liten, men smaken er god.',
+ errors:{'ungdomer':'ungdommer','kop':'kopp'},
+ fasit:'ungdommer · kopp',
+ regel:'«Ungdom» + «-er» → «ungdommer» (kort o → mm). «Kopp» har kort o → pp. «Hopper» (kort o → pp) og «løper» (lang ø → p) er allerede riktige.',
+ eks:'ungdommer (kort o) · kopp (kort o) · løper (lang ø, enkel p)'},
+
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'vanskeleg',
+ q:'Rett de fire rettskrivingsfeilene. Legg merke til at «Gutten» og «Katten» er riktige lenger nede i teksten.',
+ tekst:'Guten og katen lekte i hagen. Gutten hopet ned fra et tre og sate seg i gresset. Katten sprang bort og snuste nysgjerrig på ham.',
+ errors:{'Guten':'Gutten','katen':'katten','hopet':'hoppet','sate':'satte'},
+ fasit:'Gutten · katten · hoppet · satte',
+ regel:'Kort vokal → dobbel konsonant. «Gutten» og «Katten» lenger nede er allerede rett skrevet – endre bare de fire feilene øverst.',
+ eks:'gutt (kort u → tt) · katt (kort a → tt) · å hoppe → hoppet · å sette → satte'},
+
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'vanskeleg',
+ q:'Rett de fire rettskrivingsfeilene. Noen ord med dobbel konsonant er allerede riktige.',
+ tekst:'Hele klassen sate seg ned da læreren kom inn. Noen ungdomer fniste stille, men de fleste åpnet bøkene. Læreren drakk en kop kafe og begynte timen med å lese høyt fra en roman.',
+ errors:{'sate':'satte','ungdomer':'ungdommer','kop':'kopp','kafe':'kaffe'},
+ fasit:'satte · ungdommer · kopp · kaffe',
+ regel:'«satte», «ungdommer», «kopp», «kaffe» – alle med kort vokal før konsonanten. «Klassen», «drakk», «stille» osv. er allerede riktige.',
+ eks:'å sette → satte · ungdom → ungdommer · kopp (kort o) · kaffe (kort a)'},
+
+/* ═══════════════════════════════════════════════════
+   KILDEBRUK  –  «Rett i teksten»  (6 oppgaver)
+   Elevtekstar med feil kjeldebruk – nokre element er
+   riktige, andre må rettast.
+   ═══════════════════════════════════════════════════ */
+{kat:'kildebruk',kat_label:'Kildebruk',type:'fix',vanske:'lett',
+ q:'Rett de to kildebruksfeilene. Den siste kildetilvisningen i teksten er riktig – la den stå.',
+ tekst:'Plastforurensning er et alvorlig miljøproblem. Hele åtte millioner tonn plast ender i havet hvert år. (Jensen, 2023). Forskeren skriver: Vi er i ferd med å ødelegge havet for fremtidige generasjoner (Jensen, 2023, s. 4).',
+ errors:{'hvert år. (Jensen, 2023).':'hvert år (Jensen, 2023).','skriver: Vi er i ferd med å ødelegge havet for fremtidige generasjoner':'skriver: «Vi er i ferd med å ødelegge havet for fremtidige generasjoner»'},
+ fasit:'Kildetilvisning flyttes foran punktum · Direkte sitat settes i hermetegn',
+ regel:'Kildetilvisning (Forfatter, årstall) plasseres alltid FØR punktum. Direkte sitat settes alltid i «hermetegn».',
+ eks:'... hvert år (Jensen, 2023). · «Ordrett sitat» (Kilde, årstall).'},
+
+{kat:'kildebruk',kat_label:'Kildebruk',type:'fix',vanske:'lett',
+ q:'Rett de to kildebruksfeilene. Kildetilvisningen foran «Tidlig innsats» er riktig.',
+ tekst:'Mange unge sliter med psykisk helse (fhi.no). Solvang skriver: Unge jenter er den gruppen som opplever mest press (Solvang, 2024, s. 22). Tidlig innsats er ifølge forskning det viktigste tiltaket.',
+ errors:{'(fhi.no)':'(FHI, 2024)','Solvang skriver: Unge jenter er den gruppen som opplever mest press':'Solvang skriver: «Unge jenter er den gruppen som opplever mest press»'},
+ fasit:'(fhi.no) → (FHI, 2024) · Direkte sitat i hermetegn',
+ regel:'Bruk (Forfatter/institusjon, årstall) – ikke URL. Direkte sitat markeres alltid med «hermetegn».',
+ eks:'(FHI, 2024) ikke (fhi.no) · «Ordrett tekst» (Kilde, årstall).'},
+
+{kat:'kildebruk',kat_label:'Kildebruk',type:'fix',vanske:'medium',
+ q:'Rett de to kildebruksfeilene. Kildetilvisningen på slutten av teksten er riktig.',
+ tekst:'Klimaendringer er en av vår tids største utfordringer (Kari Jensen, 2023). Jensen konkluderer med at: Vi er nødt til å handle innen 2030, ellers er det for sent (Jensen, 2023, s. 15). Det er bred enighet om dette blant forskere.',
+ errors:{'(Kari Jensen, 2023)':'(Jensen, 2023)','Jensen konkluderer med at: Vi er nødt til å handle innen 2030, ellers er det for sent':'Jensen konkluderer med at: «Vi er nødt til å handle innen 2030, ellers er det for sent»'},
+ fasit:'(Kari Jensen, 2023) → (Jensen, 2023) · Direkte sitat i hermetegn',
+ regel:'I løpende tekst brukes bare etternavn + årstall: (Jensen, 2023). Direkte sitat settes i hermetegn.',
+ eks:'I løpende tekst: (Jensen, 2023) ikke (Kari Jensen, 2023). Sitat: «…» (Jensen, 2023).'},
+
+{kat:'kildebruk',kat_label:'Kildebruk',type:'fix',vanske:'medium',
+ q:'Rett de tre kildebruksfeilene. Den første kildetilvisningen i teksten er riktig.',
+ tekst:'Forsker Berg skriver: Ungdom bruker i gjennomsnitt seks timer daglig på skjerm (Berg, 2024, s. 31). En rapport fra SSB bekrefter dette (ssb.no, 2023). Statistikken viser store endringer. (SSB, 2021).',
+ errors:{'Berg skriver: Ungdom bruker i gjennomsnitt seks timer daglig på skjerm':'Berg skriver: «Ungdom bruker i gjennomsnitt seks timer daglig på skjerm»','(ssb.no, 2023)':'(SSB, 2023)','store endringer. (SSB, 2021).':'store endringer (SSB, 2021).'},
+ fasit:'Sitat i hermetegn · (ssb.no, 2023) → (SSB, 2023) · Kildetilvisning flyttes foran punktum',
+ regel:'Tre reglar: 1) Direkte sitat krev hermetegn. 2) Bruk (Institusjon, årstall), ikkje URL. 3) Kildetilvisning kjem FØR punktum.',
+ eks:'«Sitat» (Kilde, årstall). · (SSB, 2023) ikkje (ssb.no). · ...endringer (SSB, 2021).'},
+
+{kat:'kildebruk',kat_label:'Kildebruk',type:'fix',vanske:'vanskeleg',
+ q:'Rett de tre kildebruksfeilene i denne teksten frå ein litterær analyse.',
+ tekst:'I novellen «Vinterlys» bruker forfatteren naturen som symbol. Hansen (2021) skriver: Naturen speiler karakterens indre liv (s. 45). Videre argumenterer Hansen, Sara for at symbolbruken skaper dybde i teksten. (Hansen, 2021).',
+ errors:{'Hansen (2021) skriver: Naturen speiler karakterens indre liv':'Hansen (2021) skriver: «Naturen speiler karakterens indre liv»','Hansen, Sara':'Hansen','skaper dybde i teksten. (Hansen, 2021).':'skaper dybde i teksten (Hansen, 2021).'},
+ fasit:'Sitat i hermetegn · «Hansen, Sara» → «Hansen» · Kildetilvisning foran punktum',
+ regel:'1) Direkte sitat krev hermetegn. 2) I løpende tekst brukes berre etternavn. 3) Kildetilvisning kjem FØR punktum.',
+ eks:'Hansen (2021) skriver: «Tekst» (s. 45). · argumenterer Hansen for · dybde (Hansen, 2021).'},
+
+{kat:'kildebruk',kat_label:'Kildebruk',type:'fix',vanske:'vanskeleg',
+ q:'Rett de fire kildebruksfeilene. To kildetilvisningar i teksten er riktige – la dem stå.',
+ tekst:'Demokratiet er avhengig av en opplyst befolkning. Ifølge Eriksen, 2022 er mediekritikk viktigere enn noensinne. Han hevder: All informasjon bør kildekritisk vurderes (Eriksen, 2022, s. 8). En undersøkelse fra Karl Ivar Karlsen viser at 40 prosent av nyheter ikke er faktasjekket. (Karlsen, 2023). Det er et urovekkende funn.',
+ errors:{'Eriksen, 2022 er':'Eriksen (2022) er','Han hevder: All informasjon bør kildekritisk vurderes':'Han hevder: «All informasjon bør kildekritisk vurderes»','Karl Ivar Karlsen':'Karlsen','faktasjekket. (Karlsen, 2023).':'faktasjekket (Karlsen, 2023).'},
+ fasit:'Eriksen (2022) · Sitat i hermetegn · Karl Ivar Karlsen → Karlsen · Kildetilvisning foran punktum',
+ regel:'Fire reglar: 1) Årstall i parentes etter etternavn i tekst: Eriksen (2022). 2) Sitat krev hermetegn. 3) Berre etternavn i løpende tekst. 4) Kildetilvisning FØR punktum.',
+ eks:'Eriksen (2022) mener · «Sitat» (Kilde, år) · Karlsen, ikkje fullt navn · ...funn (Karlsen, 2023).'}
 
 ]; // end BANKV2
 if (typeof window !== 'undefined') window.BANKV2 = BANKV2;
@@ -3936,7 +4111,7 @@ function mtBuildInput(t) {
   case 'fix':
     return '<div class="mt-input-row">' +
       '<p class="mt-instruction">Rett feilene direkte i teksten under.</p>' +
-      '<textarea id="mt-fix-inp" class="mt-text-input mt-textarea mt-mono" rows="4" spellcheck="false">' + mtEsc(t.tekst) + '</textarea>' +
+      '<div id="mt-fix-inp" class="mt-text-input mt-textarea mt-mono mt-fix-field" contenteditable="true" spellcheck="false">' + mtEsc(t.tekst) + '</div>' +
       '</div>';
 
   case 'fillsel': {
@@ -4260,26 +4435,70 @@ function mtCheckOpen() {
   mtFinish(correct, 1, correct ? 1 : 0, val, t, extra, true, true);
 }
 
+function mtBuildFixHighlightHtml(val, fixedRights, missedWrongs) {
+  var marks = [];
+  fixedRights.forEach(function (right) {
+    var idx = 0;
+    while ((idx = val.indexOf(right, idx)) !== -1) {
+      marks.push({ start: idx, end: idx + right.length, cls: 'mt-fix-hl-ok' });
+      idx += right.length;
+    }
+  });
+  missedWrongs.forEach(function (wrong) {
+    var idx = 0;
+    while ((idx = val.indexOf(wrong, idx)) !== -1) {
+      marks.push({ start: idx, end: idx + wrong.length, cls: 'mt-fix-hl-bad' });
+      idx += wrong.length;
+    }
+  });
+  marks.sort(function (a, b) { return a.start - b.start; });
+  var html = '';
+  var i = 0;
+  marks.forEach(function (m) {
+    if (m.start < i) return;
+    html += mtEsc(val.slice(i, m.start));
+    html += '<mark class="' + m.cls + '">' + mtEsc(val.slice(m.start, m.end)) + '</mark>';
+    i = m.end;
+  });
+  html += mtEsc(val.slice(i));
+  return html;
+}
+
 function mtCheckFix() {
   if (MTS.answered) return;
   var el = $mt('mt-fix-inp');
   if (!el) return;
-  var val = el.value.trim();
+  var isTextarea = el.tagName && el.tagName.toLowerCase() === 'textarea';
+  var val = isTextarea ? el.value.trim() : (el.innerText || el.textContent || '').trim();
   if (!val) { el.focus(); return; }
   MTS.answered = true;
   var t = MTS.current;
   var errors = t.errors || {};
   var keys = Object.keys(errors);
   var hits = 0;
+  var fixedRights = [];
+  var missedWrongs = [];
   keys.forEach(function (wrong) {
     var right = errors[wrong];
     var cleaned = val.split(right).join('\x00');
-    if (val.indexOf(right) !== -1 && cleaned.indexOf(wrong) === -1) hits++;
+    var fixed = val.indexOf(right) !== -1 && cleaned.indexOf(wrong) === -1;
+    if (fixed) {
+      hits++;
+      fixedRights.push(right);
+    } else {
+      if (val.indexOf(wrong) !== -1) missedWrongs.push(wrong);
+    }
   });
   var correct = hits === keys.length;
   var partial = !correct && hits > 0;
-  el.disabled = true;
-  el.className = 'mt-text-input mt-textarea mt-mono ' + (correct ? 'mt-inp-correct' : (partial ? 'mt-inp-neutral' : 'mt-inp-wrong'));
+  if (isTextarea) {
+    el.disabled = true;
+    el.className = 'mt-text-input mt-textarea mt-mono ' + (correct ? 'mt-inp-correct' : (partial ? 'mt-inp-neutral' : 'mt-inp-wrong'));
+  } else {
+    el.contentEditable = 'false';
+    el.className = 'mt-text-input mt-textarea mt-mono mt-fix-field ' + (correct ? 'mt-inp-correct' : (partial ? 'mt-inp-neutral' : 'mt-inp-wrong'));
+    el.innerHTML = mtBuildFixHighlightHtml(val, fixedRights, missedWrongs);
+  }
   var feedback = correct ? null : mtSmartFeedback(val, t);
   mtFinish(correct, keys.length, hits, val, t, feedback);
 
@@ -5203,6 +5422,10 @@ function mtBindMcKeys() {
     '.mt-text-input:focus { border-color:var(--mid,#2E6B4F); }',
     '.mt-textarea { resize:vertical; line-height:1.6; }',
     '.mt-mono { font-family:"JetBrains Mono",monospace; font-size:.85rem; }',
+    '.mt-fix-field { white-space:pre-wrap; min-height:6.4rem; cursor:text; overflow-y:auto; }',
+    '.mt-fix-field[contenteditable="false"] { cursor:default; }',
+    '.mt-fix-hl-ok { background:rgba(26,122,80,.18); color:#155f3e; border-radius:3px; padding:1px 2px; }',
+    '.mt-fix-hl-bad { background:rgba(192,57,43,.18); color:#8a2319; border-radius:3px; padding:1px 2px; text-decoration:line-through; }',
     '.mt-inp-correct { border-color:#1A7A50 !important; background:rgba(26,122,80,.06) !important; }',
     '.mt-inp-wrong { border-color:#C0392B !important; background:rgba(192,57,43,.06) !important; }',
     '.mt-inp-neutral { border-color:var(--accent,#e5822a) !important; }',
