@@ -1129,6 +1129,10 @@ nav a.active { font-weight: 700; }
   flex-wrap: wrap;
 }
 
+#nl-ad-actions .adp-win-close {
+  margin-right: auto;
+}
+
 #nl-ad-win .ex-controls {
   display: none !important;
 }
@@ -1395,15 +1399,11 @@ nav a.active { font-weight: 700; }
   cursor: pointer;
 }
 
-.adp-win-card.mt-manual-mode {
-  padding-bottom: 3.6rem;
-}
-
 .adp-win-card.mt-manual-mode .adp-win-close {
-  position: absolute;
-  left: 1rem;
-  bottom: 1rem;
-  z-index: 4;
+  position: static;
+  left: auto;
+  bottom: auto;
+  z-index: auto;
 }
 
 .adp-win-body {
@@ -4138,8 +4138,7 @@ footer strong { color: rgba(255,255,255,.8); }
   .adp-win-card { width: min(100%, 620px); max-height: 94vh; padding: .7rem; }
   .adp-win-head { align-items: flex-start; gap: .68rem; }
   .adp-win-close { padding: .36rem .62rem; font-size: .78rem; }
-  .adp-win-card.mt-manual-mode { padding-bottom: 3.2rem; }
-  .adp-win-card.mt-manual-mode .adp-win-close { left: .7rem; bottom: .7rem; }
+  .adp-win-card.mt-manual-mode .adp-win-close { left: auto; bottom: auto; }
   .mt-head-manual-nav-wrap { margin-top: .5rem; padding-top: .34rem; }
   .mt-manual-nav-head { gap: .5rem; }
   .mt-manual-nav-head .gram-blank { font-size: .82rem; }
