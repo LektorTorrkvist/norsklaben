@@ -2492,26 +2492,28 @@ function mtCheckOpen(){
   const val=el.value.trim();
   if(!val){ el.focus(); return; }
   MTS.answered=true;
-  // Open tasks always count as "answered" – score given for attempting
   MTS.score++;
   MTS.streak++;
+  MTS.history[MTS.idx]=true;
   mtUpdateProgress();
   el.disabled=true;
-  el.style.borderColor='#e5822a';
+  el.style.borderColor='#4a90d9';
 
   const fb=$mt('mt-feedback');
   if(!fb) return;
   fb.style.display='block';
-  fb.style.background='#fff8f0';
-  fb.style.border='1px solid #f5c282';
-  fb.style.color='#6b3800';
+  fb.style.background='#eef6ff';
+  fb.style.border='1px solid #9fc4ea';
+  fb.style.color='#1f4f7a';
 
-  let html=`<strong>Takk for svaret! Her er eit poeng for innsatsen. 📝</strong>`;
+  let html=`<strong>Tips når du skriv</strong>`;
+  if(t.forklaring) html+=`<div style="margin-top:0.5rem;font-size:13px;opacity:0.9">${mtEsc(t.forklaring)}</div>`;
+  if(t.regel) html+=`<div style="margin-top:0.6rem;font-size:13px;opacity:0.9"><strong>Tips:</strong> ${mtEsc(t.regel)}</div>`;
   html+=`<div style="margin-top:0.8rem;display:grid;grid-template-columns:1fr 1fr;gap:10px">`;
-  if(t.eksempel_svak) html+=`<div style="background:#fff0ed;border-radius:8px;padding:0.7rem 0.9rem;font-size:13px;color:#7f1d1d"><strong style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:4px">Kan bli betre 🟡</strong>${mtEsc(t.eksempel_svak)}</div>`;
-  if(t.eksempel_god) html+=`<div style="background:#e8f6f0;border-radius:8px;padding:0.7rem 0.9rem;font-size:13px;color:#14532d"><strong style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:4px">Sterk formulering ✅</strong>${mtEsc(t.eksempel_god)}</div>`;
+  if(t.eksempel_svak) html+=`<div style="background:#f5f9ff;border:1px solid #c8dcf2;border-radius:8px;padding:0.7rem 0.9rem;font-size:13px;color:#1f4f7a"><strong style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:4px">Unngå gjerne</strong>${mtEsc(t.eksempel_svak)}</div>`;
+  if(t.eksempel_god) html+=`<div style="background:#f5f9ff;border:1px solid #c8dcf2;border-radius:8px;padding:0.7rem 0.9rem;font-size:13px;color:#1f4f7a"><strong style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:4px">Prøv heller</strong>${mtEsc(t.eksempel_god)}</div>`;
   html+=`</div>`;
-  if(t.regel) html+=`<div style="margin-top:0.6rem;font-size:13px;opacity:0.85"><strong>Regel:</strong> ${mtEsc(t.regel)}</div>`;
+  if(t.eks) html+=`<div style="margin-top:0.6rem;font-size:13px;opacity:0.9"><strong>Døme:</strong> ${mtEsc(t.eks)}</div>`;
   fb.innerHTML=html;
 
   const nw=$mt('mt-next-wrap');
@@ -2662,7 +2664,7 @@ function mtNext(){
       } else if(t.type==='open'){
         const el=$mt('mt-open-inp');
         if(el && el.value.trim()) mtCheckOpen();
-        else { MTS.answered=true; MTS.history[MTS.idx]=false; }
+        else { MTS.answered=true; MTS.history[MTS.idx]=true; mtUpdateProgress(); }
       } else if(t.type==='mc'){
         // Ingen val gjort – tel som feil og gå vidare
         MTS.answered=true; MTS.history[MTS.idx]=false; mtUpdateProgress();
@@ -2688,7 +2690,7 @@ function mtNext(){
       } else if(t.type==='open'){
         const el=$mt('mt-open-inp');
         if(el && el.value.trim()) mtCheckOpen();
-        else { MTS.answered=true; MTS.history[MTS.idx]=false; }
+        else { MTS.answered=true; MTS.history[MTS.idx]=true; mtUpdateProgress(); }
       } else if(t.type==='mc'){
         // Ingen val gjort – tel som feil og gå vidare
         MTS.answered=true; MTS.history[MTS.idx]=false; mtUpdateProgress();

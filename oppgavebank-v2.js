@@ -4201,6 +4201,36 @@ function mtIsGibberish(text) {
   return false;
 }
 
+function mtIsWritingTask(task) {
+  return !!task && (task.type === 'open' || task.type === 'omskriv');
+}
+
+function mtBuildWritingFeedback(t, extraMsg) {
+  var html = '<div class="mt-fb-heading">Tips når du skriv</div>';
+  var seen = {};
+
+  function addUnique(key, block) {
+    var norm = String(key || '').trim().toLowerCase();
+    if (!norm || seen[norm]) return;
+    seen[norm] = true;
+    html += block;
+  }
+
+  if (extraMsg) addUnique('extra:' + extraMsg, '<div class="mt-fb-extra">' + mtEsc(extraMsg) + '</div>');
+  if (t && t.forklaring) addUnique('forklaring:' + t.forklaring, '<div class="mt-fb-forklaring">' + mtEsc(t.forklaring) + '</div>');
+  if (t && t.regel) addUnique('regel:' + t.regel, '<div class="mt-fb-rule"><strong>&#128218; Tips:</strong> ' + mtEsc(t.regel) + '</div>');
+
+  if (t && (t.eksempel_svak || t.eksempel_god)) {
+    var models = '';
+    if (t.eksempel_svak) models += '<div class="mt-fb-model mt-fb-model-tip"><div class="mt-fb-model-label">Unngå gjerne</div>' + mtEsc(t.eksempel_svak) + '</div>';
+    if (t.eksempel_god) models += '<div class="mt-fb-model mt-fb-model-tip"><div class="mt-fb-model-label">Prøv heller</div>' + mtEsc(t.eksempel_god) + '</div>';
+    addUnique('models:' + String(t.eksempel_svak || '') + '|' + String(t.eksempel_god || ''), '<div class="mt-fb-models">' + models + '</div>');
+  }
+
+  if (t && t.eks) addUnique('eks:' + t.eks, '<div class="mt-fb-eks"><strong>&#128221; Døme:</strong> ' + mtEsc(t.eks) + '</div>');
+  return html;
+}
+
 function mtCheckOpen() {
   if (MTS.answered) return;
   var el = $mt('mt-open-inp');
@@ -4213,10 +4243,10 @@ function mtCheckOpen() {
   mtDraftSet(t, '');
   mtAutosaveStop();
 
-  /* Gibberish-sjekk → 0 XP */
+  /* Opne skriveoppgåver får kvalitativ feedback, aldri feilmarkering. */
   if (mtIsGibberish(val)) {
-    el.className = 'mt-text-input mt-textarea mt-inp-wrong';
-    mtFinish(false, 1, 0, val, t, 'Svaret ser ikkje ut til å vere eit skikkeleg forsøk. Prøv å skrive eit ordentleg svar.', true, true);
+    el.className = 'mt-text-input mt-textarea mt-inp-neutral';
+    mtFinish(true, 0, 0, val, t, 'Skriv litt meir, så blir det lettare å gi nyttige skrivetips.', true, true);
     return;
   }
 
@@ -4230,9 +4260,6 @@ function mtCheckOpen() {
   (t.maa_ikkje_ha || []).forEach(function (kw) {
     if (lower.indexOf(kw.toLowerCase()) !== -1) forbidden.push(kw);
   });
-  var eilOk = missing.length === 0 && forbidden.length === 0;
-  var hasEil = (t.maa_ha && t.maa_ha.length) || (t.maa_ikkje_ha && t.maa_ikkje_ha.length);
-
   /* Fagord-bonus */
   var fagord = mtDetectFagord(val);
   var extra = null;
@@ -4246,9 +4273,8 @@ function mtCheckOpen() {
     extra = 'Bra, du brukte fagomgrepet «' + fagord[0] + '».';
   }
 
-  var correct = hasEil ? eilOk : true;
-  el.className = 'mt-text-input mt-textarea ' + (correct ? 'mt-inp-neutral' : 'mt-inp-wrong');
-  mtFinish(correct, 1, correct ? 1 : 0, val, t, extra, true, true);
+  el.className = 'mt-text-input mt-textarea mt-inp-neutral';
+  mtFinish(true, 1, 1, val, t, extra, true, true);
 }
 
 /* ── fix ── */
@@ -4660,32 +4686,38 @@ function mtCheckOmskriv() {
   el.disabled = true;
   mtDraftSet(t, '');
   mtAutosaveStop();
+  if (mtIsGibberish(val)) {
+    el.className = 'mt-text-input mt-textarea mt-inp-neutral';
+    mtFinish(true, 0, 0, val, t, 'Skriv litt meir, så kan du bruke råda til å omskrive teksten tydelegare.', true, true);
+    return;
+  }
 
   /* Sjekk maa_ha / maa_ikkje_ha */
   var lower = val.toLowerCase();
-  var ok = true;
   var missing = [];
   (t.maa_ha || []).forEach(function (kw) {
-    if (lower.indexOf(kw.toLowerCase()) === -1) { ok = false; missing.push(kw); }
+    if (lower.indexOf(kw.toLowerCase()) === -1) missing.push(kw);
   });
+  var forbidden = [];
   (t.maa_ikkje_ha || []).forEach(function (kw) {
-    if (lower.indexOf(kw.toLowerCase()) !== -1) ok = false;
+    if (lower.indexOf(kw.toLowerCase()) !== -1) forbidden.push(kw);
   });
 
   el.className = 'mt-text-input mt-textarea mt-inp-neutral';
 
   var extra = null;
-  if (!ok && missing.length) extra = 'Hugs å bruke: ' + missing.join(', ');
+  if (missing.length) extra = 'Hugs å bruke: ' + missing.join(', ');
+  else if (forbidden.length) extra = 'Prøv å byte ut: ' + forbidden.join(', ');
 
   /* Fagord-bonus for omskriv */
   var fagord = mtDetectFagord(val);
-  if (ok && fagord.length >= 2) {
+  if (fagord.length >= 2) {
     extra = 'Flott fagspråk! Du brukte: ' + fagord.join(', ');
-  } else if (ok && fagord.length === 1) {
+  } else if (fagord.length === 1) {
     extra = (extra ? extra + ' ' : '') + 'Bra, du brukte fagomgrepet «' + fagord[0] + '».';
   }
 
-  mtFinish(ok, 1, ok ? 1 : 0, val, t, extra, true, true);
+  mtFinish(true, 1, 1, val, t, extra, true, true);
 }
 
 /* ── sorter_rekke ── */
@@ -4776,32 +4808,34 @@ function mtSmartFeedback(chosen, t) {
 ══════════════════════════════════════════════════════ */
 
 function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQualitativeMode) {
+  var qualitativeMode = !!forceQualitativeMode || !!isOpenType;
+  var writingMode = qualitativeMode && mtIsWritingTask(t);
   /* Oppdater poeng */
   MTS.score += pts;
   MTS.maxScore += maxPts;
-  if (correct) MTS.streak++; else MTS.streak = 0;
+  if (correct || (writingMode && pts > 0)) MTS.streak++; else MTS.streak = 0;
 
   /* Tidsbruk */
   var elapsed = Date.now() - MTS.taskStart;
 
   /* Kategorihistorikk (siste 5) */
   if (!MTS.catHistory[t.kat]) MTS.catHistory[t.kat] = [];
-  MTS.catHistory[t.kat].push(correct);
+  MTS.catHistory[t.kat].push(writingMode ? true : correct);
   if (MTS.catHistory[t.kat].length > 5) MTS.catHistory[t.kat].shift();
 
   /* Feiltype-logging */
-  if (!correct && t.feiltype) {
+  if (!writingMode && !correct && t.feiltype) {
     if (!MTS.feilLog[t.feiltype]) MTS.feilLog[t.feiltype] = 0;
     MTS.feilLog[t.feiltype]++;
   }
 
   /* Retry-kø: legg til ved feil (ikkje i manuell modus) */
-  if (!MTS.manualMode && !correct && !t._isRetry) {
+  if (!writingMode && !MTS.manualMode && !correct && !t._isRetry) {
     MTS.retryQueue.push(t);
   }
 
   /* Feillogg – lagre til localStorage */
-  if (!correct) {
+  if (!writingMode && !correct) {
     mtFeilloggPush(t, chosen);
   }
 
@@ -4854,7 +4888,7 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQu
   /* Lagre i history */
   MTS.history.push({
     task: t,
-    correct: correct,
+    correct: writingMode ? true : correct,
     points: pts,
     maxPts: maxPts,
     time: elapsed,
@@ -4866,14 +4900,14 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQu
   if (!fb) return;
 
   var isPartial = !correct && pts > 0;
-  var cls = correct ? 'mt-fb-correct' : (isPartial ? 'mt-fb-partial' : 'mt-fb-wrong');
+  var cls = writingMode ? 'mt-fb-writing' : (correct ? 'mt-fb-correct' : (isPartial ? 'mt-fb-partial' : 'mt-fb-wrong'));
   fb.className = 'mt-feedback ' + cls;
 
   var html = '';
 
-  var qualitativeMode = !!forceQualitativeMode || !!isOpenType;
-
-  if (qualitativeMode) {
+  if (writingMode) {
+    html += mtBuildWritingFeedback(t, extraMsg);
+  } else if (qualitativeMode) {
     html += '<div class="mt-fb-heading">&#128221; Fagleg tilbakemelding</div>';
     if (extraMsg) html += '<div class="mt-fb-extra">' + mtEsc(extraMsg) + '</div>';
     if (t.regel) html += '<div class="mt-fb-rule"><strong>&#128218; Regel:</strong> ' + mtEsc(t.regel) + '</div>';
@@ -4897,14 +4931,14 @@ function mtFinish(correct, maxPts, pts, chosen, t, extraMsg, isOpenType, forceQu
   }
 
   /* forklaring-felt (alltid vist) */
-  if (t.forklaring) html += '<div class="mt-fb-forklaring">' + mtEsc(t.forklaring) + '</div>';
+  if (!writingMode && t.forklaring) html += '<div class="mt-fb-forklaring">' + mtEsc(t.forklaring) + '</div>';
 
   /* Regel (ved feil) */
-  if (!correct && t.regel) html += '<div class="mt-fb-rule"><strong>&#128218; Regel:</strong> ' + mtEsc(t.regel) + '</div>';
-  if (!correct && t.eks) html += '<div class="mt-fb-eks"><strong>&#128221; Døme:</strong> ' + mtEsc(t.eks) + '</div>';
+  if (!writingMode && !correct && t.regel) html += '<div class="mt-fb-rule"><strong>&#128218; Regel:</strong> ' + mtEsc(t.regel) + '</div>';
+  if (!writingMode && !correct && t.eks) html += '<div class="mt-fb-eks"><strong>&#128221; Døme:</strong> ' + mtEsc(t.eks) + '</div>';
 
   /* Retry-tips */
-  if (!correct && !t._isRetry) html += '<div class="mt-fb-retry-tip">Denne oppgåva kjem att seinare i økta &#128260;</div>';
+  if (!writingMode && !correct && !t._isRetry) html += '<div class="mt-fb-retry-tip">Denne oppgåva kjem att seinare i økta &#128260;</div>';
   if (t._isRetry && correct) html += '<div class="mt-fb-retry-win">&#127881; Du klarte det på andre forsøk! Godt lært!</div>';
 
   /* XP-badge i tilbakemelding */
@@ -4941,9 +4975,20 @@ function mtNext() {
     } else if (t.type === 'fix') {
       var el = $mt('mt-fix-inp');
       if (el && el.value.trim() !== t.tekst) { mtCheckFix(); return; }
+    } else if (t.type === 'open') {
+      var openEl = $mt('mt-open-inp');
+      if (openEl && openEl.value.trim()) { mtCheckOpen(); return; }
+      MTS.answered = true;
+      MTS.history.push({ task: t, correct: true, points: 0, maxPts: 0, time: Date.now() - MTS.taskStart, isRetry: !!t._isRetry });
+      mtServeNext();
+      return;
     } else if (t.type === 'omskriv') {
-      var el = $mt('mt-omskriv-inp');
-      if (el && el.value.trim()) { mtCheckOmskriv(); return; }
+      var omskrivEl = $mt('mt-omskriv-inp');
+      if (omskrivEl && omskrivEl.value.trim()) { mtCheckOmskriv(); return; }
+      MTS.answered = true;
+      MTS.history.push({ task: t, correct: true, points: 0, maxPts: 0, time: Date.now() - MTS.taskStart, isRetry: !!t._isRetry });
+      mtServeNext();
+      return;
     }
     /* Hoppa over utan poeng */
     MTS.answered = true;
@@ -5466,6 +5511,7 @@ function mtBindMcKeys() {
     '.mt-fb-correct { background:rgba(26,122,80,.08); border:1px solid rgba(26,122,80,.25); color:#14532d; }',
     '.mt-fb-partial { background:rgba(176,90,0,.08); border:1px solid rgba(176,90,0,.25); color:#6b4a00; }',
     '.mt-fb-wrong { background:rgba(192,57,43,.08); border:1px solid rgba(192,57,43,.25); color:#7f1d1d; }',
+    '.mt-fb-writing { background:rgba(74,144,217,.1); border:1px solid rgba(74,144,217,.3); color:#1f4f7a; }',
     '.mt-fb-heading { font-weight:700; font-size:.95rem; margin-bottom:.3rem; }',
     '.mt-fb-detail { font-size:.84rem; opacity:.8; margin-bottom:.25rem; }',
     '.mt-fb-fasit { margin-top:.3rem; }',
@@ -5489,6 +5535,7 @@ function mtBindMcKeys() {
     '.mt-fb-model-label { font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }',
     '.mt-fb-model-weak { background:rgba(192,57,43,.06); border:1px solid rgba(192,57,43,.15); color:#7f1d1d; }',
     '.mt-fb-model-good { background:rgba(26,122,80,.06); border:1px solid rgba(26,122,80,.15); color:#14532d; }',
+    '.mt-fb-model-tip { background:rgba(74,144,217,.08); border:1px solid rgba(74,144,217,.2); color:#1f4f7a; }',
 
     /* ─── Summary additions ─── */
     '.mt-sum-advice { margin-top:.5rem; font-size:.84rem; color:var(--tmid,#4a4a46); font-style:italic; }',
