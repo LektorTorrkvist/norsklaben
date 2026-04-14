@@ -1,3 +1,14 @@
+/* Blå tips-feedback for åpne skriveoppgaver */
+.tip {
+  color: #2066b6 !important;
+  background: #eef5fc;
+  border-left: 3px solid #2066b6;
+  padding: .4rem .7rem;
+  border-radius: 0 var(--rs) var(--rs) 0;
+  margin-top: .4rem;
+  display: block;
+  font-size: .95em;
+}
 /* ═══════════════════════════════════════════
    Norsklaben – Felles stilark
    Brukt av: index.html, skrivelab.html, nynorsklab.html

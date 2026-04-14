@@ -901,6 +901,31 @@ function mtIsCorrect(val, t) {
 }
 
 function mtFinish(correct, chosen, t) {
+  // EGEN LOGIKK FOR ÅPNE OPPGAVER
+  if (t.type === 'open') {
+    MTS.score++;
+    MTS.streak++;
+    MTS.history[MTS.idx] = true;
+    mtUpdateProgress();
+    var fb = $mt('mt-feedback');
+    if (!fb) return;
+    fb.style.display = 'block';
+    fb.style.background = '#e8f6f0';
+    fb.style.border = '1px solid #82c9a8';
+    fb.style.color = '#14532d';
+    var html = '<strong>Takk for svaret! Her er et poeng for innsatsen. \uD83D\uDCDD</strong>';
+    html += '<div style="margin-top:0.8rem;display:grid;grid-template-columns:1fr 1fr;gap:10px">';
+    if (t.eksempel_svak) html += '<div style="background:#fff0ed;border-radius:8px;padding:0.7rem 0.9rem;font-size:13px;color:#7f1d1d"><strong style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:4px">Kan bli bedre \uD83D\uDD34</strong>' + mtEsc(t.eksempel_svak) + '</div>';
+    if (t.eksempel_god) html += '<div style="background:#e8f6f0;border-radius:8px;padding:0.7rem 0.9rem;font-size:13px;color:#14532d"><strong style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:4px">Sterk formulering \u2705</strong>' + mtEsc(t.eksempel_god) + '</div>';
+    html += '</div>';
+    if (t.regel) html += '<div style="margin-top:0.6rem;font-size:13px;opacity:0.85"><strong>Regel:</strong> ' + mtEsc(t.regel) + '</div>';
+    fb.innerHTML = html;
+    var nw = $mt('mt-next-wrap');
+    if (nw) nw.style.display = 'block';
+    return;
+  }
+
+  // VANLIG LOGIKK FOR ANDRE OPPGAVETYPER
   if (correct) { MTS.score++; MTS.streak++; } else { MTS.streak = 0; }
   MTS.history[MTS.idx] = correct;
   mtUpdateProgress();
@@ -936,7 +961,12 @@ function mtNext() {
       } else if (t.type === 'open') {
         var oel = $mt('mt-open-inp');
         if (oel && oel.value.trim()) { mtCheckOpen(); }
-        else { MTS.answered = true; MTS.history[MTS.idx] = false; }
+        else {
+          // ÅPNE OPPGAVER SKAL ALDRI VÆRE FEIL ELLER REPETERES
+          MTS.answered = true;
+          MTS.history[MTS.idx] = true;
+          mtUpdateProgress();
+        }
       } else if (t.type === 'fix') {
         var fel = $mt('mt-fix-inp');
         if (fel && fel.value.trim() !== t.tekst) { mtFixSjekk(); }

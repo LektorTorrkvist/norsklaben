@@ -348,10 +348,21 @@
     var h = document.getElementById('rhythm-val-' + id);
     var sc = document.getElementById('score-' + id);
     if (!h || h.value === '') { if (sc) sc.textContent = 'Velg en versjon først.'; return; }
+    // Endret logikk for åpne skriveoppgaver: kun blå farge og tips/eksempel
     if (h.value === String(answer)) {
-      if (sc) { sc.textContent = '✔ Rett!'; sc.style.color = '#1a7a50'; sc.classList.remove('err'); sc.classList.add('ok'); }
+      if (sc) {
+        sc.textContent = 'Tips: Slik kan du tenke – Sjekk om teksten din passer for en fagsensor. Prøv å bruke et mer formelt språk.';
+        sc.style.color = '#2066b6'; // blå
+        sc.classList.remove('err', 'ok');
+        sc.classList.add('tip');
+      }
     } else {
-      if (sc) { sc.textContent = '✘ Prøv igjen.'; sc.style.color = '#c0392b'; sc.classList.remove('ok'); sc.classList.add('err'); }
+      if (sc) {
+        sc.textContent = 'Tips: Prøv å omskrive teksten med et eksempel på formelt språk. Se om du kan gjøre teksten mer presis og saklig.';
+        sc.style.color = '#2066b6'; // blå
+        sc.classList.remove('ok', 'err');
+        sc.classList.add('tip');
+      }
     }
   }
   function rhythmReset(id) {
