@@ -20,9 +20,21 @@
 .ob-hero .stat-l { color:#6f7f73; }
 .ob-wrap { max-width:960px; margin:0 auto; padding:0 1rem 3rem; }
 .ob-ai { background:linear-gradient(135deg,#f0f7f2 0%,#e8f3ec 100%); border:1.5px dashed #9fc4a8; border-radius:1rem; padding:1.4rem 1.6rem; margin-bottom:2rem; text-align:center; }
+.ob-ai-headline { display:grid; grid-template-columns:auto 1fr; gap:.9rem; align-items:start; text-align:left; margin-bottom:1rem; }
 .ob-ai-icon { font-size:1.8rem; margin-bottom:.3rem; }
 .ob-ai h3 { font-family:'Playfair Display',serif; font-size:1.15rem; margin:0 0 .3rem; color:var(--fg); }
 .ob-ai p { font-size:.92rem; color:#5a6a5e; margin:0; line-height:1.45; }
+.ob-ai-label { display:block; text-align:left; font-size:.8rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#55705e; margin-bottom:.45rem; }
+.ob-ai-text { width:100%; min-height:150px; border:1px solid #c9dbcf; border-radius:.85rem; padding:.85rem .95rem; resize:vertical; font:inherit; background:#fff; color:var(--fg); box-sizing:border-box; }
+.ob-ai-actions { display:flex; gap:.6rem; flex-wrap:wrap; justify-content:flex-start; margin-top:.9rem; }
+.ob-ai-status { text-align:left; font-size:.84rem; color:#59705d; margin-top:.75rem !important; }
+.ob-ai-results { margin-top:1rem; text-align:left; }
+.ob-ai-summary { display:flex; justify-content:space-between; gap:.8rem; flex-wrap:wrap; align-items:center; background:#fff; border:1px solid #dbe7de; border-radius:.8rem; padding:.75rem .9rem; margin-bottom:.9rem; }
+.ob-ai-result-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:.85rem; }
+.ob-ai-result { background:#fff; border:1px solid #dbe7de; border-radius:.9rem; padding:.9rem; }
+.ob-ai-result-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:.55rem; }
+.ob-ai-badge { display:inline-flex; align-items:center; gap:.35rem; background:#e8f3ec; color:#1a6d46; font-size:.76rem; font-weight:700; border-radius:999px; padding:.2rem .55rem; }
+.ob-ai-result-actions { display:flex; gap:.45rem; flex-wrap:wrap; margin-top:.7rem; }
 .ob-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:1rem; margin-bottom:1.6rem; }
 .ob-card { background:#fff; border:1px solid #dce6df; border-radius:.85rem; padding:1.1rem 1.2rem; transition:box-shadow .15s,transform .15s; position:relative; }
 .ob-card:hover { box-shadow:0 4px 14px rgba(26,61,43,.1); transform:translateY(-2px); }
@@ -93,6 +105,7 @@
 @media(max-width:600px) {
   .ob-hero h1 { font-size:1.65rem; }
   .ob-grid { grid-template-columns:1fr; }
+  .ob-ai-headline { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -102,6 +115,7 @@
   <nav>
     <a href="skrivelab-bm.html">Skrivelab</a>
     <a href="oppgavebank-bm.html" class="active">Oppgavebank</a>
+    <a href="elevprofil-bm.html">Elevprofil</a>
     <a href="nynorsklab.html">Nynorsklab</a>
     <a href="verktoyskasse-bm.html">Verktøykasse</a>
     <a href="undervisingsbank-bm.html">Undervisningsbank</a>
@@ -127,11 +141,7 @@
   </div>
 </div>
 <div class="ob-wrap">
-  <div class="ob-ai" id="ob-ai-scan">
-    <div class="ob-ai-icon">🤖</div>
-    <h3>Tekstskanning (kommer snart)</h3>
-    <p>Lim inn en elevtekst og få forslag til øvingskategorier basert på feil i teksten. Kobles til Skrivemeisteren for målrettet øving.</p>
-  </div>
+  <div class="ob-ai" id="ob-ai-scan"><noscript>Aktiver JavaScript for å bruke tekstskanning og elevprofil.</noscript></div>
   <div id="ob-content">
     <p style="text-align:center;color:#999;padding:2rem 0;">Laster oppgaver …</p>
   </div>
@@ -185,6 +195,7 @@
 <footer></footer>
 <script src="oppgavebank-bm-v2.js"></script>
 <script src="nav.js"></script>
+<script src="elevprofil-bm.js"></script>
 <script>
 (function() {
   'use strict';

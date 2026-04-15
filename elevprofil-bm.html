@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elevprofil – Norsklaben</title>
+  <meta name="description" content="Lokal elevprofil med styrker, svakheter, anbefalte kategorier og progresjon fra Skrivemesteren.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#1A3D2B">
+  <style>
+    .ep-shell { max-width: 1120px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+    .ep-note { margin: 1.2rem 0 1.6rem; background: linear-gradient(135deg, #f6fbf8 0%, #eef7f2 100%); border: 1px solid #d6e8dc; border-radius: 1rem; padding: 1rem 1.15rem; color: #496456; }
+    .ep-note strong { color: var(--fg); }
+    .ep-hero-card { display: grid; grid-template-columns: 1.3fr .9fr; gap: 1rem; align-items: stretch; margin-bottom: 1rem; }
+    .ep-hero-copy, .ep-level-card, .ep-panel, .ep-kpi { background: #fff; border: 1px solid #dce6df; border-radius: 1.1rem; box-shadow: 0 14px 34px rgba(26, 61, 43, .06); }
+    .ep-hero-copy { padding: 1.35rem 1.4rem; background: radial-gradient(circle at top left, rgba(88, 150, 108, .16), transparent 46%), #fff; }
+    .ep-kicker { display: inline-block; font-size: .74rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #6e856f; margin-bottom: .65rem; }
+    .ep-hero-copy h1 { font-family: 'Playfair Display', serif; font-size: 2.1rem; color: var(--fg); margin: 0 0 .45rem; }
+    .ep-hero-copy p { margin: 0; color: #52685a; line-height: 1.6; max-width: 58ch; }
+    .ep-level-card { padding: 1.25rem 1.2rem; display: grid; gap: .7rem; background: linear-gradient(135deg, #173828 0%, #24533a 100%); color: #fff; }
+    .ep-level-top { display: flex; justify-content: space-between; gap: .8rem; align-items: baseline; }
+    .ep-level-top strong { font-size: 1.9rem; }
+    .ep-level-bar { height: .8rem; background: rgba(255, 255, 255, .16); border-radius: 999px; overflow: hidden; }
+    .ep-level-bar span { display: block; height: 100%; background: linear-gradient(90deg, #f0c36d 0%, #f7de8e 100%); border-radius: 999px; }
+    .ep-level-meta { display: flex; justify-content: space-between; gap: .8rem; font-size: .88rem; color: rgba(255, 255, 255, .88); }
+    .ep-grid { display: grid; gap: 1rem; margin-top: 1rem; }
+    .ep-grid-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .ep-grid-main { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ep-kpi { padding: 1rem 1.05rem; display: grid; gap: .25rem; }
+    .ep-kpi-label { font-size: .77rem; letter-spacing: .08em; text-transform: uppercase; color: #708372; font-weight: 700; }
+    .ep-kpi strong { font-size: 1.65rem; color: var(--fg); }
+    .ep-kpi-meta { color: #5f7062; font-size: .92rem; }
+    .ep-panel { padding: 1.15rem 1.15rem 1.05rem; }
+    .ep-panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: .8rem; margin-bottom: .9rem; }
+    .ep-panel-head h2 { margin: 0; font-size: 1.2rem; font-family: 'Playfair Display', serif; color: var(--fg); }
+    .ep-panel-head span { font-size: .88rem; color: #6a7d6e; }
+    .ep-stat-row { display: flex; justify-content: space-between; gap: 1rem; align-items: center; border: 1px solid #e7eee9; border-radius: .9rem; padding: .82rem .9rem; background: #fbfdfb; margin-bottom: .65rem; }
+    .ep-stat-row strong { display: block; color: var(--fg); }
+    .ep-stat-row span { display: block; font-size: .9rem; color: #607262; }
+    .ep-stat-row.ok { border-color: #d2ead7; background: #f4fbf5; }
+    .ep-stat-row.warn { border-color: #f3dfc4; background: #fffaf2; }
+    .ep-reco-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .9rem; }
+    .ep-reco { border: 1px solid #e2ebe4; border-radius: 1rem; padding: .95rem; background: linear-gradient(180deg, #fff, #fbfdfb); }
+    .ep-reco-top { display: flex; justify-content: space-between; gap: .7rem; align-items: center; margin-bottom: .65rem; }
+    .ep-chip { display: inline-flex; align-items: center; gap: .3rem; font-size: .77rem; font-weight: 700; border-radius: 999px; padding: .25rem .6rem; background: #e8f3ec; color: #1b6a45; }
+    .ep-chip.muted { background: #f3f6f4; color: #526257; }
+    .ep-reco-score { font-size: .78rem; color: #6d7f70; }
+    .ep-reco p { margin: 0 0 .85rem; color: #56685a; line-height: 1.55; min-height: 4.4em; }
+    .ep-reco-actions, .ep-chip-row { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .ep-btn { display: inline-flex; align-items: center; justify-content: center; gap: .35rem; padding: .5rem .8rem; border-radius: .7rem; border: 1px solid #cfe0d3; color: var(--fg); background: #f7faf8; text-decoration: none; font-weight: 600; font-size: .85rem; }
+    .ep-btn:hover { background: #edf5ef; }
+    .ep-btn-pri { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .ep-btn-pri:hover { background: #155a3a; }
+    .ep-bars { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .7rem; min-height: 220px; align-items: end; }
+    .ep-bar-col { display: grid; justify-items: center; gap: .35rem; }
+    .ep-bar { width: 100%; max-width: 56px; border-radius: 16px 16px 6px 6px; background: linear-gradient(180deg, #1c7a50 0%, #84c19a 100%); min-height: 20px; box-shadow: inset 0 -6px 16px rgba(255, 255, 255, .18); }
+    .ep-bar-col strong { color: var(--fg); font-size: .92rem; }
+    .ep-bar-col small { color: #6d7f70; font-size: .75rem; }
+    .ep-analysis { border: 1px solid #e5ece6; border-radius: .95rem; padding: .88rem .95rem; background: #fcfdfc; margin-bottom: .7rem; }
+    .ep-analysis-top { display: flex; justify-content: space-between; gap: .8rem; align-items: baseline; margin-bottom: .45rem; }
+    .ep-analysis-top strong { color: var(--fg); }
+    .ep-analysis-top span { font-size: .8rem; color: #6c7e70; }
+    .ep-analysis p { margin: 0 0 .7rem; color: #526459; line-height: 1.55; }
+    .ep-empty { border: 1px dashed #cedcd1; border-radius: .95rem; padding: 1rem; color: #617366; background: #fafcfa; }
+    .ep-loading { text-align: center; color: #6b7d70; padding: 3rem 0; }
+    @media (max-width: 900px) {
+      .ep-hero-card, .ep-grid-main, .ep-grid-kpis { grid-template-columns: 1fr; }
+      .ep-bars { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px) {
+      .ep-shell { padding-top: 1.25rem; }
+      .ep-hero-copy h1 { font-size: 1.7rem; }
+      .ep-panel-head { display: block; }
+      .ep-panel-head span { display: block; margin-top: .2rem; }
+      .ep-bars { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <a class="logo" href="index-bm.html">Norsk<span>laben</span></a>
+  <nav>
+    <a href="skrivelab-bm.html">Skrivelab</a>
+    <a href="oppgavebank-bm.html">Oppgavebank</a>
+    <a href="elevprofil-bm.html" class="active">Elevprofil</a>
+    <a href="nynorsklab.html">Nynorsklab</a>
+    <a href="verktoyskasse-bm.html">Verktøykasse</a>
+    <a href="undervisingsbank-bm.html">Undervisningsbank</a>
+    <div class="nav-dropdown">
+      <button class="nav-dropbtn" type="button" aria-expanded="false">Leikekassa</button>
+      <div class="nav-dropmenu">
+        <a href="mad-libs.html">Mad Libs</a>
+        <a href="vurderingslab.html">Vurderingslab</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="hero skrivelab-hero">
+  <div class="htag">Elevoversikt</div>
+  <h1>Elevprofil</h1>
+  <p>Her samles styrker, svakheter, anbefalte øvingskategorier og progresjon fra Skrivemesteren i samme lokale profil.</p>
+</div>
+
+<main class="ep-shell">
+  <div class="ep-note">
+    <strong>Lokalt lagret profil:</strong> Dataene på denne siden ligger bare i nettleseren på denne enheten. Lim inn en oppgavetekst i Oppgavebanken og gjennomfør økter i Skrivelab for å fylle profilen.
+  </div>
+  <div id="elevprofil-root">
+    <p class="ep-loading">Laster elevprofil ...</p>
+  </div>
+</main>
+
+<footer>
+  <p>Norsklaben • av Lektor Tørrkvist • 2026</p>
+  <p id="nl-sist-oppdatert">Sist oppdatert: lokal elevprofil</p>
+</footer>
+
+<script src="nav.js"></script>
+<script src="elevprofil-bm.js"></script>
+</body>
+</html>
