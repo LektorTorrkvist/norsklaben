@@ -3036,12 +3036,36 @@ function mtCopyLongAnswer(btn) {
 
 /* ─── XP / NIVÅ ──────────────────────────────────── */
 var MT_XP_LEVELS = [
-  { name: 'Ordl\u00e6rling',         xp: 0,    icon: '\uD83C\uDF31' },
-  { name: 'Setningssmed',       xp: 80,   icon: '\uD83D\uDD28' },
-  { name: 'Tekstbygger',        xp: 250,  icon: '\uD83C\uDFD7' },
-  { name: 'Grammatikksnekker',  xp: 500,  icon: '\u2699\uFE0F' },
-  { name: 'Spr\u00e5kmester',       xp: 900,  icon: '\uD83C\uDFC6' },
-  { name: 'Norskmester',        xp: 1500, icon: '\uD83D\uDC51' }
+  { name: 'Ordlærling',        xp: 0,     icon: '🌱' },
+  { name: 'Bokstavjeger',      xp: 30,    icon: '🔍' },
+  { name: 'Setningssmed',      xp: 80,    icon: '🔨' },
+  { name: 'Ordkunstner',       xp: 150,   icon: '🖌️' },
+  { name: 'Tekstbygger',       xp: 250,   icon: '🏗️' },
+  { name: 'Avsnittarkitekt',   xp: 380,   icon: '📐' },
+  { name: 'Grammatikksnekker', xp: 500,   icon: '⚙️' },
+  { name: 'Kommakommandør',    xp: 650,   icon: '✏️' },
+  { name: 'Ordklassemester',   xp: 800,   icon: '🏷️' },
+  { name: 'Setningssamler',    xp: 1000,  icon: '🧱' },
+  { name: 'Språkmester',       xp: 1200,  icon: '🏆' },
+  { name: 'Tekstsmed',         xp: 1500,  icon: '⚒️' },
+  { name: 'Ordformidler',      xp: 1800,  icon: '💬' },
+  { name: 'Stilmester',        xp: 2200,  icon: '🎭' },
+  { name: 'Norskentusiast',    xp: 2600,  icon: '📚' },
+  { name: 'Tekstanalytiker',   xp: 3100,  icon: '🔬' },
+  { name: 'Sjangerkjenner',    xp: 3700,  icon: '📝' },
+  { name: 'Argumentator',      xp: 4400,  icon: '💡' },
+  { name: 'Kildeforsker',      xp: 5200,  icon: '📖' },
+  { name: 'Retorikksnekker',   xp: 6100,  icon: '🗣️' },
+  { name: 'Ordpoet',           xp: 7200,  icon: '🖋️' },
+  { name: 'Litteraturnerd',    xp: 8500,  icon: '📕' },
+  { name: 'Språkvokter',       xp: 10000, icon: '🛡️' },
+  { name: 'Skrivekunstner',    xp: 11800, icon: '🎨' },
+  { name: 'Tekstmester',       xp: 13800, icon: '🏅' },
+  { name: 'Norskmester',       xp: 16000, icon: '👑' },
+  { name: 'Språkfilosof',      xp: 18500, icon: '🧠' },
+  { name: 'Ordlegende',        xp: 21500, icon: '⭐' },
+  { name: 'Norskprofessor',    xp: 25000, icon: '🎓' },
+  { name: 'Stormester',        xp: 30000, icon: '💎' }
 ];
 
 function mtXpCalc(correct, pts, maxPts, vanske, streak, isRetry) {
