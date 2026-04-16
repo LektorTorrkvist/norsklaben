@@ -562,10 +562,15 @@
     var recommendations = buildRecommendations(categoryStats, analysisStore.analyses, feilloggCounts);
     var recentAnalyses = analysisStore.analyses.slice(0, 4);
     var recentHistory = adaptiveHistory.slice(-6);
-    var latestRadar = null;
+    var radarSums = [0,0,0,0,0,0], radarCount = 0;
     for (var ri = 0; ri < analysisStore.analyses.length; ri++) {
-      if (analysisStore.analyses[ri].radarScores) { latestRadar = analysisStore.analyses[ri].radarScores; break; }
+      var rs = analysisStore.analyses[ri].radarScores;
+      if (rs) {
+        for (var rj = 0; rj < 6; rj++) radarSums[rj] += rs[rj];
+        radarCount++;
+      }
     }
+    var averageRadar = radarCount > 0 ? radarSums.map(function(s) { return Math.round(s / radarCount * 10) / 10; }) : null;
 
     function kpiCard(title, value, meta) {
       return '' +
@@ -655,9 +660,9 @@
         '<article class="ep-panel"><div class="ep-panel-head"><h2>Svakheter</h2><span>Kategorier som bør prioriteres</span></div>' + statRows(weaknesses, 'Ingen svakhetsdata ennå.', 'warn') + '</article>' +
       '</section>' +
       '<section class="ep-panel">' +
-        '<div class="ep-panel-head"><h2>Skrivemestring</h2><span>Vurdering fra analyserte tekster (1–6)</span></div>' +
+        '<div class="ep-panel-head"><h2>Skrivemestring</h2><span>Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'er') + ' (1–6)</span></div>' +
         '<div class="ep-radar-wrap">' +
-          (latestRadar ? buildRadarSvg(latestRadar, RADAR_CATEGORIES) : '<div class="ep-radar-empty">Radardiagrammet vises når tekster har blitt vurdert av analysetjenesten.</div>') +
+          (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES) : '<div class="ep-radar-empty">Radardiagrammet vises når tekster har blitt vurdert av analysetjenesten.</div>') +
         '</div>' +
       '</section>' +
       '<section class="ep-panel">' +
