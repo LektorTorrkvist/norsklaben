@@ -382,8 +382,9 @@ nav a.active { font-weight: 700; }
 
 .skrivelab-landing-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 1.2rem;
+  align-items: start;
 }
 
 .skrivelab-path {
@@ -397,11 +398,13 @@ nav a.active { font-weight: 700; }
 .skrivelab-path-api {
   background: linear-gradient(180deg, #f6fbf7 0%, #eef7f2 100%);
   border-top: 3px solid var(--primary);
+  order: 2;
 }
 
 .skrivelab-path-master {
   background: linear-gradient(180deg, #fffaf1 0%, #fff4de 100%);
   border-top: 3px solid var(--accent);
+  order: 1;
 }
 
 .skrivelab-path-top h3 {

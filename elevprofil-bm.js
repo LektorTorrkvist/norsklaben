@@ -670,18 +670,20 @@
         kpiCard('Feillogg', String((mastery.feillogg || []).length), 'Oppgaver å ta opp igjen') +
         kpiCard('Siste analyse', recentAnalyses.length ? formatDate(recentAnalyses[0].ts, true) : '-', 'Oppgavetekst lagret lokalt') +
       '</section>' +
-      '<section class="ep-grid ep-grid-main">' +
-        '<article class="ep-panel"><div class="ep-panel-head"><h2>Styrker</h2><span>Det eleven treffer best på</span></div>' + statRows(strengths, 'Ingen styrkedata ennå. Kjør noen økter først.', 'ok') + '</article>' +
-        '<article class="ep-panel"><div class="ep-panel-head"><h2>Svakheter</h2><span>Kategorier som bør prioriteres</span></div>' + statRows(weaknesses, 'Ingen svakhetsdata ennå.', 'warn') + '</article>' +
-      '</section>' +
-      '<section class="ep-panel">' +
-        '<div class="ep-panel-head"><h2>Skrivemestring</h2><span>Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'er') + ' (1–6)</span></div>' +
-        '<div class="ep-radar-wrap">' +
-          (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES) : '<div class="ep-radar-empty">Radardiagrammet vises når tekster har blitt vurdert av analysetjenesten.</div>') +
+      '<section class="ep-grid ep-grid-feature">' +
+        '<article class="ep-panel ep-panel-radar">' +
+          '<div class="ep-panel-head"><h2>Skrivemestring</h2><span>Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'er') + ' (1–6)</span></div>' +
+          '<div class="ep-radar-wrap">' +
+            (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES) : '<div class="ep-radar-empty">Radardiagrammet vises når tekster har blitt vurdert av analysetjenesten.</div>') +
+          '</div>' +
+        '</article>' +
+        '<div class="ep-stack">' +
+          '<article class="ep-panel"><div class="ep-panel-head"><h2>Styrker</h2><span>Det eleven treffer best på</span></div>' + statRows(strengths, 'Ingen styrkedata ennå. Kjør noen økter først.', 'ok') + '</article>' +
+          '<article class="ep-panel"><div class="ep-panel-head"><h2>Svakheter</h2><span>Kategorier som bør prioriteres</span></div>' + statRows(weaknesses, 'Ingen svakhetsdata ennå.', 'warn') + '</article>' +
         '</div>' +
       '</section>' +
-      '<section class="ep-panel">' +
-        '<div class="ep-panel-head"><h2>Dette bør du jobbe mer med</h2><span>Kombinerer siste oppgavetekst, feillogg og øvingshistorikk</span></div>' +
+      '<section class="ep-panel ep-panel-reco">' +
+        '<div class="ep-panel-head"><h2>Oppgaveforslag</h2><span>Konkrete øvinger basert på siste oppgavetekst, feillogg og øvingshistorikk</span></div>' +
         '<div class="ep-reco-grid">' + recommendationRows(recommendations) + '</div>' +
       '</section>' +
       '<section class="ep-grid ep-grid-main">' +

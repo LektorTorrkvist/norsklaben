@@ -71,11 +71,20 @@
     .ep-analysis p { margin: 0 0 .7rem; color: #526459; line-height: 1.55; }
     .ep-empty { border: 1px dashed #cedcd1; border-radius: .95rem; padding: 1rem; color: #617366; background: #fafcfa; }
     .ep-loading { text-align: center; color: #6b7d70; padding: 3rem 0; }
-    .ep-radar-wrap { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding: .5rem 0 0; }
-    .ep-radar-svg { width: 100%; max-width: 380px; }
+    .ep-radar-wrap { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding: .8rem 0 .4rem; }
+    .ep-radar-svg { width: 100%; max-width: 420px; }
     .ep-radar-empty { text-align: center; color: #6a7d6e; font-size: .92rem; padding: 1.5rem 0; }
+    .ep-grid-feature { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); align-items: stretch; }
+    .ep-grid-feature .ep-stack { display: grid; gap: 1rem; }
+    .ep-panel-radar { background: radial-gradient(circle at top right, rgba(132, 193, 154, .14), transparent 55%), #fff; border-color: #cfe2d6; }
+    .ep-panel-radar .ep-panel-head h2 { font-size: 1.32rem; }
+    .ep-panel-reco { border-left: 5px solid var(--accent, #c8832a); background: linear-gradient(180deg, #fffaf2 0%, #fff 65%); box-shadow: 0 18px 40px rgba(200, 131, 42, .10); }
+    .ep-panel-reco .ep-panel-head h2 { color: #8b5815; }
+    .ep-reco { transition: transform .18s ease, box-shadow .18s ease; }
+    .ep-reco:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(26, 61, 43, .12); }
+    .ep-reco-grid { gap: 1rem; }
     @media (max-width: 900px) {
-      .ep-hero-card, .ep-grid-main, .ep-grid-kpis { grid-template-columns: 1fr; }
+      .ep-hero-card, .ep-grid-main, .ep-grid-kpis, .ep-grid-feature { grid-template-columns: 1fr; }
       .ep-bars { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
     @media (max-width: 560px) {
@@ -128,6 +137,6 @@
 </footer>
 
 <script src="nav.js"></script>
-<script src="elevprofil-bm.js"></script>
+<script src="elevprofil-bm.js?v=20260422a"></script>
 </body>
 </html>
