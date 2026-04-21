@@ -382,13 +382,13 @@ nav a.active { font-weight: 700; }
 
 .skrivelab-landing-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr);
-  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
 }
 
 .skrivelab-path {
   border-radius: 18px;
-  padding: 1.15rem;
+  padding: 1.6rem 1.7rem;
   border: 1px solid var(--border);
   min-width: 0;
   box-shadow: 0 10px 24px rgba(26,61,43,.08);
@@ -396,10 +396,12 @@ nav a.active { font-weight: 700; }
 
 .skrivelab-path-api {
   background: linear-gradient(180deg, #f6fbf7 0%, #eef7f2 100%);
+  border-top: 3px solid var(--primary);
 }
 
 .skrivelab-path-master {
   background: linear-gradient(180deg, #fffaf1 0%, #fff4de 100%);
+  border-top: 3px solid var(--accent);
 }
 
 .skrivelab-path-top h3 {
