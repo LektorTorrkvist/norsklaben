@@ -612,6 +612,7 @@ function nlLoadTekstanalyseWidget() {
   var script = document.createElement('script');
   script.src = api + '/tekstanalyse.js';
   script.setAttribute('data-nl-api-widget', '1');
+  script.dataset.maal = 'nn';
   script.onload = function() {
     target.dataset.nlApiMounted = '1';
     if (fallback) fallback.hidden = true;

@@ -353,11 +353,6 @@
   function clearProfileData() {
     var keys = [
       ANALYSIS_KEY,
-      ADAPTIVE_PROFILE_KEY,
-      ADAPTIVE_HISTORY_KEY,
-      MT_SHARED_KEY,
-      MT_BACKUP_KEY,
-      MT_LEGACY_KEY,
       'nl_ta_history_v1'
     ];
     keys.forEach(function(key) {
