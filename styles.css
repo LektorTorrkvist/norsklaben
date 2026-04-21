@@ -391,6 +391,7 @@ nav a.active { font-weight: 700; }
   padding: 1.15rem;
   border: 1px solid var(--border);
   min-width: 0;
+  box-shadow: 0 10px 24px rgba(26,61,43,.08);
 }
 
 .skrivelab-path-api {
@@ -406,6 +407,20 @@ nav a.active { font-weight: 700; }
   font-size: 1.45rem;
   color: var(--primary);
   margin-bottom: .35rem;
+}
+
+.skrivelab-path-icon {
+  width: 3rem;
+  height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: rgba(255,255,255,.8);
+  border: 1px solid rgba(26,61,43,.08);
+  font-size: 1.4rem;
+  margin-bottom: .7rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.85);
 }
 
 .skrivelab-path-top p {
@@ -438,6 +453,20 @@ nav a.active { font-weight: 700; }
   flex-wrap: wrap;
   gap: .55rem;
   margin: .9rem 0 1rem;
+}
+
+.skrivelab-choice-line {
+  margin: .8rem 0 .95rem;
+  padding: .7rem .85rem;
+  background: rgba(255,255,255,.7);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  color: var(--tmid);
+  line-height: 1.55;
+}
+
+.skrivelab-choice-line strong {
+  color: var(--primary);
 }
 
 .skrivelab-feature {
@@ -480,6 +509,10 @@ nav a.active { font-weight: 700; }
   margin: 1rem 0 1.1rem;
 }
 
+.skrivelab-steps-simple {
+  margin-top: 0;
+}
+
 .skrivelab-step {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -512,6 +545,7 @@ nav a.active { font-weight: 700; }
   display: flex;
   gap: .55rem;
   flex-wrap: wrap;
+  margin-top: .2rem;
 }
 
 .skrivelab-bank-intro {
