@@ -30,6 +30,7 @@ function nlBoot() {
   nlSafeInit('ensure-bank-ob-styles', nlEnsureBankObStyles);
 
   nlSafeInit('ensure-bank-shell', nlEnsureBankShell);
+  nlSafeInit('load-tekstanalyse', nlLoadTekstanalyseWidget);
   nlSafeInit('import-bank-tasks', nlImportMTBankTasks);
   nlSafeInit('normalize-categories', nlNormalizeCategories);
   nlSafeInit('normalize-types-and-titles', nlNormalizeExerciseMetaFromType);
@@ -501,7 +502,9 @@ function nlEnsureBankShell() {
     else document.body.appendChild(mainEl);
   }
 
-  if (!mainEl.querySelector('.nl-bank-scan')) {
+  var hasLandingApi = document.getElementById('nl-tekstanalyse') || document.getElementById('nl-skrivelab-ai');
+
+  if (!mainEl.querySelector('.nl-bank-scan') && !hasLandingApi) {
     var scanWrap = document.createElement('section');
     scanWrap.className = 'nl-bank-scan';
     scanWrap.innerHTML =
@@ -575,6 +578,46 @@ function nlEnsureBankShell() {
     grp.appendChild(grid);
     mainEl.appendChild(grp);
   });
+}
+
+function nlLoadTekstanalyseWidget() {
+  var target = document.getElementById('nl-tekstanalyse') || document.getElementById('nl-skrivelab-ai');
+  if (!target) return;
+  if (target.dataset.nlApiMounted === '1' || document.querySelector('script[data-nl-api-widget="1"]')) return;
+
+  var fallback = document.getElementById('nl-api-fallback');
+  var params = new URLSearchParams(window.location.search);
+  var api = params.get('api');
+
+  if (api) {
+    if (!/^https?:\/\//.test(api)) api = 'http://' + api;
+    try { localStorage.setItem('nl_api_base', api); } catch (err) {}
+  } else {
+    try { api = localStorage.getItem('nl_api_base'); } catch (err) {}
+  }
+
+  if (!api) api = 'http://localhost:3000';
+  window.NL_API_BASE = api;
+  target.dataset.nlApiMounted = 'loading';
+
+  var script = document.createElement('script');
+  script.src = api + '/tekstanalyse.js';
+  script.setAttribute('data-nl-api-widget', '1');
+  script.onload = function() {
+    target.dataset.nlApiMounted = '1';
+    if (fallback) fallback.hidden = true;
+  };
+  script.onerror = function() {
+    target.dataset.nlApiMounted = 'error';
+    if (fallback) {
+      fallback.hidden = false;
+      fallback.innerHTML = '<strong>API-et svarar ikkje enno.</strong><span>Start den lokale tenesta på <code>' + nlMtEscHtml(api) + '</code> eller opne sida med <code>?api=adresse</code> for å peike til rett server.</span>';
+    }
+    if (window.console && console.warn) {
+      console.warn('Tekstanalyse API ikkje tilgjengeleg på ' + api);
+    }
+  };
+  document.body.appendChild(script);
 }
 
 function nlNormalizeCategories() {

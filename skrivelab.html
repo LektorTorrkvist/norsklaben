@@ -72,14 +72,78 @@
 </header>
 
 <div class="hero skrivelab-hero">
-  <div class="htag">Øvingsoppgåver</div>
+  <div class="htag">Skrivehjelp + øving</div>
   <h1>Skrivelab</h1>
-  <p>Øvingsoppgåver med ein speltvist i norsk skriving – frå grammatikk til drøfting, kjeldebruk og sjanger.</p>
+  <p>Her startar du enten med API-et som les elevteksten din og foreslår målretta øving, eller med Skrivemeisteren for direkte trening i grammatikk, kjeldebruk og sjanger.</p>
   <div class="hero-stats">
     <div><div class="stat-n" id="nl-stat-categories">24</div><div class="stat-l">Kategoriar</div></div>
     <div><div class="stat-n" id="nl-stat-tasks">219</div><div class="stat-l">Oppgåver</div></div>
   </div>
+  <div class="skrivelab-hero-actions">
+    <a class="lbtn skrivelab-hero-btn" href="#nl-tekstanalyse">Analyser elevtekst</a>
+    <a class="lbtn skrivelab-hero-btn skrivelab-hero-btn-ghost" href="#nl-adaptive">Gå til Skrivemeisteren</a>
+  </div>
 </div>
+
+<section class="skrivelab-landing" aria-labelledby="skrivelab-landing-title">
+  <div class="skrivelab-landing-shell">
+    <div class="skrivelab-landing-head">
+      <div>
+        <p class="skrivelab-kicker">To inngangar, same mål</p>
+        <h2 id="skrivelab-landing-title">Vel korleis du vil starte skriveøkta</h2>
+      </div>
+      <p class="skrivelab-landing-lead">Skrivelab fungerer både som inngang til lokal tekstanalyse via API-et og som startside for Skrivemeisteren. Begynn med elevteksten om du vil ha presise forslag, eller hopp rett inn i øvinga.</p>
+    </div>
+
+    <div class="skrivelab-landing-grid">
+      <article class="skrivelab-path skrivelab-path-api" aria-labelledby="skrivelab-api-title">
+        <div class="skrivelab-path-top">
+          <span class="skrivelab-path-badge">API</span>
+          <h3 id="skrivelab-api-title">Lim inn elevtekst og få forslag til øving</h3>
+          <p>API-et les teksten, peikar ut moglege utfordringar og foreslår kategoriar du kan sende vidare til Skrivemeisteren.</p>
+        </div>
+        <div class="skrivelab-feature-list" aria-label="Fordelar med tekstanalyse">
+          <div class="skrivelab-feature">Kort samandrag og positiv respons</div>
+          <div class="skrivelab-feature">3–5 relevante kategoriar frå oppgåvebanken</div>
+          <div class="skrivelab-feature">Direkte overgang til målretta øving</div>
+        </div>
+        <div id="nl-tekstanalyse" class="skrivelab-api-slot">
+          <div class="nl-api-fallback" id="nl-api-fallback">
+            <strong>Tekstanalysen lastar når API-et er tilgjengeleg.</strong>
+            <span>Standardadresse er <code>http://localhost:3000</code>. Du kan overstyre med <code>?api=adresse</code>.</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="skrivelab-path skrivelab-path-master" aria-labelledby="skrivelab-master-title">
+        <div class="skrivelab-path-top">
+          <span class="skrivelab-path-badge skrivelab-path-badge-gold">Skrivemeisteren</span>
+          <h3 id="skrivelab-master-title">Start øving direkte</h3>
+          <p>Vel kategoriar sjølv, bruk adaptiv vanskegrad og jobb deg oppover i nivå med poeng, streak og oppsummering etter kvar økt.</p>
+        </div>
+        <div class="skrivelab-steps" aria-label="Slik brukar du Skrivemeisteren">
+          <div class="skrivelab-step">
+            <strong>1</strong>
+            <span>Vel kategoriar eller lat systemet styre vanskegraden.</span>
+          </div>
+          <div class="skrivelab-step">
+            <strong>2</strong>
+            <span>Gjer ei kort økt med oppgåver som liknar typiske skriveutfordringar.</span>
+          </div>
+          <div class="skrivelab-step">
+            <strong>3</strong>
+            <span>Sjå framgang, feil å øve meir på og kva som bør repeterast.</span>
+          </div>
+        </div>
+        <div class="skrivelab-path-actions">
+          <a class="adp-btn adp-btn-pri" href="#nl-adaptive">Opne Skrivemeisteren</a>
+          <a class="adp-btn" href="#nl-bank-main">Bla i oppgåvebanken</a>
+          <a class="adp-btn" href="elevprofil.html">Sjå elevprofil</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
 
 <section class="adp" id="nl-adaptive" aria-labelledby="nl-adaptive-title">
   <div class="adp-inner">
@@ -248,6 +312,17 @@
   </div>
 </div>
 
+<section class="skrivelab-bank-intro" aria-labelledby="nl-bank-main-title">
+  <div class="skrivelab-bank-intro-inner">
+    <div>
+      <p class="skrivelab-kicker">Manuell utforsking</p>
+      <h2 id="nl-bank-main-title">Heile oppgåvebanken ligg framleis under</h2>
+      <p>Viss du vil plukke oppgåver sjølv, kan du bla i alle kategoriane og starte ei manuell økt frå korta lenger nede på sida.</p>
+    </div>
+    <a class="adp-btn" href="#nl-bank-main">Gå til oppgåvebanken</a>
+  </div>
+</section>
+
 <main class="main" id="nl-bank-main" aria-label="Oppgavebank"></main>
 
 <footer>
@@ -258,6 +333,8 @@
   <script src="nav.js"></script>
   <script src="oppgavebank-v2.js?v=20260410f"></script>
   <script src="skrivelab.js?v=20260410f"></script>
+</body>
+</html>
   <script>
   (function() {
     function nlFallbackBoot() {
