@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   tekstanalyse.js – Norsklaben Skriveprofil-widget
+  tekstanalyse.js – Norsklaben Elevprofil-widget
    ────────────────────────────────────────────────────
    • Mountar seg i #nl-tekstanalyse (eller #ob-ai-scan / #nl-skrivelab-ai)
    • POST /api/analyser-tekst → renderar samandrag, radar, styrker, forslag
@@ -36,8 +36,8 @@
   var MAAL = detectMaal();
 
   var T = MAAL === 'bm' ? {
-    title: 'Skriveprofil',
-    intro: 'Lim inn den siste teksten du har levert. Du får en grundig analyse, en skriveprofil og konkrete oppgaver å øve på.',
+    title: 'Elevprofil',
+    intro: 'Lim inn den siste teksten du har levert. Du får en grundig analyse, en elevprofil og konkrete oppgaver å øve på.',
     maalLabel: 'Målform',
     sjangerLabel: 'Sjanger',
     sjangerPlaceholder: 'Velg sjanger (valgfritt)',
@@ -56,7 +56,7 @@
     openSaved: 'Opne',
     noGenre: 'Utan sjanger',
     historyEmpty: 'Du har inga lagra historikk enno.',
-    radarTitle: 'Skriveprofilen din',
+    radarTitle: 'Elevprofilen din',
     strengthsTitle: 'Det du gjør bra',
     suggestTitle: 'Øvingsforslag basert på teksten din',
     quote: 'Fra teksten din:',
@@ -66,8 +66,8 @@
     error: 'Noe gikk galt. Sjekk at API-et kjører.',
     short: 'Teksten er kort – analysen blir bedre med en lengre tekst.'
   } : {
-    title: 'Skriveprofil',
-    intro: 'Lim inn den siste teksten du har levert. Du får ein grundig analyse, ein skriveprofil og konkrete oppgåver å øve på.',
+    title: 'Elevprofil',
+    intro: 'Lim inn den siste teksten du har levert. Du får ein grundig analyse, ein elevprofil og konkrete oppgåver å øve på.',
     maalLabel: 'Målform',
     sjangerLabel: 'Sjanger',
     sjangerPlaceholder: 'Vel sjanger (valfritt)',
@@ -86,7 +86,7 @@
     openSaved: 'Åpne',
     noGenre: 'Uten sjanger',
     historyEmpty: 'Du har ingen lagret historikk ennå.',
-    radarTitle: 'Skriveprofilen din',
+    radarTitle: 'Elevprofilen din',
     strengthsTitle: 'Det du gjer bra',
     suggestTitle: 'Øvingsforslag basert på teksten din',
     quote: 'Frå teksten din:',
