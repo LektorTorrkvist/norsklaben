@@ -14,9 +14,14 @@
     return s[s.length - 1];
   })();
   var SRC = SCRIPT && SCRIPT.src ? SCRIPT.src : '';
+  function defaultApiBase() {
+    var h = (location.hostname || '').toLowerCase();
+    if (h === 'localhost' || h === '127.0.0.1' || h === '') return 'http://localhost:3000';
+    return 'http://46.224.113.120:3000';
+  }
   var API_BASE =
     (typeof window !== 'undefined' && window.NL_API_BASE) ||
-    (SRC ? SRC.replace(/\/[^\/]*$/, '') : 'http://localhost:3000');
+    (SRC ? SRC.replace(/\/[^\/]*$/, '') : defaultApiBase());
 
   function detectMaal() {
     if (SCRIPT && SCRIPT.dataset && SCRIPT.dataset.maal) return SCRIPT.dataset.maal === 'bm' ? 'bm' : 'nn';
