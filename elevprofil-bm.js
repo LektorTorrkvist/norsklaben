@@ -350,6 +350,21 @@
     });
   }
 
+  function clearProfileData() {
+    var keys = [
+      ANALYSIS_KEY,
+      ADAPTIVE_PROFILE_KEY,
+      ADAPTIVE_HISTORY_KEY,
+      MT_SHARED_KEY,
+      MT_BACKUP_KEY,
+      MT_LEGACY_KEY,
+      'nl_ta_history_v1'
+    ];
+    keys.forEach(function(key) {
+      try { window.localStorage.removeItem(key); } catch (e) {}
+    });
+  }
+
   function getXpLevel(totalXp) {
     var safeXp = Math.max(0, Number(totalXp) || 0);
     var current = XP_LEVELS[0];
@@ -673,6 +688,24 @@
         '<article class="ep-panel"><div class="ep-panel-head"><h2>Progresjon i Skrivemesteren</h2><span>De siste øktene med treffprosent og XP</span></div>' + historyBars(recentHistory) + '</article>' +
         '<article class="ep-panel"><div class="ep-panel-head"><h2>Siste oppgavetekster</h2><span>Analysehistorikk lagret fra Oppgavebanken</span></div>' + analysisCards(recentAnalyses) + '</article>' +
       '</section>';
+
+    var actions = document.createElement('div');
+    actions.className = 'ep-profile-actions';
+    actions.style.display = 'flex';
+    actions.style.justifyContent = 'flex-end';
+    actions.style.marginBottom = '1rem';
+    actions.innerHTML = '<button type="button" class="ep-btn" data-ep-reset-profile="1">Tilbakestill elevprofil</button>';
+    root.insertBefore(actions, root.firstChild);
+
+    var resetBtn = root.querySelector('[data-ep-reset-profile="1"]');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function() {
+        var ok = window.confirm('Er du sikker på at du vil tilbakestille elevprofilen? Dette sletter lagrede analyser, historikk og progresjonsdata på denne enheten.');
+        if (!ok) return;
+        clearProfileData();
+        renderProfilePage();
+      });
+    }
   }
 
   window.NLBmProfile = {

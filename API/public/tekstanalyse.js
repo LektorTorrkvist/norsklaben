@@ -23,6 +23,9 @@
     (typeof window !== 'undefined' && window.NL_API_BASE) ||
     (SRC ? SRC.replace(/\/[^\/]*$/, '') : defaultApiBase());
   var STORAGE_KEY = 'nl_ta_history_v1';
+  var ELEVPROFIL_KEY_NN = 'norsklaben-elevprofil-nn-v1';
+  var ELEVPROFIL_KEY_BM = 'norsklaben-elevprofil-bm-v1';
+  var ELEVPROFIL_LIMIT = 24;
   var MAX_HISTORY = 15;
 
   function detectMaal() {
@@ -269,6 +272,60 @@
     items.unshift(entry);
     saveHistory(items);
     return entry;
+  }
+
+  function syncToElevprofilStore(payload) {
+    var key = payload.maal === 'bm' ? ELEVPROFIL_KEY_BM : ELEVPROFIL_KEY_NN;
+    var radar = payload.resultat && payload.resultat.radar ? payload.resultat.radar : {};
+    var forslag = Array.isArray(payload.resultat && payload.resultat.forslag) ? payload.resultat.forslag : [];
+    var categories = forslag.map(function (f) {
+      var id = String((f && f.kategori) || '').trim();
+      if (!id) return null;
+      return {
+        id: id,
+        label: String((f && (f.tittel || f.kat_label || f.kategori)) || id),
+        reason: String((f && f.forklaring) || '').trim(),
+        score: 12
+      };
+    }).filter(Boolean).slice(0, 6);
+
+    var radarScores = [
+      Number(radar.innhald) || 0,
+      Number(radar.struktur) || 0,
+      Number(radar.spraak_stil) || 0,
+      Number(radar.rettskriving) || 0,
+      Number(radar.rettskriving) || 0,
+      Number(radar.kjeldebruk) || 0
+    ].map(function (v) {
+      return Math.max(1, Math.min(6, v || 1));
+    });
+
+    var entry = {
+      ts: new Date().toISOString(),
+      title: payload.sjanger ? ('Sjanger: ' + payload.sjanger) : 'Elevtekst',
+      textExcerpt: String(payload.tekst || '').slice(0, 280),
+      source: payload.maal === 'bm' ? 'skrivelab-bm' : 'skrivelab-nn',
+      categories: categories,
+      radarScores: radarScores,
+      summary: String((payload.resultat && payload.resultat.sammendrag) || '').slice(0, 600),
+      strengths: Array.isArray(payload.resultat && payload.resultat.styrker)
+        ? payload.resultat.styrker.slice(0, 3)
+        : []
+    };
+
+    try {
+      var storeRaw = window.localStorage.getItem(key);
+      var store = storeRaw ? JSON.parse(storeRaw) : null;
+      if (!store || typeof store !== 'object') store = { version: 1, updatedAt: '', analyses: [] };
+      if (!Array.isArray(store.analyses)) store.analyses = [];
+      store.analyses.unshift(entry);
+      if (store.analyses.length > ELEVPROFIL_LIMIT) {
+        store.analyses = store.analyses.slice(0, ELEVPROFIL_LIMIT);
+      }
+      store.updatedAt = new Date().toISOString();
+      store.version = 1;
+      window.localStorage.setItem(key, JSON.stringify(store));
+    } catch (err) {}
   }
 
   function updateSavedControls(host) {
@@ -617,12 +674,14 @@
         return r.json();
       })
       .then(function (data) {
-        addHistoryEntry({
+        var payload = {
           tekst: tekst,
           maal: valgtMaal,
           sjanger: sjanger,
           resultat: data
-        });
+        };
+        addHistoryEntry(payload);
+        syncToElevprofilStore(payload);
         updateSavedControls(host);
         renderResult(host, data);
         status.textContent = '';

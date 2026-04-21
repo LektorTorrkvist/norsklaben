@@ -336,6 +336,21 @@
     });
   }
 
+  function clearProfileData() {
+    var keys = [
+      ANALYSIS_KEY,
+      ADAPTIVE_PROFILE_KEY,
+      ADAPTIVE_HISTORY_KEY,
+      MT_SHARED_KEY,
+      MT_BACKUP_KEY,
+      MT_LEGACY_KEY,
+      'nl_ta_history_v1'
+    ];
+    keys.forEach(function(key) {
+      try { window.localStorage.removeItem(key); } catch (e) {}
+    });
+  }
+
   function getXpLevel(totalXp) {
     var safeXp = Math.max(0, Number(totalXp) || 0);
     var current = XP_LEVELS[0];
@@ -538,6 +553,24 @@
     }
 
     root.innerHTML = '<section class="ep-hero-card"><div class="ep-hero-copy"><span class="ep-kicker">Lokal elevprofil</span><h1>' + escapeHtml(levelInfo.current.icon + ' ' + levelInfo.current.name) + '</h1><p>Profilen byggjer på oppgåvetekstar som er limte inn i Oppgåvebanken, pluss faktisk progresjon frå Skrivemeisteren og øvingsoppgåvene.</p></div><div class="ep-level-card"><div class="ep-level-top"><strong>' + escapeHtml(String(totalXp)) + ' XP</strong><span>' + escapeHtml(sessionCount + ' økter') + '</span></div><div class="ep-level-bar"><span style="width:' + escapeHtml(String(levelProgress)) + '%"></span></div><div class="ep-level-meta"><span>' + escapeHtml(levelInfo.current.name) + '</span><span>' + escapeHtml(levelInfo.next ? (nextXp + ' XP til ' + levelInfo.next.name) : 'Høgaste nivå nådd') + '</span></div></div></section><section class="ep-grid ep-grid-kpis">' + kpiCard('Flyt', String(streak) + (streak === 1 ? ' dag' : ' dagar'), 'Dagar på rad') + kpiCard('Beste økt', String(bestPct) + ' %', 'Høgaste treffprosent') + kpiCard('Feillogg', String((mastery.feillogg || []).length), 'Oppgåver å ta opp att') + kpiCard('Siste analyse', recentAnalyses.length ? formatDate(recentAnalyses[0].ts, true) : '-', 'Oppgåvetekst lagra lokalt') + '</section><section class="ep-grid ep-grid-main"><article class="ep-panel"><div class="ep-panel-head"><h2>Styrkar</h2><span>Det eleven treff best på</span></div>' + statRows(strengths, 'Ingen styrkedata enno. Køyr nokre økter først.', 'ok') + '</article><article class="ep-panel"><div class="ep-panel-head"><h2>Svakheiter</h2><span>Kategoriar som bør prioriterast</span></div>' + statRows(weaknesses, 'Ingen svakheitsdata enno.', 'warn') + '</article></section><section class="ep-panel"><div class="ep-panel-head"><h2>Skrivemeistring</h2><span>Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'ar') + ' (1–6)</span></div><div class="ep-radar-wrap">' + (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES) : '<div class="ep-radar-empty">Radardiagrammet kjem når tekstar har blitt vurderte av analysetenesta.</div>') + '</div></section><section class="ep-panel"><div class="ep-panel-head"><h2>Dette bør du jobbe meir med</h2><span>Kombinerer siste oppgåvetekst, feillogg og øvingshistorikk</span></div><div class="ep-reco-grid">' + recommendationRows(recommendations) + '</div></section><section class="ep-grid ep-grid-main"><article class="ep-panel"><div class="ep-panel-head"><h2>Progresjon i Skrivemeisteren</h2><span>Dei siste øktene med treffprosent og XP</span></div>' + historyBars(recentHistory) + '</article><article class="ep-panel"><div class="ep-panel-head"><h2>Siste oppgåvetekstar</h2><span>Analysehistorikk lagra frå Oppgåvebanken</span></div>' + analysisCards(recentAnalyses) + '</article></section>';
+
+    var actions = document.createElement('div');
+    actions.className = 'ep-profile-actions';
+    actions.style.display = 'flex';
+    actions.style.justifyContent = 'flex-end';
+    actions.style.marginBottom = '1rem';
+    actions.innerHTML = '<button type="button" class="ep-btn" data-ep-reset-profile="1">Tilbakestill elevprofil</button>';
+    root.insertBefore(actions, root.firstChild);
+
+    var resetBtn = root.querySelector('[data-ep-reset-profile="1"]');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function() {
+        var ok = window.confirm('Er du sikker på at du vil tilbakestille elevprofilen? Dette slettar lagra analysar, historikk og progresjonsdata på denne eininga.');
+        if (!ok) return;
+        clearProfileData();
+        renderProfilePage();
+      });
+    }
   }
 
   window.NLProfile = {
