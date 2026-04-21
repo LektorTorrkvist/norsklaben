@@ -543,6 +543,10 @@ function nlLoadTekstanalyseWidget() {
     try { localStorage.setItem('nl_api_base', api); } catch (err) {}
   } else {
     try { api = localStorage.getItem('nl_api_base'); } catch (err) {}
+    if (api && /46\.224\.113\.120/.test(api)) {
+      api = null;
+      try { localStorage.removeItem('nl_api_base'); } catch (err) {}
+    }
   }
 
   if (!api) {
@@ -4354,9 +4358,6 @@ function nlAdMasteryData(pct) {
     medal: '&#128170;',
     heading: 'Halvvegs der!',
     comment: 'Du har forstått mye, men det er nokre tema du bør øve mer på. Gå gjennom rettingane og prøv igjen – du kommer til å merke framgang!'
-  /* Clear incremental progress – full session is about to be saved */
-  try { window.localStorage.removeItem(NL_AD_PROFILE_KEY + '-progress'); } catch (e) {}
-
   };
   return {
     medal: '&#127793;',

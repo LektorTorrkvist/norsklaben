@@ -594,6 +594,10 @@ function nlLoadTekstanalyseWidget() {
     try { localStorage.setItem('nl_api_base', api); } catch (err) {}
   } else {
     try { api = localStorage.getItem('nl_api_base'); } catch (err) {}
+    if (api && /46\.224\.113\.120/.test(api)) {
+      api = null;
+      try { localStorage.removeItem('nl_api_base'); } catch (err) {}
+    }
   }
 
   if (!api) {
