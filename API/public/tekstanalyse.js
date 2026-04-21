@@ -17,7 +17,7 @@
   function defaultApiBase() {
     var h = (location.hostname || '').toLowerCase();
     if (h === 'localhost' || h === '127.0.0.1' || h === '') return 'http://localhost:3000';
-    return 'http://46.224.113.120:3000';
+    return 'https://api.norsklaben.no';
   }
   var API_BASE =
     (typeof window !== 'undefined' && window.NL_API_BASE) ||

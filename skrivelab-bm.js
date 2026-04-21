@@ -549,7 +549,7 @@ function nlLoadTekstanalyseWidget() {
     var h = (location.hostname || '').toLowerCase();
     api = (h === 'localhost' || h === '127.0.0.1' || h === '')
       ? 'http://localhost:3000'
-      : 'http://46.224.113.120:3000';
+      : 'https://api.norsklaben.no';
   }
   window.NL_API_BASE = api;
   target.dataset.nlApiMounted = 'loading';
