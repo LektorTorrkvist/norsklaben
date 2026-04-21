@@ -25,13 +25,15 @@ function buildSystemPrompt(maal = 'nn') {
   const katListe = buildCategoryList(maal);
 
   if (maal === 'bm') {
-    return `Du er en norsklærer-assistent. Du leser elevtekster, velger 3–5 øvingskategorier fra en fast liste, og gir en helhetlig vurdering av teksten.
+    return `Du er en norsklærer-assistent. Du leser elevtekster, gir en grundig, helhetlig vurdering, og velger 3–5 øvingskategorier fra en fast liste.
 
 REGLER:
 - Svar KUN med et JSON-objekt. Ingen forklaring, ingen markdown, ingen kommentarer.
 - Bruk bare kategorinøkler fra listen under (for "forslag").
-- Skriv enkelt, for en 8.-klassing.
+- Skriv enkelt og vennlig, for en 8.-klassing. Bruk "du".
 - Radar-feltet skal alltid inneholde alle fem nøklene med heltall fra 1 til 6.
+- "styrker" skal være 2–3 korte, konkrete styrker eleven viser i teksten.
+- Hvert forslag MA inneholde et kort, ordrett sitat fra elevteksten i "eksempel_fra_teksten" som viser hvorfor eleven bør jobbe med akkurat denne kategorien.
 
 RADAR-VURDERING (1 = svak, 6 = framifrå):
   innhald       – Innhold og ideer: relevans, kreativitet, dybde
@@ -44,13 +46,15 @@ KATEGORIER (for øvingsforslag):
 ${katListe}`;
   }
 
-  return `Du er ein norsklærar-assistent. Du les elevtekstar, vel 3–5 øvingskategoriar frå ei fast liste, og gjev ei heilskapleg vurdering av teksten.
+  return `Du er ein norsklærar-assistent. Du les elevtekstar, gjev ei grundig, heilskapleg vurdering, og vel 3–5 øvingskategoriar frå ei fast liste.
 
 REGLAR:
 - Svar KUN med eit JSON-objekt. Ingen forklaring, ingen markdown, ingen kommentarar.
 - Bruk berre kategorinøklar frå lista under (for «forslag»).
-- Skriv enkelt, for ein 8.-klassing.
+- Skriv enkelt og vennleg, for ein 8.-klassing. Bruk «du».
 - Radar-feltet skal alltid innehalde alle fem nøklane med heiltal frå 1 til 6.
+- «styrker» skal vere 2–3 korte, konkrete styrker eleven viser i teksten.
+- Kvart forslag MA innehalde eit kort, ordrett sitat frå elevteksten i «eksempel_fra_teksten» som viser kvifor eleven bør jobbe med akkurat denne kategorien.
 
 RADAR-VURDERING (1 = svak, 6 = framifrå):
   innhald       – Innhald og idear: relevans, kreativitet, djupne
@@ -69,7 +73,10 @@ function buildUserPrompt(elevtekst, maal = 'nn', oppgavetekst = '') {
   const eksempel = maal === 'bm'
     ? `{
   "sammendrag": "Du skriver om et spennende tema og har noen gode ideer.",
-  "positivt": "Du bruker konkrete eksempler – det gjør teksten levende!",
+  "styrker": [
+    "Du bruker konkrete eksempler som gjør teksten levende.",
+    "Du har en tydelig stemme og tar leseren med inn i historien."
+  ],
   "radar": {
     "innhald": 4,
     "struktur": 3,
@@ -100,7 +107,10 @@ function buildUserPrompt(elevtekst, maal = 'nn', oppgavetekst = '') {
 }`
     : `{
   "sammendrag": "Du skriv om eit spanande tema og har nokre gode idear.",
-  "positivt": "Du brukar konkrete eksempel – det gjer teksten levande!",
+  "styrker": [
+    "Du brukar konkrete eksempel som gjer teksten levande.",
+    "Du har ei tydeleg stemme og tek lesaren med inn i forteljinga."
+  ],
   "radar": {
     "innhald": 4,
     "struktur": 3,
@@ -143,10 +153,10 @@ Analyser teksten. Returner eit JSON-objekt med nøyaktig dette formatet (3–5 f
 ${eksempel}
 
 KRAV TIL JSON-SVARET:
-- "sammendrag": kort oppsummering av teksten (maks 2 setningar)
-- "positivt": éin konkret ting eleven gjer bra
+- "sammendrag": kort oppsummering av teksten (1–2 setningar)
+- "styrker": liste med 2–3 korte, konkrete styrker eleven viser
 ${radarInstr}
-- "forslag": liste med 3–5 øvingsforslag knytt til kategorinøklar frå lista
+- "forslag": liste med 3–5 øvingsforslag knytt til kategorinøklar frå lista. Kvart forslag MA ha eit kort, ordrett sitat frå teksten i "eksempel_fra_teksten".
 
 VIKTIG: Skriv KUN JSON. Ingen tekst utanfor JSON-objektet.`;
 }

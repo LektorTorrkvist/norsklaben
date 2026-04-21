@@ -23,7 +23,7 @@ const { buildSystemPrompt, buildUserPrompt } = require('./prompt');
 
 const PORT        = process.env.PORT        || 3000;
 const OLLAMA_URL  = process.env.OLLAMA_URL  || 'http://localhost:11434';
-const OLLAMA_MODEL= process.env.OLLAMA_MODEL|| 'qwen3.5:4b';
+const OLLAMA_MODEL= process.env.OLLAMA_MODEL|| 'gemma4:e4b';
 const MAX_TEKST   = parseInt(process.env.MAX_TEKST || '6000', 10);
 
 // Finn lokal IP-adresse (første ikke-interne nettverksadresse)
@@ -157,9 +157,23 @@ function normaliser(json, maal) {
 
   const radar = normaliserRadar(json.radar);
 
+  // Styrker: array av 2–3 korte strenger. Aksepter gammal "positivt"-streng
+  // som einaste element for bakoverkompatibilitet.
+  let styrker = [];
+  if (Array.isArray(json.styrker)) {
+    styrker = json.styrker
+      .map(s => String(s || '').trim())
+      .filter(Boolean)
+      .slice(0, 3)
+      .map(s => s.slice(0, 220));
+  }
+  const positivt = String(json.positivt || '').slice(0, 300);
+  if (!styrker.length && positivt) styrker = [positivt];
+
   return {
-    sammendrag: String(json.sammendrag || '').slice(0, 500),
-    positivt:   String(json.positivt   || '').slice(0, 300),
+    sammendrag: String(json.sammendrag || '').slice(0, 600),
+    positivt,
+    styrker,
     radar,
     forslag
   };
@@ -252,7 +266,7 @@ app.post('/api/analyser-tekst', async (req, res) => {
     }
 
     const sys  = buildSystemPrompt(maal);
-    const user = buildUserPrompt(tekst, oppgave);
+    const user = buildUserPrompt(tekst, maal, oppgave);
 
     const raw  = await kallOllama(sys, user);
     console.log('\n─── RAW LLM-SVAR ───────────────────────────────');
