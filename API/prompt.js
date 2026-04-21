@@ -69,6 +69,9 @@ ${katListe}`;
 
 function buildUserPrompt(elevtekst, maal = 'nn', oppgavetekst = '') {
   const oppg = oppgavetekst ? `Oppgåve: ${oppgavetekst}\n\n` : '';
+  const maalKontekst = maal === 'bm'
+    ? 'MALFORM: bokmal\n'
+    : 'MALFORM: nynorsk\n';
 
   const eksempel = maal === 'bm'
     ? `{
@@ -144,7 +147,7 @@ function buildUserPrompt(elevtekst, maal = 'nn', oppgavetekst = '') {
     ? `- "radar": objekt med nøyaktig disse fem nøklene (heltall 1–6): innhald, struktur, spraak_stil, rettskriving, kjeldebruk`
     : `- "radar": objekt med nøyaktig desse fem nøklane (heiltal 1–6): innhald, struktur, spraak_stil, rettskriving, kjeldebruk`;
 
-  return `${oppg}ELEVTEKST:
+  return `${maalKontekst}${oppg}ELEVTEKST:
 """
 ${elevtekst}
 """

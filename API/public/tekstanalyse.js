@@ -22,6 +22,8 @@
   var API_BASE =
     (typeof window !== 'undefined' && window.NL_API_BASE) ||
     (SRC ? SRC.replace(/\/[^\/]*$/, '') : defaultApiBase());
+  var STORAGE_KEY = 'nl_ta_history_v1';
+  var MAX_HISTORY = 15;
 
   function detectMaal() {
     if (SCRIPT && SCRIPT.dataset && SCRIPT.dataset.maal) return SCRIPT.dataset.maal === 'bm' ? 'bm' : 'nn';
@@ -36,11 +38,24 @@
   var T = MAAL === 'bm' ? {
     title: 'Skriveprofil',
     intro: 'Lim inn den siste teksten du har levert. Du får en grundig analyse, en skriveprofil og konkrete oppgaver å øve på.',
+    maalLabel: 'Målform',
+    sjangerLabel: 'Sjanger',
+    sjangerPlaceholder: 'Velg sjanger (valgfritt)',
     label: 'Lim inn elevteksten din',
     placeholder: 'Lim inn teksten din her …',
     analyze: 'Analyser teksten',
     analyzing: 'Analyserer …',
     again: 'Analyser ny tekst',
+    openLast: 'Siste lagra analyse',
+    history: 'Historikk',
+    clearHistory: 'Tom historikk',
+    historyTitle: 'Tidlegare analysar',
+    latestSaved: 'Sist lagra:',
+    noSaved: 'Ingen lagra analysar enno.',
+    viewingSaved: 'Viser lagra analyse frå',
+    openSaved: 'Opne',
+    noGenre: 'Utan sjanger',
+    historyEmpty: 'Du har inga lagra historikk enno.',
     radarTitle: 'Skriveprofilen din',
     strengthsTitle: 'Det du gjør bra',
     suggestTitle: 'Øvingsforslag basert på teksten din',
@@ -53,11 +68,24 @@
   } : {
     title: 'Skriveprofil',
     intro: 'Lim inn den siste teksten du har levert. Du får ein grundig analyse, ein skriveprofil og konkrete oppgåver å øve på.',
+    maalLabel: 'Målform',
+    sjangerLabel: 'Sjanger',
+    sjangerPlaceholder: 'Vel sjanger (valfritt)',
     label: 'Lim inn elevteksten din',
     placeholder: 'Lim inn teksten din her …',
     analyze: 'Analyser teksten',
     analyzing: 'Analyserer …',
     again: 'Analyser ny tekst',
+    openLast: 'Siste lagrede analyse',
+    history: 'Historikk',
+    clearHistory: 'Tøm historikk',
+    historyTitle: 'Tidligere analyser',
+    latestSaved: 'Sist lagret:',
+    noSaved: 'Ingen lagrede analyser ennå.',
+    viewingSaved: 'Viser lagret analyse fra',
+    openSaved: 'Åpne',
+    noGenre: 'Uten sjanger',
+    historyEmpty: 'Du har ingen lagret historikk ennå.',
     radarTitle: 'Skriveprofilen din',
     strengthsTitle: 'Det du gjer bra',
     suggestTitle: 'Øvingsforslag basert på teksten din',
@@ -68,6 +96,32 @@
     error: 'Noko gjekk gale. Sjekk at API-et køyrer.',
     short: 'Teksten er kort – analysen blir betre med ein lengre tekst.'
   };
+
+  var MAAL_ALTERNATIV = MAAL === 'bm'
+    ? [
+      { value: 'bm', label: 'Bokmål' },
+      { value: 'nn', label: 'Nynorsk' }
+    ]
+    : [
+      { value: 'nn', label: 'Nynorsk' },
+      { value: 'bm', label: 'Bokmål' }
+    ];
+
+  var SJANGER_ALTERNATIV = MAAL === 'bm'
+    ? [
+      { value: 'fortellende tekst', label: 'Fortellende tekst' },
+      { value: 'beskrivende tekst', label: 'Beskrivende tekst' },
+      { value: 'argumenterende tekst', label: 'Argumenterende tekst' },
+      { value: 'fagtekst', label: 'Fagtekst' },
+      { value: 'refleksjonstekst', label: 'Refleksjonstekst' }
+    ]
+    : [
+      { value: 'forteljande tekst', label: 'Forteljande tekst' },
+      { value: 'skildrande tekst', label: 'Skildrande tekst' },
+      { value: 'argumenterande tekst', label: 'Argumenterande tekst' },
+      { value: 'fagtekst', label: 'Fagtekst' },
+      { value: 'refleksjonstekst', label: 'Refleksjonstekst' }
+    ];
 
   var RADAR_AKSAR = [
     { key: 'innhald',      label: MAAL === 'bm' ? 'Innhold'         : 'Innhald' },
@@ -86,9 +140,14 @@
 '.nl-ta p{margin:0 0 .6rem;color:#3a4a3f;}' +
 '.nl-ta-intro{color:#3a4a3f;margin:.2rem 0 1rem;font-size:.95rem;}' +
 '.nl-ta-label{display:block;font-weight:600;margin:.2rem 0 .4rem;color:#1A3D2B;font-size:.92rem;}' +
+'.nl-ta-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;margin:.2rem 0 .65rem;}' +
+'.nl-ta-meta-field{display:flex;flex-direction:column;}' +
+'.nl-ta-select{width:100%;padding:.55rem .7rem;border:1.5px solid #E6DFD2;border-radius:10px;font:500 .95rem "Source Sans 3",sans-serif;color:#1A3D2B;background:#fffdf8;box-sizing:border-box;}' +
+'.nl-ta-select:focus{outline:none;border-color:#1A3D2B;box-shadow:0 0 0 3px rgba(26,61,43,.12);}' +
 '.nl-ta-textarea{width:100%;min-height:160px;padding:.85rem 1rem;border:1.5px solid #E6DFD2;border-radius:12px;font-family:inherit;font-size:1rem;line-height:1.55;color:#1A3D2B;background:#fffdf8;resize:vertical;box-sizing:border-box;}' +
 '.nl-ta-textarea:focus{outline:none;border-color:#1A3D2B;box-shadow:0 0 0 3px rgba(26,61,43,.12);}' +
 '.nl-ta-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem;}' +
+'.nl-ta-actions-top{margin-top:0;margin-bottom:.85rem;}' +
 '.nl-ta-btn{display:inline-flex;align-items:center;gap:.4rem;background:#1A3D2B;color:#fff;border:none;border-radius:10px;padding:.65rem 1.2rem;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;transition:background .2s;}' +
 '.nl-ta-btn:hover{background:#2E6B4F;}' +
 '.nl-ta-btn[disabled]{opacity:.65;cursor:wait;}' +
@@ -97,6 +156,7 @@
 '.nl-ta-btn-gold{background:#C8832A;}' +
 '.nl-ta-btn-gold:hover{background:#A66A1F;}' +
 '.nl-ta-status{margin-top:.6rem;font-size:.9rem;color:#7a6a4a;}' +
+'.nl-ta-storage-note{margin:-.15rem 0 .7rem;color:#7a6a4a;font-size:.88rem;}' +
 '.nl-ta-status.err{color:#a73e23;}' +
 '.nl-ta-spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:nl-ta-spin .7s linear infinite;}' +
 '@keyframes nl-ta-spin{to{transform:rotate(360deg);}}' +
@@ -104,6 +164,7 @@
 '.nl-ta-summary p{margin:0;color:#1A3D2B;font-size:.98rem;}' +
 '.nl-ta-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem;margin-bottom:1rem;}' +
 '@media(max-width:720px){.nl-ta-grid{grid-template-columns:1fr;}}' +
+'@media(max-width:720px){.nl-ta-meta{grid-template-columns:1fr;}}' +
 '.nl-ta-radar-wrap{display:flex;justify-content:center;align-items:center;padding:.4rem 0;}' +
 '.nl-ta-radar{width:100%;max-width:340px;height:auto;}' +
 '.nl-ta-radar .axis{stroke:#cdbfa6;stroke-width:1;}' +
@@ -124,7 +185,13 @@
 '.nl-ta-suggest-actions a{color:#1A3D2B;text-decoration:none;font-weight:600;font-size:.9rem;border-bottom:1px dashed #C8832A;}' +
 '.nl-ta-suggest-actions a:hover{color:#C8832A;}' +
 '.nl-ta-startall{display:block;margin:1.1rem 0 0;text-align:center;}' +
-'.nl-ta-empty{padding:1rem;border:1.5px dashed #cdbfa6;border-radius:12px;color:#7a6a4a;text-align:center;font-style:italic;}';
+'.nl-ta-empty{padding:1rem;border:1.5px dashed #cdbfa6;border-radius:12px;color:#7a6a4a;text-align:center;font-style:italic;}' +
+'.nl-ta-history-list{display:grid;gap:.75rem;}' +
+'.nl-ta-history-item{display:grid;gap:.45rem;background:#fffaf6;border:1px solid #eadfce;border-radius:12px;padding:.9rem 1rem;}' +
+'.nl-ta-history-meta{display:flex;gap:.55rem;flex-wrap:wrap;font-size:.84rem;color:#7a6a4a;}' +
+'.nl-ta-history-chip{display:inline-flex;align-items:center;padding:.12rem .5rem;border-radius:999px;background:#efe7d8;color:#6b5430;}' +
+'.nl-ta-history-excerpt{margin:0;color:#314338;font-size:.93rem;}' +
+'.nl-ta-history-actions{display:flex;gap:.5rem;flex-wrap:wrap;}';
 
   function injectCss() {
     if (document.getElementById('nl-ta-css')) return;
@@ -146,6 +213,129 @@
     return String(s == null ? '' : s)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;')
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function loadHistory() {
+    try {
+      var raw = window.localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      var parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      return parsed.filter(function (entry) {
+        return entry && entry.id && entry.savedAt && entry.resultat;
+      });
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function saveHistory(items) {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items.slice(0, MAX_HISTORY)));
+    } catch (err) {}
+  }
+
+  function formatTs(ts) {
+    try {
+      return new Intl.DateTimeFormat(MAAL === 'bm' ? 'nb-NO' : 'nn-NO', {
+        dateStyle: 'short',
+        timeStyle: 'short'
+      }).format(new Date(ts));
+    } catch (err) {
+      return String(ts || '');
+    }
+  }
+
+  function textExcerpt(text) {
+    var clean = String(text || '').replace(/\s+/g, ' ').trim();
+    if (clean.length <= 140) return clean;
+    return clean.slice(0, 137) + '...';
+  }
+
+  function maalLabel(value) {
+    return value === 'bm' ? 'Bokmal' : 'Nynorsk';
+  }
+
+  function addHistoryEntry(payload) {
+    var items = loadHistory();
+    var entry = {
+      id: 'nlta-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
+      savedAt: new Date().toISOString(),
+      maal: payload.maal === 'bm' ? 'bm' : 'nn',
+      sjanger: String(payload.sjanger || '').trim(),
+      tekst: String(payload.tekst || ''),
+      resultat: payload.resultat || null
+    };
+    items.unshift(entry);
+    saveHistory(items);
+    return entry;
+  }
+
+  function updateSavedControls(host) {
+    var items = loadHistory();
+    var latestBtn = host.querySelector('[data-nl-ta-open-last]');
+    var historyBtn = host.querySelector('[data-nl-ta-show-history]');
+    var note = host.querySelector('[data-nl-ta-storage-note]');
+    var hasItems = items.length > 0;
+
+    if (latestBtn) latestBtn.disabled = !hasItems;
+    if (historyBtn) historyBtn.disabled = !hasItems;
+    if (note) {
+      note.textContent = hasItems
+        ? (T.latestSaved + ' ' + formatTs(items[0].savedAt))
+        : T.noSaved;
+    }
+  }
+
+  function applyEntryToForm(host, entry) {
+    var ta = host.querySelector('#nl-ta-input');
+    var maalSel = host.querySelector('#nl-ta-maal');
+    var sjangerSel = host.querySelector('#nl-ta-sjanger');
+    if (ta) ta.value = String(entry.tekst || '');
+    if (maalSel) maalSel.value = entry.maal === 'bm' ? 'bm' : 'nn';
+    if (sjangerSel) sjangerSel.value = String(entry.sjanger || '');
+  }
+
+  function showSavedEntry(host, entry) {
+    if (!entry || !entry.resultat) return;
+    applyEntryToForm(host, entry);
+    renderResult(host, entry.resultat);
+    var status = host.querySelector('[data-nl-ta-status]');
+    if (status) {
+      status.classList.remove('err');
+      status.textContent = T.viewingSaved + ' ' + formatTs(entry.savedAt) + '.';
+    }
+    var resEl = host.querySelector('[data-nl-ta-results]');
+    if (resEl && resEl.scrollIntoView) resEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderHistory(host) {
+    var resultsEl = host.querySelector('[data-nl-ta-results]');
+    if (!resultsEl) return;
+
+    var items = loadHistory();
+    if (!items.length) {
+      resultsEl.innerHTML = '<div class="nl-ta-card"><h3>' + esc(T.historyTitle) + '</h3><div class="nl-ta-empty">' + esc(T.historyEmpty) + '</div></div>';
+      return;
+    }
+
+    var html = '<div class="nl-ta-card">';
+    html += '<h3>' + esc(T.historyTitle) + '</h3>';
+    html += '<div class="nl-ta-actions nl-ta-actions-top"><button type="button" class="nl-ta-btn nl-ta-btn-ghost" data-nl-ta-clear-history="1">' + esc(T.clearHistory) + '</button></div>';
+    html += '<div class="nl-ta-history-list">';
+    items.forEach(function (entry) {
+      html += '<article class="nl-ta-history-item">';
+      html += '<div class="nl-ta-history-meta">';
+      html += '<span class="nl-ta-history-chip">' + esc(formatTs(entry.savedAt)) + '</span>';
+      html += '<span class="nl-ta-history-chip">' + esc(maalLabel(entry.maal)) + '</span>';
+      html += '<span class="nl-ta-history-chip">' + esc(entry.sjanger || T.noGenre) + '</span>';
+      html += '</div>';
+      html += '<p class="nl-ta-history-excerpt">' + esc(textExcerpt(entry.tekst)) + '</p>';
+      html += '<div class="nl-ta-history-actions"><button type="button" class="nl-ta-btn nl-ta-btn-ghost" data-nl-ta-open-id="' + esc(entry.id) + '">' + esc(T.openSaved) + '</button></div>';
+      html += '</article>';
+    });
+    html += '</div></div>';
+    resultsEl.innerHTML = html;
   }
 
   function buildRadarSvg(radar) {
@@ -293,10 +483,34 @@
     host.dataset.nlTaMounted = '1';
     host.classList.add('nl-ta');
 
+    var maalOptions = MAAL_ALTERNATIV.map(function (m) {
+      return '<option value="' + esc(m.value) + '"' + (m.value === MAAL ? ' selected' : '') + '>' + esc(m.label) + '</option>';
+    }).join('');
+
+    var sjangerOptions = '<option value="">' + esc(T.sjangerPlaceholder) + '</option>' +
+      SJANGER_ALTERNATIV.map(function (s) {
+        return '<option value="' + esc(s.value) + '">' + esc(s.label) + '</option>';
+      }).join('');
+
     host.innerHTML =
       '<div class="nl-ta-card">' +
         '<h3>' + esc(T.title) + '</h3>' +
         '<p class="nl-ta-intro">' + esc(T.intro) + '</p>' +
+        '<div class="nl-ta-actions nl-ta-actions-top">' +
+          '<button type="button" class="nl-ta-btn nl-ta-btn-ghost" data-nl-ta-open-last="1">' + esc(T.openLast) + '</button>' +
+          '<button type="button" class="nl-ta-btn nl-ta-btn-ghost" data-nl-ta-show-history="1">' + esc(T.history) + '</button>' +
+        '</div>' +
+        '<div class="nl-ta-storage-note" data-nl-ta-storage-note></div>' +
+        '<div class="nl-ta-meta">' +
+          '<div class="nl-ta-meta-field">' +
+            '<label class="nl-ta-label" for="nl-ta-maal">' + esc(T.maalLabel) + '</label>' +
+            '<select id="nl-ta-maal" class="nl-ta-select">' + maalOptions + '</select>' +
+          '</div>' +
+          '<div class="nl-ta-meta-field">' +
+            '<label class="nl-ta-label" for="nl-ta-sjanger">' + esc(T.sjangerLabel) + '</label>' +
+            '<select id="nl-ta-sjanger" class="nl-ta-select">' + sjangerOptions + '</select>' +
+          '</div>' +
+        '</div>' +
         '<label class="nl-ta-label" for="nl-ta-input">' + esc(T.label) + '</label>' +
         '<textarea id="nl-ta-input" class="nl-ta-textarea" placeholder="' + esc(T.placeholder) + '"></textarea>' +
         '<div class="nl-ta-actions">' +
@@ -306,17 +520,57 @@
       '</div>' +
       '<div data-nl-ta-results></div>';
 
+    updateSavedControls(host);
+
     host.addEventListener('click', function (e) {
       var go = e.target.closest('[data-nl-ta-go]');
       if (go) { e.preventDefault(); doAnalyse(host, go); return; }
+
+      var openLast = e.target.closest('[data-nl-ta-open-last]');
+      if (openLast) {
+        e.preventDefault();
+        var latestItems = loadHistory();
+        if (latestItems.length) showSavedEntry(host, latestItems[0]);
+        return;
+      }
+
+      var showHistoryBtn = e.target.closest('[data-nl-ta-show-history]');
+      if (showHistoryBtn) {
+        e.preventDefault();
+        renderHistory(host);
+        return;
+      }
 
       var reset = e.target.closest('[data-nl-ta-reset]');
       if (reset) {
         e.preventDefault();
         var resultsEl = host.querySelector('[data-nl-ta-results]');
         if (resultsEl) resultsEl.innerHTML = '';
+        var statusEl = host.querySelector('[data-nl-ta-status]');
+        if (statusEl) {
+          statusEl.classList.remove('err');
+          statusEl.textContent = '';
+        }
         var ta = host.querySelector('#nl-ta-input');
         if (ta) { ta.focus(); }
+        return;
+      }
+
+      var openSavedBtn = e.target.closest('[data-nl-ta-open-id]');
+      if (openSavedBtn) {
+        e.preventDefault();
+        var id = openSavedBtn.getAttribute('data-nl-ta-open-id') || '';
+        var entry = loadHistory().find(function (item) { return item.id === id; });
+        if (entry) showSavedEntry(host, entry);
+        return;
+      }
+
+      var clearHistoryBtn = e.target.closest('[data-nl-ta-clear-history]');
+      if (clearHistoryBtn) {
+        e.preventDefault();
+        saveHistory([]);
+        updateSavedControls(host);
+        renderHistory(host);
         return;
       }
 
@@ -331,8 +585,13 @@
 
   function doAnalyse(host, btn) {
     var ta = host.querySelector('#nl-ta-input');
+    var maalSel = host.querySelector('#nl-ta-maal');
+    var sjangerSel = host.querySelector('#nl-ta-sjanger');
     var status = host.querySelector('[data-nl-ta-status]');
     var tekst = (ta && ta.value || '').trim();
+    var valgtMaal = (maalSel && maalSel.value === 'bm') ? 'bm' : 'nn';
+    var sjanger = (sjangerSel && sjangerSel.value || '').trim();
+    var oppgave = sjanger ? ('Sjanger: ' + sjanger) : '';
 
     status.classList.remove('err');
     status.textContent = '';
@@ -351,13 +610,20 @@
     fetch(API_BASE + '/api/analyser-tekst', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tekst: tekst, maal: MAAL })
+      body: JSON.stringify({ tekst: tekst, maal: valgtMaal, sjanger: sjanger, oppgave: oppgave })
     })
       .then(function (r) {
         if (!r.ok) return r.json().then(function (j) { throw new Error(j.feil || ('HTTP ' + r.status)); });
         return r.json();
       })
       .then(function (data) {
+        addHistoryEntry({
+          tekst: tekst,
+          maal: valgtMaal,
+          sjanger: sjanger,
+          resultat: data
+        });
+        updateSavedControls(host);
         renderResult(host, data);
         status.textContent = '';
         var resEl = host.querySelector('[data-nl-ta-results]');

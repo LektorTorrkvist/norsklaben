@@ -23,7 +23,7 @@ const { buildSystemPrompt, buildUserPrompt } = require('./prompt');
 
 const PORT        = process.env.PORT        || 3000;
 const OLLAMA_URL  = process.env.OLLAMA_URL  || 'http://localhost:11434';
-const OLLAMA_MODEL= process.env.OLLAMA_MODEL|| 'gemma4:e4b';
+const OLLAMA_MODEL= process.env.OLLAMA_MODEL|| 'LTG/normistral-11b-thinking:latest';
 const MAX_TEKST   = parseInt(process.env.MAX_TEKST || '6000', 10);
 
 // Finn lokal IP-adresse (første ikke-interne nettverksadresse)
@@ -256,7 +256,13 @@ app.post('/api/analyser-tekst', async (req, res) => {
   try {
     const tekst = String(req.body?.tekst || '').trim();
     const maal  = req.body?.maal === 'bm' ? 'bm' : 'nn';
-    const oppgave = String(req.body?.oppgave || '').trim();
+    const sjanger = String(req.body?.sjanger || '').trim().slice(0, 80);
+    let oppgave = String(req.body?.oppgave || '').trim();
+
+    if (sjanger) {
+      const sjangerLinje = maal === 'bm' ? `Sjanger: ${sjanger}` : `Sjanger: ${sjanger}`;
+      oppgave = oppgave ? `${sjangerLinje}\n${oppgave}` : sjangerLinje;
+    }
 
     if (!tekst) {
       return res.status(400).json({ feil: 'Manglar "tekst" i body.' });
