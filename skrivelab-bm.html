@@ -72,20 +72,62 @@
 </header>
 
 <div class="hero skrivelab-hero">
-  <div class="htag">Øvingsoppgaver</div>
+  <div class="htag">Norsklaben</div>
   <h1>Skrivelab</h1>
-  <p>Øvingsoppgaver i norsk skriving – fra grammatikk til drøfting, kildebruk og sjanger.</p>
-  <div class="hero-stats">
-    <div><div class="stat-n" id="nl-stat-categories">24</div><div class="stat-l">Kategorier</div></div>
-    <div><div class="stat-n" id="nl-stat-tasks">219</div><div class="stat-l">Oppgaver</div></div>
+  <p>Vil du vite hva du bør øve på – eller bare starte å øve med en gang?</p>
+  <div class="skrivelab-hero-actions">
+    <a class="lbtn skrivelab-hero-btn" href="#nl-skriveprofil">📝 Skriveprofil</a>
+    <a class="lbtn skrivelab-hero-btn skrivelab-hero-btn-ghost" href="#nl-adaptive">🎯 Skrivemesteren</a>
   </div>
 </div>
+
+<section class="skrivelab-landing" aria-labelledby="skrivelab-landing-title">
+  <div class="skrivelab-landing-shell">
+    <div class="skrivelab-landing-head">
+      <div>
+        <p class="skrivelab-kicker">To veier, samme mål</p>
+        <h2 id="skrivelab-landing-title">Hva vil du gjøre i dag?</h2>
+      </div>
+      <p class="skrivelab-landing-lead">Du velger selv – start med teksten din, eller hopp rett inn i øving. Begge hjelper deg med å bli en bedre skriver.</p>
+    </div>
+
+    <div class="skrivelab-landing-grid">
+      <article class="skrivelab-path skrivelab-path-api" id="nl-skriveprofil" aria-labelledby="skrivelab-api-title">
+        <div class="skrivelab-path-top">
+          <div class="skrivelab-path-icon" aria-hidden="true">📝</div>
+          <span class="skrivelab-path-badge">Skriveprofil</span>
+          <h3 id="skrivelab-api-title">Lim inn den siste teksten din</h3>
+          <p>Få tilbakemelding på hva du kan gjøre bedre – og konkrete oppgaver å øve på til neste gang.</p>
+        </div>
+        <div id="nl-tekstanalyse" class="skrivelab-api-slot">
+          <div class="nl-api-fallback" id="nl-api-fallback">
+            <strong>Tekstanalysen kommer opp her når API-et er klart.</strong>
+            <span>Voksenoppsett: standardadresse er <code>http://localhost:3000</code>. Du kan overstyre med <code>?api=adresse</code>.</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="skrivelab-path skrivelab-path-master" aria-labelledby="skrivelab-master-title">
+        <div class="skrivelab-path-top">
+          <div class="skrivelab-path-icon" aria-hidden="true">🎯</div>
+          <span class="skrivelab-path-badge skrivelab-path-badge-gold">Skrivemesteren</span>
+          <h3 id="skrivelab-master-title">Spill deg gjennom skriveferdighetene</h3>
+          <p>Tren på typiske skrivefeil, grammatikk og rettskriving. Tjen XP og se hvor mye du lærer!</p>
+        </div>
+        <div class="skrivelab-path-actions">
+          <a class="adp-btn adp-btn-pri" href="#nl-adaptive">Kom i gang →</a>
+          <a class="adp-btn" href="elevprofil-bm.html">Se profilen min</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
 
 <section class="adp" id="nl-adaptive" aria-labelledby="nl-adaptive-title">
   <div class="adp-inner">
     <div class="adp-head">
-      <h2 id="nl-adaptive-title">Skrivemesteren - adaptive øvingsoppgaver for norskfaget</h2>
-      <p>Bli en skrivemester! Spill deg gjennom grammatikk, rettskriving og typiske skriveferdigheiter. Tjen XP og nå nye nivå!</p>
+      <h2 id="nl-adaptive-title">Skrivemesteren</h2>
+      <p>Velg kategorier og start øving. Du tjener XP, klatrer i nivå og ser hvor du blir bedre – økt for økt.</p>
       <div class="adp-gamify adp-gamify-cockpit" id="nl-ad-gamify" aria-live="polite">
         <div class="adp-g-orbit" aria-hidden="true"></div>
 
@@ -145,7 +187,7 @@
 
     <div class="adp-grid">
       <div class="adp-field adp-field-wide">
-        <label>Kategorier – velg hva du vil øve på</label>
+        <label>Hva vil du øve på?</label>
         <div class="adp-cats" id="nl-ad-cats"></div>
         <div class="adp-cat-tools">
           <button type="button" class="adp-btn adp-cat-tool" id="nl-ad-cats-clear">Tøm</button>
@@ -154,7 +196,7 @@
       </div>
 
       <div class="adp-field">
-        <label for="nl-ad-level">Vanskegrad</label>
+        <label for="nl-ad-level">Hvor vanskelig?</label>
         <select id="nl-ad-level">
           <option value="adaptiv" selected>Adaptiv (automatisk)</option>
           <option value="lett">Lett</option>
@@ -164,7 +206,7 @@
       </div>
 
       <div class="adp-field">
-        <label for="nl-ad-count">Antall oppgaver (maks 25)</label>
+        <label for="nl-ad-count">Hvor mange oppgaver?</label>
         <input id="nl-ad-count" type="number" min="3" max="25" value="8" />
       </div>
     </div>
@@ -247,6 +289,17 @@
     </div>
   </div>
 </div>
+
+<section class="skrivelab-bank-intro" aria-labelledby="nl-bank-main-title">
+  <div class="skrivelab-bank-intro-inner">
+    <div>
+      <p class="skrivelab-kicker">Oppgavebank</p>
+      <h2 id="nl-bank-main-title">Finn oppgaver selv</h2>
+      <p>Bla gjennom alle kategorier og velg en oppgave du vil øve på.</p>
+    </div>
+    <a class="adp-btn" href="#nl-bank-main">Se alle oppgaver</a>
+  </div>
+</section>
 
 <main class="main" id="nl-bank-main" aria-label="Oppgavebank"></main>
 

@@ -30,6 +30,7 @@ function nlBoot() {
   nlSafeInit('ensure-bank-ob-styles', nlEnsureBankObStyles);
 
   nlSafeInit('ensure-bank-shell', nlEnsureBankShell);
+  nlSafeInit('load-tekstanalyse', nlLoadTekstanalyseWidget);
   nlSafeInit('import-bank-tasks', nlImportMTBankTasks);
   nlSafeInit('normalize-categories', nlNormalizeCategories);
   nlSafeInit('normalize-types-and-titles', nlNormalizeExerciseMetaFromType);
@@ -238,16 +239,6 @@ function nlBoot() {
         if (typeof window.mtStartFeillogg !== 'function') return;
         /* Sjekk om det finst feil å øve på først */
         var logg = (typeof window.mtFeilloggGet === 'function') ? window.mtFeilloggGet() : [];
-        if (!logg || !logg.length) {
-          alert('Ingen tidligere feil å øve på ennå.');
-          return;
-        }
-        /* Skjul skrivelab-eige UI før vi opnar v2-modalen */
-        var mainEl = document.querySelector('.main');
-        var adaptivePanel = document.getElementById('nl-adaptive');
-        if (mainEl) mainEl.style.display = 'none';
-        if (adaptivePanel) adaptivePanel.style.display = 'none';
-        window.mtStartFeillogg();ar logg = (typeof window.mtFeilloggGet === 'function') ? window.mtFeilloggGet() : [];
         if (!logg || !logg.length) {
           alert('Ingen tidligere feil å øve på ennå.');
           return;
@@ -536,6 +527,47 @@ function nlEnsureBankShell() {
     grp.appendChild(grid);
     mainEl.appendChild(grp);
   });
+}
+
+function nlLoadTekstanalyseWidget() {
+  var target = document.getElementById('nl-tekstanalyse') || document.getElementById('nl-skrivelab-ai');
+  if (!target) return;
+  if (target.dataset.nlApiMounted === '1' || document.querySelector('script[data-nl-api-widget="1"]')) return;
+
+  var fallback = document.getElementById('nl-api-fallback');
+  var params = new URLSearchParams(window.location.search);
+  var api = params.get('api');
+
+  if (api) {
+    if (!/^https?:\/\//.test(api)) api = 'http://' + api;
+    try { localStorage.setItem('nl_api_base', api); } catch (err) {}
+  } else {
+    try { api = localStorage.getItem('nl_api_base'); } catch (err) {}
+  }
+
+  if (!api) api = 'http://localhost:3000';
+  window.NL_API_BASE = api;
+  target.dataset.nlApiMounted = 'loading';
+
+  var script = document.createElement('script');
+  script.src = api + '/tekstanalyse.js';
+  script.setAttribute('data-nl-api-widget', '1');
+  script.onload = function() {
+    target.dataset.nlApiMounted = '1';
+    if (fallback) fallback.hidden = true;
+  };
+  script.onerror = function() {
+    target.dataset.nlApiMounted = 'error';
+    if (fallback) {
+      fallback.hidden = false;
+      var apiSafe = (typeof nlMtEscHtml === 'function') ? nlMtEscHtml(api) : String(api).replace(/</g, '&lt;');
+      fallback.innerHTML = '<strong>API-et svarer ikke ennå.</strong><span>Start den lokale tjenesten på <code>' + apiSafe + '</code> eller åpne siden med <code>?api=adresse</code> for å peke til riktig server.</span>';
+    }
+    if (window.console && console.warn) {
+      console.warn('Tekstanalyse API ikke tilgjengelig på ' + api);
+    }
+  };
+  document.body.appendChild(script);
 }
 
 function nlNormalizeCategories() {
