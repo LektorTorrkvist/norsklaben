@@ -131,7 +131,7 @@
     var cx = 200, cy = 200, maxR = 150, n = 6;
     function angle(i) { return -Math.PI / 2 + i * 2 * Math.PI / n; }
     function pt(i, r) { return { x: cx + r * Math.cos(angle(i)), y: cy + r * Math.sin(angle(i)) }; }
-    var svg = '<svg class="ep-radar-svg" viewBox="0 0 400 400" overflow="visible" xmlns="http://www.w3.org/2000/svg">';
+    var svg = '<svg class="ep-radar-svg" viewBox="-60 -40 520 490" overflow="visible" xmlns="http://www.w3.org/2000/svg">';
     for (var ring = 1; ring <= 6; ring++) {
       var r = maxR * ring / 6;
       var pts = [];
@@ -160,14 +160,19 @@
         svg += '<text x="' + p.x.toFixed(1) + '" y="' + (p.y - 8).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#7a4a10">' + val.toFixed(1) + '</text>';
       }
     }
-    var labelR = maxR + 30;
+    var labelR = maxR + 18;
     for (var i = 0; i < n; i++) {
       var p = pt(i, labelR);
       var anchor = 'middle';
       if (p.x < cx - 10) anchor = 'end';
       else if (p.x > cx + 10) anchor = 'start';
       var dy = p.y < cy - 10 ? '-0.3em' : (p.y > cy + 10 ? '1.1em' : '0.35em');
-      svg += '<text x="' + p.x.toFixed(1) + '" y="' + p.y.toFixed(1) + '" text-anchor="' + anchor + '" font-size="12" font-weight="600" fill="#1A3D2B" dy="' + dy + '">' + escapeHtml(labels[i]) + '</text>';
+      var spIdx = labels[i].length > 16 ? labels[i].lastIndexOf(' ', Math.floor(labels[i].length / 2) + 2) : -1;
+      if (spIdx > 0) {
+        svg += '<text x="' + p.x.toFixed(1) + '" y="' + p.y.toFixed(1) + '" text-anchor="' + anchor + '" font-size="11" font-weight="600" fill="#1A3D2B"><tspan x="' + p.x.toFixed(1) + '" dy="' + dy + '">' + escapeHtml(labels[i].substring(0, spIdx)) + '</tspan><tspan x="' + p.x.toFixed(1) + '" dy="1.2em">' + escapeHtml(labels[i].substring(spIdx + 1)) + '</tspan></text>';
+      } else {
+        svg += '<text x="' + p.x.toFixed(1) + '" y="' + p.y.toFixed(1) + '" text-anchor="' + anchor + '" font-size="11" font-weight="600" fill="#1A3D2B" dy="' + dy + '">' + escapeHtml(labels[i]) + '</text>';
+      }
     }
     svg += '</svg>';
     return svg;
