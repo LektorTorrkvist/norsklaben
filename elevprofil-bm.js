@@ -3,6 +3,26 @@
 
   var ANALYSIS_KEY = 'norsklaben-elevprofil-v1';
   var LEGACY_ANALYSIS_KEYS = ['norsklaben-elevprofil-nn-v1', 'norsklaben-elevprofil-bm-v1'];
+  var RADAR_FILTER_KEY = 'norsklaben-radar-excluded-v1';
+
+  function readRadarExcluded() {
+    var arr = readLocalJson(RADAR_FILTER_KEY, []);
+    return Array.isArray(arr) ? arr : [];
+  }
+  function writeRadarExcluded(list) {
+    writeLocalJson(RADAR_FILTER_KEY, Array.isArray(list) ? list : []);
+  }
+  function toggleRadarAnalysis(ts, included) {
+    var excluded = readRadarExcluded();
+    var key = String(ts);
+    var idx = excluded.indexOf(key);
+    if (included) {
+      if (idx !== -1) excluded.splice(idx, 1);
+    } else {
+      if (idx === -1) excluded.push(key);
+    }
+    writeRadarExcluded(excluded);
+  }
   var ADAPTIVE_PROFILE_KEY = 'norsklaben-adaptive-profile-v1';
   var ADAPTIVE_HISTORY_KEY = 'norsklaben-adaptive-history-v1';
   var MT_SHARED_KEY = 'nlMestring';
@@ -375,6 +395,14 @@
     });
   }
 
+  // Bare skriveprofil-data: analyser fra Tekstsjekk + radar-filter. Rører ikke XP, økter, feillogg.
+  function clearSkriveprofilData() {
+    var keys = [ANALYSIS_KEY, RADAR_FILTER_KEY, 'nl_ta_history_v1'].concat(LEGACY_ANALYSIS_KEYS);
+    keys.forEach(function(key) {
+      try { window.localStorage.removeItem(key); } catch (e) {}
+    });
+  }
+
   function getXpLevel(totalXp) {
     var safeXp = Math.max(0, Number(totalXp) || 0);
     var current = XP_LEVELS[0];
@@ -424,35 +452,54 @@
     return counts;
   }
 
+  // Vektede anbefalinger: tekstanalyse=3, feillogg=2, øvingshistorikk=1.
+  // Kategorier i flere kilder får summert vekt.
+  var SOURCE_LABELS = {
+    tekstanalyse: 'Fra tekstanalyse',
+    feillogg: 'Gjentatte feil',
+    ovingshistorikk: 'Fra øvingshistorikk'
+  };
+
   function buildRecommendations(categoryStats, analyses, feilloggCounts) {
     var latest = analyses[0] || null;
     var map = {};
 
-    categoryStats.filter(function(item) {
-      return item.total > 0 && item.pct < 75;
-    }).sort(function(a, b) {
-      return a.pct - b.pct;
-    }).slice(0, 3).forEach(function(item) {
-      map[item.id] = map[item.id] || { id: item.id, label: item.label, score: 0, reasons: [] };
-      map[item.id].score += 4;
-      map[item.id].reasons.push('Lav treffprosent i øvingsoppgavene (' + item.pct + ' %).');
-    });
+    function ensure(id, label) {
+      if (!map[id]) {
+        map[id] = { id: id, label: label || getCategoryLabel(id), score: 0, sources: [], reasons: [] };
+      }
+      return map[id];
+    }
 
+    // Vekt 3 — kategori funnet i siste tekstanalyse
     if (latest && Array.isArray(latest.categories)) {
       latest.categories.forEach(function(item) {
         if (!item || !item.id) return;
-        map[item.id] = map[item.id] || { id: item.id, label: getCategoryLabel(item.id), score: 0, reasons: [] };
-        map[item.id].score += 5;
-        if (item.reason) map[item.id].reasons.push('Siste oppgavetekst: ' + item.reason);
+        var entry = ensure(item.id, getCategoryLabel(item.id));
+        entry.score += 3;
+        if (entry.sources.indexOf('tekstanalyse') === -1) entry.sources.push('tekstanalyse');
+        if (item.reason) entry.reasons.push('Fra siste tekstanalyse: ' + item.reason);
       });
     }
 
+    // Vekt 2 — kategori funnet i feillogg
     Object.keys(feilloggCounts || {}).forEach(function(catId) {
       var count = feilloggCounts[catId];
       if (!count) return;
-      map[catId] = map[catId] || { id: catId, label: getCategoryLabel(catId), score: 0, reasons: [] };
-      map[catId].score += Math.min(4, count);
-      map[catId].reasons.push(count + ' tidligere feil i feilloggen.');
+      var entry = ensure(catId);
+      entry.score += 2;
+      if (entry.sources.indexOf('feillogg') === -1) entry.sources.push('feillogg');
+      entry.reasons.push(count + ' tidligere feil i feilloggen.');
+    });
+
+    // Vekt 1 — kategori funnet i øvingshistorikk (lav treffprosent)
+    categoryStats.filter(function(item) {
+      return item.total > 0 && item.pct < 75;
+    }).forEach(function(item) {
+      var entry = ensure(item.id, item.label);
+      entry.score += 1;
+      if (entry.sources.indexOf('ovingshistorikk') === -1) entry.sources.push('ovingshistorikk');
+      entry.reasons.push('Lav treffprosent i øvingsoppgavene (' + item.pct + ' %).');
     });
 
     return Object.keys(map).map(function(catId) {
@@ -478,7 +525,7 @@
           '<div class="ob-ai-result-top"><span class="ob-ai-badge">' + escapeHtml(getCategoryIcon(item.id)) + ' ' + escapeHtml(item.label) + '</span></div>' +
           '<p>' + escapeHtml(item.reason) + '</p>' +
           '<div class="ob-ai-result-actions">' +
-            '<a class="ob-btn ob-btn-primary" href="skrivemeisteren-bm.html?kat=' + encodeURIComponent(item.id) + '">Start i Skrivemesteren</a>' +
+            '<a class="ob-btn ob-btn-primary" href="skrivemeisteren-bm.html?kat=' + encodeURIComponent(item.id) + '&auto=1#nl-adaptive">Start i Skrivemesteren</a>' +
             '<a class="ob-btn" href="tekstsjekk-bm.html?kat=' + encodeURIComponent(item.id) + '&mode=manual">Se oppgaver</a>' +
           '</div>' +
         '</article>';
@@ -571,29 +618,89 @@
     }, 0));
     var streak = mastery.streak.current || adaptiveProfile.streak || 0;
     var categoryStats = getCategoryStats(mastery);
-    var strengths = categoryStats.filter(function(item) {
-      return item.total > 0;
-    }).sort(function(a, b) {
-      if (b.pct !== a.pct) return b.pct - a.pct;
-      return b.total - a.total;
-    }).slice(0, 3);
-    var weaknesses = categoryStats.filter(function(item) {
-      return item.total > 0;
-    }).sort(function(a, b) {
-      if (a.pct !== b.pct) return a.pct - b.pct;
-      return b.total - a.total;
-    }).slice(0, 3);
+
+    function buildAnalysisInsights(analyses, stats) {
+      var statById = {};
+      (stats || []).forEach(function(s) { statById[s.id] = s; });
+
+      var map = {};
+      (analyses || []).forEach(function(a) {
+        var seenInText = {};
+        (a && Array.isArray(a.categories) ? a.categories : []).forEach(function(cat) {
+          if (!cat || !cat.id) return;
+          if (seenInText[cat.id]) return;
+          seenInText[cat.id] = true;
+          if (!map[cat.id]) {
+            map[cat.id] = {
+              id: cat.id,
+              label: getCategoryLabel(cat.id),
+              hits: 0,
+              latestReason: ''
+            };
+          }
+          map[cat.id].hits += 1;
+          if (!map[cat.id].latestReason && cat.reason) map[cat.id].latestReason = String(cat.reason);
+        });
+      });
+
+      var merged = Object.keys(map).map(function(id) {
+        var item = map[id];
+        var s = statById[id] || null;
+        return {
+          id: id,
+          label: item.label,
+          hits: item.hits,
+          reason: item.latestReason,
+          total: s ? s.total : 0,
+          pct: s && s.total > 0 ? s.pct : null,
+          hasTaskData: !!(s && s.total > 0)
+        };
+      });
+
+      var strengths = merged.filter(function(x) { return x.hasTaskData && x.pct >= 70; }).sort(function(a, b) {
+        if (b.pct !== a.pct) return b.pct - a.pct;
+        return b.hits - a.hits;
+      }).slice(0, 3);
+      if (!strengths.length) {
+        strengths = merged.filter(function(x) { return x.hasTaskData; }).sort(function(a, b) {
+          if (b.pct !== a.pct) return b.pct - a.pct;
+          return b.hits - a.hits;
+        }).slice(0, 3);
+      }
+
+      var weaknesses = merged.slice().sort(function(a, b) {
+        if (a.hasTaskData !== b.hasTaskData) return a.hasTaskData ? 1 : -1;
+        var ap = a.hasTaskData ? a.pct : -1;
+        var bp = b.hasTaskData ? b.pct : -1;
+        if (ap !== bp) return ap - bp;
+        return b.hits - a.hits;
+      }).slice(0, 3);
+
+      return {
+        strengths: strengths,
+        weaknesses: weaknesses,
+        totalAnalyses: Math.max(0, (analyses || []).length)
+      };
+    }
+
+    var excludedSet = {};
+    readRadarExcluded().forEach(function(k) { excludedSet[String(k)] = true; });
+    var includedAnalyses = analysisStore.analyses.filter(function(a) { return !excludedSet[String(a.ts)]; });
+    var insights = buildAnalysisInsights(includedAnalyses, categoryStats);
+    var strengths = insights.strengths;
+    var weaknesses = insights.weaknesses;
     var feilloggCounts = aggregateFeillogg(mastery.feillogg);
-    var recommendations = buildRecommendations(categoryStats, analysisStore.analyses, feilloggCounts);
-    var recentAnalyses = analysisStore.analyses.slice(0, 4);
+    var recommendations = buildRecommendations(categoryStats, includedAnalyses, feilloggCounts);
+    var recentAnalyses = analysisStore.analyses.slice(0, 8);
     var recentHistory = adaptiveHistory.slice(-6);
     var radarSums = [0,0,0,0,0,0], radarCount = 0;
     for (var ri = 0; ri < analysisStore.analyses.length; ri++) {
-      var rs = analysisStore.analyses[ri].radarScores;
-      if (rs) {
-        for (var rj = 0; rj < 6; rj++) radarSums[rj] += rs[rj];
-        radarCount++;
-      }
+      var aItem = analysisStore.analyses[ri];
+      var rs = aItem.radarScores;
+      if (!rs) continue;
+      if (excludedSet[String(aItem.ts)]) continue;
+      for (var rj = 0; rj < 6; rj++) radarSums[rj] += rs[rj];
+      radarCount++;
     }
     var averageRadar = radarCount > 0 ? radarSums.map(function(s) { return Math.round(s / radarCount * 10) / 10; }) : null;
 
@@ -616,7 +723,7 @@
       welcomeText = 'Du har ' + sessionCount + ' øving' + (sessionCount === 1 ? '' : 'er') + ' i Skrivemesteren. Prøv Tekstsjekk neste gang du skriver – da får profilen din en helhetlig vurdering.';
     } else if (sessionCount === 0) {
       welcomeTitle = 'Fin start med Tekstsjekk!';
-      welcomeText = 'Du har ' + totalAnalyses + ' analysert tekst' + (totalAnalyses === 1 ? '' : 'er') + '. Prøv Skrivemesteren for øvingsoppgaver tilpasset svake punkter.';
+      welcomeText = 'Du har ' + totalAnalyses + ' analyserte tekster. Prøv Skrivemesteren for øvingsoppgaver tilpasset svake punkter.';
     } else {
       welcomeTitle = 'Sterk innsats!';
       welcomeText = 'Du har ' + sessionCount + ' øving' + (sessionCount === 1 ? '' : 'er') + ' og ' + totalAnalyses + ' analysert' + (totalAnalyses === 1 ? '' : 'e') + ' tekst' + (totalAnalyses === 1 ? '' : 'er') + '. Hold ut – progresjonen er tydelig i diagrammet under.';
@@ -634,10 +741,15 @@
     function statRows(list, emptyText, variant) {
       if (!list.length) return '<div class="ep-empty">' + escapeHtml(emptyText) + '</div>';
       return list.map(function(item) {
+        var hasTaskData = item.hasTaskData !== false && item.pct !== null;
+        var meta = hasTaskData
+          ? (item.hits + ' tekstanalysefunn · ' + item.total + ' oppgaver')
+          : (item.hits + ' tekstanalysefunn · ingen øvingsdata ennå');
+        var pctText = hasTaskData ? (item.pct + ' %') : '—';
         return '' +
           '<div class="ep-stat-row ' + variant + '">' +
-            '<div><strong>' + escapeHtml(item.label) + '</strong><span>' + escapeHtml(item.total + ' oppgaver') + '</span></div>' +
-            '<span>' + escapeHtml(item.pct + ' %') + '</span>' +
+            '<div><div class="ep-stat-row-label">' + escapeHtml(item.label) + '</div><div class="ep-stat-row-meta">' + escapeHtml(meta) + '</div></div>' +
+            '<span class="ep-stat-row-pct">' + escapeHtml(pctText) + '</span>' +
           '</div>';
       }).join('');
     }
@@ -645,14 +757,14 @@
     function recommendationRows(list) {
       if (!list.length) return '<div class="ep-empty">Ingen tydelige anbefalinger ennå. Lim inn en oppgavetekst eller fullfør noen økter først.</div>';
       return list.map(function(item) {
+        var src = (item.sources || []);
+        var primarySrc = src.indexOf('tekstanalyse') !== -1 ? 'analyse' : (src.indexOf('feillogg') !== -1 ? 'feillogg' : 'historikk');
+        var sourceText = primarySrc === 'analyse' ? 'Fra tekstanalyse' : (primarySrc === 'feillogg' ? 'Gjentatte feil' : 'Fra øvingshistorikk');
         return '' +
-          '<article class="ep-reco">' +
-            '<div class="ep-reco-top"><span class="ep-chip">' + escapeHtml(getCategoryIcon(item.id)) + ' ' + escapeHtml(item.label) + '</span><span class="ep-reco-score">Prioritet ' + escapeHtml(String(item.score)) + '</span></div>' +
-            '<p>' + escapeHtml(item.reasons[0] || 'Bygg videre på denne kategorien.') + '</p>' +
-            '<div class="ep-reco-actions">' +
-              '<a class="ep-btn ep-btn-pri" href="skrivemeisteren-bm.html?kat=' + encodeURIComponent(item.id) + '">Øv i Skrivemesteren</a>' +
-              '<a class="ep-btn" href="tekstsjekk-bm.html?kat=' + encodeURIComponent(item.id) + '&mode=manual">Se oppgaver</a>' +
-            '</div>' +
+          '<article class="ep-reco src-' + primarySrc + '">' +
+            '<div class="ep-reco-top"><div class="ep-reco-title">' + escapeHtml(getCategoryIcon(item.id) + ' ' + item.label) + '</div><span class="ep-reco-source ' + primarySrc + '">' + sourceText + '</span></div>' +
+            '<div class="ep-reco-desc">' + escapeHtml(item.reasons[0] || 'Bygg videre på denne kategorien.') + '</div>' +
+            '<a class="ep-reco-btn" href="skrivemeisteren-bm.html?kat=' + encodeURIComponent(item.id) + '&auto=1#nl-adaptive">Start øving</a>' +
           '</article>';
       }).join('');
     }
@@ -677,79 +789,88 @@
         var chips = (item.categories || []).slice(0, 3).map(function(cat) {
           return '<span class="ep-chip muted">' + escapeHtml(cat.label) + '</span>';
         }).join('');
+        var hasRadar = !!item.radarScores;
+        var included = !excludedSet[String(item.ts)];
+        var stateClass = included ? 'is-included' : 'is-excluded';
+        var toggleLabel = included ? 'Teller med i profil' : 'Ikke inkludert';
+        var checkbox = '<label class="ep-radar-toggle" title="Inkluder eller ekskluder fra Skriveprofilen"><input type="checkbox" data-ep-radar-toggle="' + escapeHtml(String(item.ts)) + '"' + (included ? ' checked' : '') + '> <span>' + toggleLabel + '</span></label>' +
+          (!hasRadar ? ' <span class="ep-radar-toggle-disabled" title="Ingen radarvurdering – teller ikke med i radargrafen">Radar –</span>' : '');
         return '' +
-          '<article class="ep-analysis">' +
+          '<article class="ep-analysis ' + stateClass + '">' +
             '<div class="ep-analysis-top"><strong>' + escapeHtml(item.title) + '</strong><span>' + escapeHtml(formatDate(item.ts)) + '</span></div>' +
             '<p>' + escapeHtml(item.textExcerpt || '') + '</p>' +
-            '<div class="ep-chip-row">' + chips + '</div>' +
+            (chips ? '<div class="ep-chip-row">' + chips + '</div>' : '') +
+            '<div class="ep-analysis-foot">' + checkbox + '</div>' +
           '</article>';
       }).join('');
     }
 
-    root.innerHTML = '' +
-      '<section class="ep-welcome"><div class="ep-welcome-icon">👋</div><div class="ep-welcome-copy"><h2>' + escapeHtml(welcomeTitle) + '</h2><p>' + escapeHtml(welcomeText) + '</p></div></section>' +
-      '<section class="ep-hero-card">' +
-        '<div class="ep-hero-copy">' +
-          '<span class="ep-kicker">Lokal elevprofil</span>' +
-          '<h1>' + escapeHtml(levelInfo.current.icon + ' ' + levelInfo.current.name) + '</h1>' +
-          '<p>Profilen bygger på tekstanalyser fra Tekstsjekk og faktisk progresjon fra Skrivemesteren. Alt lagres lokalt i nettleseren din.</p>' +
-        '</div>' +
-        '<div class="ep-level-card">' +
-          '<div class="ep-level-top"><strong>' + escapeHtml(String(totalXp)) + ' XP</strong><span>' + escapeHtml(sessionCount + ' økter') + '</span></div>' +
-          '<div class="ep-level-bar"><span style="width:' + escapeHtml(String(levelProgress)) + '%"></span></div>' +
-          '<div class="ep-level-meta"><span>' + escapeHtml(levelInfo.current.name) + '</span><span>' + escapeHtml(levelInfo.next ? (nextXp + ' XP til ' + levelInfo.next.name) : 'Høyeste nivå nådd') + '</span></div>' +
-        '</div>' +
-      '</section>' +
-      '<section class="ep-grid ep-grid-kpis">' +
-        kpiCard('Flyt', String(streak) + (streak === 1 ? ' dag' : ' dager'), 'Dager på rad') +
-        kpiCard('Beste økt', String(bestPct) + ' %', 'Høyeste treffprosent') +
-        kpiCard('Feillogg', String((mastery.feillogg || []).length), 'Oppgaver å ta opp igjen') +
-        kpiCard('Siste analyse', recentAnalyses.length ? formatDate(recentAnalyses[0].ts, true) : '-', 'Tekst lagret lokalt') +
-      '</section>' +
-      '<section class="ep-section ep-section-skrivemeisteren">' +
-        '<div class="ep-section-head"><span class="ep-section-icon">🎯</span><div><h2>Skrivemesteren – øvingsmotor</h2><p>Adaptive øvingsoppgaver basert på styrker og svake punkter.</p></div><a class="ep-btn ep-btn-pri" href="skrivemeisteren-bm.html">Åpne Skrivemesteren →</a></div>' +
-        '<div class="ep-grid ep-grid-main">' +
-          '<article class="ep-panel"><div class="ep-panel-head"><h2>Progresjon</h2><span>De siste øktene med treffprosent og XP</span></div>' + historyBars(recentHistory) + '</article>' +
-          '<div class="ep-stack">' +
-            '<article class="ep-panel"><div class="ep-panel-head"><h2>Styrker</h2><span>Det eleven treffer best på</span></div>' + statRows(strengths, 'Ingen styrkedata ennå. Kjør noen økter først.', 'ok') + '</article>' +
-            '<article class="ep-panel"><div class="ep-panel-head"><h2>Svakheter</h2><span>Kategorier som bør prioriteres</span></div>' + statRows(weaknesses, 'Ingen svakhetsdata ennå.', 'warn') + '</article>' +
-          '</div>' +
-        '</div>' +
-      '</section>' +
-      '<section class="ep-section ep-section-tekstsjekk">' +
-        '<div class="ep-section-head"><span class="ep-section-icon">🤖</span><div><h2>Tekstsjekk – AI-analyse av egne tekster</h2><p>Lim inn en egen tekst og oppgavetekst i Tekstsjekk for grundig vurdering.</p></div><a class="ep-btn ep-btn-pri" href="tekstsjekk-bm.html">Åpne Tekstsjekk →</a></div>' +
-        '<div class="ep-grid ep-grid-feature">' +
-          '<article class="ep-panel ep-panel-radar">' +
-            '<div class="ep-panel-head"><h2>Skrivemestring</h2><span>Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'er') + ' (1–6)' + (innhaldCapped ? ' · Innhold kappet til 4 uten oppgavetekst' : '') + '</span></div>' +
-            '<div class="ep-radar-wrap">' +
-              (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES) : '<div class="ep-radar-empty">Radardiagrammet vises når tekster har blitt vurdert i Tekstsjekk.</div>') +
-            '</div>' +
-          '</article>' +
-          '<article class="ep-panel"><div class="ep-panel-head"><h2>Siste oppgavetekster</h2><span>Analysehistorikk fra Tekstsjekk</span></div>' + analysisCards(recentAnalyses) + '</article>' +
-        '</div>' +
-        '<article class="ep-panel ep-panel-reco">' +
-          '<div class="ep-panel-head"><h2>Oppgaveforslag</h2><span>Konkrete øvinger basert på siste analyse, feillogg og øvingshistorikk</span></div>' +
-          '<div class="ep-reco-grid">' + recommendationRows(recommendations) + '</div>' +
-        '</article>' +
-      '</section>';
+    var zoneGame = document.getElementById('ep-zone-game');
+    var zoneWriting = document.getElementById('ep-zone-writing');
+    var zoneReco = document.getElementById('ep-zone-reco');
+    var zoneHistory = document.getElementById('ep-zone-history');
+    if (!zoneGame || !zoneWriting || !zoneReco || !zoneHistory) {
+      root.innerHTML = '<p class="ep-loading">Mangler sonestruktur for elevprofil.</p>';
+      return;
+    }
 
-    var actions = document.createElement('div');
-    actions.className = 'ep-profile-actions';
-    actions.style.display = 'flex';
-    actions.style.justifyContent = 'flex-end';
-    actions.style.marginBottom = '1rem';
-    actions.innerHTML = '<button type="button" class="ep-btn" data-ep-reset-profile="1">Tilbakestill elevprofil</button>';
-    root.insertBefore(actions, root.firstChild);
+    zoneGame.innerHTML = '' +
+      '<div class="ep-game">' +
+        '<div class="ep-game-level">' +
+          '<div class="ep-game-level-top"><span class="ep-game-icon">' + escapeHtml(levelInfo.current.icon) + '</span><span class="ep-game-level-name">' + escapeHtml(levelInfo.current.name) + '</span><span class="ep-game-level-num">Nivå ' + escapeHtml(String(levelInfo.current.level)) + '</span></div>' +
+          '<div class="ep-game-bar-wrap"><div class="ep-game-bar-fill" style="width:' + escapeHtml(String(levelProgress)) + '%"></div></div>' +
+          '<div class="ep-game-bar-label">' + escapeHtml(String(totalXp)) + ' XP · ' + escapeHtml(levelInfo.next ? (nextXp + ' XP igjen til ' + levelInfo.next.name) : 'Høyeste nivå nådd') + '</div>' +
+        '</div>' +
+        '<div class="ep-game-kpis">' +
+          '<div class="ep-game-kpi"><div class="ep-game-kpi-icon">🔥</div><div class="ep-game-kpi-val">' + escapeHtml(String(streak)) + '</div><div class="ep-game-kpi-lbl">Dager på rad</div></div>' +
+          '<div class="ep-game-kpi"><div class="ep-game-kpi-icon">🏆</div><div class="ep-game-kpi-val">' + escapeHtml(String(bestPct)) + ' %</div><div class="ep-game-kpi-lbl">Beste økt</div></div>' +
+          '<div class="ep-game-kpi"><div class="ep-game-kpi-icon">🎯</div><div class="ep-game-kpi-val">' + escapeHtml(sessionCount + '') + '</div><div class="ep-game-kpi-lbl">Økter</div></div>' +
+          '<div class="ep-game-kpi"><div class="ep-game-kpi-icon">📋</div><div class="ep-game-kpi-val">' + escapeHtml(String((mastery.feillogg || []).length)) + '</div><div class="ep-game-kpi-lbl">I feillogg</div></div>' +
+        '</div>' +
+      '</div>';
 
-    var resetBtn = root.querySelector('[data-ep-reset-profile="1"]');
+    zoneWriting.innerHTML = '' +
+      '<div class="ep-welcome-mini"><span class="ep-welcome-mini-icon">👋</span><span class="ep-welcome-mini-copy"><strong>' + escapeHtml(welcomeTitle) + '</strong> ' + escapeHtml(welcomeText) + '</span></div>' +
+      '<div class="ep-writing">' +
+        '<div class="ep-radar-card">' +
+          '<div class="ep-panel-title">Skrivemestring</div>' +
+          '<div class="ep-panel-sub">Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'er') + ' (1–6)' + (innhaldCapped ? ' · Innhold kappet til 4 uten oppgavetekst' : '') + '</div>' +
+          (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES) : '<div class="ep-radar-empty">Radardiagrammet vises når tekster har blitt vurdert i Tekstsjekk.</div>') +
+        '</div>' +
+        '<div class="ep-strengths-weak">' +
+          '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Styrker</h3><span>Basert på ' + escapeHtml(String(insights.totalAnalyses)) + ' analyserte tekster, koblet mot treffprosent i matchende oppgaver.</span></div><span class="ep-sw-icon">🌟</span></div>' + statRows(strengths, 'Ingen styrkedata fra tekstanalyser ennå. Analyser flere tekster først.', 'ok') + '</div>' +
+          '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Svakheter</h3><span>Basert på kategorier som går igjen i tekstanalysene, med lav treffprosent eller manglende øvingsdata.</span></div><span class="ep-sw-icon">🎯</span></div>' + statRows(weaknesses, 'Ingen svakhetsdata fra tekstanalyser ennå.', 'warn') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="ep-sp-actions"><button type="button" class="ep-btn-ghost" data-ep-reset-skriveprofil="1">Tilbakestill skriveprofil</button><span class="ep-sp-actions-hint">Sletter bare tekstanalysene og radarvalget på denne enheten. XP, økter og feillogg blir ikke rørt.</span></div>';
+
+    zoneReco.innerHTML = '' +
+      '<div class="ep-reco-intro"><strong>Tips:</strong> Anbefalinger fra tekstanalysen prioriteres høyest, siden de viser mønstre i fri skriving.</div>' +
+      '<div class="ep-reco-grid">' + recommendationRows(recommendations) + '</div>';
+
+    zoneHistory.innerHTML = '' +
+      '<div class="ep-history">' +
+        '<div class="ep-hist-panel"><div class="ep-panel-title">Progresjon i Skrivemesteren</div><div class="ep-panel-sub">De siste seks øktene</div>' + historyBars(recentHistory) + '</div>' +
+        '<div class="ep-hist-panel ep-hist-analyses"><div class="ep-panel-title">Siste tekstanalyser</div><div class="ep-panel-sub">Hak av hvilke tekster som skal vises i Skriveprofilen</div><div class="ep-analysis-list">' + analysisCards(recentAnalyses) + '</div></div>' +
+      '</div>';
+
+    var resetBtn = root.querySelector('[data-ep-reset-skriveprofil="1"]');
     if (resetBtn) {
       resetBtn.addEventListener('click', function() {
-        var ok = window.confirm('Er du sikker på at du vil tilbakestille elevprofilen? Dette sletter lagrede analyser, historikk og progresjonsdata på denne enheten.');
+        var ok = window.confirm('Tilbakestille skriveprofilen? Dette sletter alle lagrede tekstanalyser og radarvalget på denne enheten. XP, økter og feillogg blir ikke rørt.');
         if (!ok) return;
-        clearProfileData();
+        clearSkriveprofilData();
         renderProfilePage();
       });
     }
+
+    // Avmerkingsbokser for radarsnittet — toggler inkludering og re-rendrer.
+    root.querySelectorAll('[data-ep-radar-toggle]').forEach(function(cb) {
+      cb.addEventListener('change', function() {
+        toggleRadarAnalysis(cb.getAttribute('data-ep-radar-toggle'), cb.checked);
+        renderProfilePage();
+      });
+    });
   }
 
   window.NLBmProfile = {

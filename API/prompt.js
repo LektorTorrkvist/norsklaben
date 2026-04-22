@@ -83,7 +83,7 @@ RADAR – sett heltall 1–6 for hvert av disse fem feltene:
   spraak_stil   = ${rk.spraak_stil}
   rettskriving  = ${rk.rettskriving}
   kjeldebruk    = ${rk.kjeldebruk}
-Hvis et område ikke er relevant (f.eks. kildebruk i en novelle uten kilder): sett 1 og forklar kort.
+Hvis et område ikke er relevant (f.eks. kildebruk i en novelle uten kilder): sett 1 og forklar kort, og ta ikke med som del av gjennomsnitt i radaroversikt i elevprofilen.
 
 INNHOLDSDEKNING (eget felt "innholdDekning"):
 - Hvis oppgavetekst er gitt: vurder strengt om eleven svarer på det oppgaven faktisk krever. Gi score 1–6.

@@ -346,6 +346,47 @@
   }
 })();
 
+/* ─── Autostart fra URL: ?kats=a,b,c eller ?kat=a (med valgfri &auto=1) ─── */
+(function() {
+  var params = new URLSearchParams(location.search);
+  var raw = params.get('kats') || params.get('kat');
+  if (!raw) return;
+  var auto = params.get('auto') !== '0';
+  var kats = raw.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  if (!kats.length) return;
+
+  var attempts = 0;
+  var maxAttempts = 40;
+  function tryApply() {
+    attempts++;
+    var wrap = document.getElementById('nl-ad-cats');
+    var buttons = wrap ? wrap.querySelectorAll('.adp-cat') : null;
+    if (!buttons || !buttons.length) {
+      if (attempts < maxAttempts) return setTimeout(tryApply, 200);
+      return;
+    }
+    buttons.forEach(function(b) { b.classList.remove('on'); });
+    var hits = 0;
+    kats.forEach(function(k) {
+      var btn = wrap.querySelector('.adp-cat[data-cat="' + k + '"]');
+      if (btn && !btn.classList.contains('on')) { btn.click(); hits++; }
+    });
+    var adp = document.getElementById('nl-adaptive');
+    if (adp && adp.scrollIntoView) adp.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (auto && hits) {
+      setTimeout(function() {
+        var startBtn = document.getElementById('nl-ad-start');
+        if (startBtn) startBtn.click();
+      }, 350);
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(tryApply, 400); });
+  } else {
+    setTimeout(tryApply, 400);
+  }
+})();
+
 /* ─── Rhythm pick helpers ─── */
 function rhythmPick(el, id) {
   var wrap = document.getElementById('rhythm-' + id);

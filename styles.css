@@ -4515,6 +4515,481 @@ tr:nth-child(even) td { background: var(--bg); }
   margin-top: .8rem;
 }
 
+/* ═══════════════════════════════════════════════════
+   ELEVPROFIL – ny layout 2026
+   Skall: skissa frå elevprofil-skisse.html
+   Soner: spel-og-framgang, skriveprofil, tilrådingar, historikk
+   Lokal CSS for elevprofil.html og elevprofil-bm.html
+═══════════════════════════════════════════════════ */
+
+/* HERO */
+.ep-hero {
+  background: linear-gradient(135deg, var(--primary) 0%, #24533a 100%);
+  color: #fff;
+  padding: 2.5rem 1.5rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.ep-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 50% 70% at 80% 30%, rgba(200,131,42,.2) 0%, transparent 60%);
+  pointer-events: none;
+}
+.ep-hero-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.ep-hero-left { flex: 1; min-width: 250px; }
+.ep-hero-kicker {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.65);
+  margin-bottom: .5rem;
+}
+.ep-hero-left h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: .3rem;
+}
+.ep-hero-left p {
+  color: rgba(255,255,255,.78);
+  font-size: 1rem;
+  max-width: 480px;
+}
+
+/* SHELL */
+.ep-shell {
+  max-width: 1120px;
+  margin: -1.5rem auto 0;
+  padding: 0 1.5rem 4rem;
+  position: relative;
+  z-index: 2;
+}
+.ep-loading { text-align: center; color: var(--tmuted); padding: 3rem 0; }
+.ep-empty { border: 1px dashed #cedcd1; border-radius: var(--rs); padding: 1rem; color: var(--tmuted); background: #fafcfa; font-size: .9rem; }
+
+/* SONE-OVERSKRIFT */
+.ep-zone-title {
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--tmuted);
+  margin: 2.5rem 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+.ep-zone-title::before {
+  content: '';
+  width: 24px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+.ep-zone-title:first-of-type { margin-top: 0; }
+
+/* ═══════ SONE 1: SPEL OG FRAMGANG ═══════ */
+.ep-game {
+  background: linear-gradient(135deg, #173828 0%, #24533a 100%);
+  color: #fff;
+  border-radius: var(--r);
+  padding: 1.75rem;
+  box-shadow: var(--shadow);
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2rem;
+}
+.ep-game-level { display: flex; flex-direction: column; gap: .85rem; }
+.ep-game-level-top { display: flex; align-items: center; gap: .75rem; }
+.ep-game-icon { font-size: 2rem; }
+.ep-game-level-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.ep-game-level-num {
+  font-size: .78rem;
+  font-weight: 700;
+  background: rgba(255,255,255,.15);
+  padding: .2rem .7rem;
+  border-radius: 999px;
+  margin-left: auto;
+}
+.ep-game-bar-wrap {
+  background: rgba(255,255,255,.15);
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+}
+.ep-game-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f0c36d 0%, #f7de8e 100%);
+  border-radius: 999px;
+  transition: width .5s ease;
+}
+.ep-game-bar-label { font-size: .85rem; color: rgba(255,255,255,.78); }
+.ep-game-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+.ep-game-kpi {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: var(--rs);
+  padding: .75rem .85rem;
+}
+.ep-game-kpi-icon { font-size: 1.1rem; margin-bottom: .1rem; }
+.ep-game-kpi-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+}
+.ep-game-kpi-lbl { font-size: .75rem; color: rgba(255,255,255,.7); margin-top: .15rem; }
+
+/* ═══════ SONE 2: SKRIVEPROFIL ═══════ */
+.ep-writing {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+.ep-radar-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.ep-panel-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  color: var(--primary);
+  margin-bottom: .3rem;
+  width: 100%;
+}
+.ep-panel-sub {
+  font-size: .82rem;
+  color: var(--tmuted);
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.ep-radar-svg { width: 100%; max-width: 420px; min-height: 360px; display: block; }
+.ep-radar-empty { text-align: center; color: var(--tmuted); font-size: .9rem; padding: 2rem 1rem; min-height: 360px; display: flex; align-items: center; justify-content: center; }
+
+.ep-strengths-weak { display: flex; flex-direction: column; gap: 1rem; }
+.ep-sw-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1.25rem 1.4rem;
+  box-shadow: var(--shadow);
+}
+.ep-sw-head { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: .85rem; }
+.ep-sw-head-text h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  color: var(--primary);
+  margin-bottom: .1rem;
+}
+.ep-sw-head-text span { font-size: .78rem; color: var(--tmuted); }
+.ep-sw-icon { font-size: 1.4rem; }
+
+.ep-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .7rem .9rem;
+  border-radius: var(--rs);
+  margin-bottom: .5rem;
+  border: 1px solid transparent;
+}
+.ep-stat-row:last-child { margin-bottom: 0; }
+.ep-stat-row.ok   { background: #f4fbf5; border-color: #d2ead7; }
+.ep-stat-row.warn { background: #fffaf2; border-color: #f3dfc4; }
+.ep-stat-row-label { font-weight: 600; font-size: .92rem; color: var(--text); }
+.ep-stat-row-meta  { font-size: .78rem; color: var(--tmuted); }
+.ep-stat-row-pct   { font-weight: 700; font-size: .95rem; }
+.ep-stat-row.ok .ep-stat-row-pct { color: #1b6a45; }
+.ep-stat-row.warn .ep-stat-row-pct { color: #8a5a1e; }
+
+/* ═══════ SONE 3: TILRÅDINGAR ═══════ */
+.ep-reco-intro {
+  background: linear-gradient(135deg, #fdf8ee 0%, #fdf4e0 100%);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--rs);
+  padding: .85rem 1.1rem;
+  margin-bottom: 1rem;
+  font-size: .9rem;
+  color: var(--tmid);
+}
+.ep-reco-intro strong { color: var(--primary); }
+
+.ep-reco-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+.ep-reco {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.ep-reco:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.ep-reco::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--border); }
+.ep-reco.src-analyse::before { background: var(--accent); }
+.ep-reco.src-feillogg::before { background: #d47a57; }
+.ep-reco.src-historikk::before { background: var(--mid); }
+
+.ep-reco-top { display: flex; justify-content: space-between; align-items: flex-start; gap: .75rem; }
+.ep-reco-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+.ep-reco-source {
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.ep-reco-source.analyse { background: var(--alight); color: #8a5a1e; }
+.ep-reco-source.feillogg { background: #fce9e0; color: #a04e2e; }
+.ep-reco-source.historikk { background: var(--plight); color: var(--mid); }
+
+.ep-reco-desc { font-size: .88rem; color: var(--tmid); line-height: 1.5; flex-grow: 1; }
+.ep-reco-btn {
+  align-self: flex-start;
+  background: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  padding: .5rem 1rem;
+  border-radius: var(--rs);
+  font-size: .85rem;
+  font-weight: 600;
+}
+.ep-reco-btn:hover { background: var(--mid); }
+
+/* ═══════ SONE 4: HISTORIKK ═══════ */
+.ep-history { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.ep-hist-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1.25rem 1.4rem;
+  box-shadow: var(--shadow);
+}
+.ep-bars {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: .65rem;
+  min-height: 180px;
+  align-items: end;
+  margin-top: 1rem;
+}
+.ep-bar-col { display: flex; flex-direction: column; align-items: center; gap: .3rem; }
+.ep-bar {
+  width: 100%;
+  max-width: 40px;
+  border-radius: 10px 10px 4px 4px;
+  background: linear-gradient(180deg, var(--mid) 0%, #84c19a 100%);
+  min-height: 15px;
+}
+.ep-bar-col strong { font-size: .82rem; color: var(--primary); }
+.ep-bar-col small { font-size: .72rem; color: var(--tmuted); }
+
+/* Analyse-kort med tekstval (avmerkingsbokser) */
+.ep-analysis-list { display: flex; flex-direction: column; gap: .6rem; }
+.ep-analysis {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  border: 1px solid var(--border);
+  border-left: 4px solid #c8d8ce;
+  border-radius: var(--rs);
+  padding: .85rem .95rem;
+  background: #fcfdfc;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.ep-analysis.is-included { border-left-color: #1a7a50; background: #f4faf6; box-shadow: 0 4px 12px rgba(26, 122, 80, .08); }
+.ep-analysis.is-excluded { border-left-color: #c8d8ce; background: #fafbfa; opacity: .78; }
+.ep-analysis.is-noradar { border-left-color: #e3d6b5; background: #fdfaf2; }
+.ep-analysis-top { display: flex; justify-content: space-between; gap: .75rem; align-items: baseline; }
+.ep-analysis-top strong { color: var(--primary); font-size: .92rem; }
+.ep-analysis-top span { font-size: .75rem; color: var(--tmuted); white-space: nowrap; }
+.ep-analysis p { font-size: .85rem; color: var(--tmid); line-height: 1.5; margin: 0; }
+.ep-analysis .ep-chip-row { display: flex; flex-wrap: wrap; gap: .3rem; }
+.ep-analysis-foot { margin-top: .3rem; padding-top: .55rem; border-top: 1px dashed #dfe7e1; }
+
+/* Kategori-merker på analyse */
+.ep-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .72rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: .15rem .55rem;
+  background: var(--plight);
+  color: var(--mid);
+}
+.ep-chip.muted { background: #f3f6f4; color: var(--tmuted); }
+
+/* Avmerkingsboks for radar */
+.ep-radar-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--mid);
+  cursor: pointer;
+  user-select: none;
+  padding: .3rem .65rem .3rem .45rem;
+  background: #fff;
+  border: 1.5px solid var(--mid);
+  border-radius: 999px;
+  transition: background .15s ease, color .15s ease;
+}
+.ep-radar-toggle:hover { background: var(--plight); }
+.ep-analysis.is-included .ep-radar-toggle { background: var(--mid); color: #fff; }
+.ep-analysis.is-included .ep-radar-toggle:hover { background: #1b5a40; }
+.ep-radar-toggle input[type="checkbox"] { width: 1rem; height: 1rem; accent-color: var(--mid); cursor: pointer; margin: 0; }
+.ep-radar-toggle-disabled {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-size: .76rem;
+  font-weight: 600;
+  color: #a08245;
+  background: #fdf6e6;
+  border: 1.5px dashed #e3d6b5;
+  border-radius: 999px;
+  padding: .25rem .65rem;
+  cursor: help;
+}
+
+/* Tilbakestill-knapp i Skriveprofil */
+.ep-sp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .8rem;
+  margin-top: 1.4rem;
+  padding-top: 1.1rem;
+  border-top: 1px dashed var(--border);
+}
+.ep-sp-actions-hint { color: var(--tmuted); font-size: .8rem; flex: 1; min-width: 220px; }
+.ep-btn-ghost {
+  background: transparent;
+  color: #8c4a3f;
+  border: 1.5px solid #d4a89f;
+  padding: .5rem 1rem;
+  border-radius: var(--rs);
+  font-weight: 600;
+  font-size: .85rem;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+.ep-btn-ghost:hover { background: #faecea; color: #6e3a31; }
+
+/* Kompakt velkomst-pille øvst i Skriveprofil */
+.ep-welcome-mini {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  margin: 0 0 1rem;
+  padding: .55rem .85rem;
+  background: var(--plight);
+  border: 1px solid #cde4d4;
+  border-radius: 999px;
+  font-size: .87rem;
+  color: var(--primary);
+  line-height: 1.4;
+}
+.ep-welcome-mini-icon { font-size: 1.1rem; flex: 0 0 auto; }
+.ep-welcome-mini-copy strong { color: var(--primary); margin-right: .3rem; }
+
+/* Note (lokalt lagra) */
+.ep-note {
+  margin: 0 0 1.5rem;
+  background: linear-gradient(135deg, #f6fbf8 0%, #eef7f2 100%);
+  border: 1px solid #d6e8dc;
+  border-radius: var(--r);
+  padding: .85rem 1.1rem;
+  color: #496456;
+  font-size: .88rem;
+}
+.ep-note strong { color: var(--primary); }
+
+/* RESPONSIVT */
+@media (max-width: 900px) {
+  .ep-game { grid-template-columns: 1fr; }
+  .ep-writing { grid-template-columns: 1fr; }
+  .ep-history { grid-template-columns: 1fr; }
+}
+@media (max-width: 700px) {
+  .ep-bars { grid-template-columns: repeat(3, 1fr); }
+  .ep-hero-left h1 { font-size: 1.7rem; }
+}
+/* Siste tekstanalysar — scrollbar panel i historikk */
+.ep-hist-analyses {
+  display: flex;
+  flex-direction: column;
+}
+.ep-hist-analyses .ep-panel-title,
+.ep-hist-analyses .ep-panel-sub {
+  flex: 0 0 auto;
+}
+.ep-hist-analyses .ep-analysis-list {
+  flex: 1;
+  max-height: 460px;
+  overflow-y: auto;
+  padding-right: 3px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.ep-hist-analyses .ep-analysis-list::-webkit-scrollbar { width: 5px; }
+.ep-hist-analyses .ep-analysis-list::-webkit-scrollbar-track { background: transparent; }
+.ep-hist-analyses .ep-analysis-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* Tilrådingskort — tydelegare kilje-fargar */
+.ep-reco.src-historikk::before { background: var(--mid); }
+
+/* Stat-rad — responsiv layout på smale skjermar */
+@media (max-width: 480px) {
+  .ep-stat-row { flex-direction: column; align-items: flex-start; gap: .3rem; }
+  .ep-stat-row-pct { font-size: 1rem; }
+}
+
+/* ═══ slutt: ELEVPROFIL – ny layout 2026 ═══ */
+
 .gram-btn {
   border-radius: 999px;
   border: 1.5px solid var(--border);

@@ -16,7 +16,7 @@
   var SRC = SCRIPT && SCRIPT.src ? SCRIPT.src : '';
   function defaultApiBase() {
     var h = (location.hostname || '').toLowerCase();
-    if (h === 'localhost' || h === '127.0.0.1' || h === '') return 'http://localhost:3000';
+    if (location.protocol === 'http:' && (h === 'localhost' || h === '127.0.0.1')) return 'http://localhost:3000';
     return 'https://api.norsklaben.no';
   }
   var API_BASE =

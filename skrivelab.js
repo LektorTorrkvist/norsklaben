@@ -602,7 +602,7 @@ function nlLoadTekstanalyseWidget() {
 
   if (!api) {
     var h = (location.hostname || '').toLowerCase();
-    api = (h === 'localhost' || h === '127.0.0.1' || h === '')
+    api = (location.protocol === 'http:' && (h === 'localhost' || h === '127.0.0.1'))
       ? 'http://localhost:3000'
       : 'https://api.norsklaben.no';
   }
