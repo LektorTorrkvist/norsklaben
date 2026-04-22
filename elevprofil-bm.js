@@ -131,7 +131,7 @@
     var cx = 200, cy = 200, maxR = 150, n = 6;
     function angle(i) { return -Math.PI / 2 + i * 2 * Math.PI / n; }
     function pt(i, r) { return { x: cx + r * Math.cos(angle(i)), y: cy + r * Math.sin(angle(i)) }; }
-    var svg = '<svg class="ep-radar-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">';
+    var svg = '<svg class="ep-radar-svg" viewBox="0 0 400 400" overflow="visible" xmlns="http://www.w3.org/2000/svg">';
     for (var ring = 1; ring <= 6; ring++) {
       var r = maxR * ring / 6;
       var pts = [];

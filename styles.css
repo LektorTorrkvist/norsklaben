@@ -4668,11 +4668,12 @@ tr:nth-child(even) td { background: var(--bg); }
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--r);
-  padding: 1.5rem;
+  padding: 1.5rem 2rem;
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: visible;
 }
 .ep-panel-title {
   font-family: 'Playfair Display', serif;
@@ -4687,7 +4688,7 @@ tr:nth-child(even) td { background: var(--bg); }
   width: 100%;
   margin-bottom: 1rem;
 }
-.ep-radar-svg { width: 100%; max-width: 420px; min-height: 360px; display: block; }
+.ep-radar-svg { width: 100%; max-width: 420px; min-height: 360px; display: block; overflow: visible; }
 .ep-radar-empty { text-align: center; color: var(--tmuted); font-size: .9rem; padding: 2rem 1rem; min-height: 360px; display: flex; align-items: center; justify-content: center; }
 
 .ep-strengths-weak { display: flex; flex-direction: column; gap: 1rem; }
