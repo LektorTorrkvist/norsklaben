@@ -23,7 +23,7 @@ const { buildSystemPrompt, buildUserPrompt } = require('./prompt');
 
 const PORT        = process.env.PORT        || 3000;
 const OLLAMA_URL  = process.env.OLLAMA_URL  || 'http://localhost:11434';
-const OLLAMA_MODEL= process.env.OLLAMA_MODEL|| 'Gemma4:e4b';
+const OLLAMA_MODEL= process.env.OLLAMA_MODEL|| 'gemma4:e4b';
 const MAX_TEKST   = parseInt(process.env.MAX_TEKST || '6000', 10);
 
 // Finn lokal IP-adresse (første ikke-interne nettverksadresse)
