@@ -182,7 +182,7 @@
 '.nl-ta-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem;margin-bottom:1rem;}' +
 '@media(max-width:720px){.nl-ta-grid{grid-template-columns:1fr;}}' +
 '@media(max-width:720px){.nl-ta-meta{grid-template-columns:1fr;}}' +
-'.nl-ta-radar-wrap{display:flex;justify-content:center;align-items:center;padding:.4rem 0;}' +
+'.nl-ta-radar-wrap{display:flex;justify-content:center;align-items:center;padding:.4rem 1.5rem;overflow:visible;}' +
 '.nl-ta-radar{width:100%;max-width:340px;height:auto;}' +
 '.nl-ta-radar .axis{stroke:#cdbfa6;stroke-width:1;}' +
 '.nl-ta-radar .grid{stroke:#e6dfd2;stroke-width:1;fill:none;}' +
@@ -485,7 +485,7 @@
               '</g>';
     }
 
-    return '<svg class="nl-ta-radar" viewBox="0 0 ' + size + ' ' + size + '" role="img" aria-label="' + esc(T.radarTitle) + '">' +
+    return '<svg class="nl-ta-radar" viewBox="0 0 ' + size + ' ' + size + '" overflow="visible" role="img" aria-label="' + esc(T.radarTitle) + '">' +
            grids + axes +
            '<polygon class="area" points="' + areaPts.join(' ') + '"/>' +
            dots + labels + '</svg>';
