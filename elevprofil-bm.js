@@ -136,14 +136,14 @@
       var r = maxR * ring / 6;
       var pts = [];
       for (var i = 0; i < n; i++) { var p = pt(i, r); pts.push(p.x.toFixed(1) + ',' + p.y.toFixed(1)); }
-      svg += '<polygon points="' + pts.join(' ') + '" fill="' + (ring % 2 === 0 ? 'rgba(232,243,236,.35)' : 'none') + '" stroke="#dce6df" stroke-width="1"/>';
+      svg += '<polygon points="' + pts.join(' ') + '" fill="' + (ring % 2 === 0 ? 'rgba(200,131,42,.08)' : 'none') + '" stroke="#e6dfd2" stroke-width="1"/>';
     }
     for (var i = 0; i < n; i++) {
       var p = pt(i, maxR);
-      svg += '<line x1="' + cx + '" y1="' + cy + '" x2="' + p.x.toFixed(1) + '" y2="' + p.y.toFixed(1) + '" stroke="#dce6df" stroke-width="1"/>';
+      svg += '<line x1="' + cx + '" y1="' + cy + '" x2="' + p.x.toFixed(1) + '" y2="' + p.y.toFixed(1) + '" stroke="#cdbfa6" stroke-width="1"/>';
     }
     for (var ring = 1; ring <= 6; ring++) {
-      svg += '<text x="' + (cx + 5) + '" y="' + (cy - maxR * ring / 6 + 12).toFixed(1) + '" font-size="10" fill="#9aad9e">' + ring + '</text>';
+      svg += '<text x="' + (cx + 5) + '" y="' + (cy - maxR * ring / 6 + 12).toFixed(1) + '" font-size="10" fill="#c8a06a">' + ring + '</text>';
     }
     if (scores) {
       var dataPts = [];
@@ -152,12 +152,12 @@
         var p = pt(i, maxR * val / 6);
         dataPts.push(p.x.toFixed(1) + ',' + p.y.toFixed(1));
       }
-      svg += '<polygon points="' + dataPts.join(' ') + '" fill="rgba(26,122,80,.18)" stroke="#1a7a50" stroke-width="2.5"/>';
+      svg += '<polygon points="' + dataPts.join(' ') + '" fill="rgba(200,131,42,.22)" stroke="#C8832A" stroke-width="2.5"/>';
       for (var i = 0; i < n; i++) {
         var val = Math.max(0, Math.min(6, scores[i] || 0));
         var p = pt(i, maxR * val / 6);
-        svg += '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="4.5" fill="#1a7a50"/>';
-        svg += '<text x="' + p.x.toFixed(1) + '" y="' + (p.y - 8).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#1a3d2b">' + val.toFixed(1) + '</text>';
+        svg += '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="4.5" fill="#C8832A"/>';
+        svg += '<text x="' + p.x.toFixed(1) + '" y="' + (p.y - 8).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#7a4a10">' + val.toFixed(1) + '</text>';
       }
     }
     var labelR = maxR + 30;
@@ -167,7 +167,7 @@
       if (p.x < cx - 10) anchor = 'end';
       else if (p.x > cx + 10) anchor = 'start';
       var dy = p.y < cy - 10 ? '-0.3em' : (p.y > cy + 10 ? '1.1em' : '0.35em');
-      svg += '<text x="' + p.x.toFixed(1) + '" y="' + p.y.toFixed(1) + '" text-anchor="' + anchor + '" font-size="12" font-weight="600" fill="#3a5a42" dy="' + dy + '">' + escapeHtml(labels[i]) + '</text>';
+      svg += '<text x="' + p.x.toFixed(1) + '" y="' + p.y.toFixed(1) + '" text-anchor="' + anchor + '" font-size="12" font-weight="600" fill="#1A3D2B" dy="' + dy + '">' + escapeHtml(labels[i]) + '</text>';
     }
     svg += '</svg>';
     return svg;
