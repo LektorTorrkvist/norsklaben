@@ -83,6 +83,23 @@
     .ep-reco { transition: transform .18s ease, box-shadow .18s ease; }
     .ep-reco:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(26, 61, 43, .12); }
     .ep-reco-grid { gap: 1rem; }
+    .ep-gami-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .8rem; }
+    .ep-gami-card { border: 1px solid #e2ebe4; border-radius: 1rem; padding: .9rem; background: linear-gradient(180deg, #fcfdfc 0%, #f7faf8 100%); display: grid; gap: .3rem; }
+    .ep-gami-kicker { font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: #728473; font-weight: 700; }
+    .ep-gami-card strong { font-size: 1.2rem; color: var(--fg); }
+    .ep-gami-card small { color: #647567; line-height: 1.45; }
+    .ep-panel-trophies { background: radial-gradient(circle at top left, rgba(240, 195, 109, .16), transparent 50%), #fff; border-color: #ead9b8; }
+    .ep-trophy-summary { display: grid; gap: .2rem; margin-bottom: .9rem; padding: .9rem 1rem; border-radius: .95rem; background: rgba(255, 250, 242, .92); border: 1px solid #f0dfc3; }
+    .ep-trophy-summary strong { color: #7f5318; font-size: 1rem; }
+    .ep-trophy-summary span { color: #876336; line-height: 1.5; }
+    .ep-trophy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .75rem; }
+    .ep-trophy { border: 1px solid #ead9b8; border-radius: .95rem; padding: .85rem .8rem; background: linear-gradient(180deg, #fffdf8 0%, #fff7ea 100%); display: grid; gap: .28rem; min-height: 140px; }
+    .ep-trophy.locked { border-color: #e4e8e5; background: #f7f9f8; }
+    .ep-trophy-icon { font-size: 1.4rem; }
+    .ep-trophy strong { color: var(--fg); font-size: .95rem; }
+    .ep-trophy small { color: #667768; line-height: 1.45; }
+    .ep-trophy span { color: #8a6c42; font-size: .77rem; font-weight: 700; margin-top: auto; }
+    .ep-trophy.locked span { color: #8a9690; }
     @media (max-width: 900px) {
       .ep-hero-card, .ep-grid-main, .ep-grid-kpis, .ep-grid-feature { grid-template-columns: 1fr; }
       .ep-bars { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -137,6 +154,6 @@
 </footer>
 
 <script src="nav.js"></script>
-<script src="elevprofil-bm.js?v=20260422b"></script>
+<script src="elevprofil-bm.js?v=20260422c"></script>
 </body>
 </html>

@@ -42,6 +42,21 @@
     { name: 'Stormeister',       xp: 30000, icon: '💎' }
   ];
 
+  var MT_BADGE_DEFS = [
+    { id: 'first_session', icon: '🌟', namn: 'Fyrste økt', beskriving: 'Fullført fyrste øvingsøkt' },
+    { id: 'ten_correct', icon: '🎯', namn: '10 rette', beskriving: '10 rette svar totalt' },
+    { id: 'fifty_correct', icon: '🔥', namn: '50 rette', beskriving: '50 rette svar totalt' },
+    { id: 'hundred_tasks', icon: '💯', namn: '100 oppgåver', beskriving: 'Svart på 100 oppgåver totalt' },
+    { id: 'all_cats', icon: '🌈', namn: 'Allsidig', beskriving: 'Prøvd alle kategoriar' },
+    { id: 'streak3', icon: '⚡', namn: '3 dagar på rad', beskriving: 'Øvd 3 dagar på rad' },
+    { id: 'streak7', icon: '🔥', namn: '7 dagar på rad', beskriving: 'Øvd ei heil veke på rad' },
+    { id: 'perfect_session', icon: '🏅', namn: 'Perfekt økt', beskriving: 'Fullført ei økt med 100 % rett' },
+    { id: 'hard_session', icon: '🧗', namn: 'Utfordrar seg sjølv', beskriving: 'Fullført ei økt på vanskeleg nivå' },
+    { id: 'xp500', icon: '🚀', namn: '500 XP', beskriving: 'Tent 500 erfaringspoeng totalt' },
+    { id: 'xp1500', icon: '👑', namn: '1500 XP', beskriving: 'Tent 1500 erfaringspoeng totalt' },
+    { id: 'retry_hero', icon: '🔄', namn: 'Lærer av feil', beskriving: 'Klart 5 retry-oppgåver rett' }
+  ];
+
   var CATEGORY_META = {
     djupneoppgaver: { label: 'Djupneoppgåver', icon: '🧠' },
     og_aa: { label: 'Og / å', icon: '✏️' },
@@ -295,13 +310,38 @@
     });
   }
 
+  function formatPlayedDay(day) {
+    if (!day) return '-';
+    var parsed = new Date(day);
+    if (isNaN(parsed.getTime())) return String(day);
+    return parsed.toLocaleDateString('nn-NO', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
+  function getLatestUnlockedBadge(badges) {
+    var latest = null;
+    var latestTs = -1;
+    MT_BADGE_DEFS.forEach(function(def) {
+      var item = badges && badges[def.id];
+      if (!item) return;
+      var ts = item.dato ? Date.parse(item.dato) : 0;
+      if (!isFinite(ts)) ts = 0;
+      if (ts > latestTs) {
+        latestTs = ts;
+        latest = def;
+      }
+    });
+    return latest;
+  }
+
   function readMasteryData() {
     var data = readLocalJson(MT_SHARED_KEY, null) || readLocalJson(MT_BACKUP_KEY, null) || readLocalJson(MT_LEGACY_KEY, {});
     if (!data || typeof data !== 'object') data = {};
     if (!Array.isArray(data.sessions)) data.sessions = [];
     if (!Array.isArray(data.feillogg)) data.feillogg = [];
+    if (!data.badges || typeof data.badges !== 'object') data.badges = {};
     if (!data.streak || typeof data.streak !== 'object') data.streak = { current: 0, rekord: 0, dagar: [] };
     data.totalXP = Math.max(0, Number(data.totalXP) || 0);
+    data.retryWins = Math.max(0, Number(data.retryWins) || 0);
     data.streak.current = Math.max(0, Number(data.streak.current) || 0);
     data.streak.rekord = Math.max(0, Number(data.streak.rekord) || 0);
     return data;
@@ -494,13 +534,19 @@
     var sessionCount = Math.max(adaptiveProfile.sessions || 0, mastery.sessions.length || 0);
     var bestPct = Math.max(adaptiveProfile.bestPct || 0, adaptiveHistory.reduce(function(max, item) { return Math.max(max, item.pct || 0); }, 0));
     var streak = mastery.streak.current || adaptiveProfile.streak || 0;
+    var streakRecord = mastery.streak.rekord || streak;
     var categoryStats = getCategoryStats(mastery);
+    var totalTasks = categoryStats.reduce(function(sum, item) { return sum + item.total; }, 0);
+    var totalCorrect = categoryStats.reduce(function(sum, item) { return sum + item.rett; }, 0);
     var strengths = categoryStats.filter(function(item) { return item.total > 0; }).sort(function(a, b) { if (b.pct !== a.pct) return b.pct - a.pct; return b.total - a.total; }).slice(0, 3);
     var weaknesses = categoryStats.filter(function(item) { return item.total > 0; }).sort(function(a, b) { if (a.pct !== b.pct) return a.pct - b.pct; return b.total - a.total; }).slice(0, 3);
     var feilloggCounts = aggregateFeillogg(mastery.feillogg);
     var recommendations = buildRecommendations(categoryStats, analysisStore.analyses, feilloggCounts);
     var recentAnalyses = analysisStore.analyses.slice(0, 4);
     var recentHistory = adaptiveHistory.slice(-6);
+    var badges = mastery.badges || {};
+    var latestBadge = getLatestUnlockedBadge(badges);
+    var unlockedBadgeCount = MT_BADGE_DEFS.filter(function(def) { return !!badges[def.id]; }).length;
     var radarSums = [0,0,0,0,0,0], radarCount = 0;
     for (var ri = 0; ri < analysisStore.analyses.length; ri++) {
       var rs = analysisStore.analyses[ri].radarScores;
@@ -547,7 +593,29 @@
       }).join('');
     }
 
-    root.innerHTML = '<section class="ep-hero-card"><div class="ep-hero-copy"><span class="ep-kicker">Lokal elevprofil</span><h1>' + escapeHtml(levelInfo.current.icon + ' ' + levelInfo.current.name) + '</h1><p>Profilen byggjer på oppgåvetekstar som er limte inn i Oppgåvebanken, pluss faktisk progresjon frå Skrivemeisteren og øvingsoppgåvene.</p></div><div class="ep-level-card"><div class="ep-level-top"><strong>' + escapeHtml(String(totalXp)) + ' XP</strong><span>' + escapeHtml(sessionCount + ' økter') + '</span></div><div class="ep-level-bar"><span style="width:' + escapeHtml(String(levelProgress)) + '%"></span></div><div class="ep-level-meta"><span>' + escapeHtml(levelInfo.current.name) + '</span><span>' + escapeHtml(levelInfo.next ? (nextXp + ' XP til ' + levelInfo.next.name) : 'Høgaste nivå nådd') + '</span></div></div></section><section class="ep-grid ep-grid-kpis">' + kpiCard('Flyt', String(streak) + (streak === 1 ? ' dag' : ' dagar'), 'Dagar på rad') + kpiCard('Beste økt', String(bestPct) + ' %', 'Høgaste treffprosent') + kpiCard('Feillogg', String((mastery.feillogg || []).length), 'Oppgåver å ta opp att') + kpiCard('Siste analyse', recentAnalyses.length ? formatDate(recentAnalyses[0].ts, true) : '-', 'Oppgåvetekst lagra lokalt') + '</section><section class="ep-grid ep-grid-feature"><article class="ep-panel ep-panel-radar"><div class="ep-panel-head"><h2>Skrivemeistring</h2><span>Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'ar') + ' (1–6)</span></div><div class="ep-radar-wrap">' + (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES) : '<div class="ep-radar-empty">Radardiagrammet kjem når tekstar har blitt vurderte av analysetenesta.</div>') + '</div></article><div class="ep-stack"><article class="ep-panel"><div class="ep-panel-head"><h2>Styrkar</h2><span>Det eleven treff best på</span></div>' + statRows(strengths, 'Ingen styrkedata enno. Køyr nokre økter først.', 'ok') + '</article><article class="ep-panel"><div class="ep-panel-head"><h2>Svakheiter</h2><span>Kategoriar som bør prioriterast</span></div>' + statRows(weaknesses, 'Ingen svakheitsdata enno.', 'warn') + '</article></div></section><section class="ep-panel ep-panel-reco"><div class="ep-panel-head"><h2>Oppgåveforslag</h2><span>Konkrete øvingar basert på siste oppgåvetekst, feillogg og øvingshistorikk</span></div><div class="ep-reco-grid">' + recommendationRows(recommendations) + '</div></section><section class="ep-grid ep-grid-main"><article class="ep-panel"><div class="ep-panel-head"><h2>Progresjon i Skrivemeisteren</h2><span>Dei siste øktene med treffprosent og XP</span></div>' + historyBars(recentHistory) + '</article><article class="ep-panel"><div class="ep-panel-head"><h2>Siste oppgåvetekstar</h2><span>Analysehistorikk lagra frå Oppgåvebanken</span></div>' + analysisCards(recentAnalyses) + '</article></section>';
+    function gamificationCards() {
+      var cards = [
+        { label: 'Neste nivå', value: levelInfo.next ? (nextXp + ' XP') : 'Maks nivå', meta: levelInfo.next ? levelInfo.next.name : 'Alle nivå låste opp' },
+        { label: 'Rekordflyt', value: String(streakRecord) + (streakRecord === 1 ? ' dag' : ' dagar'), meta: 'Lengste samanhengande øving' },
+        { label: 'Retry-sigerar', value: String(mastery.retryWins || 0), meta: 'Rette svar i feilmodus' },
+        { label: 'Svar totalt', value: String(totalCorrect) + ' / ' + String(totalTasks || 0), meta: 'Rette av alle registrerte svar' },
+        { label: 'Sist aktiv', value: formatPlayedDay(adaptiveProfile.lastPlayedDay), meta: 'Siste registrerte øvingsdag' },
+        { label: 'Låste trofé', value: String(unlockedBadgeCount) + ' / ' + String(MT_BADGE_DEFS.length), meta: 'Framgang i troféskapet' }
+      ];
+      return '<div class="ep-gami-grid">' + cards.map(function(card) {
+        return '<div class="ep-gami-card"><span class="ep-gami-kicker">' + escapeHtml(card.label) + '</span><strong>' + escapeHtml(card.value) + '</strong><small>' + escapeHtml(card.meta) + '</small></div>';
+      }).join('') + '</div>';
+    }
+
+    function trophyCards() {
+      return '<div class="ep-trophy-grid">' + MT_BADGE_DEFS.map(function(def) {
+        var unlocked = !!badges[def.id];
+        var badgeDate = unlocked && badges[def.id] && badges[def.id].dato ? formatDate(badges[def.id].dato, true) : 'Ikkje låst opp enno';
+        return '<article class="ep-trophy' + (unlocked ? '' : ' locked') + '"><div class="ep-trophy-icon">' + escapeHtml(unlocked ? def.icon : '🔒') + '</div><strong>' + escapeHtml(def.namn) + '</strong><small>' + escapeHtml(def.beskriving) + '</small><span>' + escapeHtml(badgeDate) + '</span></article>';
+      }).join('') + '</div>';
+    }
+
+    root.innerHTML = '<section class="ep-hero-card"><div class="ep-hero-copy"><span class="ep-kicker">Lokal elevprofil</span><h1>' + escapeHtml(levelInfo.current.icon + ' ' + levelInfo.current.name) + '</h1><p>Profilen byggjer på oppgåvetekstar som er limte inn i Oppgåvebanken, pluss faktisk progresjon frå Skrivemeisteren og øvingsoppgåvene.</p></div><div class="ep-level-card"><div class="ep-level-top"><strong>' + escapeHtml(String(totalXp)) + ' XP</strong><span>' + escapeHtml(sessionCount + ' økter') + '</span></div><div class="ep-level-bar"><span style="width:' + escapeHtml(String(levelProgress)) + '%"></span></div><div class="ep-level-meta"><span>' + escapeHtml(levelInfo.current.name) + '</span><span>' + escapeHtml(levelInfo.next ? (nextXp + ' XP til ' + levelInfo.next.name) : 'Høgaste nivå nådd') + '</span></div></div></section><section class="ep-grid ep-grid-kpis">' + kpiCard('Flyt', String(streak) + (streak === 1 ? ' dag' : ' dagar'), 'Dagar på rad') + kpiCard('Beste økt', String(bestPct) + ' %', 'Høgaste treffprosent') + kpiCard('Feillogg', String((mastery.feillogg || []).length), 'Oppgåver å ta opp att') + kpiCard('Siste analyse', recentAnalyses.length ? formatDate(recentAnalyses[0].ts, true) : '-', 'Oppgåvetekst lagra lokalt') + '</section><section class="ep-grid ep-grid-main"><article class="ep-panel"><div class="ep-panel-head"><h2>Spelframgang</h2><span>Utvalde data frå Skrivemeisteren</span></div>' + gamificationCards() + '</article><article class="ep-panel ep-panel-trophies"><div class="ep-panel-head"><h2>Troféskap</h2><span>' + escapeHtml(String(unlockedBadgeCount)) + ' av ' + escapeHtml(String(MT_BADGE_DEFS.length)) + ' låste opp</span></div><div class="ep-trophy-summary"><strong>' + escapeHtml(latestBadge ? (latestBadge.icon + ' ' + latestBadge.namn) : 'Ingen trofé enno') + '</strong><span>' + escapeHtml(latestBadge ? latestBadge.beskriving : 'Fullfør fleire økter for å opne dei første trofea.') + '</span></div>' + trophyCards() + '</article></section><section class="ep-grid ep-grid-feature"><article class="ep-panel ep-panel-radar"><div class="ep-panel-head"><h2>Skrivemeistring</h2><span>Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'ar') + ' (1–6)</span></div><div class="ep-radar-wrap">' + (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES) : '<div class="ep-radar-empty">Radardiagrammet kjem når tekstar har blitt vurderte av analysetenesta.</div>') + '</div></article><div class="ep-stack"><article class="ep-panel"><div class="ep-panel-head"><h2>Styrkar</h2><span>Det eleven treff best på</span></div>' + statRows(strengths, 'Ingen styrkedata enno. Køyr nokre økter først.', 'ok') + '</article><article class="ep-panel"><div class="ep-panel-head"><h2>Svakheiter</h2><span>Kategoriar som bør prioriterast</span></div>' + statRows(weaknesses, 'Ingen svakheitsdata enno.', 'warn') + '</article></div></section><section class="ep-panel ep-panel-reco"><div class="ep-panel-head"><h2>Oppgåveforslag</h2><span>Konkrete øvingar basert på siste oppgåvetekst, feillogg og øvingshistorikk</span></div><div class="ep-reco-grid">' + recommendationRows(recommendations) + '</div></section><section class="ep-grid ep-grid-main"><article class="ep-panel"><div class="ep-panel-head"><h2>Progresjon i Skrivemeisteren</h2><span>Dei siste øktene med treffprosent og XP</span></div>' + historyBars(recentHistory) + '</article><article class="ep-panel"><div class="ep-panel-head"><h2>Siste oppgåvetekstar</h2><span>Analysehistorikk lagra frå Oppgåvebanken</span></div>' + analysisCards(recentAnalyses) + '</article></section>';
 
     var actions = document.createElement('div');
     actions.className = 'ep-profile-actions';

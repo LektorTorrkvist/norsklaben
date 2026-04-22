@@ -42,6 +42,21 @@
     { name: 'Stormester',        xp: 30000, icon: '💎' }
   ];
 
+  var MT_BADGE_DEFS = [
+    { id: 'first_session', icon: '🌟', navn: 'Første økt', beskrivelse: 'Fullført første øvingsøkt' },
+    { id: 'ten_correct', icon: '🎯', navn: '10 rette', beskrivelse: '10 rette svar totalt' },
+    { id: 'fifty_correct', icon: '🔥', navn: '50 rette', beskrivelse: '50 rette svar totalt' },
+    { id: 'hundred_tasks', icon: '💯', navn: '100 oppgaver', beskrivelse: 'Besvart 100 oppgaver totalt' },
+    { id: 'all_cats', icon: '🌈', navn: 'Allsidig', beskrivelse: 'Prøvd alle kategorier' },
+    { id: 'streak3', icon: '⚡', navn: '3 dager på rad', beskrivelse: 'Øvd 3 dager på rad' },
+    { id: 'streak7', icon: '🔥', navn: '7 dager på rad', beskrivelse: 'Øvd en hel uke på rad' },
+    { id: 'perfect_session', icon: '🏅', navn: 'Perfekt økt', beskrivelse: 'Fullført en økt med 100 % rett' },
+    { id: 'hard_session', icon: '🧗', navn: 'Utfordrer seg selv', beskrivelse: 'Fullført en økt på vanskelig nivå' },
+    { id: 'xp500', icon: '🚀', navn: '500 XP', beskrivelse: 'Tjent 500 erfaringspoeng totalt' },
+    { id: 'xp1500', icon: '👑', navn: '1500 XP', beskrivelse: 'Tjent 1500 erfaringspoeng totalt' },
+    { id: 'retry_hero', icon: '🔄', navn: 'Lærer av feil', beskrivelse: 'Klart 5 retry-oppgaver rett' }
+  ];
+
   var CATEGORY_META = {
     djupneoppgaver: { label: 'Dybdeoppgaver', icon: '🧠' },
     og_aa: { label: 'Og / å', icon: '✏️' },
@@ -309,13 +324,38 @@
     });
   }
 
+  function formatPlayedDay(day) {
+    if (!day) return '-';
+    var parsed = new Date(day);
+    if (isNaN(parsed.getTime())) return String(day);
+    return parsed.toLocaleDateString('nb-NO', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
+  function getLatestUnlockedBadge(badges) {
+    var latest = null;
+    var latestTs = -1;
+    MT_BADGE_DEFS.forEach(function(def) {
+      var item = badges && badges[def.id];
+      if (!item) return;
+      var ts = item.dato ? Date.parse(item.dato) : 0;
+      if (!isFinite(ts)) ts = 0;
+      if (ts > latestTs) {
+        latestTs = ts;
+        latest = def;
+      }
+    });
+    return latest;
+  }
+
   function readMasteryData() {
     var data = readLocalJson(MT_SHARED_KEY, null) || readLocalJson(MT_BACKUP_KEY, null) || readLocalJson(MT_LEGACY_KEY, {});
     if (!data || typeof data !== 'object') data = {};
     if (!Array.isArray(data.sessions)) data.sessions = [];
     if (!Array.isArray(data.feillogg)) data.feillogg = [];
+    if (!data.badges || typeof data.badges !== 'object') data.badges = {};
     if (!data.streak || typeof data.streak !== 'object') data.streak = { current: 0, rekord: 0, dagar: [] };
     data.totalXP = Math.max(0, Number(data.totalXP) || 0);
+    data.retryWins = Math.max(0, Number(data.retryWins) || 0);
     data.streak.current = Math.max(0, Number(data.streak.current) || 0);
     data.streak.rekord = Math.max(0, Number(data.streak.rekord) || 0);
     return data;
@@ -555,7 +595,10 @@
       return Math.max(max, item.pct || 0);
     }, 0));
     var streak = mastery.streak.current || adaptiveProfile.streak || 0;
+    var streakRecord = mastery.streak.rekord || streak;
     var categoryStats = getCategoryStats(mastery);
+    var totalTasks = categoryStats.reduce(function(sum, item) { return sum + item.total; }, 0);
+    var totalCorrect = categoryStats.reduce(function(sum, item) { return sum + item.rett; }, 0);
     var strengths = categoryStats.filter(function(item) {
       return item.total > 0;
     }).sort(function(a, b) {
@@ -572,6 +615,9 @@
     var recommendations = buildRecommendations(categoryStats, analysisStore.analyses, feilloggCounts);
     var recentAnalyses = analysisStore.analyses.slice(0, 4);
     var recentHistory = adaptiveHistory.slice(-6);
+    var badges = mastery.badges || {};
+    var latestBadge = getLatestUnlockedBadge(badges);
+    var unlockedBadgeCount = MT_BADGE_DEFS.filter(function(def) { return !!badges[def.id]; }).length;
     var radarSums = [0,0,0,0,0,0], radarCount = 0;
     for (var ri = 0; ri < analysisStore.analyses.length; ri++) {
       var rs = analysisStore.analyses[ri].radarScores;
@@ -646,6 +692,28 @@
       }).join('');
     }
 
+    function gamificationCards() {
+      var cards = [
+        { label: 'Neste nivå', value: levelInfo.next ? (nextXp + ' XP') : 'Maks nivå', meta: levelInfo.next ? levelInfo.next.name : 'Alle nivåer låst opp' },
+        { label: 'Streak-rekord', value: String(streakRecord) + (streakRecord === 1 ? ' dag' : ' dager'), meta: 'Lengste sammenhengende øving' },
+        { label: 'Retry-seirer', value: String(mastery.retryWins || 0), meta: 'Rette svar i feilmodus' },
+        { label: 'Svar totalt', value: String(totalCorrect) + ' / ' + String(totalTasks || 0), meta: 'Rette av alle registrerte svar' },
+        { label: 'Sist aktiv', value: formatPlayedDay(adaptiveProfile.lastPlayedDay), meta: 'Siste registrerte øvingsdag' },
+        { label: 'Låste trofeer', value: String(unlockedBadgeCount) + ' / ' + String(MT_BADGE_DEFS.length), meta: 'Framgang i troféskapet' }
+      ];
+      return '<div class="ep-gami-grid">' + cards.map(function(card) {
+        return '<div class="ep-gami-card"><span class="ep-gami-kicker">' + escapeHtml(card.label) + '</span><strong>' + escapeHtml(card.value) + '</strong><small>' + escapeHtml(card.meta) + '</small></div>';
+      }).join('') + '</div>';
+    }
+
+    function trophyCards() {
+      return '<div class="ep-trophy-grid">' + MT_BADGE_DEFS.map(function(def) {
+        var unlocked = !!badges[def.id];
+        var badgeDate = unlocked && badges[def.id] && badges[def.id].dato ? formatDate(badges[def.id].dato, true) : 'Ikke låst opp ennå';
+        return '<article class="ep-trophy' + (unlocked ? '' : ' locked') + '"><div class="ep-trophy-icon">' + escapeHtml(unlocked ? def.icon : '🔒') + '</div><strong>' + escapeHtml(def.navn) + '</strong><small>' + escapeHtml(def.beskrivelse) + '</small><span>' + escapeHtml(badgeDate) + '</span></article>';
+      }).join('') + '</div>';
+    }
+
     root.innerHTML = '' +
       '<section class="ep-hero-card">' +
         '<div class="ep-hero-copy">' +
@@ -664,6 +732,10 @@
         kpiCard('Beste økt', String(bestPct) + ' %', 'Høyeste treffprosent') +
         kpiCard('Feillogg', String((mastery.feillogg || []).length), 'Oppgaver å ta opp igjen') +
         kpiCard('Siste analyse', recentAnalyses.length ? formatDate(recentAnalyses[0].ts, true) : '-', 'Oppgavetekst lagret lokalt') +
+      '</section>' +
+      '<section class="ep-grid ep-grid-main">' +
+        '<article class="ep-panel"><div class="ep-panel-head"><h2>Spillframgang</h2><span>Utvalgte data fra Skrivemesteren</span></div>' + gamificationCards() + '</article>' +
+        '<article class="ep-panel ep-panel-trophies"><div class="ep-panel-head"><h2>Troféskap</h2><span>' + escapeHtml(String(unlockedBadgeCount)) + ' av ' + escapeHtml(String(MT_BADGE_DEFS.length)) + ' låst opp</span></div><div class="ep-trophy-summary"><strong>' + escapeHtml(latestBadge ? (latestBadge.icon + ' ' + latestBadge.navn) : 'Ingen trofeer ennå') + '</strong><span>' + escapeHtml(latestBadge ? latestBadge.beskrivelse : 'Fullfør flere økter for å låse opp de første trofeene.') + '</span></div>' + trophyCards() + '</article>' +
       '</section>' +
       '<section class="ep-grid ep-grid-feature">' +
         '<article class="ep-panel ep-panel-radar">' +
