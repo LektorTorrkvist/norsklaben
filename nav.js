@@ -33,7 +33,9 @@ document.addEventListener('DOMContentLoaded', function () {
     ].join('');
 
     const updated = footer.querySelector('#nl-sist-oppdatert');
-    if (updated) updated.textContent = formatLastUpdated();
+    if (updated) {
+      try { updated.textContent = formatLastUpdated(); } catch (_) {}
+    }
   }
 
   function showEggModal() {

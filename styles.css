@@ -56,6 +56,7 @@ body {
 header {
   background: var(--primary);
   padding: 0 2rem;
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -99,6 +100,9 @@ nav { display: flex; gap: .25rem; }
 
 .nav-hamburger {
   display: none;
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 0;
   width: 40px;
   height: 40px;
   border: 1px solid rgba(255,255,255,.24);
@@ -117,7 +121,9 @@ nav { display: flex; gap: .25rem; }
   border-radius: 2px;
   background: #fff;
   transition: transform .18s ease, opacity .18s ease;
+  display: block;
 }
+.nav-hamburger span + span { margin-top: 4px; }
 
 header.nl-nav-open .nav-hamburger span:nth-child(1) {
   transform: translateY(6px) rotate(45deg);
@@ -5419,7 +5425,14 @@ footer strong { color: rgba(255,255,255,.8); }
   .sort-buckets { grid-template-columns: repeat(2, 1fr); }
   .burger-buckets { grid-template-columns: 1fr; }
   .nav-hamburger {
+    display: -webkit-inline-flex;
     display: inline-flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-flex-direction: column;
+    flex-direction: column;
     margin-left: auto;
   }
   nav {
