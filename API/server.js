@@ -28,6 +28,7 @@ const MAX_TEKST         = parseInt(process.env.MAX_TEKST || '6000', 10);
 const OLLAMA_NUM_CTX    = parseInt(process.env.OLLAMA_NUM_CTX || '2048', 10);
 const OLLAMA_NUM_PREDICT= parseInt(process.env.OLLAMA_NUM_PREDICT || '700', 10);
 const OLLAMA_KEEP_ALIVE = process.env.OLLAMA_KEEP_ALIVE || '15m';
+const OLLAMA_TIMEOUT_MS = parseInt(process.env.OLLAMA_TIMEOUT_MS || '90000', 10);
 const JOB_TTL_MS        = parseInt(process.env.ANALYSE_JOB_TTL_MS || String(15 * 60 * 1000), 10);
 const ESTIMERT_ANALYSE_MS = parseInt(process.env.ANALYSE_ESTIMAT_MS || '45000', 10);
 
@@ -349,11 +350,25 @@ async function kallOllama(systemPrompt, userPrompt) {
     think: false
   };
 
-  const res = await fetch(`${OLLAMA_URL}/api/chat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), OLLAMA_TIMEOUT_MS);
+
+  let res;
+  try {
+    res = await fetch(`${OLLAMA_URL}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: controller.signal
+    });
+  } catch (err) {
+    if (err && err.name === 'AbortError') {
+      throw new Error(`Analysen brukte for lang tid (over ${Math.round(OLLAMA_TIMEOUT_MS / 1000)} sekund). Prøv på nytt.`);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!res.ok) {
     const txt = await res.text();
