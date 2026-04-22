@@ -680,62 +680,6 @@
     });
   }
 
-  function fetchJson(url, options) {
-    return fetch(url, options).then(function (r) {
-      return r.json().catch(function () { return {}; }).then(function (data) {
-        if (!r.ok) throw new Error(data.feil || ('HTTP ' + r.status));
-        return data;
-      });
-    });
-  }
-
-  function formatAnalyseStatus(data) {
-    var pos = Number(data && data.posisjon);
-    var sec = Number(data && data.estimert_ventetid_sec) || 0;
-
-    if (!data || !data.status) return '';
-
-    if (data.status === 'queued') {
-      if (MAAL === 'bm') return 'Analysen står i kø. Du er nummer ' + pos + '. Omtrent ' + sec + ' sekunder ventetid.';
-      return 'Analysen står i kø. Du er nummer ' + pos + '. Om lag ' + sec + ' sekund ventetid.';
-    }
-
-    if (data.status === 'processing') {
-      if (MAAL === 'bm') return 'Analysen kjøres nå. Dette kan ta opptil ' + sec + ' sekunder.';
-      return 'Analysen blir køyrd no. Dette kan ta opptil ' + sec + ' sekund.';
-    }
-
-    return '';
-  }
-
-  function waitForAnalyse(jobId, statusEl) {
-    var started = Date.now();
-
-    return new Promise(function (resolve, reject) {
-      function poll() {
-        fetchJson(API_BASE + '/api/analyser-status/' + encodeURIComponent(jobId))
-          .then(function (data) {
-            var liveMsg = formatAnalyseStatus(data);
-            if (statusEl && liveMsg) {
-              statusEl.classList.remove('err');
-              statusEl.textContent = liveMsg;
-            }
-
-            if (data.status === 'done') return resolve(data.resultat || {});
-            if (data.status === 'error') return reject(new Error(data.feil || T.error));
-            if (Date.now() - started > 10 * 60 * 1000) {
-              return reject(new Error(MAAL === 'bm' ? 'Analysen tok for lang tid.' : 'Analysen tok for lang tid.'));
-            }
-
-            setTimeout(poll, data.status === 'queued' ? 2000 : 1500);
-          })
-          .catch(reject);
-      }
-
-      poll();
-    });
-  }
-
   function doAnalyse(host, btn) {
     var ta = host.querySelector('#nl-ta-input');
     var oppgaveEl = host.querySelector('#nl-ta-oppgave');
@@ -777,18 +721,14 @@
       if (etaRemaining <= 0) clearInterval(etaInterval);
     }, 1000);
 
-    fetchJson(API_BASE + '/api/analyser-tekst', {
+    fetch(API_BASE + '/api/analyser-tekst', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tekst: tekst, maal: valgtMaal, sjanger: sjanger, oppgave: oppgave, oppgaveText: oppgaveText })
     })
-      .then(function (startData) {
-        if (startData && startData.jobbId) {
-          var initialMsg = formatAnalyseStatus(startData);
-          if (initialMsg) status.textContent = initialMsg;
-          return waitForAnalyse(startData.jobbId, status);
-        }
-        return startData;
+      .then(function (r) {
+        if (!r.ok) return r.json().then(function (j) { throw new Error(j.feil || ('HTTP ' + r.status)); });
+        return r.json();
       })
       .then(function (data) {
         var payload = {
