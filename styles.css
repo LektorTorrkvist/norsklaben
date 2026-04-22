@@ -4703,6 +4703,7 @@ tr:nth-child(even) td { background: var(--bg); }
 .ep-sw-head-text h3 {
   font-family: 'Playfair Display', serif;
   font-size: 1.05rem;
+  font-weight: 400;
   color: var(--primary);
   margin-bottom: .1rem;
 }
