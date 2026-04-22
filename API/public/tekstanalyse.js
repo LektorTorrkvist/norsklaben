@@ -23,8 +23,8 @@
     (typeof window !== 'undefined' && window.NL_API_BASE) ||
     (SRC ? SRC.replace(/\/[^\/]*$/, '') : defaultApiBase());
   var STORAGE_KEY = 'nl_ta_history_v1';
-  var ELEVPROFIL_KEY_NN = 'norsklaben-elevprofil-nn-v1';
-  var ELEVPROFIL_KEY_BM = 'norsklaben-elevprofil-bm-v1';
+  var ELEVPROFIL_KEY = 'norsklaben-elevprofil-v1';
+  var ELEVPROFIL_LEGACY_KEYS = ['norsklaben-elevprofil-nn-v1', 'norsklaben-elevprofil-bm-v1'];
   var ELEVPROFIL_LIMIT = 24;
   var MAX_HISTORY = 15;
 
@@ -44,6 +44,9 @@
     maalLabel: 'Målform',
     sjangerLabel: 'Sjanger',
     sjangerPlaceholder: 'Velg sjanger (valgfritt)',
+    oppgaveLabel: 'Oppgavetekst (valgfritt, men anbefalt)',
+    oppgavePlaceholder: 'Lim inn oppgaveteksten du fikk – da kan AI-en vurdere om innholdet treffer.',
+    oppgaveHint: 'Uten oppgavetekst settes innhold til maks 4 av 6 i radardiagrammet.',
     label: 'Lim inn elevteksten din',
     placeholder: 'Lim inn teksten din her …',
     analyze: 'Analyser teksten',
@@ -67,13 +70,19 @@
     startAll: 'Start Skrivemesteren med disse kategoriene',
     empty: 'Skriv eller lim inn minst noen setninger først.',
     error: 'Noe gikk galt. Sjekk at API-et kjører.',
-    short: 'Teksten er kort – analysen blir bedre med en lengre tekst.'
+    short: 'Teksten er kort – analysen blir bedre med en lengre tekst.',
+    gemma4Info: 'Lokal LLM: Gemma 4',
+    etaPrefix: 'Analyserer med Gemma 4 –',
+    etaSuffix: 'sek. igjen …'
   } : {
     title: 'Elevprofil',
     intro: 'Lim inn den siste teksten du har levert. Du får ein grundig analyse, ein elevprofil og konkrete oppgåver å øve på.',
     maalLabel: 'Målform',
     sjangerLabel: 'Sjanger',
     sjangerPlaceholder: 'Vel sjanger (valfritt)',
+    oppgaveLabel: 'Oppgåvetekst (valfritt, men tilrådd)',
+    oppgavePlaceholder: 'Lim inn oppgåveteksten du fekk – då kan AI-en vurdere om innhaldet treff.',
+    oppgaveHint: 'Utan oppgåvetekst blir innhald sett til maks 4 av 6 i radardiagrammet.',
     label: 'Lim inn elevteksten din',
     placeholder: 'Lim inn teksten din her …',
     analyze: 'Analyser teksten',
@@ -97,7 +106,10 @@
     startAll: 'Start Skrivemeisteren med desse kategoriane',
     empty: 'Skriv eller lim inn minst nokre setningar først.',
     error: 'Noko gjekk gale. Sjekk at API-et køyrer.',
-    short: 'Teksten er kort – analysen blir betre med ein lengre tekst.'
+    short: 'Teksten er kort – analysen blir betre med ein lengre tekst.',
+    gemma4Info: 'Lokal LLM: Gemma 4',
+    etaPrefix: 'Analyserer med Gemma 4 –',
+    etaSuffix: 'sek. att …'
   };
 
   var MAAL_ALTERNATIV = MAAL === 'bm'
@@ -149,6 +161,8 @@
 '.nl-ta-select:focus{outline:none;border-color:#1A3D2B;box-shadow:0 0 0 3px rgba(26,61,43,.12);}' +
 '.nl-ta-textarea{width:100%;min-height:160px;padding:.85rem 1rem;border:1.5px solid #E6DFD2;border-radius:12px;font-family:inherit;font-size:1rem;line-height:1.55;color:#1A3D2B;background:#fffdf8;resize:vertical;box-sizing:border-box;}' +
 '.nl-ta-textarea:focus{outline:none;border-color:#1A3D2B;box-shadow:0 0 0 3px rgba(26,61,43,.12);}' +
+'.nl-ta-textarea-small{min-height:78px;background:#fffaf0;border-color:#E6CFA8;}' +
+'.nl-ta-hint{font-size:.85rem;color:#7d6a3d;margin:.25rem 0 .9rem;font-style:italic;}' +
 '.nl-ta-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem;}' +
 '.nl-ta-actions-top{margin-top:0;margin-bottom:.85rem;}' +
 '.nl-ta-btn{display:inline-flex;align-items:center;gap:.4rem;background:#1A3D2B;color:#fff;border:none;border-radius:10px;padding:.65rem 1.2rem;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;transition:background .2s;}' +
@@ -194,7 +208,11 @@
 '.nl-ta-history-meta{display:flex;gap:.55rem;flex-wrap:wrap;font-size:.84rem;color:#7a6a4a;}' +
 '.nl-ta-history-chip{display:inline-flex;align-items:center;padding:.12rem .5rem;border-radius:999px;background:#efe7d8;color:#6b5430;}' +
 '.nl-ta-history-excerpt{margin:0;color:#314338;font-size:.93rem;}' +
-'.nl-ta-history-actions{display:flex;gap:.5rem;flex-wrap:wrap;}';
+'.nl-ta-history-actions{display:flex;gap:.5rem;flex-wrap:wrap;}' +
+'.nl-ta-model-info{display:flex;align-items:center;gap:.45rem;margin-top:.5rem;font-size:.82rem;color:#6b5a3a;}' +
+'.nl-ta-model-dot{width:8px;height:8px;border-radius:50%;background:#2E6B4F;flex-shrink:0;display:inline-block;}' +
+'.nl-ta-model-dot--pulse{animation:nl-ta-pulse 1.4s ease-in-out infinite;}' +
+'@keyframes nl-ta-pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(1.3);}}';
 
   function injectCss() {
     if (document.getElementById('nl-ta-css')) return;
@@ -266,6 +284,7 @@
       savedAt: new Date().toISOString(),
       maal: payload.maal === 'bm' ? 'bm' : 'nn',
       sjanger: String(payload.sjanger || '').trim(),
+      oppgaveText: String(payload.oppgaveText || ''),
       tekst: String(payload.tekst || ''),
       resultat: payload.resultat || null
     };
@@ -275,7 +294,6 @@
   }
 
   function syncToElevprofilStore(payload) {
-    var key = payload.maal === 'bm' ? ELEVPROFIL_KEY_BM : ELEVPROFIL_KEY_NN;
     var radar = payload.resultat && payload.resultat.radar ? payload.resultat.radar : {};
     var forslag = Array.isArray(payload.resultat && payload.resultat.forslag) ? payload.resultat.forslag : [];
     var categories = forslag.map(function (f) {
@@ -289,8 +307,20 @@
       };
     }).filter(Boolean).slice(0, 6);
 
+    var hasOppgave = String(payload.oppgaveText || '').trim().length >= 20;
+    var innhaldRaw = Number(radar.innhald) || 0;
+    var innhaldDekning = Number((payload.resultat && payload.resultat.innholdDekning && payload.resultat.innholdDekning.score)) || 0;
+    var innhaldFinal = innhaldRaw;
+    if (hasOppgave && innhaldDekning > 0) {
+      // AI har vurdert om teksten treff oppgåva – vekt 60/40 mellom innhald og dekning.
+      innhaldFinal = (innhaldRaw * 0.6) + (innhaldDekning * 0.4);
+    } else if (!hasOppgave) {
+      // Ingen oppgåvetekst = vi kan ikkje vurdere om innhaldet treff. Cap på 4 av 6.
+      innhaldFinal = Math.min(innhaldRaw || 4, 4);
+    }
+
     var radarScores = [
-      Number(radar.innhald) || 0,
+      innhaldFinal,
       Number(radar.struktur) || 0,
       Number(radar.spraak_stil) || 0,
       Number(radar.rettskriving) || 0,
@@ -304,9 +334,11 @@
       ts: new Date().toISOString(),
       title: payload.sjanger ? ('Sjanger: ' + payload.sjanger) : 'Elevtekst',
       textExcerpt: String(payload.tekst || '').slice(0, 280),
-      source: payload.maal === 'bm' ? 'skrivelab-bm' : 'skrivelab-nn',
+      source: payload.maal === 'bm' ? 'tekstsjekk-bm' : 'tekstsjekk-nn',
       categories: categories,
       radarScores: radarScores,
+      hasOppgaveText: hasOppgave,
+      oppgaveExcerpt: String(payload.oppgaveText || '').slice(0, 280),
       summary: String((payload.resultat && payload.resultat.sammendrag) || '').slice(0, 600),
       strengths: Array.isArray(payload.resultat && payload.resultat.styrker)
         ? payload.resultat.styrker.slice(0, 3)
@@ -314,7 +346,7 @@
     };
 
     try {
-      var storeRaw = window.localStorage.getItem(key);
+      var storeRaw = window.localStorage.getItem(ELEVPROFIL_KEY);
       var store = storeRaw ? JSON.parse(storeRaw) : null;
       if (!store || typeof store !== 'object') store = { version: 1, updatedAt: '', analyses: [] };
       if (!Array.isArray(store.analyses)) store.analyses = [];
@@ -324,7 +356,7 @@
       }
       store.updatedAt = new Date().toISOString();
       store.version = 1;
-      window.localStorage.setItem(key, JSON.stringify(store));
+      window.localStorage.setItem(ELEVPROFIL_KEY, JSON.stringify(store));
     } catch (err) {}
   }
 
@@ -346,9 +378,11 @@
 
   function applyEntryToForm(host, entry) {
     var ta = host.querySelector('#nl-ta-input');
+    var oppgaveEl = host.querySelector('#nl-ta-oppgave');
     var maalSel = host.querySelector('#nl-ta-maal');
     var sjangerSel = host.querySelector('#nl-ta-sjanger');
     if (ta) ta.value = String(entry.tekst || '');
+    if (oppgaveEl) oppgaveEl.value = String(entry.oppgaveText || '');
     if (maalSel) maalSel.value = entry.maal === 'bm' ? 'bm' : 'nn';
     if (sjangerSel) sjangerSel.value = String(entry.sjanger || '');
   }
@@ -527,8 +561,8 @@
         return;
       }
     }
-    // Anna side: naviger til skrivelab med autostart
-    var page = MAAL === 'bm' ? 'skrivelab-bm.html' : 'skrivelab.html';
+    // Anna side: naviger til skrivemeisteren med autostart
+    var page = MAAL === 'bm' ? 'skrivemeisteren-bm.html' : 'skrivemeisteren.html';
     location.href = page + '?kats=' + encodeURIComponent(katList.join(',')) + '&auto=1#nl-adaptive';
   }
 
@@ -568,10 +602,16 @@
             '<select id="nl-ta-sjanger" class="nl-ta-select">' + sjangerOptions + '</select>' +
           '</div>' +
         '</div>' +
+        '<label class="nl-ta-label" for="nl-ta-oppgave">' + esc(T.oppgaveLabel) + '</label>' +
+        '<textarea id="nl-ta-oppgave" class="nl-ta-textarea nl-ta-textarea-small" placeholder="' + esc(T.oppgavePlaceholder) + '" rows="3"></textarea>' +
+        '<p class="nl-ta-hint">' + esc(T.oppgaveHint) + '</p>' +
         '<label class="nl-ta-label" for="nl-ta-input">' + esc(T.label) + '</label>' +
         '<textarea id="nl-ta-input" class="nl-ta-textarea" placeholder="' + esc(T.placeholder) + '"></textarea>' +
         '<div class="nl-ta-actions">' +
           '<button type="button" class="nl-ta-btn" data-nl-ta-go="1">' + esc(T.analyze) + '</button>' +
+        '</div>' +
+        '<div class="nl-ta-model-info" data-nl-ta-model-info>' +
+          '<span class="nl-ta-model-dot"></span> ' + esc(T.gemma4Info) +
         '</div>' +
         '<div class="nl-ta-status" data-nl-ta-status></div>' +
       '</div>' +
@@ -642,13 +682,15 @@
 
   function doAnalyse(host, btn) {
     var ta = host.querySelector('#nl-ta-input');
+    var oppgaveEl = host.querySelector('#nl-ta-oppgave');
     var maalSel = host.querySelector('#nl-ta-maal');
     var sjangerSel = host.querySelector('#nl-ta-sjanger');
     var status = host.querySelector('[data-nl-ta-status]');
     var tekst = (ta && ta.value || '').trim();
+    var oppgaveText = (oppgaveEl && oppgaveEl.value || '').trim();
     var valgtMaal = (maalSel && maalSel.value === 'bm') ? 'bm' : 'nn';
     var sjanger = (sjangerSel && sjangerSel.value || '').trim();
-    var oppgave = sjanger ? ('Sjanger: ' + sjanger) : '';
+    var oppgave = oppgaveText || (sjanger ? ('Sjanger: ' + sjanger) : '');
 
     status.classList.remove('err');
     status.textContent = '';
@@ -664,10 +706,25 @@
     btn.innerHTML = '<span class="nl-ta-spinner"></span> ' + esc(T.analyzing);
     if (tekst.length < 200) status.textContent = T.short;
 
+    var wordCount = Math.round(tekst.length / 5);
+    var etaSec = Math.max(8, Math.round(wordCount * 0.07 + 10));
+    var etaRemaining = etaSec;
+    var modelInfo = host.querySelector('[data-nl-ta-model-info]');
+    if (modelInfo) {
+      modelInfo.innerHTML = '<span class="nl-ta-model-dot nl-ta-model-dot--pulse"></span> ' +
+        esc(T.etaPrefix) + ' <strong data-nl-ta-eta>' + etaRemaining + '</strong> ' + esc(T.etaSuffix);
+    }
+    var etaInterval = setInterval(function () {
+      etaRemaining--;
+      var etaEl = host.querySelector('[data-nl-ta-eta]');
+      if (etaEl) etaEl.textContent = String(Math.max(0, etaRemaining));
+      if (etaRemaining <= 0) clearInterval(etaInterval);
+    }, 1000);
+
     fetch(API_BASE + '/api/analyser-tekst', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tekst: tekst, maal: valgtMaal, sjanger: sjanger, oppgave: oppgave })
+      body: JSON.stringify({ tekst: tekst, maal: valgtMaal, sjanger: sjanger, oppgave: oppgave, oppgaveText: oppgaveText })
     })
       .then(function (r) {
         if (!r.ok) return r.json().then(function (j) { throw new Error(j.feil || ('HTTP ' + r.status)); });
@@ -678,6 +735,7 @@
           tekst: tekst,
           maal: valgtMaal,
           sjanger: sjanger,
+          oppgaveText: oppgaveText,
           resultat: data
         };
         addHistoryEntry(payload);
@@ -695,6 +753,9 @@
       .then(function () {
         btn.disabled = false;
         btn.textContent = origLabel;
+        clearInterval(etaInterval);
+        var mi = host.querySelector('[data-nl-ta-model-info]');
+        if (mi) mi.innerHTML = '<span class="nl-ta-model-dot"></span> ' + esc(T.gemma4Info);
       });
   }
 

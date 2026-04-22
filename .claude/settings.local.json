@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk -F: '$2 > 1400')",
+      "Bash(awk -F: 'int\\($1\\) > 1400')",
+      "Bash(awk -F: 'int\\($1\\) > 2050')",
+      "Bash(awk -F: 'int\\($1\\) > 2300')",
+      "Bash(awk -F: 'int\\($1\\) > 4300')"
+    ]
+  }
+}

@@ -16,13 +16,18 @@
 <header>
   <a class="logo" href="index.html">Norsk<span>laben</span></a>
   <nav>
-    <a href="skrivelab.html">Skrivelab</a>
+    <a href="skrivemeisteren.html">Skrivemeisteren</a>
+    <a href="tekstsjekk.html">Tekstsjekk</a>
+    <a href="elevprofil.html">Elevprofil</a>
     <a href="nynorsklab.html">Nynorsklab</a>
-    <a href="verktoyskasse.html">Verktøykasse</a>
-    <a href="undervisingsbank.html">Undervisingsbank</a>
-    <div class="nav-dropdown">
-      <button class="nav-dropbtn" type="button" aria-expanded="false">Leikekassa</button>
+    <div class="nav-dropdown" data-nl-nav="verktoykassa">
+      <button class="nav-dropbtn" type="button" aria-expanded="false">Verktøykassa</button>
       <div class="nav-dropmenu">
+        <div class="nav-dropsection">For lærar</div>
+        <a href="undervisingsbank.html">Undervisingsbank</a>
+        <div class="nav-dropdivider" role="separator" aria-hidden="true"></div>
+        <div class="nav-dropsection">For elev</div>
+        <a href="verktoyskasse.html">Verktøykasse</a>
         <a href="mad-libs.html">Mad Libs</a>
         <a href="vurderingslab.html">Vurderingslab</a>
       </div>
@@ -35,114 +40,119 @@
 </header>
 
 <div class="hero hero-index">
-  <div class="htag">Undervisningsressursar i norsk</div>
-  <h1>Norsklaben</h1>
-  <p>Ein database med øvingsoppgåver og undervisningsressursar for norskfaget på ungdomstrinnet.</p>
-</div>
-
-<div class="lab-cards">
-
-  <a class="lcard" href="skrivelab.html">
-    <div class="lcard-icon">✍️</div>
-    <h2>Skrivelab</h2>
-    <p>Øvingsoppgåver i norsk skriving – grammatikk, setningsbygging, tekststruktur, sjanger, drøfting, kjeldebruk og ordval. Basert på analyse av elevtekstar frå 8. trinn.</p>
-    <div class="lcard-meta">
-      <span class="tag tag-g" id="skrivelab-cats-count">24 kategoriar</span>
-      <span class="tag tag-a" id="skrivelab-tasks-count">219 oppgåver</span>
-    </div>
-    <span class="lbtn">Gå til Skrivelab →</span>
-  </a>
-
-  <a class="lcard" href="nynorsklab.html">
-    <div class="lcard-icon">🇳🇴</div>
-    <h2>Nynorsklab</h2>
-    <p>Øvingsoppgåver spesifikt for nynorsk – målformkonsistens, verbformer, substantivbøying, adjektivsamsvar, pronomen og særnorske nynorskformer.</p>
-    <div class="lcard-meta">
-      <span class="tag tag-g">9 kategoriar</span>
-      <span class="tag tag-a">34 oppgåver</span>
-    </div>
-    <span class="lbtn">Gå til Nynorsklab →</span>
-  </a>
-
-  <a class="lcard" href="elevprofil.html">
-    <div class="lcard-icon">📈</div>
-    <h2>Elevprofil</h2>
-    <p>Sjå eit lokalt oversyn over styrkar, svakheiter, tilrådde kategoriar og progresjon frå Skrivemeisteren. Profilen blir fylt automatisk når oppgåvetekstar blir analyserte og økter blir fullførte.</p>
-    <div class="lcard-meta">
-      <span class="tag tag-g">Lokal lagring</span>
-      <span class="tag tag-a">Elevretta</span>
-    </div>
-    <span class="lbtn">Opne elevprofil →</span>
-  </a>
-
-</div>
-
-<section class="index-ob-note" aria-labelledby="index-ob-note-title">
-  <div class="index-ob-note-inner">
-    <div class="index-ob-note-icon" aria-hidden="true">📚</div>
-    <div class="index-ob-note-text">
-      <h2 id="index-ob-note-title">Nyheit: Oppgåvebank</h2>
-      <p>Bruk Oppgåvebanken for å få ei samla oversikt over alle øvingsoppgåver. Du kan starte manuell øving direkte frå kvar kategori, eller dele lenker med elevar.</p>
-    </div>
-    <a class="index-ob-note-btn" href="oppgavebank.html">Opne Oppgåvebank →</a>
+  <div class="hero-inner">
+    <div class="htag">Norsk på ungdomstrinnet</div>
+    <h1>Norsklaben</h1>
+    <p>Øv på det du treng, når du treng det. Oppgåver og teksthjelp tilpassa 8.–10. klasse.</p>
   </div>
-</section>
+</div>
 
-<div class="how">
-  <h2>Slik brukar du Norsklaben</h2>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <h3>Vel lab</h3>
-      <p>Gå til Skrivelab for generelle skriveferdigheiter, eller Nynorsklab for nynorsk grammatikk.</p>
+<!-- HOVUDKORT -->
+<div class="main-cards">
+
+  <a class="mcard green" href="skrivemeisteren.html">
+    <div class="mcard-icon">🎮</div>
+    <h2>Skrivemeisteren</h2>
+    <div class="mcard-tagline">Spel og øv</div>
+    <p>Spel deg gjennom typiske skrivefeil. Vel kategori, svar på oppgåver og sjå kor langt du kjem.</p>
+    <div class="mcard-footer">
+      <div class="mcard-tags">
+        <span class="tag tag-g">250+ oppgåver</span>
+        <span class="tag tag-g">24 kategoriar</span>
+      </div>
+      <span class="mcard-arrow">Spel →</span>
     </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <h3>Filtrer</h3>
-      <p>Bruk søk eller filtreringsknappane for å finne oppgåver som passar nivå og operasjon (korrigere, byggje, analysere…).</p>
+  </a>
+
+  <a class="mcard amber" href="tekstsjekk.html">
+    <div class="mcard-icon">🔍</div>
+    <h2>Tekstsjekk</h2>
+    <div class="mcard-tagline">AI-analyse</div>
+    <p>Lim inn teksten din og få tilbakemelding. AI-en finn kva du bør øve meir på og foreslår oppgåver.</p>
+    <div class="mcard-footer">
+      <div class="mcard-tags">
+        <span class="tag tag-a">AI-analyse</span>
+        <span class="tag tag-a">Tilpassa deg</span>
+      </div>
+      <span class="mcard-arrow">Sjekk tekst →</span>
     </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <h3>Klikk og øv</h3>
-      <p>Klikk på ein kategori for å sjå alle oppgåvene. Klikk på ei oppgåve for å opne ho. Bruk «Vis fasit» for å sjekke svaret.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <h3>Vanskegrad</h3>
-      <p>Kvar oppgåve er merkt med vanskegrad: grunnleggjande, mellomtrinn eller avansert.</p>
+  </a>
+
+</div>
+
+<!-- TILLEGGSVERKTØY -->
+<div class="extra-section">
+  <h3>Fleire verktøy</h3>
+  <div class="extra-grid">
+
+    <a class="ecard" href="nynorsklab.html">
+      <span class="ecard-icon">🇳🇴</span>
+      <div class="ecard-text">
+        Nynorsklab
+        <small>Verbformer, bøying, målform</small>
+      </div>
+    </a>
+
+    <a class="ecard" href="verktoyskasse.html">
+      <span class="ecard-icon">🛠️</span>
+      <div class="ecard-text">
+        Verktøykasse
+        <small>Skrivetips og sjangerhjelp</small>
+      </div>
+    </a>
+
+    <a class="ecard" href="elevprofil.html">
+      <span class="ecard-icon">📈</span>
+      <div class="ecard-text">
+        Elevprofil
+        <small>Framgang og styrkar</small>
+      </div>
+    </a>
+
+    <a class="ecard" href="mad-libs.html">
+      <span class="ecard-icon">😄</span>
+      <div class="ecard-text">
+        Mad Libs
+        <small>Ordklasser på ein morosam måte</small>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- KORLEIS -->
+<div class="how-wrap" style="margin-top: 2rem;">
+  <div class="how">
+    <h2>Korleis brukar du Norsklaben?</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Vel det du treng</h3>
+        <p>Vil du øve på eiga hand? → Skrivemeisteren. Har du skrive ein tekst? → Tekstsjekk.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Vel kategori</h3>
+        <p>I Skrivemeisteren vel du kva du vil jobbe med: komma, setningar, sjanger og meir.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Svar og lær</h3>
+        <p>Kvar oppgåve gir deg forklaring og fasit. Feil er berre ein ny sjanse til å lære.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Følg framgangen</h3>
+        <p>Elevprofilen viser kva du er god på og kva du bør jobbe meir med.</p>
+      </div>
     </div>
   </div>
 </div>
 
 <footer>
   <p>Norsklaben • av Lektor Tørrkvist • 2026</p>
-  <p id="nl-sist-oppdatert">Sist oppdatert laster...</p>
 </footer>
 
 <script src="nav.js"></script>
-<script src="oppgavebank-v2.js?v=20260410f"></script>
-<script>
-(function() {
-  var catsEl = document.getElementById('skrivelab-cats-count');
-  var tasksEl = document.getElementById('skrivelab-tasks-count');
-  if (!catsEl || !tasksEl) return;
-
-  var bank = (typeof BANKV2 !== 'undefined' && Array.isArray(BANKV2)) ? BANKV2 : [];
-  if (!bank.length) return;
-
-  var catMap = {};
-  bank.forEach(function(t) {
-    if (!t || !t.kat) return;
-    catMap[String(t.kat)] = true;
-  });
-
-  var catCount = Object.keys(catMap).length;
-  var taskCount = bank.length;
-
-  catsEl.textContent = catCount + ' kategori' + (catCount === 1 ? '' : 'ar');
-  tasksEl.textContent = taskCount + ' oppgåver';
-})();
-</script>
-
 </body>
 </html>

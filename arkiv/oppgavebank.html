@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="nn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oppgåvebank – Norsklaben</title>
+<meta name="description" content="Oversikt over alle øvingsoppgåver i Skrivemeisteren – vel kategori, øv direkte eller del lenker med elevar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#1A3D2B">
+
+
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Norsk<span>laben</span></a>
+  <nav>
+    <a href="skrivemeisteren.html">Skrivemeisteren</a>
+    <a href="tekstsjekk.html">Tekstsjekk</a>
+    <a href="elevprofil.html">Elevprofil</a>
+    <a href="nynorsklab.html">Nynorsklab</a>
+    <div class="nav-dropdown" data-nl-nav="verktoykassa">
+      <button class="nav-dropbtn" type="button" aria-expanded="false">Verktøykassa</button>
+      <div class="nav-dropmenu">
+        <div class="nav-dropsection">For lærar</div>
+        <a href="undervisingsbank.html">Undervisingsbank</a>
+        <div class="nav-dropdivider" role="separator" aria-hidden="true"></div>
+        <div class="nav-dropsection">For elev</div>
+        <a href="verktoyskasse.html">Verktøykasse</a>
+        <a href="mad-libs.html">Mad Libs</a>
+        <a href="vurderingslab.html">Vurderingslab</a>
+      </div>
+    </div>
+    <div class="lang-toggle" aria-label="Vel målform">
+      <a href="oppgavebank.html" class="active" title="Nynorsk">NN</a>
+      <a href="oppgavebank-bm.html" title="Bokmål">BM</a>
+    </div>
+  </nav>
+</header>
+
+<div class="ob-hero">
+  <h1>📚 Oppgåvebank</h1>
+  <p>Oversikt over alle øvingsoppgåver i Skrivemeisteren. Vel ein kategori for å øve, eller del lenkja med elevane dine.</p>
+  <div class="hero-stats">
+    <div><div class="stat-n" id="ob-stat-categories">0</div><div class="stat-l">Kategoriar</div></div>
+    <div><div class="stat-n" id="ob-stat-tasks">0</div><div class="stat-l">Oppgåver</div></div>
+  </div>
+</div>
+
+<div class="ob-wrap">
+
+  <div class="ob-ai" id="ob-ai-scan"><noscript>Aktiver JavaScript for å bruke tekstskanning og elevprofil.</noscript></div>
+
+  <div id="ob-content">
+    <p style="text-align:center;color:#999;padding:2rem 0;">Lastar oppgåver …</p>
+  </div>
+
+</div>
+
+<div class="ob-toast" id="ob-toast"></div>
+
+<div class="adp-win" id="nl-ad-win" hidden>
+  <div class="adp-win-bg" id="nl-ad-win-bg"></div>
+  <div class="adp-win-card" role="dialog" aria-modal="true" aria-labelledby="nl-ad-win-title">
+    <div class="adp-win-head">
+      <h3 id="nl-ad-win-title">Skrivemeisteren - manuell modus</h3>
+    </div>
+
+    <div class="adp-win-body" id="nl-ad-win-body"></div>
+
+    <section class="adp-summary" id="nl-ad-summary" hidden aria-live="polite">
+      <div class="adp-summary-medal" id="nl-ad-sum-medal"></div>
+      <h4 id="nl-ad-sum-heading">Økt fullført!</h4>
+      <div class="adp-summary-comment" id="nl-ad-sum-comment"></div>
+      <div class="adp-summary-grid">
+        <div class="adp-summary-kpi"><span class="adp-summary-lbl">Poeng</span><strong id="nl-ad-sum-poeng">0/0</strong></div>
+        <div class="adp-summary-kpi kpi-xp"><span class="adp-summary-lbl">XP i økta</span><strong id="nl-ad-sum-xp">+0</strong></div>
+        <div class="adp-summary-kpi kpi-ok"><span class="adp-summary-lbl">Rette</span><strong id="nl-ad-sum-rette">0</strong></div>
+        <div class="adp-summary-kpi kpi-err"><span class="adp-summary-lbl">Feil</span><strong id="nl-ad-sum-feil">0</strong></div>
+      </div>
+      <div class="adp-summary-strengths" id="nl-ad-sum-strengths"></div>
+      <div class="adp-summary-corrections" id="nl-ad-sum-retting"></div>
+      <div class="adp-summary-teacher" id="nl-ad-sum-teacher">
+        <span class="teacher-icon">&#128248;</span>
+        <strong>Vil du skryte til l&aelig;raren?</strong>
+        Ta eit skjermbilete av denne sluttkvitteringa og vis det til l&aelig;raren din!
+        <div class="adp-summary-meta">
+          <span id="nl-ad-sum-time">-</span>
+          <span id="nl-ad-sum-id">-</span>
+        </div>
+      </div>
+      <div class="adp-summary-actions">
+        <button class="adp-btn adp-btn-pri" id="nl-ad-sum-new">Start ny økt</button>
+        <button class="adp-btn" id="nl-ad-sum-close">Lukk</button>
+      </div>
+    </section>
+
+    <div class="adp-run-actions" id="nl-ad-actions">
+      <button class="adp-win-close" id="nl-ad-win-close" aria-label="Lukk økta">Lukk</button>
+      <button class="adp-btn" id="nl-ad-check">Sjekk svar</button>
+      <button class="adp-btn adp-btn-pri" id="nl-ad-next">Neste oppgåve →</button>
+    </div>
+  </div>
+</div>
+
+<footer></footer>
+
+<script src="oppgavebank-v2.js"></script>
+<script src="nav.js"></script>
+<script src="elevprofil.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var BANK = (typeof BANKV2 !== 'undefined') ? BANKV2 : [];
+  var container = document.getElementById('ob-content');
+  if (!BANK.length || !container) return;
+
+  var catCounter = {};
+  BANK.forEach(function(t) {
+    if (!t || !t.kat) return;
+    catCounter[String(t.kat)] = true;
+  });
+  var obCatsEl = document.getElementById('ob-stat-categories');
+  var obTasksEl = document.getElementById('ob-stat-tasks');
+  if (obCatsEl) obCatsEl.textContent = String(Object.keys(catCounter).length);
+  if (obTasksEl) obTasksEl.textContent = String(BANK.length);
+
+  /* ── Icon map per category ── */
+  var ICONS = {
+    og_aa:'✏️', sammensatt:'🔗', dobbel_konsonant:'🔤', kj_skj:'👅',
+    tegnsetting:'❗', ordklasser:'🏷️', setningsbygging:'🧱', bindeord:'🔗',
+    tekststruktur:'📄', kildebruk:'📖', oppgavetolking:'🎯', spraak_stil:'🎨',
+    aarsak_sammenheng:'🔀', referansekjede:'🔁', logisk_struktur:'🧩',
+    sjangerkompetanse:'📝', fagartikkel:'📰', debattinnlegg:'💬',
+    overskrift_ingress:'📰', novelle:'📕', parafrase:'🔄', sitat:'💎',
+    tal_og_statistikk:'📊', ordval:'💡', bruke_eksempel:'📌',
+    tilpass_til_lesaran:'👥', djupneoppgaver:'🧠'
+  };
+
+  /* ── Thematic groups ── */
+  var GROUPS = [
+    { title:'Langsvar og refleksjonsoppgåver', cats:['djupneoppgaver'] },
+    { title:'Rettskriving og grammatikk', cats:['og_aa','sammensatt','dobbel_konsonant','kj_skj','tegnsetting','ordklasser','setningsbygging'] },
+    { title:'Tekst og struktur', cats:['bindeord','tekststruktur','aarsak_sammenheng','referansekjede','logisk_struktur'] },
+    { title:'Sjanger og stil', cats:['spraak_stil','sjangerkompetanse','fagartikkel','debattinnlegg','novelle','overskrift_ingress'] },
+    { title:'Kjeldebruk og fagskriving', cats:['kildebruk','oppgavetolking','parafrase','sitat','bruke_eksempel'] },
+    { title:'Ordval, tilpassing og tal', cats:['ordval','tilpass_til_lesaran','tal_og_statistikk'] }
+  ];
+
+  var TYPE_LABELS = {
+    mc:'Fleirval', cloze:'Fullfør', fix:'Fiks tekst', fillsel:'Nedtrekk',
+    drag_kolonne:'Dra-kolonne', drag_ord:'Dra-ord', finn_feil:'Finn feil',
+    klikk_marker:'Klikk-markør', sann_usann_serie:'Sant/usant', burger_sort:'Burgersortering',
+    sorter_rekke:'Sorter rekkje', avsnitt_klikk:'Avsnittsklikk', mcset:'Fleirvalssett', omskriv:'Omskriving', rank:'Rangering'
+  };
+
+  /* ── Build stats per category ── */
+  var catData = {};
+  BANK.forEach(function(t) {
+    if (!t.kat) return;
+    if (!catData[t.kat]) catData[t.kat] = { label:t.kat_label||t.kat, lett:0, medium:0, hard:0, total:0, types:{}, tasks:[] };
+    var d = catData[t.kat];
+    d.total++;
+    if (t.vanske === 'lett') d.lett++;
+    else if (t.vanske === 'medium') d.medium++;
+    else d.hard++;
+    var ty = t.type || 'ukjent';
+    d.types[ty] = 1;
+    d.tasks.push(t);
+  });
+
+  /* ── Render ── */
+  var html = '';
+  var seenCats = {};
+
+  GROUPS.forEach(function(g) {
+    var groupHtml = '';
+    g.cats.forEach(function(kat) {
+      if (seenCats[kat] || !catData[kat]) return;
+      seenCats[kat] = 1;
+      groupHtml += buildCard(kat, catData[kat]);
+    });
+    if (!groupHtml) return;
+    html += '<h2 class="ob-group-title">' + esc(g.title) + '</h2>';
+    html += '<div class="ob-grid">' + groupHtml + '</div>';
+  });
+
+  /* Catch any categories not in GROUPS */
+  var extraHtml = '';
+  Object.keys(catData).forEach(function(kat) {
+    if (seenCats[kat]) return;
+    seenCats[kat] = 1;
+    extraHtml += buildCard(kat, catData[kat]);
+  });
+  if (extraHtml) {
+    html += '<h2 class="ob-group-title">Andre kategoriar</h2>';
+    html += '<div class="ob-grid">' + extraHtml + '</div>';
+  }
+
+  container.innerHTML = html;
+
+  /* ── Copy-link buttons ── */
+  container.addEventListener('click', function(e) {
+    var openBtn = e.target.closest('.ob-btn-open');
+    if (openBtn) {
+      e.preventDefault();
+      var katOpen = String(openBtn.dataset.kat || '').trim();
+      if (katOpen) openCategoryModal(katOpen, { updateUrl: true, scrollToCard: false });
+      return;
+    }
+
+    var taskBtn = e.target.closest('.ob-task-link');
+    if (taskBtn) {
+      e.preventDefault();
+      var taskKat = String(taskBtn.dataset.kat || '').trim();
+      var taskIdx = parseInt(taskBtn.dataset.taskIdx, 10);
+      if (taskKat) openCategoryModal(taskKat, { updateUrl: true, scrollToCard: false, startIdx: isFinite(taskIdx) ? taskIdx : 0 });
+      return;
+    }
+
+    var btn = e.target.closest('.ob-btn-copy');
+    if (!btn) return;
+    e.preventDefault();
+    var url = btn.dataset.url;
+    if (!url) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function() { showToast('Lenke kopiert!'); });
+    } else {
+      /* Fallback */
+      var ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.cssText = 'position:fixed;left:-999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); showToast('Lenke kopiert!'); } catch(_) {}
+      document.body.removeChild(ta);
+    }
+  });
+
+  /* ── Helpers ── */
+  function buildCard(kat, d) {
+    var icon = ICONS[kat] || '📋';
+    var typeList = Object.keys(d.types).map(function(t) { return TYPE_LABELS[t]||t; }).join(', ');
+
+    var anchor = 'kat-' + kat;
+    var manualQuery = '?kat=' + encodeURIComponent(kat) + '&mode=manual';
+    var localLink = location.pathname + manualQuery + '#' + anchor;
+    var shareUrl = location.origin + localLink;
+    var taskListHtml = buildTaskListHtml(kat, d.tasks || []);
+
+    var s = '';
+    s += '<div class="ob-card" id="' + anchor + '">';
+    s += '<div class="ob-card-head">';
+    s += '<span class="ob-card-icon">' + icon + '</span>';
+    s += '<h3 class="ob-card-title">' + esc(d.label) + '</h3>';
+    s += '</div>';
+    s += '<div class="ob-card-meta">';
+    s += '<span class="ob-tag ob-tag-total">' + d.total + ' oppgåver</span>';
+    if (d.lett) s += '<span class="ob-tag ob-tag-lett">' + d.lett + ' lette</span>';
+    if (d.medium) s += '<span class="ob-tag ob-tag-medium">' + d.medium + ' medium</span>';
+    if (d.hard) s += '<span class="ob-tag ob-tag-hard">' + d.hard + ' vanskelege</span>';
+    s += '</div>';
+    s += '<div class="ob-card-types">Oppgåvetypar: ' + esc(typeList) + '</div>';
+    s += '<div class="ob-card-actions">';
+    s += '<button type="button" class="ob-btn ob-btn-primary ob-btn-open" data-kat="' + esc(kat) + '">▶ Øv no</button>';
+    s += '<button type="button" class="ob-btn ob-btn-copy" data-url="' + esc(shareUrl) + '">🔗 Kopier lenke</button>';
+    s += '<a class="ob-btn" href="' + localLink + '">⚓ Anker</a>';
+    s += '</div>';
+    s += '<div class="ob-card-drop">' + taskListHtml + '</div>';
+    s += '</div>';
+    return s;
+  }
+
+  function buildTaskListHtml(kat, tasks) {
+    if (!Array.isArray(tasks) || !tasks.length) return '';
+    var items = tasks.map(function(t, i) {
+      var raw = String((t && (t.q || t.sporsmal || t.tekst)) || ('Oppgåve ' + (i + 1)));
+      var q = raw
+        .split(/\r?\n+/)
+        .map(function(line) {
+          return String(line).replace(/^\s*(?:\d+[\.)]\s*)+/, '').trim();
+        })
+        .filter(Boolean)
+        .join(' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (q.length > 135) q = q.slice(0, 132) + '...';
+      return '<li class="ob-task-item"><button type="button" class="ob-task-link" data-kat="' + esc(kat) + '" data-task-idx="' + i + '">' + esc((i + 1) + '. ' + q) + '</button></li>';
+    }).join('');
+
+    return '<details class="ob-task-drop"><summary>Sjå alle oppgåvene i kategorien</summary><ol class="ob-task-list">' + items + '</ol></details>';
+  }
+
+  function openCategoryModal(kat, opts) {
+    var cfg = opts || {};
+    var tasks = BANK.filter(function(t) { return t && t.kat === kat; });
+    if (!tasks.length) {
+      showToast('Ingen oppgåver funne i denne kategorien.');
+      return;
+    }
+
+    if (typeof window.mtStartManualQueue !== 'function') {
+      showToast('Modalmotoren er ikkje klar enno. Prøv igjen.');
+      return;
+    }
+
+    if (cfg.updateUrl !== false && window.history && window.history.replaceState) {
+      var anchor = 'kat-' + kat;
+      var nextUrl = location.pathname + '?kat=' + encodeURIComponent(kat) + '&mode=manual#' + anchor;
+      window.history.replaceState({}, '', nextUrl);
+    }
+
+    if (cfg.scrollToCard !== false) {
+      var card = document.getElementById('kat-' + kat);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    /* Reorder so the chosen task is first */
+    var idx = cfg.startIdx || 0;
+    if (idx > 0 && idx < tasks.length) {
+      tasks = tasks.slice(idx).concat(tasks.slice(0, idx));
+    }
+
+    window.mtStartManualQueue(tasks);
+  }
+
+  function esc(s) {
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('ob-toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 2000);
+  }
+
+  var obHashFlashTimer = null;
+  function flashCardTarget(el) {
+    if (!el || !el.classList || !el.classList.contains('ob-card')) return;
+    document.querySelectorAll('.ob-card.ob-target').forEach(function(card) {
+      card.classList.remove('ob-target');
+    });
+    el.classList.add('ob-target');
+    if (obHashFlashTimer) clearTimeout(obHashFlashTimer);
+    obHashFlashTimer = setTimeout(function() {
+      el.classList.remove('ob-target');
+    }, 1400);
+  }
+
+  /* ── Highlight card if hash targets one ── */
+  function checkHash() {
+    if (location.hash) {
+      var el = document.querySelector(location.hash);
+      if (el && el.classList.contains('ob-card')) {
+        el.scrollIntoView({ behavior:'smooth', block:'center' });
+        flashCardTarget(el);
+      }
+    }
+
+    var params = new URLSearchParams(window.location.search);
+    var katFromUrl = String(params.get('kat') || '').trim();
+    var mode = String(params.get('mode') || '').toLowerCase();
+    if (katFromUrl && (mode === 'manual' || mode === 'manuell' || mode === 'mt')) {
+      setTimeout(function() {
+        openCategoryModal(katFromUrl, { updateUrl: false, scrollToCard: false });
+      }, 120);
+    }
+  }
+  checkHash();
+  window.addEventListener('hashchange', checkHash);
+
+})();
+</script>
+<script>
+(function(){
+  var p = new URLSearchParams(window.location.search);
+  var api = p.get('api');
+  if (api) {
+    if (!/^https?:\/\//.test(api)) api = 'http://' + api;
+    try { localStorage.setItem('nl_api_base', api); } catch(e){}
+  } else {
+    try { api = localStorage.getItem('nl_api_base'); } catch(e){}
+  }
+  if (!api) {
+    var h = (location.hostname || '').toLowerCase();
+    api = (h === 'localhost' || h === '127.0.0.1' || h === '')
+      ? 'http://localhost:3000'
+      : 'https://api.norsklaben.no';
+  }
+  window.NL_API_BASE = api;
+  var s = document.createElement('script');
+  s.src = api + '/tekstanalyse.js';
+  s.onerror = function(){ console.warn('Tekstanalyse API ikkje tilgjengeleg på ' + api); };
+  document.body.appendChild(s);
+})();
+</script>
+</body>
+</html>

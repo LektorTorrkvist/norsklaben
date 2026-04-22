@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skrivemeisteren – Norsklaben</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#1A3D2B">
+</head>
+<body>
+
+<!-- Motivational startup modal (uendra struktur, tekst på bokmål) -->
+<div class="nl-welcome-overlay" id="nl-welcome-overlay" hidden>
+  <div class="nl-welcome-card">
+    <div class="nl-welcome-emoji" id="nl-welcome-emoji">🌱</div>
+    <h2 class="nl-welcome-title" id="nl-welcome-title">Velkommen tilbake!</h2>
+    <p class="nl-welcome-msg" id="nl-welcome-msg"></p>
+    <div class="nl-welcome-level-box" id="nl-welcome-level-box" hidden>
+      <div class="nl-wlvl-icon" id="nl-welcome-lvl-icon">🌱</div>
+      <div class="nl-wlvl-info">
+        <div class="nl-wlvl-name" id="nl-welcome-lvl-name">Ordlærling</div>
+        <div class="nl-wlvl-bar"><span class="nl-wlvl-fill" id="nl-welcome-lvl-fill" style="width:0%"></span></div>
+        <div class="nl-wlvl-xp" id="nl-welcome-lvl-xp">0 / 80 XP</div>
+      </div>
+    </div>
+    <div class="nl-welcome-stats" id="nl-welcome-stats" hidden>
+      <div class="nl-welcome-stat"><span class="nl-ws-icon">⭐</span><strong id="nl-welcome-xp">0</strong> XP</div>
+      <div class="nl-welcome-stat"><span class="nl-ws-icon">🔥</span><strong id="nl-welcome-streak">0</strong> dager på rad</div>
+    </div>
+    <div class="nl-welcome-tips" id="nl-welcome-tips" hidden>
+      <h4>💡 Tips: Øv litt ekstra på</h4>
+      <ul id="nl-welcome-tips-list"></ul>
+    </div>
+    <button type="button" class="nl-welcome-btn" id="nl-welcome-btn">La oss kjøre! 🚀</button>
+  </div>
+</div>
+
+<!-- Level-up overlay -->
+<div class="nl-levelup-overlay" id="nl-levelup-overlay" hidden>
+  <div class="nl-levelup-card">
+    <div class="nl-levelup-fireworks" id="nl-levelup-fireworks"></div>
+    <div class="nl-levelup-icon" id="nl-levelup-icon">🏆</div>
+    <h2 class="nl-levelup-title">Nivå opp!</h2>
+    <div class="nl-levelup-name" id="nl-levelup-name">Setningssmed</div>
+    <p class="nl-levelup-msg" id="nl-levelup-msg"></p>
+  </div>
+</div>
+
+<header>
+  <a class="logo" href="index-bm.html">Norsk<span>laben</span></a>
+  <nav>
+    <a href="skrivemeisteren-bm.html" class="active">Skrivemeisteren</a>
+    <a href="tekstsjekk-bm.html">Tekstsjekk</a>
+    <a href="nynorsklab.html">Nynorsklab</a>
+    <div class="nav-dropdown" data-nl-nav="verktoykassa">
+      <button class="nav-dropbtn" type="button" aria-expanded="false">Verktøykassa</button>
+      <div class="nav-dropmenu">
+        <div class="nav-dropsection">For lærer</div>
+        <a href="undervisingsbank-bm.html">Undervisningsbank</a>
+        <div class="nav-dropdivider" role="separator" aria-hidden="true"></div>
+        <div class="nav-dropsection">For elev</div>
+        <a href="verktoyskasse-bm.html">Verktøykasse</a>
+        <a href="mad-libs.html">Mad Libs</a>
+        <a href="vurderingslab.html">Vurderingslab</a>
+      </div>
+    </div>
+    <div class="lang-toggle" aria-label="Velg målform">
+      <a href="skrivemeisteren.html" title="Nynorsk">NN</a>
+      <a href="skrivemeisteren-bm.html" class="active" title="Bokmål">BM</a>
+    </div>
+    <a href="elevprofil-bm.html" class="profile-btn" title="Elevprofil" aria-label="Gå til elevprofil">👤</a>
+  </nav>
+</header>
+
+<div class="hero skrivemeisteren-hero">
+  <div class="hero-inner">
+    <div class="htag">Øv og bli bedre</div>
+    <h1>Skrivemeisteren</h1>
+    <p>Velg hva du vil øve på, svar på oppgaver og tjen XP. Kommer du deg helt til toppen?</p>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-n" id="nl-stat-categories">–</div>
+        <div class="stat-l">Kategorier</div>
+      </div>
+      <div>
+        <div class="stat-n" id="nl-stat-tasks">–</div>
+        <div class="stat-l">Oppgaver</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="nl-adaptive" aria-labelledby="nl-adaptive-title">
+  <div class="page-wrap">
+
+    <!-- ── GAMIFICATION-PANEL ── -->
+    <div class="gami-panel" id="nl-ad-gamify" aria-live="polite">
+
+      <div class="gami-left">
+        <div class="gami-level-row">
+          <span class="gami-level-icon" id="nl-ad-prof-level-icon">🌱</span>
+          <span class="gami-level-name" id="nl-ad-prof-level-name">Ordlærling</span>
+          <span class="gami-level-num">Nivå <strong id="nl-ad-prof-level">1</strong></span>
+        </div>
+        <div class="gami-bar-wrap" role="img" aria-label="Framgang mot neste nivå">
+          <div class="gami-bar-fill" id="nl-ad-prof-progress-fill" style="width: 0%"></div>
+        </div>
+        <div class="gami-bar-label" id="nl-ad-prof-progress-text">0 / 80 XP til neste nivå</div>
+        <span id="nl-ad-prof-last-badge" hidden></span>
+      </div>
+
+      <div class="gami-pills">
+        <div class="gami-pill">
+          <span class="gami-pill-icon">⭐</span>
+          <div>
+            <div class="gami-pill-val" id="nl-ad-prof-xp">0</div>
+            <div class="gami-pill-lbl">XP totalt</div>
+          </div>
+        </div>
+        <div class="gami-pill">
+          <span class="gami-pill-icon">🔥</span>
+          <div>
+            <div class="gami-pill-val" id="nl-ad-prof-streak">0</div>
+            <div class="gami-pill-lbl">Dager på rad</div>
+          </div>
+        </div>
+        <div class="gami-pill">
+          <span class="gami-pill-icon">🏆</span>
+          <div>
+            <div class="gami-pill-val" id="nl-ad-prof-trophies">0/12</div>
+            <div class="gami-pill-lbl">Troféer</div>
+          </div>
+        </div>
+        <div class="gami-pill">
+          <span class="gami-pill-icon">🎯</span>
+          <div>
+            <div class="gami-pill-val" id="nl-ad-prof-next">80 XP</div>
+            <div class="gami-pill-lbl">Til neste nivå</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Innsiktspanel (skjult, fylles av JS) -->
+    <div id="nl-front-insights" hidden>
+      <div id="nl-front-strengths"></div>
+      <div id="nl-front-weak"></div>
+    </div>
+
+    <!-- ── ØVINGSPANEL ── -->
+    <div class="adp-panel">
+      <h2 id="nl-adaptive-title" class="adp-panel-title">Start en øving</h2>
+      <div class="adp-panel-sub">Velg én eller flere kategorier du vil øve på, og trykk start.</div>
+
+      <!-- Kategorier — fylles av JS -->
+      <div class="cat-grid" id="nl-ad-cats"></div>
+
+      <div class="cat-tools">
+        <button class="cat-tool" id="nl-ad-cats-clear" type="button">Tøm valg</button>
+        <button class="cat-tool" id="nl-ad-cats-all" type="button">Velg alle</button>
+      </div>
+
+      <div class="adp-settings">
+        <div class="adp-field">
+          <label for="nl-ad-level">Vanskelighetsgrad</label>
+          <select id="nl-ad-level">
+            <option value="adaptiv" selected>Automatisk</option>
+            <option value="lett">Lett</option>
+            <option value="medium">Middels</option>
+            <option value="vanskeleg">Vanskelig</option>
+          </select>
+        </div>
+        <div class="adp-field">
+          <label for="nl-ad-count">Antall oppgaver</label>
+          <input id="nl-ad-count" type="number" min="3" max="25" value="8" />
+        </div>
+      </div>
+
+      <div class="adp-actions">
+        <button class="btn-primary" id="nl-ad-start" type="button">🎮 Start øving</button>
+        <button class="btn-secondary" id="nl-ad-retry" type="button">Øv på tidligere feil</button>
+        <a class="btn-secondary" href="elevprofil.html">Se profilen min</a>
+        <button class="adp-btn" id="nl-ad-reset" type="button" hidden>Avslutt økt</button>
+      </div>
+    </div>
+
+    <div class="section-label">Bla gjennom alle oppgaver</div>
+
+  </div>
+</section>
+
+<!-- Øvingsvindu (uendra struktur, tekst på bokmål) -->
+<div class="adp-win" id="nl-ad-win" hidden>
+  <div class="adp-win-bg" id="nl-ad-win-bg"></div>
+  <div class="adp-win-card" role="dialog" aria-modal="true" aria-labelledby="nl-ad-win-title">
+    <div class="adp-win-head">
+      <h3 id="nl-ad-win-title">Skrivemeisteren – adaptive øvingsoppgaver</h3>
+      <button class="adp-win-close" id="nl-ad-win-close" aria-label="Lukk økten">Lukk</button>
+    </div>
+
+    <div class="adp-win-body" id="nl-ad-win-body"></div>
+
+    <section class="adp-summary" id="nl-ad-summary" hidden aria-live="polite">
+      <div class="adp-summary-medal" id="nl-ad-sum-medal"></div>
+      <h4 id="nl-ad-sum-heading">Økt fullført!</h4>
+
+      <div class="adp-summary-ring">
+        <svg viewBox="0 0 100 100">
+          <circle class="adp-ring-bg" cx="50" cy="50" r="42"/>
+          <circle class="adp-ring-fill" id="nl-ad-ring" cx="50" cy="50" r="42"
+                  stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
+          <text class="adp-ring-text" x="50" y="50" id="nl-ad-ring-pct">0%</text>
+        </svg>
+      </div>
+
+      <div class="adp-summary-comment" id="nl-ad-sum-comment"></div>
+
+      <div class="adp-summary-grid">
+        <div class="adp-summary-kpi">
+          <span class="adp-summary-lbl">Poeng</span>
+          <strong id="nl-ad-sum-poeng">0/0</strong>
+        </div>
+        <div class="adp-summary-kpi kpi-xp">
+          <span class="adp-summary-lbl">XP i økten</span>
+          <strong id="nl-ad-sum-xp">+0</strong>
+        </div>
+        <div class="adp-summary-kpi kpi-ok">
+          <span class="adp-summary-lbl">Riktige</span>
+          <strong id="nl-ad-sum-rette">0</strong>
+        </div>
+        <div class="adp-summary-kpi kpi-err">
+          <span class="adp-summary-lbl">Feil</span>
+          <strong id="nl-ad-sum-feil">0</strong>
+        </div>
+      </div>
+
+      <div class="adp-summary-strengths" id="nl-ad-sum-strengths"></div>
+      <div class="adp-summary-corrections" id="nl-ad-sum-retting"></div>
+
+      <div class="adp-summary-teacher" id="nl-ad-sum-teacher">
+        <span class="teacher-icon">📸</span>
+        <strong>Vil du skryte til læreren?</strong>
+        Ta et skjermbilde av denne sluttkvitteringen og vis det til læreren din!
+        <div class="adp-summary-meta">
+          <span id="nl-ad-sum-time">-</span>
+          <span id="nl-ad-sum-id">-</span>
+        </div>
+      </div>
+
+      <div class="adp-summary-actions">
+        <button class="adp-btn adp-btn-pri" id="nl-ad-sum-new">Start ny økt</button>
+        <button class="adp-btn" id="nl-ad-sum-close">Lukk</button>
+      </div>
+    </section>
+
+    <div class="adp-run-actions" id="nl-ad-actions">
+      <button class="adp-btn" id="nl-ad-check">Sjekk svar</button>
+      <button class="adp-btn adp-btn-pri" id="nl-ad-next">Neste oppgave →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Oppgavebank-grid (fylles av oppgavebank-bm-v2.js + skrivelab-bm.js) -->
+<main class="main" id="nl-bank-main" aria-label="Oppgavebank"></main>
+
+<footer>
+  <p>Norsklaben • av Lektor Tørrkvist • 2026</p>
+</footer>
+
+<script src="nav.js"></script>
+<script src="oppgavebank-bm-v2.js?v=20260410f"></script>
+<script src="skrivelab-bm.js?v=20260422b"></script>
+<script>
+(function() {
+  function nlFallbackBoot() {
+    if (window.__nlSkrivelabBootDone) return;
+
+    if (document.body) {
+      document.body.classList.add('nl-js-collapsible');
+    }
+
+    var catsClearBtn = document.getElementById('nl-ad-cats-clear');
+    if (catsClearBtn && catsClearBtn.dataset.nlFallbackBound !== '1') {
+      catsClearBtn.dataset.nlFallbackBound = '1';
+      catsClearBtn.addEventListener('click', function() {
+        document.querySelectorAll('#nl-ad-cats .adp-cat').forEach(function(el) {
+          el.classList.remove('on');
+        });
+      });
+    }
+
+    var catsAllBtn = document.getElementById('nl-ad-cats-all');
+    if (catsAllBtn && catsAllBtn.dataset.nlFallbackBound !== '1') {
+      catsAllBtn.dataset.nlFallbackBound = '1';
+      catsAllBtn.addEventListener('click', function() {
+        document.querySelectorAll('#nl-ad-cats .adp-cat').forEach(function(el) {
+          el.classList.add('on');
+        });
+      });
+    }
+
+    var adStartBtn = document.getElementById('nl-ad-start');
+    if (adStartBtn && adStartBtn.dataset.nlFallbackBound !== '1') {
+      adStartBtn.dataset.nlFallbackBound = '1';
+      adStartBtn.addEventListener('click', function() {
+        if (typeof window.mtStart === 'function') {
+          window.mtStart();
+          return;
+        }
+        if (typeof nlAdStart === 'function') {
+          try {
+            nlAdStart();
+            return;
+          } catch (err) {
+            try {
+              if (typeof nlResetExerciseVisibilityState === 'function') nlResetExerciseVisibilityState();
+              if (typeof nlInitAdaptive === 'function') nlInitAdaptive();
+              if (typeof nlInitBankModal === 'function') nlInitBankModal();
+              nlAdStart();
+              return;
+            } catch (err2) {
+              if (window.console && console.error) {
+                console.error('[Skrivelab:fallback] Start øving feila', err2);
+              }
+            }
+          }
+        }
+        if (window.console && console.warn) {
+          console.warn('[Skrivelab:fallback] Start øving feila framleis etter gjenhenting.');
+        }
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(nlFallbackBoot, 200);
+    });
+  } else {
+    setTimeout(nlFallbackBoot, 200);
+  }
+})();
+
+/* ─── Rhythm pick helpers ─── */
+function rhythmPick(el, id) {
+  var wrap = document.getElementById('rhythm-' + id);
+  if (!wrap) return;
+  wrap.querySelectorAll('.rhythm-pick').forEach(function(p) {
+    p.style.borderColor = 'transparent';
+    p.style.background = '';
+  });
+  el.style.borderColor = 'var(--mid)';
+  el.style.background = 'var(--plight)';
+  var h = document.getElementById('rhythm-val-' + id);
+  if (h) h.value = el.getAttribute('data-val');
+}
+function rhythmCheck(id, answer) {
+  var h = document.getElementById('rhythm-val-' + id);
+  var sc = document.getElementById('score-' + id);
+  if (!h || h.value === '') { if (sc) sc.textContent = 'Velg en versjon først.'; return; }
+  if (h.value === String(answer)) {
+    if (sc) {
+      sc.textContent = 'Tips: Slik kan du tenke – Sjekk om teksten din passer for en fagsensor. Prøv å bruke et mer formelt språk.';
+      sc.style.color = '#2066b6';
+      sc.classList.remove('err', 'ok');
+      sc.classList.add('tip');
+    }
+  } else {
+    if (sc) {
+      sc.textContent = 'Tips: Prøv å omskrive teksten med et eksempel på formelt språk. Se om du kan gjøre teksten mer presis og saklig.';
+      sc.style.color = '#2066b6';
+      sc.classList.remove('ok', 'err');
+      sc.classList.add('tip');
+    }
+  }
+}
+function rhythmReset(id) {
+  var wrap = document.getElementById('rhythm-' + id);
+  if (wrap) wrap.querySelectorAll('.rhythm-pick').forEach(function(p) {
+    p.style.borderColor = 'transparent'; p.style.background = '';
+  });
+  var h = document.getElementById('rhythm-val-' + id);
+  if (h) h.value = '';
+  var sc = document.getElementById('score-' + id);
+  if (sc) { sc.textContent = ''; sc.style.color = ''; sc.classList.remove('ok', 'err'); }
+}
+
+(function() {
+  var catsEl = document.getElementById('nl-stat-categories');
+  var tasksEl = document.getElementById('nl-stat-tasks');
+  if (!catsEl || !tasksEl) return;
+  if (typeof BANKV2 === 'undefined' || !Array.isArray(BANKV2) || !BANKV2.length) return;
+  var catMap = {};
+  BANKV2.forEach(function(t) {
+    if (!t || !t.kat) return;
+    catMap[String(t.kat)] = true;
+  });
+  catsEl.textContent = String(Object.keys(catMap).length);
+  tasksEl.textContent = String(BANKV2.length);
+})();
+</script>
+
+</body>
+</html>

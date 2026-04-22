@@ -1,167 +1,196 @@
 /* ══════════════════════════════════════════════════════
-   prompt.js  – Qwen3/Qwen2.5-optimalisert
+   prompt.js  – Gemma 4 e4b-optimalisert (v4)
    ────────────────────────────────────────────────────
-   Endringar frå v1:
-   • Kortare kategori-liste i systemprompt (nøkkel + label)
-   • Detaljert JSON-eksempel med ekte verdiar i user-prompten
-   • /no_think i user-prompt for å slå av Qwen3-tenking
-   • Elevtekst-analyse vert sendt som user-melding, ikkje system
-   Endringar frå v2:
-   • Radar-vurdering (1–6) lagt til for fem kompetanseområde:
-     innhald, struktur, spraak_stil, rettskriving, kjeldebruk
-   • Brukast i radardiagram i elevprofilen på norsklaben.no
+   Mål:
+   • Kort, presis prompt → mindre tokens, raskare svar
+   • Streng sensor-vurdering (1–6) som ein erfaren norsklærar
+   • Konkret sjekk mot oppgåvetekst og sjanger når det finst
+   • Venlege, elevnære tilbakemeldingar (8.–10. klasse)
+   • Berre kategorinøklar som faktisk finst i banken
 ══════════════════════════════════════════════════════ */
 
 const { CATEGORIES } = require('./categories');
 
+/* ─── Hjelparar ─────────────────────────────────────── */
+
 function buildCategoryList(maal) {
-  // Kortare format – berre nøkkel og label, så prompten ikkje vert for lang
-  return CATEGORIES[maal]
-    .map(c => `${c.key}: ${c.label}`)
-    .join('\n');
+  // Kompakt: «key — label». Ingen ekstra forklaringar (sparar tokens).
+  return CATEGORIES[maal].map(c => `${c.key} — ${c.label}`).join('\n');
 }
+
+function radarKeys(maal) {
+  return maal === 'bm'
+    ? {
+        innhald:      'innhold (relevans, dybde, ideer)',
+        struktur:     'struktur (innledning, hoveddel, avslutning, avsnitt)',
+        spraak_stil:  'språk og stil (ordvalg, variasjon, sjangertilpasning)',
+        rettskriving: 'rettskriving, grammatikk og tegnsetting',
+        kjeldebruk:   'kildebruk (sitat, referanser, kildeliste)'
+      }
+    : {
+        innhald:      'innhald (relevans, djupne, idear)',
+        struktur:     'struktur (innleiing, hovuddel, avslutning, avsnitt)',
+        spraak_stil:  'språk og stil (ordval, variasjon, sjangertilpassing)',
+        rettskriving: 'rettskriving, grammatikk og teiknsetting',
+        kjeldebruk:   'kjeldebruk (sitat, referansar, kjeldeliste)'
+      };
+}
+
+function rubrikk(maal) {
+  // Intern diagnose-skala – samme strenghet som ein sensor, men brukt til å bygge elevprofil.
+  // Eleven ser ikkje skalaen som karakter, men som radar i profilen sin.
+  return maal === 'bm'
+    ? `RADAR-SKALA 1–6 (intern diagnose – ver STRENG og realistisk):
+  6 = framifrå. Godt over forventet på 10. trinn.
+  5 = svært god. Tydelig over snittet.
+  4 = god. På forventet nivå for trinnet.
+  3 = noe under forventet. Flere svakheter.
+  2 = svak. Store mangler.
+  1 = svært svak / nesten ikke besvart.
+Bruk hele skalaen. Ikke gi 5–6 uten at det er tydelig fortjent. En realistisk profil hjelper eleven mer enn snille tall.`
+    : `RADAR-SKALA 1–6 (intern diagnose – ver STRENG og realistisk):
+  6 = framifrå. Klart over forventa på 10. trinn.
+  5 = svært god. Tydeleg over snittet.
+  4 = god. På forventa nivå for trinnet.
+  3 = litt under forventa. Fleire svakheiter.
+  2 = svak. Store manglar.
+  1 = svært svak / nesten ikkje besvart.
+Bruk heile skalaen. Ikkje gje 5–6 utan at det er tydeleg fortent. Ein realistisk profil hjelper eleven meir enn snille tal.`;
+}
+
+/* ─── System-prompt ─────────────────────────────────── */
 
 function buildSystemPrompt(maal = 'nn') {
   const katListe = buildCategoryList(maal);
+  const rk = radarKeys(maal);
+  const rub = rubrikk(maal);
 
   if (maal === 'bm') {
-    return `Du er en norsklærer-assistent. Du leser elevtekster, gir en grundig, helhetlig vurdering, og velger 3–5 øvingskategorier fra en fast liste.
+    return `Du er en erfaren norsklærer for ungdomsskolen (8.–10. trinn). Du leser elevtekster med samme strenghet som en sensor – men målet er IKKE å gi en karakter. Målet er å bygge en presis elevprofil og foreslå konkrete øvingsoppgaver eleven kan jobbe med på Norsklaben.
 
-REGLER:
-- Svar KUN med et JSON-objekt. Ingen forklaring, ingen markdown, ingen kommentarer.
-- Bruk bare kategorinøkler fra listen under (for "forslag").
-- Skriv enkelt og vennlig, for en 8.-klassing. Bruk "du".
-- Radar-feltet skal alltid inneholde alle fem nøklene med heltall fra 1 til 6.
-- "styrker" skal være 2–3 korte, konkrete styrker eleven viser i teksten.
-- Hvert forslag MA inneholde et kort, ordrett sitat fra elevteksten i "eksempel_fra_teksten" som viser hvorfor eleven bør jobbe med akkurat denne kategorien.
+Du skal:
+1. DIAGNOSTISERE styrker og svakheter strengt og realistisk (radar 1–6).
+2. PEKE eleven til 3–5 konkrete øvingskategorier fra Norsklabens bank som faktisk treffer det eleven trenger å trene på.
+3. SKRIVE tilbakemeldinger som motiverer eleven til å øve videre.
 
-RADAR-VURDERING (1 = svak, 6 = framifrå):
-  innhald       – Innhold og ideer: relevans, kreativitet, dybde
-  struktur      – Struktur: innledning, hoveddel, avslutning, avsnitt
-  spraak_stil   – Språk og stil: ordvalg, variasjon, tilpasning til sjanger
-  rettskriving  – Rettskriving, grammatikk og tegnsetting
-  kjeldebruk    – Kildebruk: referanser, sitat, kildeliste
+OPPGAVE: Les elevteksten. Returner ett JSON-objekt – ingenting annet (ingen markdown, ingen forklaring utenfor JSON).
 
-KATEGORIER (for øvingsforslag):
-${katListe}`;
+${rub}
+
+RADAR – sett heltall 1–6 for hvert av disse fem feltene:
+  innhald       = ${rk.innhald}
+  struktur      = ${rk.struktur}
+  spraak_stil   = ${rk.spraak_stil}
+  rettskriving  = ${rk.rettskriving}
+  kjeldebruk    = ${rk.kjeldebruk}
+Hvis et område ikke er relevant (f.eks. kildebruk i en novelle uten kilder): sett 1 og forklar kort.
+
+INNHOLDSDEKNING (eget felt "innholdDekning"):
+- Hvis oppgavetekst er gitt: vurder strengt om eleven svarer på det oppgaven faktisk krever. Gi score 1–6.
+- Hvis oppgavetekst MANGLER: sett "innholdDekning.score": 0 og begrunnelse: "Ingen oppgavetekst gitt." I dette tilfellet skal "radar.innhald" aldri være over 4.
+
+FORSLAG (det viktigste feltet): Velg 3–5 øvingskategorier fra listen under som er det MEST NYTTIGE eleven kan trene på nå – basert på de tydeligste svakhetene i akkurat denne teksten. Bare disse nøklene er gyldige:
+${katListe}
+
+Reglar for forslag:
+- Prioriter kategorier der teksten faktisk har problemer (ikke generelle råd).
+- Match sjanger: er teksten en novelle, foreslå sjanger-relevante kategorier (novelle, spraak_stil, setningsbygging) framfor f.eks. kildebruk.
+- Hvert forslag MÅ ha et kort, ORDRETT sitat fra elevteksten i "eksempel_fra_teksten" (3–10 ord) som viser hvorfor eleven trenger akkurat denne øvingen.
+- Ikke foreslå samme kategori to ganger.
+
+STIL PÅ TILBAKEMELDING:
+- Skriv "du", enkelt og vennlig, men ærlig.
+- 2–3 konkrete styrker eleven faktisk viser (motiverer til videre arbeid).
+- Forklar hvert forslag i 1–2 setninger eleven forstår – og hvorfor akkurat denne øvingen vil hjelpe.`;
   }
 
-  return `Du er ein norsklærar-assistent. Du les elevtekstar, gjev ei grundig, heilskapleg vurdering, og vel 3–5 øvingskategoriar frå ei fast liste.
+  return `Du er ein erfaren norsklærar for ungdomsskulen (8.–10. trinn). Du les elevtekstar med same strenge blikk som ein sensor – men målet er IKKJE å gje ein karakter. Målet er å byggje ein presis elevprofil og foreslå konkrete øvingsoppgåver eleven kan jobbe med på Norsklaben.
 
-REGLAR:
-- Svar KUN med eit JSON-objekt. Ingen forklaring, ingen markdown, ingen kommentarar.
-- Bruk berre kategorinøklar frå lista under (for «forslag»).
-- Skriv enkelt og vennleg, for ein 8.-klassing. Bruk «du».
-- Radar-feltet skal alltid innehalde alle fem nøklane med heiltal frå 1 til 6.
-- «styrker» skal vere 2–3 korte, konkrete styrker eleven viser i teksten.
-- Kvart forslag MA innehalde eit kort, ordrett sitat frå elevteksten i «eksempel_fra_teksten» som viser kvifor eleven bør jobbe med akkurat denne kategorien.
+Du skal:
+1. DIAGNOSTISERE styrker og svakheiter strengt og realistisk (radar 1–6).
+2. PEIKE eleven til 3–5 konkrete øvingskategoriar frå Norsklabens bank som faktisk treff det eleven treng å trene på.
+3. SKRIVE tilbakemeldingar som motiverer eleven til å øve vidare.
 
-RADAR-VURDERING (1 = svak, 6 = framifrå):
-  innhald       – Innhald og idear: relevans, kreativitet, djupne
-  struktur      – Struktur: innleiing, hovuddel, avslutning, avsnitt
-  spraak_stil   – Språk og stil: ordval, variasjon, tilpassing til sjanger
-  rettskriving  – Rettskriving, grammatikk og teiknsetting
-  kjeldebruk    – Kjeldebruk: referansar, sitat, kjeldeliste
+OPPGÅVE: Les elevteksten. Returner eitt JSON-objekt – ingenting anna (ingen markdown, ingen forklaring utanfor JSON).
 
-KATEGORIAR (for øvingsforslag):
-${katListe}`;
+${rub}
+
+RADAR – sett heiltal 1–6 for kvart av desse fem felta:
+  innhald       = ${rk.innhald}
+  struktur      = ${rk.struktur}
+  spraak_stil   = ${rk.spraak_stil}
+  rettskriving  = ${rk.rettskriving}
+  kjeldebruk    = ${rk.kjeldebruk}
+Om eit område ikkje er relevant (t.d. kjeldebruk i ei novelle utan kjelder): set 1 og forklar kort.
+
+INNHALDSDEKNING (eige felt "innholdDekning"):
+- Om oppgåvetekst er gjeven: vurder strengt om eleven svarar på det oppgåva faktisk krev. Gje score 1–6.
+- Om oppgåvetekst MANGLAR: set "innholdDekning.score": 0 og grunngje med "Inga oppgåvetekst gjeven." I dette tilfellet skal "radar.innhald" aldri vere over 4.
+
+FORSLAG (det viktigaste feltet): Vel 3–5 øvingskategoriar frå lista under som er det MEST NYTTIGE eleven kan trene på no – basert på dei tydelegaste svakheitene i akkurat denne teksten. Berre desse nøklane er gyldige:
+${katListe}
+
+Reglar for forslag:
+- Prioriter kategoriar der teksten faktisk har problem (ikkje generelle råd).
+- Match sjanger: er teksten ei novelle, foreslå sjangerrelevante kategoriar (novelle, spraak_stil, setningsbygging) framfor t.d. kjeldebruk.
+- Kvart forslag MÅ ha eit kort, ORDRETT sitat frå elevteksten i "eksempel_fra_teksten" (3–10 ord) som viser kvifor eleven treng akkurat denne øvinga.
+- Ikkje foreslå same kategori to gonger.
+
+STIL PÅ TILBAKEMELDING:
+- Skriv «du», enkelt og venleg, men ærleg.
+- 2–3 konkrete styrker eleven faktisk viser (motiverer til vidare arbeid).
+- Forklar kvart forslag i 1–2 setningar eleven forstår – og kvifor akkurat denne øvinga vil hjelpe.`;
 }
 
-function buildUserPrompt(elevtekst, maal = 'nn', oppgavetekst = '') {
-  const oppg = oppgavetekst ? `Oppgåve: ${oppgavetekst}\n\n` : '';
-  const maalKontekst = maal === 'bm'
-    ? 'MALFORM: bokmal\n'
-    : 'MALFORM: nynorsk\n';
+/* ─── User-prompt ───────────────────────────────────── */
 
-  const eksempel = maal === 'bm'
+function buildUserPrompt(elevtekst, maal = 'nn', oppgavetekst = '') {
+  const harOppgave = String(oppgavetekst || '').trim().length >= 20;
+  const oppgBlokk = harOppgave
+    ? (maal === 'bm'
+        ? `OPPGAVETEKST:\n"""\n${oppgavetekst.trim()}\n"""\n\n`
+        : `OPPGÅVETEKST:\n"""\n${oppgavetekst.trim()}\n"""\n\n`)
+    : (maal === 'bm'
+        ? `OPPGAVETEKST: (mangler – innhold maks 4)\n\n`
+        : `OPPGÅVETEKST: (manglar – innhald maks 4)\n\n`);
+
+  // Minimalt JSON-skjelett (sparer tokens vs. fullstendig eksempel).
+  const skjelett = maal === 'bm'
     ? `{
-  "sammendrag": "Du skriver om et spennende tema og har noen gode ideer.",
-  "styrker": [
-    "Du bruker konkrete eksempler som gjør teksten levende.",
-    "Du har en tydelig stemme og tar leseren med inn i historien."
-  ],
-  "radar": {
-    "innhald": 4,
-    "struktur": 3,
-    "spraak_stil": 3,
-    "rettskriving": 2,
-    "kjeldebruk": 1
-  },
+  "sammendrag": "...",
+  "styrker": ["...", "..."],
+  "radar": { "innhald": 0, "struktur": 0, "spraak_stil": 0, "rettskriving": 0, "kjeldebruk": 0 },
+  "innholdDekning": { "score": 0, "begrunnelse": "..." },
   "forslag": [
-    {
-      "kategori": "og_aa",
-      "tittel": "Og / å",
-      "forklaring": "Du blander av og til 'og' og 'å'. Øv på når du skal bruke hvert av dem.",
-      "eksempel_fra_teksten": "likar og gå på tur"
-    },
-    {
-      "kategori": "tegnsetting",
-      "tittel": "Tegnsetting",
-      "forklaring": "Noen setninger mangler punktum på slutten.",
-      "eksempel_fra_teksten": "Det var veldig kult"
-    },
-    {
-      "kategori": "setningsbygging",
-      "tittel": "Setningsbygging",
-      "forklaring": "Noen setninger er veldig korte og hakker litt. Prøv å koble dem sammen.",
-      "eksempel_fra_teksten": "Det var kult. Det var bra. Jeg likte det."
-    }
+    { "kategori": "nøkkel_fra_liste", "tittel": "...", "forklaring": "...", "eksempel_fra_teksten": "..." }
   ]
 }`
     : `{
-  "sammendrag": "Du skriv om eit spanande tema og har nokre gode idear.",
-  "styrker": [
-    "Du brukar konkrete eksempel som gjer teksten levande.",
-    "Du har ei tydeleg stemme og tek lesaren med inn i forteljinga."
-  ],
-  "radar": {
-    "innhald": 4,
-    "struktur": 3,
-    "spraak_stil": 3,
-    "rettskriving": 2,
-    "kjeldebruk": 1
-  },
+  "sammendrag": "...",
+  "styrker": ["...", "..."],
+  "radar": { "innhald": 0, "struktur": 0, "spraak_stil": 0, "rettskriving": 0, "kjeldebruk": 0 },
+  "innholdDekning": { "score": 0, "begrunnelse": "..." },
   "forslag": [
-    {
-      "kategori": "og_aa",
-      "tittel": "Og / å",
-      "forklaring": "Du blandar av og til 'og' og 'å'. Øv på når du skal bruke kvart av dei.",
-      "eksempel_fra_teksten": "likar og gå på tur"
-    },
-    {
-      "kategori": "teiknsetting",
-      "tittel": "Teiknsetting",
-      "forklaring": "Nokre setningar manglar punktum på slutten.",
-      "eksempel_fra_teksten": "Det var veldig kult"
-    },
-    {
-      "kategori": "setningsbygging",
-      "tittel": "Setningsbygging",
-      "forklaring": "Nokre setningar er veldig korte og hakkar litt. Prøv å binde dei saman.",
-      "eksempel_fra_teksten": "Det var kult. Det var bra. Eg likte det."
-    }
+    { "kategori": "nokkel_fra_liste", "tittel": "...", "forklaring": "...", "eksempel_fra_teksten": "..." }
   ]
 }`;
 
-  const radarInstr = maal === 'bm'
-    ? `- "radar": objekt med nøyaktig disse fem nøklene (heltall 1–6): innhald, struktur, spraak_stil, rettskriving, kjeldebruk`
-    : `- "radar": objekt med nøyaktig desse fem nøklane (heiltal 1–6): innhald, struktur, spraak_stil, rettskriving, kjeldebruk`;
+  const slutt = maal === 'bm'
+    ? `Returner KUN gyldig JSON i nøyaktig dette formatet (3–5 forslag):
+${skjelett}`
+    : `Returner KUN gyldig JSON i nøyaktig dette formatet (3–5 forslag):
+${skjelett}`;
 
-  return `${maalKontekst}${oppg}ELEVTEKST:
+  const maalNavn = maal === 'bm' ? 'bokmål' : 'nynorsk';
+
+  return `MÅLFORM: ${maalNavn}
+
+${oppgBlokk}ELEVTEKST:
 """
 ${elevtekst}
 """
 
-Analyser teksten. Returner eit JSON-objekt med nøyaktig dette formatet (3–5 forslag):
-${eksempel}
-
-KRAV TIL JSON-SVARET:
-- "sammendrag": kort oppsummering av teksten (1–2 setningar)
-- "styrker": liste med 2–3 korte, konkrete styrker eleven viser
-${radarInstr}
-- "forslag": liste med 3–5 øvingsforslag knytt til kategorinøklar frå lista. Kvart forslag MA ha eit kort, ordrett sitat frå teksten i "eksempel_fra_teksten".
-
-VIKTIG: Skriv KUN JSON. Ingen tekst utanfor JSON-objektet.`;
+${slutt}`;
 }
 
 module.exports = { buildSystemPrompt, buildUserPrompt };

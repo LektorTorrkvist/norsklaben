@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="nn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Norsklaben – Øvingsoppgåver i norsk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:      #F7F3EE;
+      --card:    #ffffff;
+      --primary: #1A3D2B;
+      --mid:     #2E6B4F;
+      --plight:  #E8F2EC;
+      --accent:  #C8832A;
+      --alight:  #FDF4E0;
+      --text:    #1C1C1C;
+      --tmid:    #4A4840;
+      --tmuted:  #7A7670;
+      --border:  #E0DBD2;
+      --shadow:  0 1px 4px rgba(26,61,43,.06), 0 4px 16px rgba(26,61,43,.06);
+      --shadow-hover: 0 4px 16px rgba(26,61,43,.12), 0 8px 32px rgba(26,61,43,.08);
+      --r: 12px;
+      --rs: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: var(--primary);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.18);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+    }
+    .logo span { color: var(--alight); }
+
+    nav { display: flex; align-items: center; gap: .2rem; }
+
+    nav a {
+      color: rgba(255,255,255,.75);
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 500;
+      padding: .4rem .85rem;
+      border-radius: var(--rs);
+      transition: background .15s, color .15s;
+    }
+    nav a:hover { background: rgba(255,255,255,.12); color: #fff; }
+
+    .lang-toggle {
+      display: flex;
+      gap: .2rem;
+      margin-left: .5rem;
+      padding-left: .75rem;
+      border-left: 1px solid rgba(255,255,255,.18);
+    }
+    .lang-toggle a {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      padding: .3rem .55rem;
+      border-radius: var(--rs);
+      color: rgba(255,255,255,.55);
+      text-decoration: none;
+      transition: all .15s;
+    }
+    .lang-toggle a.active { background: rgba(255,255,255,.15); color: #fff; }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: var(--primary);
+      color: #fff;
+      text-align: center;
+      padding: 3.5rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 20% 50%, rgba(46,107,79,.45) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 30%, rgba(200,131,42,.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; max-width: 640px; margin: 0 auto; }
+
+    .htag {
+      display: inline-block;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.85);
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .3rem .9rem;
+      border-radius: 999px;
+      margin-bottom: 1.1rem;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: .85rem;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,.78);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ─── HOVUDKORT ─── */
+    .main-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      max-width: 860px;
+      margin: -2rem auto 0;
+      padding: 0 1.5rem 3rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (max-width: 600px) {
+      .main-cards { grid-template-columns: 1fr; }
+    }
+
+    .mcard {
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 1.75rem 1.5rem 1.5rem;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      border: 1.5px solid var(--border);
+      transition: box-shadow .2s, transform .2s, border-color .2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mcard:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-3px);
+      border-color: rgba(26,61,43,.2);
+    }
+
+    /* Fargekode per kort */
+    .mcard.green::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--mid));
+      border-radius: var(--r) var(--r) 0 0;
+    }
+
+    .mcard.amber::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), #e6a040);
+      border-radius: var(--r) var(--r) 0 0;
+    }
+
+    .mcard-icon {
+      font-size: 2rem;
+      line-height: 1;
+      margin-bottom: .2rem;
+    }
+
+    .mcard h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+
+    .mcard-tagline {
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--tmuted);
+      margin-top: -.3rem;
+    }
+
+    .mcard p {
+      font-size: .95rem;
+      color: var(--tmid);
+      line-height: 1.55;
+      flex-grow: 1;
+    }
+
+    .mcard-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: .5rem;
+      padding-top: .75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .mcard-tags { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+    .tag {
+      font-size: .72rem;
+      font-weight: 600;
+      padding: .2rem .6rem;
+      border-radius: 999px;
+    }
+    .tag-g { background: var(--plight); color: var(--mid); }
+    .tag-a { background: var(--alight); color: #8a5a00; }
+
+    .mcard-arrow {
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--primary);
+      white-space: nowrap;
+      opacity: .7;
+    }
+    .mcard:hover .mcard-arrow { opacity: 1; }
+
+    /* ─── TILLEGGSVERKTØY ─── */
+    .extra-section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 1.5rem 1.5rem;
+    }
+
+    .extra-section h3 {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--tmuted);
+      margin-bottom: .75rem;
+    }
+
+    .extra-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: .65rem;
+    }
+
+    .ecard {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--rs);
+      padding: .9rem 1rem;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      font-size: .9rem;
+      font-weight: 500;
+      transition: background .15s, border-color .15s;
+    }
+
+    .ecard:hover { background: var(--plight); border-color: rgba(26,61,43,.2); }
+
+    .ecard-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+    .ecard-text { line-height: 1.3; }
+    .ecard-text small { display: block; font-size: .76rem; color: var(--tmuted); font-weight: 400; margin-top: .1rem; }
+
+    /* ─── KORLEIS ─── */
+    .how {
+      max-width: 860px;
+      margin: 2rem auto 0;
+      padding: 2rem 1.5rem;
+      background: var(--plight);
+      border-radius: var(--r);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Hjelp skille how frå kanten */
+    .how-wrap {
+      max-width: 860px;
+      margin: 0 auto 3rem;
+      padding: 0 1.5rem;
+    }
+
+    .how h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 1.1rem;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      font-size: .8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step h3 { font-size: .95rem; font-weight: 700; color: var(--primary); }
+    .step p { font-size: .87rem; color: var(--tmid); line-height: 1.5; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      color: var(--tmuted);
+      font-size: .83rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Norsk<span>laben</span></a>
+  <nav>
+    <a href="skrivemeisteren.html">Skrivemeisteren</a>
+    <a href="tekstsjekk.html">Tekstsjekk</a>
+    <a href="nynorsklab.html">Nynorsklab</a>
+    <div class="nav-dropdown" data-nl-nav="verktoykassa">
+      <button class="nav-dropbtn" type="button" aria-expanded="false">Verktøykassa</button>
+      <div class="nav-dropmenu">
+        <div class="nav-dropsection">For lærar</div>
+        <a href="undervisingsbank.html">Undervisingsbank</a>
+        <div class="nav-dropdivider" role="separator" aria-hidden="true"></div>
+        <div class="nav-dropsection">For elev</div>
+        <a href="verktoyskasse.html">Verktøykasse</a>
+        <a href="mad-libs.html">Mad Libs</a>
+        <a href="vurderingslab.html">Vurderingslab</a>
+      </div>
+    </div>
+    <div class="lang-toggle">
+      <a href="index.html" class="active" title="Nynorsk">NN</a>
+      <a href="index-bm.html" title="Bokmål">BM</a>
+    </div>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="htag">Norsk på ungdomstrinnet</div>
+    <h1>Norsklaben</h1>
+    <p>Øv på det du treng, når du treng det. Oppgåver og teksthjelp tilpassa 8.–10. klasse.</p>
+  </div>
+</div>
+
+<!-- HOVUDKORT -->
+<div class="main-cards">
+
+  <a class="mcard green" href="skrivemeisteren.html">
+    <div class="mcard-icon">🎮</div>
+    <h2>Skrivemeisteren</h2>
+    <div class="mcard-tagline">Spel og øv</div>
+    <p>Spel deg gjennom typiske skrivefeil. Vel kategori, svar på oppgåver og sjå kor langt du kjem.</p>
+    <div class="mcard-footer">
+      <div class="mcard-tags">
+        <span class="tag tag-g">250+ oppgåver</span>
+        <span class="tag tag-g">24 kategoriar</span>
+      </div>
+      <span class="mcard-arrow">Spel →</span>
+    </div>
+  </a>
+
+  <a class="mcard amber" href="tekstsjekk.html">
+    <div class="mcard-icon">🔍</div>
+    <h2>Tekstsjekk</h2>
+    <div class="mcard-tagline">AI-analyse</div>
+    <p>Lim inn teksten din og få tilbakemelding. AI-en finn kva du bør øve meir på og foreslår oppgåver.</p>
+    <div class="mcard-footer">
+      <div class="mcard-tags">
+        <span class="tag tag-a">AI-analyse</span>
+        <span class="tag tag-a">Tilpassa deg</span>
+      </div>
+      <span class="mcard-arrow">Sjekk tekst →</span>
+    </div>
+  </a>
+
+</div>
+
+<!-- TILLEGGSVERKTØY -->
+<div class="extra-section">
+  <h3>Fleire verktøy</h3>
+  <div class="extra-grid">
+
+    <a class="ecard" href="nynorsklab.html">
+      <span class="ecard-icon">🇳🇴</span>
+      <div class="ecard-text">
+        Nynorsklab
+        <small>Verbformer, bøying, målform</small>
+      </div>
+    </a>
+
+    <a class="ecard" href="verktoyskasse.html">
+      <span class="ecard-icon">🛠️</span>
+      <div class="ecard-text">
+        Verktøykasse
+        <small>Skrivetips og sjangerhjelp</small>
+      </div>
+    </a>
+
+    <a class="ecard" href="elevprofil.html">
+      <span class="ecard-icon">📈</span>
+      <div class="ecard-text">
+        Elevprofil
+        <small>Framgang og styrkar</small>
+      </div>
+    </a>
+
+    <a class="ecard" href="mad-libs.html">
+      <span class="ecard-icon">😄</span>
+      <div class="ecard-text">
+        Mad Libs
+        <small>Ordklasser på ein morosam måte</small>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- KORLEIS -->
+<div class="how-wrap" style="margin-top: 2rem;">
+  <div class="how">
+    <h2>Korleis brukar du Norsklaben?</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Vel det du treng</h3>
+        <p>Vil du øve på eiga hand? → Skrivemeisteren. Har du skrive ein tekst? → Tekstsjekk.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Vel kategori</h3>
+        <p>I Skrivemeisteren vel du kva du vil jobbe med: komma, setningar, sjanger og meir.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Svar og lær</h3>
+        <p>Kvar oppgåve gir deg forklaring og fasit. Feil er berre ein ny sjanse til å lære.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Følg framgangen</h3>
+        <p>Elevprofilen viser kva du er god på og kva du bør jobbe meir med.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Norsklaben • av Lektor Tørrkvist • 2026</p>
+</footer>
+
+</body>
+</html>

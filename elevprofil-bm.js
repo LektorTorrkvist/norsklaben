@@ -1,7 +1,8 @@
 (function() {
   'use strict';
 
-  var ANALYSIS_KEY = 'norsklaben-elevprofil-bm-v1';
+  var ANALYSIS_KEY = 'norsklaben-elevprofil-v1';
+  var LEGACY_ANALYSIS_KEYS = ['norsklaben-elevprofil-nn-v1', 'norsklaben-elevprofil-bm-v1'];
   var ADAPTIVE_PROFILE_KEY = 'norsklaben-adaptive-profile-v1';
   var ADAPTIVE_HISTORY_KEY = 'norsklaben-adaptive-history-v1';
   var MT_SHARED_KEY = 'nlMestring';
@@ -238,12 +239,26 @@
   }
 
   function getAnalysisStore() {
-    var raw = readLocalJson(ANALYSIS_KEY, defaultAnalysisStore());
-    var store = raw && typeof raw === 'object' ? raw : defaultAnalysisStore();
+    var primary = readLocalJson(ANALYSIS_KEY, defaultAnalysisStore());
+    var store = primary && typeof primary === 'object' ? primary : defaultAnalysisStore();
     if (!Array.isArray(store.analyses)) store.analyses = [];
-    store.analyses = store.analyses.map(sanitizeAnalysisEntry).filter(function(item) {
-      return item.categories.length || item.textExcerpt;
+    var combined = store.analyses.slice();
+    LEGACY_ANALYSIS_KEYS.forEach(function(legacyKey) {
+      var legacy = readLocalJson(legacyKey, null);
+      if (legacy && Array.isArray(legacy.analyses)) {
+        combined = combined.concat(legacy.analyses);
+      }
     });
+    var seen = {};
+    store.analyses = combined.map(sanitizeAnalysisEntry).filter(function(item) {
+      if (!(item.categories.length || item.textExcerpt)) return false;
+      var key = item.ts + '|' + item.source + '|' + (item.title || '').slice(0, 40);
+      if (seen[key]) return false;
+      seen[key] = 1;
+      return true;
+    }).sort(function(a, b) {
+      return (b.ts || '').localeCompare(a.ts || '');
+    }).slice(0, ANALYSIS_LIMIT);
     store.updatedAt = String(store.updatedAt || '');
     store.version = 1;
     return store;
@@ -354,7 +369,7 @@
     var keys = [
       ANALYSIS_KEY,
       'nl_ta_history_v1'
-    ];
+    ].concat(LEGACY_ANALYSIS_KEYS);
     keys.forEach(function(key) {
       try { window.localStorage.removeItem(key); } catch (e) {}
     });
@@ -463,8 +478,8 @@
           '<div class="ob-ai-result-top"><span class="ob-ai-badge">' + escapeHtml(getCategoryIcon(item.id)) + ' ' + escapeHtml(item.label) + '</span></div>' +
           '<p>' + escapeHtml(item.reason) + '</p>' +
           '<div class="ob-ai-result-actions">' +
-            '<a class="ob-btn ob-btn-primary" href="skrivelab-bm.html?kat=' + encodeURIComponent(item.id) + '">Start i Skrivemesteren</a>' +
-            '<a class="ob-btn" href="oppgavebank-bm.html?kat=' + encodeURIComponent(item.id) + '&mode=manual">Se oppgaver</a>' +
+            '<a class="ob-btn ob-btn-primary" href="skrivemeisteren-bm.html?kat=' + encodeURIComponent(item.id) + '">Start i Skrivemesteren</a>' +
+            '<a class="ob-btn" href="tekstsjekk-bm.html?kat=' + encodeURIComponent(item.id) + '&mode=manual">Se oppgaver</a>' +
           '</div>' +
         '</article>';
     }).join('');
@@ -582,6 +597,31 @@
     }
     var averageRadar = radarCount > 0 ? radarSums.map(function(s) { return Math.round(s / radarCount * 10) / 10; }) : null;
 
+    var innhaldCapped = false;
+    if (averageRadar && analysisStore.analyses.length) {
+      var withOppgave = 0, withoutOppgave = 0;
+      analysisStore.analyses.forEach(function(a) {
+        if (a.hasOppgaveText) withOppgave++; else withoutOppgave++;
+      });
+      if (withoutOppgave > 0 && withOppgave === 0) innhaldCapped = true;
+    }
+
+    var totalAnalyses = analysisStore.analyses.length;
+    var welcomeTitle, welcomeText;
+    if (totalAnalyses === 0 && sessionCount === 0) {
+      welcomeTitle = 'Velkommen til elevprofilen din!';
+      welcomeText = 'Her ser du fremgangen din. Start med å øve i Skrivemesteren eller få en egen tekst analysert i Tekstsjekk – så fyller profilen seg automatisk.';
+    } else if (totalAnalyses === 0) {
+      welcomeTitle = 'Godt jobbet med øvingene!';
+      welcomeText = 'Du har ' + sessionCount + ' øving' + (sessionCount === 1 ? '' : 'er') + ' i Skrivemesteren. Prøv Tekstsjekk neste gang du skriver – da får profilen din en helhetlig vurdering.';
+    } else if (sessionCount === 0) {
+      welcomeTitle = 'Fin start med Tekstsjekk!';
+      welcomeText = 'Du har ' + totalAnalyses + ' analysert tekst' + (totalAnalyses === 1 ? '' : 'er') + '. Prøv Skrivemesteren for øvingsoppgaver tilpasset svake punkter.';
+    } else {
+      welcomeTitle = 'Sterk innsats!';
+      welcomeText = 'Du har ' + sessionCount + ' øving' + (sessionCount === 1 ? '' : 'er') + ' og ' + totalAnalyses + ' analysert' + (totalAnalyses === 1 ? '' : 'e') + ' tekst' + (totalAnalyses === 1 ? '' : 'er') + '. Hold ut – progresjonen er tydelig i diagrammet under.';
+    }
+
     function kpiCard(title, value, meta) {
       return '' +
         '<article class="ep-kpi">' +
@@ -610,8 +650,8 @@
             '<div class="ep-reco-top"><span class="ep-chip">' + escapeHtml(getCategoryIcon(item.id)) + ' ' + escapeHtml(item.label) + '</span><span class="ep-reco-score">Prioritet ' + escapeHtml(String(item.score)) + '</span></div>' +
             '<p>' + escapeHtml(item.reasons[0] || 'Bygg videre på denne kategorien.') + '</p>' +
             '<div class="ep-reco-actions">' +
-              '<a class="ep-btn ep-btn-pri" href="skrivelab-bm.html?kat=' + encodeURIComponent(item.id) + '">Øv i Skrivemesteren</a>' +
-              '<a class="ep-btn" href="oppgavebank-bm.html?kat=' + encodeURIComponent(item.id) + '&mode=manual">Se oppgaver</a>' +
+              '<a class="ep-btn ep-btn-pri" href="skrivemeisteren-bm.html?kat=' + encodeURIComponent(item.id) + '">Øv i Skrivemesteren</a>' +
+              '<a class="ep-btn" href="tekstsjekk-bm.html?kat=' + encodeURIComponent(item.id) + '&mode=manual">Se oppgaver</a>' +
             '</div>' +
           '</article>';
       }).join('');
@@ -647,11 +687,12 @@
     }
 
     root.innerHTML = '' +
+      '<section class="ep-welcome"><div class="ep-welcome-icon">👋</div><div class="ep-welcome-copy"><h2>' + escapeHtml(welcomeTitle) + '</h2><p>' + escapeHtml(welcomeText) + '</p></div></section>' +
       '<section class="ep-hero-card">' +
         '<div class="ep-hero-copy">' +
           '<span class="ep-kicker">Lokal elevprofil</span>' +
           '<h1>' + escapeHtml(levelInfo.current.icon + ' ' + levelInfo.current.name) + '</h1>' +
-          '<p>Profilen bygger på oppgavetekster som er limt inn i Oppgavebanken, pluss faktisk progresjon fra Skrivemesteren og øvingsoppgavene.</p>' +
+          '<p>Profilen bygger på tekstanalyser fra Tekstsjekk og faktisk progresjon fra Skrivemesteren. Alt lagres lokalt i nettleseren din.</p>' +
         '</div>' +
         '<div class="ep-level-card">' +
           '<div class="ep-level-top"><strong>' + escapeHtml(String(totalXp)) + ' XP</strong><span>' + escapeHtml(sessionCount + ' økter') + '</span></div>' +
@@ -663,27 +704,33 @@
         kpiCard('Flyt', String(streak) + (streak === 1 ? ' dag' : ' dager'), 'Dager på rad') +
         kpiCard('Beste økt', String(bestPct) + ' %', 'Høyeste treffprosent') +
         kpiCard('Feillogg', String((mastery.feillogg || []).length), 'Oppgaver å ta opp igjen') +
-        kpiCard('Siste analyse', recentAnalyses.length ? formatDate(recentAnalyses[0].ts, true) : '-', 'Oppgavetekst lagret lokalt') +
+        kpiCard('Siste analyse', recentAnalyses.length ? formatDate(recentAnalyses[0].ts, true) : '-', 'Tekst lagret lokalt') +
       '</section>' +
-      '<section class="ep-grid ep-grid-feature">' +
-        '<article class="ep-panel ep-panel-radar">' +
-          '<div class="ep-panel-head"><h2>Skrivemestring</h2><span>Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'er') + ' (1–6)</span></div>' +
-          '<div class="ep-radar-wrap">' +
-            (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES) : '<div class="ep-radar-empty">Radardiagrammet vises når tekster har blitt vurdert av analysetjenesten.</div>') +
+      '<section class="ep-section ep-section-skrivemeisteren">' +
+        '<div class="ep-section-head"><span class="ep-section-icon">🎯</span><div><h2>Skrivemesteren – øvingsmotor</h2><p>Adaptive øvingsoppgaver basert på styrker og svake punkter.</p></div><a class="ep-btn ep-btn-pri" href="skrivemeisteren-bm.html">Åpne Skrivemesteren →</a></div>' +
+        '<div class="ep-grid ep-grid-main">' +
+          '<article class="ep-panel"><div class="ep-panel-head"><h2>Progresjon</h2><span>De siste øktene med treffprosent og XP</span></div>' + historyBars(recentHistory) + '</article>' +
+          '<div class="ep-stack">' +
+            '<article class="ep-panel"><div class="ep-panel-head"><h2>Styrker</h2><span>Det eleven treffer best på</span></div>' + statRows(strengths, 'Ingen styrkedata ennå. Kjør noen økter først.', 'ok') + '</article>' +
+            '<article class="ep-panel"><div class="ep-panel-head"><h2>Svakheter</h2><span>Kategorier som bør prioriteres</span></div>' + statRows(weaknesses, 'Ingen svakhetsdata ennå.', 'warn') + '</article>' +
           '</div>' +
-        '</article>' +
-        '<div class="ep-stack">' +
-          '<article class="ep-panel"><div class="ep-panel-head"><h2>Styrker</h2><span>Det eleven treffer best på</span></div>' + statRows(strengths, 'Ingen styrkedata ennå. Kjør noen økter først.', 'ok') + '</article>' +
-          '<article class="ep-panel"><div class="ep-panel-head"><h2>Svakheter</h2><span>Kategorier som bør prioriteres</span></div>' + statRows(weaknesses, 'Ingen svakhetsdata ennå.', 'warn') + '</article>' +
         '</div>' +
       '</section>' +
-      '<section class="ep-panel ep-panel-reco">' +
-        '<div class="ep-panel-head"><h2>Oppgaveforslag</h2><span>Konkrete øvinger basert på siste oppgavetekst, feillogg og øvingshistorikk</span></div>' +
-        '<div class="ep-reco-grid">' + recommendationRows(recommendations) + '</div>' +
-      '</section>' +
-      '<section class="ep-grid ep-grid-main">' +
-        '<article class="ep-panel"><div class="ep-panel-head"><h2>Progresjon i Skrivemesteren</h2><span>De siste øktene med treffprosent og XP</span></div>' + historyBars(recentHistory) + '</article>' +
-        '<article class="ep-panel"><div class="ep-panel-head"><h2>Siste oppgavetekster</h2><span>Analysehistorikk lagret fra Oppgavebanken</span></div>' + analysisCards(recentAnalyses) + '</article>' +
+      '<section class="ep-section ep-section-tekstsjekk">' +
+        '<div class="ep-section-head"><span class="ep-section-icon">🤖</span><div><h2>Tekstsjekk – AI-analyse av egne tekster</h2><p>Lim inn en egen tekst og oppgavetekst i Tekstsjekk for grundig vurdering.</p></div><a class="ep-btn ep-btn-pri" href="tekstsjekk-bm.html">Åpne Tekstsjekk →</a></div>' +
+        '<div class="ep-grid ep-grid-feature">' +
+          '<article class="ep-panel ep-panel-radar">' +
+            '<div class="ep-panel-head"><h2>Skrivemestring</h2><span>Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'er') + ' (1–6)' + (innhaldCapped ? ' · Innhold kappet til 4 uten oppgavetekst' : '') + '</span></div>' +
+            '<div class="ep-radar-wrap">' +
+              (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES) : '<div class="ep-radar-empty">Radardiagrammet vises når tekster har blitt vurdert i Tekstsjekk.</div>') +
+            '</div>' +
+          '</article>' +
+          '<article class="ep-panel"><div class="ep-panel-head"><h2>Siste oppgavetekster</h2><span>Analysehistorikk fra Tekstsjekk</span></div>' + analysisCards(recentAnalyses) + '</article>' +
+        '</div>' +
+        '<article class="ep-panel ep-panel-reco">' +
+          '<div class="ep-panel-head"><h2>Oppgaveforslag</h2><span>Konkrete øvinger basert på siste analyse, feillogg og øvingshistorikk</span></div>' +
+          '<div class="ep-reco-grid">' + recommendationRows(recommendations) + '</div>' +
+        '</article>' +
       '</section>';
 
     var actions = document.createElement('div');
@@ -720,11 +767,10 @@
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
-      initScanPanel();
+      // initScanPanel() er deaktivert: Hetzner-widget (tekstanalyse.js) eig #ob-ai-scan no.
       renderProfilePage();
     });
   } else {
-    initScanPanel();
     renderProfilePage();
   }
 })();

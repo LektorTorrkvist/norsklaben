@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const dropdowns = Array.from(document.querySelectorAll('.nav-dropdown'));
+  let dropdowns = [];
   const header = document.querySelector('header');
   const nav = header ? header.querySelector('nav') : null;
   const logo = document.querySelector('.logo');
@@ -170,11 +170,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var path = String((window.location && window.location.pathname) || '').toLowerCase();
     var docLang = (document.documentElement.lang || '').toLowerCase();
     var isBm = path.indexOf('-bm.html') !== -1 || docLang.indexOf('nb') === 0;
-    var targetHref = isBm ? 'oppgavebank-bm.html' : 'oppgavebank.html';
-    var targetText = isBm ? 'Oppgavebank' : 'Oppgåvebank';
+    var targetHref = isBm ? 'tekstsjekk-bm.html' : 'tekstsjekk.html';
+    var targetText = isBm ? 'Tekstsjekk' : 'Tekstsjekk';
 
     var link = nav.querySelector('a[data-nl-nav="oppgavebank"]') ||
-      nav.querySelector('a[href*="oppgavebank.html"], a[href*="oppgavebank-bm.html"]');
+      nav.querySelector('a[href*="tekstsjekk.html"], a[href*="tekstsjekk-bm.html"]');
 
     if (!link) {
       link = document.createElement('a');
@@ -184,13 +184,13 @@ document.addEventListener('DOMContentLoaded', function () {
     link.href = targetHref;
     link.textContent = targetText;
 
-    if (path.indexOf('oppgavebank.html') !== -1 || path.indexOf('oppgavebank-bm.html') !== -1) {
+    if (path.indexOf('tekstsjekk.html') !== -1 || path.indexOf('tekstsjekk-bm.html') !== -1) {
       link.classList.add('active');
     } else {
       link.classList.remove('active');
     }
 
-    var firstLink = nav.querySelector('a[href*="skrivelab"]');
+    var firstLink = nav.querySelector('a[href*="skrivemeisteren"]');
     if (firstLink) {
       nav.insertBefore(link, firstLink.nextSibling);
     } else {
@@ -199,6 +199,101 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   ensureOppgavebankNavLink();
+
+  function ensureVerktoykasseDropdown() {
+    if (!nav) return;
+
+    var path = String((window.location && window.location.pathname) || '').toLowerCase();
+    var docLang = (document.documentElement.lang || '').toLowerCase();
+    var isBm = path.indexOf('-bm.html') !== -1 || docLang.indexOf('nb') === 0;
+    var toolsHomeHref = isBm ? 'verktoyskasse-bm.html' : 'verktoyskasse.html';
+    var teacherHref = isBm ? 'undervisingsbank-bm.html' : 'undervisingsbank.html';
+    var teacherLabel = isBm ? 'Undervisningsbank' : 'Undervisingsbank';
+    var teacherSection = isBm ? 'For lærer' : 'For lærar';
+    var studentSection = isBm ? 'For elev' : 'For elev';
+
+    Array.from(nav.children).forEach(function (child) {
+      if (child.tagName !== 'A') return;
+      var href = String(child.getAttribute('href') || '').toLowerCase();
+      if (href.indexOf('verktoyskasse') !== -1 || href.indexOf('undervisingsbank') !== -1) {
+        child.remove();
+      }
+    });
+
+    var dropdown = nav.querySelector('.nav-dropdown[data-nl-nav="verktoykassa"]') || nav.querySelector('.nav-dropdown');
+    if (!dropdown) {
+      dropdown = document.createElement('div');
+      dropdown.className = 'nav-dropdown';
+    }
+    dropdown.setAttribute('data-nl-nav', 'verktoykassa');
+
+    Array.from(nav.querySelectorAll('.nav-dropdown')).forEach(function (dd) {
+      if (dd !== dropdown) dd.remove();
+    });
+
+    var btn = dropdown.querySelector('.nav-dropbtn');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'nav-dropbtn';
+      btn.setAttribute('aria-expanded', 'false');
+    }
+    btn.textContent = 'Verktøykassa';
+
+    var menu = dropdown.querySelector('.nav-dropmenu');
+    if (!menu) {
+      menu = document.createElement('div');
+      menu.className = 'nav-dropmenu';
+    }
+
+    menu.innerHTML = [
+      '<div class="nav-dropsection">' + teacherSection + '</div>',
+      '<a href="' + teacherHref + '">' + teacherLabel + '</a>',
+      '<div class="nav-dropdivider" role="separator" aria-hidden="true"></div>',
+      '<div class="nav-dropsection">' + studentSection + '</div>',
+      '<a href="' + toolsHomeHref + '">Verktøykasse</a>',
+      '<a href="mad-libs.html">Mad Libs</a>',
+      '<a href="vurderingslab.html">Vurderingslab</a>'
+    ].join('');
+
+    dropdown.innerHTML = '';
+    dropdown.appendChild(btn);
+    dropdown.appendChild(menu);
+
+    var activeMap = {
+      'undervisingsbank.html': teacherHref,
+      'undervisingsbank-bm.html': teacherHref,
+      'verktoyskasse.html': toolsHomeHref,
+      'verktoyskasse-bm.html': toolsHomeHref,
+      'mad-libs.html': 'mad-libs.html',
+      'vurderingslab.html': 'vurderingslab.html'
+    };
+
+    var activeTarget = '';
+    Object.keys(activeMap).forEach(function (p) {
+      if (path.indexOf(p) !== -1) activeTarget = activeMap[p];
+    });
+
+    var hasActive = false;
+    Array.from(menu.querySelectorAll('a')).forEach(function (a) {
+      var href = String(a.getAttribute('href') || '');
+      if (href === activeTarget) {
+        a.classList.add('active');
+        hasActive = true;
+      } else {
+        a.classList.remove('active');
+      }
+    });
+
+    if (hasActive) btn.classList.add('active');
+    else btn.classList.remove('active');
+
+    var anchor = nav.querySelector('a[href*="nynorsklab"]') || nav.querySelector('a[data-nl-nav="oppgavebank"]');
+    if (anchor) nav.insertBefore(dropdown, anchor.nextSibling);
+    else nav.appendChild(dropdown);
+  }
+
+  ensureVerktoykasseDropdown();
 
   function closeMobileNav() {
     if (!header || !navToggle) return;
@@ -256,6 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  dropdowns = Array.from(document.querySelectorAll('.nav-dropdown'));
   if (!dropdowns.length) return;
 
   function closeAll() {

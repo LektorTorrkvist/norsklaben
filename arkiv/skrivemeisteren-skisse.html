@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="nn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skrivemeisteren – Norsklaben</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:      #F7F3EE;
+      --card:    #ffffff;
+      --primary: #1A3D2B;
+      --mid:     #2E6B4F;
+      --plight:  #E8F2EC;
+      --accent:  #C8832A;
+      --alight:  #FDF4E0;
+      --text:    #1C1C1C;
+      --tmid:    #4A4840;
+      --tmuted:  #7A7670;
+      --border:  #E0DBD2;
+      --shadow:  0 1px 4px rgba(26,61,43,.06), 0 4px 16px rgba(26,61,43,.06);
+      --shadow-hover: 0 4px 16px rgba(26,61,43,.12), 0 8px 32px rgba(26,61,43,.08);
+      --r: 12px;
+      --rs: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: var(--primary);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.18);
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+    }
+    .logo span { color: var(--alight); }
+    nav { display: flex; align-items: center; gap: .2rem; }
+    nav a {
+      color: rgba(255,255,255,.75);
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 500;
+      padding: .4rem .85rem;
+      border-radius: var(--rs);
+      transition: background .15s, color .15s;
+    }
+    nav a:hover, nav a.active { background: rgba(255,255,255,.12); color: #fff; }
+    .lang-toggle {
+      display: flex;
+      gap: .2rem;
+      margin-left: .5rem;
+      padding-left: .75rem;
+      border-left: 1px solid rgba(255,255,255,.18);
+    }
+    .lang-toggle a {
+      font-size: .78rem;
+      font-weight: 700;
+      padding: .3rem .55rem;
+      border-radius: var(--rs);
+      color: rgba(255,255,255,.55);
+      text-decoration: none;
+    }
+    .lang-toggle a.active { background: rgba(255,255,255,.15); color: #fff; }
+    .profile-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.1);
+      border: 1.5px solid rgba(255,255,255,.22);
+      color: rgba(255,255,255,.85);
+      text-decoration: none;
+      margin-left: .5rem;
+      font-size: 1.15rem;
+      line-height: 1;
+      transition: background .15s;
+    }
+    .profile-btn:hover { background: rgba(255,255,255,.2); }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: var(--primary);
+      color: #fff;
+      text-align: center;
+      padding: 3rem 1.5rem 3.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 15% 50%, rgba(46,107,79,.45) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 85% 20%, rgba(200,131,42,.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; max-width: 600px; margin: 0 auto; }
+    .htag {
+      display: inline-block;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.85);
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .28rem .85rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 700;
+      margin-bottom: .65rem;
+    }
+    .hero p {
+      font-size: 1rem;
+      color: rgba(255,255,255,.78);
+      max-width: 440px;
+      margin: 0 auto;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      margin-top: 1.5rem;
+    }
+    .stat-n {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--alight);
+    }
+    .stat-l { font-size: .78rem; color: rgba(255,255,255,.6); margin-top: .1rem; }
+
+    /* ─── HOVUDINNHALD ─── */
+    .page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    /* ─── GAMIFICATION-PANEL ─── */
+    .gami-panel {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 1.25rem 1.5rem;
+      margin-top: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .gami-left { display: flex; flex-direction: column; gap: .5rem; }
+
+    .gami-level-row {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .gami-level-icon { font-size: 1.4rem; line-height: 1; }
+    .gami-level-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .gami-level-num {
+      font-size: .78rem;
+      font-weight: 700;
+      background: var(--plight);
+      color: var(--mid);
+      padding: .15rem .55rem;
+      border-radius: 999px;
+    }
+
+    .gami-bar-wrap {
+      background: var(--border);
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .gami-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--mid), var(--accent));
+      border-radius: 999px;
+      transition: width .5s ease;
+    }
+    .gami-bar-label {
+      font-size: .75rem;
+      color: var(--tmuted);
+      margin-top: .25rem;
+    }
+
+    .gami-pills {
+      display: flex;
+      gap: .65rem;
+      flex-wrap: wrap;
+    }
+    .gami-pill {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--rs);
+      padding: .35rem .7rem;
+      font-size: .82rem;
+    }
+    .gami-pill-icon { font-size: 1rem; }
+    .gami-pill-val { font-weight: 700; color: var(--primary); }
+    .gami-pill-lbl { color: var(--tmuted); font-size: .75rem; }
+
+    @media (max-width: 520px) {
+      .gami-panel { grid-template-columns: 1fr; }
+    }
+
+    /* ─── ØVINGSPANEL ─── */
+    .adp-panel {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      margin-top: 1.25rem;
+    }
+
+    .adp-panel-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--primary);
+      margin-bottom: .35rem;
+    }
+    .adp-panel-sub {
+      font-size: .88rem;
+      color: var(--tmuted);
+      margin-bottom: 1.1rem;
+    }
+
+    /* Kategoriknapper */
+    .cat-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+      margin-bottom: 1rem;
+    }
+    .cat-btn {
+      font-size: .82rem;
+      font-weight: 600;
+      padding: .35rem .75rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      color: var(--tmid);
+      cursor: pointer;
+      transition: all .15s;
+      font-family: inherit;
+    }
+    .cat-btn:hover { border-color: var(--mid); color: var(--mid); }
+    .cat-btn.active {
+      background: var(--plight);
+      border-color: var(--mid);
+      color: var(--mid);
+    }
+    .cat-tools {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: 1.1rem;
+    }
+    .cat-tool {
+      font-size: .78rem;
+      padding: .25rem .65rem;
+      border-radius: var(--rs);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--tmuted);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .15s;
+    }
+    .cat-tool:hover { background: var(--bg); color: var(--tmid); }
+
+    /* Innstillingar-rad */
+    .adp-settings {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+      padding-top: .85rem;
+      border-top: 1px solid var(--border);
+    }
+    .adp-field { display: flex; flex-direction: column; gap: .3rem; }
+    .adp-field label {
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--tmuted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .adp-field select,
+    .adp-field input {
+      font-family: inherit;
+      font-size: .9rem;
+      padding: .4rem .7rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--rs);
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+    }
+    .adp-field select:focus,
+    .adp-field input:focus { border-color: var(--mid); }
+    .adp-field input { width: 80px; }
+
+    /* Handlingsknapper */
+    .adp-actions {
+      display: flex;
+      gap: .65rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--rs);
+      padding: .65rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+    }
+    .btn-primary:hover { background: var(--mid); transform: translateY(-1px); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--tmid);
+      border: 1.5px solid var(--border);
+      border-radius: var(--rs);
+      padding: .6rem 1.1rem;
+      font-size: .9rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: all .15s;
+    }
+    .btn-secondary:hover { border-color: var(--mid); color: var(--mid); }
+
+    /* ─── SEKSJONSTITTEL ─── */
+    .section-label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--tmuted);
+      margin: 2.25rem 0 .75rem;
+    }
+
+    /* ─── OPPGÅVEBANK-GRID (placeholder) ─── */
+    .ob-placeholder {
+      background: var(--card);
+      border: 1.5px dashed var(--border);
+      border-radius: var(--r);
+      padding: 2rem;
+      text-align: center;
+      color: var(--tmuted);
+      font-size: .9rem;
+    }
+    .ob-placeholder strong { display: block; font-size: 1rem; color: var(--tmid); margin-bottom: .3rem; }
+
+    /* ─── DEMO-DATA (for skissa) ─── */
+    .demo-note {
+      font-size: .75rem;
+      color: var(--accent);
+      font-style: italic;
+      margin-top: .25rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Norsk<span>laben</span></a>
+  <nav>
+    <a href="skrivemeisteren.html" class="active">Skrivemeisteren</a>
+    <a href="tekstsjekk.html">Tekstsjekk</a>
+    <a href="nynorsklab.html">Nynorsklab</a>
+    <div class="nav-dropdown" data-nl-nav="verktoykassa">
+      <button class="nav-dropbtn" type="button" aria-expanded="false">Verktøykassa</button>
+      <div class="nav-dropmenu">
+        <div class="nav-dropsection">For lærar</div>
+        <a href="undervisingsbank.html">Undervisingsbank</a>
+        <div class="nav-dropdivider" role="separator" aria-hidden="true"></div>
+        <div class="nav-dropsection">For elev</div>
+        <a href="verktoyskasse.html">Verktøykasse</a>
+        <a href="mad-libs.html">Mad Libs</a>
+        <a href="vurderingslab.html">Vurderingslab</a>
+      </div>
+    </div>
+    <div class="lang-toggle">
+      <a href="skrivemeisteren.html" class="active">NN</a>
+      <a href="skrivemeisteren-bm.html">BM</a>
+    </div>
+    <a href="elevprofil.html" class="profile-btn" title="Elevprofil" aria-label="Gå til elevprofil">👤</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="htag">Øv og bli betre</div>
+    <h1>Skrivemeisteren</h1>
+    <p>Vel kva du vil øve på, svar på oppgåver og tjen XP. Kjem du deg heilt til toppen?</p>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-n" id="nl-stat-categories">24</div>
+        <div class="stat-l">Kategoriar</div>
+      </div>
+      <div>
+        <div class="stat-n" id="nl-stat-tasks">250+</div>
+        <div class="stat-l">Oppgåver</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <!-- ── GAMIFICATION-PANEL ── -->
+  <div class="gami-panel" id="nl-ad-gamify" aria-live="polite">
+
+    <div class="gami-left">
+      <div class="gami-level-row">
+        <span class="gami-level-icon" id="nl-ad-prof-level-icon">🌱</span>
+        <span class="gami-level-name" id="nl-ad-prof-level-name">Ordlærling</span>
+        <span class="gami-level-num">Nivå <strong id="nl-ad-prof-level">1</strong></span>
+      </div>
+      <div class="gami-bar-wrap" role="img" aria-label="Framgang mot neste nivå">
+        <div class="gami-bar-fill" id="nl-ad-prof-progress-fill" style="width: 0%"></div>
+      </div>
+      <div class="gami-bar-label" id="nl-ad-prof-progress-text">0 / 80 XP til neste nivå</div>
+      <div class="demo-note">← Startar på 0 for nye elevar — fyller seg opp etter kvart</div>
+    </div>
+
+    <div class="gami-pills">
+      <div class="gami-pill">
+        <span class="gami-pill-icon">⭐</span>
+        <div>
+          <div class="gami-pill-val" id="nl-ad-prof-xp">0</div>
+          <div class="gami-pill-lbl">XP totalt</div>
+        </div>
+      </div>
+      <div class="gami-pill">
+        <span class="gami-pill-icon">🔥</span>
+        <div>
+          <div class="gami-pill-val" id="nl-ad-prof-streak">0</div>
+          <div class="gami-pill-lbl">Dagar på rad</div>
+        </div>
+      </div>
+      <div class="gami-pill">
+        <span class="gami-pill-icon">🏆</span>
+        <div>
+          <div class="gami-pill-val" id="nl-ad-prof-trophies">0/12</div>
+          <div class="gami-pill-lbl">Trofear</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── ØVINGSPANEL ── -->
+  <div class="adp-panel" id="nl-adaptive">
+
+    <div class="adp-panel-title">Start ei øving</div>
+    <div class="adp-panel-sub">Vel ein eller fleire kategoriar du vil øve på, og trykk start.</div>
+
+    <!-- Kategoriar — fyllast av JS (nl-ad-cats) -->
+    <div class="cat-grid" id="nl-ad-cats">
+      <!-- Eksempelknapper for skissa -->
+      <button class="cat-btn active">Og / å</button>
+      <button class="cat-btn">Komma</button>
+      <button class="cat-btn active">Setningsbygging</button>
+      <button class="cat-btn">Stor forbokstav</button>
+      <button class="cat-btn">Tekststruktur</button>
+      <button class="cat-btn">Sjanger</button>
+      <button class="cat-btn">Ordval</button>
+      <button class="cat-btn">Kjeldebruk</button>
+    </div>
+
+    <div class="cat-tools">
+      <button class="cat-tool" id="nl-ad-cats-clear">Tøm val</button>
+      <button class="cat-tool" id="nl-ad-cats-all">Vel alle</button>
+    </div>
+
+    <div class="adp-settings">
+      <div class="adp-field">
+        <label for="nl-ad-level">Vanskegrad</label>
+        <select id="nl-ad-level">
+          <option value="adaptiv" selected>Automatisk</option>
+          <option value="lett">Lett</option>
+          <option value="medium">Middels</option>
+          <option value="vanskeleg">Vanskeleg</option>
+        </select>
+      </div>
+      <div class="adp-field">
+        <label for="nl-ad-count">Tal oppgåver</label>
+        <input id="nl-ad-count" type="number" min="3" max="25" value="8" />
+      </div>
+    </div>
+
+    <div class="adp-actions">
+      <button class="btn-primary" id="nl-ad-start">🎮 Start øving</button>
+      <button class="btn-secondary" id="nl-ad-retry">Øv på tidlegare feil</button>
+      <a class="btn-secondary" href="elevprofil.html">Sjå profilen min</a>
+    </div>
+
+  </div>
+
+  <!-- ── OPPGÅVEBANK-GRID ── -->
+  <div class="section-label">Bla gjennom alle oppgåver</div>
+  <div class="ob-placeholder">
+    <strong>Oppgåvebank</strong>
+    Her visast kategori-kortlista (eksisterande .main-grid frå skrivelab.js)
+  </div>
+
+</div>
+
+<!-- Øvingsvindauge og nivå-opp-overlay — uendra frå skrivelab.html -->
+<!-- adp-win, nl-levelup-overlay, nl-welcome-overlay ligg her som før -->
+
+<footer style="text-align:center;padding:2rem;color:#7A7670;font-size:.83rem;border-top:1px solid #E0DBD2;">
+  <p>Norsklaben • av Lektor Tørrkvist • 2026</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+# Editor / agent
+.claude/
+.tmp-noop
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node / API
+node_modules/
+API/.env
+API/node_modules/
+*.log
+npm-debug.log*
+
+# Lokale notat
+CLAUDE.md

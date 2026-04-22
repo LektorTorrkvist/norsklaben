@@ -23,7 +23,7 @@ const { buildSystemPrompt, buildUserPrompt } = require('./prompt');
 
 const PORT        = process.env.PORT        || 3000;
 const OLLAMA_URL  = process.env.OLLAMA_URL  || 'http://localhost:11434';
-const OLLAMA_MODEL= process.env.OLLAMA_MODEL|| 'LTG/normistral-11b-thinking:latest';
+const OLLAMA_MODEL= process.env.OLLAMA_MODEL|| 'Gemma4:e4b';
 const MAX_TEKST   = parseInt(process.env.MAX_TEKST || '6000', 10);
 
 // Finn lokal IP-adresse (første ikke-interne nettverksadresse)
@@ -45,7 +45,7 @@ app.use(express.json({ limit: '200kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 2) Serve heile Norsklaben-mappa (foreldremappa) –
-//    slik at elevar kan opne skrivelab.html, oppgavebank.html osv.
+//    slik at elevar kan opne skrivemeisteren.html, tekstsjekk.html osv.
 app.use(express.static(path.join(__dirname, '..')));
 
 /* ─── Hjelpefunksjonar ─────────────────────────────── */
@@ -61,7 +61,7 @@ function getLabel(maal, key) {
 
 function buildOppgaveUrl(maal, key) {
   // Matchar eksisterande URL-mønster i oppgavebank(-bm).html
-  const base = maal === 'bm' ? 'oppgavebank-bm.html' : 'oppgavebank.html';
+  const base = maal === 'bm' ? 'tekstsjekk-bm.html' : 'tekstsjekk.html';
   return `${base}?kat=${encodeURIComponent(key)}&mode=manual#${encodeURIComponent(key)}`;
 }
 
@@ -191,11 +191,15 @@ async function kallOllama(systemPrompt, userPrompt) {
       { role: 'user',      content: userPrompt   }
     ],
     stream: false,
+    // Tvingar JSON-format frå Ollama (støtta av Gemma og dei fleste moderne modellar).
+    // Gjer at modellen sluttar når JSON-objektet er ferdig → mykje raskare svar.
+    format: 'json',
     options: {
-      temperature: 0.5,
+      temperature: 0.3,   // lågare → meir konsistente vurderingar
       top_p: 0.9,
       num_ctx: 4096,
-      num_predict: 2500
+      num_predict: 1200,  // nok til JSON-svaret, ikkje meir
+      repeat_penalty: 1.1
     },
     think: false
   };
@@ -315,8 +319,8 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`║  Din PC:     http://localhost:${PORT}                ║`);
   console.log(`║  Elevar:     http://${ip}:${PORT}            ║`);
   console.log('║                                                  ║');
-  console.log(`║  Skrivelab:  http://${ip}:${PORT}/skrivelab.html ║`);
-  console.log(`║  Oppgåvebank:http://${ip}:${PORT}/oppgavebank.html║`);
+  console.log(`║  Skrivemeisteren: http://${ip}:${PORT}/skrivemeisteren.html ║`);
+  console.log(`║  Tekstsjekk:      http://${ip}:${PORT}/tekstsjekk.html      ║`);
   console.log('╠══════════════════════════════════════════════════╣');
   console.log(`║  Modell: ${OLLAMA_MODEL.padEnd(41)}║`);
   console.log('╚══════════════════════════════════════════════════╝');

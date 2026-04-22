@@ -3,23 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Norsklaben - Øvingsoppgaver i norsk</title>
+  <title>Norsklaben – Øvingsoppgaver i norsk</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#1A3D2B">
 </head>
 <body>
 
 <header>
   <a class="logo" href="index-bm.html">Norsk<span>laben</span></a>
   <nav>
-    <a href="skrivelab-bm.html">Skrivelab</a>
+    <a href="skrivemeisteren-bm.html">Skrivemeisteren</a>
+    <a href="tekstsjekk-bm.html">Tekstsjekk</a>
+    <a href="elevprofil-bm.html">Elevprofil</a>
     <a href="nynorsklab.html">Nynorsklab</a>
-    <a href="verktoyskasse-bm.html">Verktøykasse</a>
-    <a href="undervisingsbank-bm.html">Undervisningsbank</a>
-    <div class="nav-dropdown">
-      <button class="nav-dropbtn" type="button" aria-expanded="false">Lekekassa</button>
+    <div class="nav-dropdown" data-nl-nav="verktoykassa">
+      <button class="nav-dropbtn" type="button" aria-expanded="false">Verktøykassa</button>
       <div class="nav-dropmenu">
+        <div class="nav-dropsection">For lærer</div>
+        <a href="undervisingsbank-bm.html">Undervisningsbank</a>
+        <div class="nav-dropdivider" role="separator" aria-hidden="true"></div>
+        <div class="nav-dropsection">For elev</div>
+        <a href="verktoyskasse-bm.html">Verktøykasse</a>
         <a href="mad-libs.html">Mad Libs</a>
         <a href="vurderingslab.html">Vurderingslab</a>
       </div>
@@ -32,114 +40,119 @@
 </header>
 
 <div class="hero hero-index">
-  <div class="htag">Undervisningsressurser i norsk</div>
-  <h1>Norsklaben</h1>
-  <p>En database med øvingsoppgaver og undervisningsressurser for norskfaget på ungdomstrinnet.</p>
-</div>
-
-<div class="lab-cards">
-
-  <a class="lcard" href="skrivelab-bm.html">
-    <div class="lcard-icon">✍️</div>
-    <h2>Skrivelab</h2>
-    <p>Øvingsoppgaver i norsk skriving - grammatikk, setningsbygging, tekststruktur, sjanger, drøfting, kildebruk og ordvalg. Basert på analyse av elevtekster fra 8. trinn.</p>
-    <div class="lcard-meta">
-      <span class="tag tag-g" id="skrivelab-cats-count">24 kategorier</span>
-      <span class="tag tag-a" id="skrivelab-tasks-count">219 oppgaver</span>
-    </div>
-    <span class="lbtn">Gå til Skrivelab -&gt;</span>
-  </a>
-
-  <a class="lcard" href="nynorsklab.html">
-    <div class="lcard-icon">🇳🇴</div>
-    <h2>Nynorsklab</h2>
-    <p>Øvingsoppgaver spesifikt for nynorsk - målformkonsistens, verbformer, substantivbøying, adjektivsamsvar, pronomen og særnorske nynorskformer.</p>
-    <div class="lcard-meta">
-      <span class="tag tag-g">9 kategorier</span>
-      <span class="tag tag-a">34 oppgaver</span>
-    </div>
-    <span class="lbtn">Gå til Nynorsklab -&gt;</span>
-  </a>
-
-  <a class="lcard" href="elevprofil-bm.html">
-    <div class="lcard-icon">📈</div>
-    <h2>Elevprofil</h2>
-    <p>Se en lokal oversikt over styrker, svakheter, anbefalte kategorier og progresjon fra Skrivemesteren. Profilen fylles automatisk når oppgavetekster analyseres og økter fullføres.</p>
-    <div class="lcard-meta">
-      <span class="tag tag-g">Lokal lagring</span>
-      <span class="tag tag-a">Elevrettet</span>
-    </div>
-    <span class="lbtn">Åpne elevprofil -&gt;</span>
-  </a>
-
-</div>
-
-<section class="index-ob-note" aria-labelledby="index-ob-note-title-bm">
-  <div class="index-ob-note-inner">
-    <div class="index-ob-note-icon" aria-hidden="true">📚</div>
-    <div class="index-ob-note-text">
-      <h2 id="index-ob-note-title-bm">Nyhet: Oppgavebank</h2>
-      <p>Bruk Oppgavebanken for å få en samlet oversikt over alle øvingsoppgaver. Du kan starte manuell øving direkte fra hver kategori, eller dele lenker med elever.</p>
-    </div>
-    <a class="index-ob-note-btn" href="oppgavebank-bm.html">Åpne Oppgavebank →</a>
+  <div class="hero-inner">
+    <div class="htag">Norsk på ungdomstrinnet</div>
+    <h1>Norsklaben</h1>
+    <p>Øv på det du trenger, når du trenger det. Oppgaver og teksthjelp tilpasset 8.–10. klasse.</p>
   </div>
-</section>
+</div>
 
-<div class="how">
-  <h2>Slik bruker du Norsklaben</h2>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <h3>Velg lab</h3>
-      <p>Gå til Skrivelab for generelle skriveferdigheter, eller Nynorsklab for nynorsk grammatikk.</p>
+<!-- HOVUDKORT -->
+<div class="main-cards">
+
+  <a class="mcard green" href="skrivemeisteren-bm.html">
+    <div class="mcard-icon">🎮</div>
+    <h2>Skrivemeisteren</h2>
+    <div class="mcard-tagline">Spill og øv</div>
+    <p>Spill deg gjennom typiske skrivefeil. Velg kategori, svar på oppgaver og se hvor langt du kommer.</p>
+    <div class="mcard-footer">
+      <div class="mcard-tags">
+        <span class="tag tag-g">250+ oppgaver</span>
+        <span class="tag tag-g">24 kategorier</span>
+      </div>
+      <span class="mcard-arrow">Spill →</span>
     </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <h3>Filtrer</h3>
-      <p>Bruk søk eller filtreringsknappene for å finne oppgaver som passer nivå og operasjon (korrigere, bygge, analysere...).</p>
+  </a>
+
+  <a class="mcard amber" href="tekstsjekk-bm.html">
+    <div class="mcard-icon">🔍</div>
+    <h2>Tekstsjekk</h2>
+    <div class="mcard-tagline">AI-analyse</div>
+    <p>Lim inn teksten din og få tilbakemelding. AI-en finner hva du bør øve mer på og foreslår oppgaver.</p>
+    <div class="mcard-footer">
+      <div class="mcard-tags">
+        <span class="tag tag-a">AI-analyse</span>
+        <span class="tag tag-a">Tilpasset deg</span>
+      </div>
+      <span class="mcard-arrow">Sjekk tekst →</span>
     </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <h3>Klikk og øv</h3>
-      <p>Klikk på en kategori for å se alle oppgavene. Klikk på en oppgave for å åpne den. Bruk «Vis fasit» for å sjekke svaret.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <h3>Vanskelighetsgrad</h3>
-      <p>Hver oppgave er merket med vanskelighetsgrad: grunnleggende, mellomtrinn eller avansert.</p>
+  </a>
+
+</div>
+
+<!-- TILLEGGSVERKTØY -->
+<div class="extra-section">
+  <h3>Flere verktøy</h3>
+  <div class="extra-grid">
+
+    <a class="ecard" href="nynorsklab.html">
+      <span class="ecard-icon">🇳🇴</span>
+      <div class="ecard-text">
+        Nynorsklab
+        <small>Verbformer, bøying, målform</small>
+      </div>
+    </a>
+
+    <a class="ecard" href="verktoyskasse.html">
+      <span class="ecard-icon">🛠️</span>
+      <div class="ecard-text">
+        Verktøykasse
+        <small>Skrivetips og sjangerhjelp</small>
+      </div>
+    </a>
+
+    <a class="ecard" href="elevprofil.html">
+      <span class="ecard-icon">📈</span>
+      <div class="ecard-text">
+        Elevprofil
+        <small>Framgang og styrker</small>
+      </div>
+    </a>
+
+    <a class="ecard" href="mad-libs.html">
+      <span class="ecard-icon">😄</span>
+      <div class="ecard-text">
+        Mad Libs
+        <small>Ordklasser på en morsom måte</small>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- KORLEIS -->
+<div class="how-wrap" style="margin-top: 2rem;">
+  <div class="how">
+    <h2>Hvordan bruker du Norsklaben?</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Velg det du trenger</h3>
+        <p>Vil du øve på egenhånd? → Skrivemeisteren. Har du skrevet en tekst? → Tekstsjekk.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Velg kategori</h3>
+        <p>I Skrivemeisteren velger du hva du vil jobbe med: komma, setninger, sjanger og mer.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Svar og lær</h3>
+        <p>Hver oppgave gir deg forklaring og fasit. Feil er bare en ny sjanse til å lære.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Følg framgangen</h3>
+        <p>Elevprofilen viser hva du er god på og hva du bør jobbe mer med.</p>
+      </div>
     </div>
   </div>
 </div>
 
 <footer>
   <p>Norsklaben • av Lektor Tørrkvist • 2026</p>
-  <p id="nl-sist-oppdatert">Sist oppdatert laster...</p>
 </footer>
 
 <script src="nav.js"></script>
-<script src="oppgavebank-bm-v2.js?v=20260410f"></script>
-<script>
-(function() {
-  var catsEl = document.getElementById('skrivelab-cats-count');
-  var tasksEl = document.getElementById('skrivelab-tasks-count');
-  if (!catsEl || !tasksEl) return;
-
-  var bank = (typeof BANKV2 !== 'undefined' && Array.isArray(BANKV2)) ? BANKV2 : [];
-  if (!bank.length) return;
-
-  var catMap = {};
-  bank.forEach(function(t) {
-    if (!t || !t.kat) return;
-    catMap[String(t.kat)] = true;
-  });
-
-  var catCount = Object.keys(catMap).length;
-  var taskCount = bank.length;
-
-  catsEl.textContent = catCount + ' kategorier';
-  tasksEl.textContent = taskCount + ' oppgaver';
-})();
-</script>
-
 </body>
 </html>

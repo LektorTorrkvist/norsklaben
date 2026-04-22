@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="nn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tekstsjekk – Norsklaben</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:      #F7F3EE;
+      --card:    #ffffff;
+      --primary: #1A3D2B;
+      --mid:     #2E6B4F;
+      --plight:  #E8F2EC;
+      --accent:  #C8832A;
+      --alight:  #FDF4E0;
+      --text:    #1C1C1C;
+      --tmid:    #4A4840;
+      --tmuted:  #7A7670;
+      --border:  #E0DBD2;
+      --shadow:  0 1px 4px rgba(26,61,43,.06), 0 4px 16px rgba(26,61,43,.06);
+      --shadow-hover: 0 4px 16px rgba(26,61,43,.12), 0 8px 32px rgba(26,61,43,.08);
+      --r: 12px;
+      --rs: 6px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Source Sans 3', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; }
+
+    /* HEADER */
+    header { background: var(--primary); padding: 0 2rem; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; height: 60px; box-shadow: 0 2px 12px rgba(0,0,0,.18); }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: #fff; text-decoration: none; }
+    .logo span { color: var(--alight); }
+    nav { display: flex; align-items: center; gap: .2rem; }
+    nav a { color: rgba(255,255,255,.75); text-decoration: none; font-size: .88rem; font-weight: 500; padding: .4rem .85rem; border-radius: var(--rs); transition: background .15s, color .15s; }
+    nav a:hover { background: rgba(255,255,255,.12); color: #fff; }
+    nav a.active { background: rgba(255,255,255,.15); color: #fff; }
+    .lang-toggle { display: flex; gap: .2rem; margin-left: .5rem; padding-left: .75rem; border-left: 1px solid rgba(255,255,255,.18); }
+    .lang-toggle a { font-size: .78rem; font-weight: 700; padding: .3rem .55rem; border-radius: var(--rs); color: rgba(255,255,255,.55); text-decoration: none; }
+    .lang-toggle a.active { background: rgba(255,255,255,.15); color: #fff; }
+    .profile-btn { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.22); color: rgba(255,255,255,.85); text-decoration: none; margin-left: .5rem; font-size: 1.15rem; line-height: 1; transition: background .15s; }
+    .profile-btn:hover { background: rgba(255,255,255,.2); }
+
+    /* HERO */
+    .hero { background: var(--primary); color: #fff; text-align: center; padding: 3rem 1.5rem 3.5rem; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 70% at 10% 50%, rgba(46,107,79,.4) 0%, transparent 70%), radial-gradient(ellipse 45% 55% at 90% 25%, rgba(200,131,42,.25) 0%, transparent 60%); pointer-events: none; }
+    .hero-inner { position: relative; max-width: 600px; margin: 0 auto; }
+    .htag { display: inline-block; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.85); font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: .28rem .85rem; border-radius: 999px; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 700; margin-bottom: .65rem; }
+    .hero p { font-size: 1rem; color: rgba(255,255,255,.78); max-width: 440px; margin: 0 auto; }
+    .hero-stats { display: flex; justify-content: center; gap: 2.5rem; margin-top: 1.5rem; }
+    .stat-n { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--alight); }
+    .stat-l { font-size: .78rem; color: rgba(255,255,255,.6); margin-top: .1rem; }
+
+    /* HOVUDINNHALD */
+    .ob-wrap { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* AI-SCAN */
+    .ob-ai { background: linear-gradient(135deg, #fdf8ee 0%, #fdf4e0 100%); border: 1.5px dashed #d4a257; border-radius: var(--r); padding: 1.4rem 1.6rem; margin-bottom: 2rem; }
+    .ob-ai-headline { display: grid; grid-template-columns: auto 1fr; gap: .9rem; align-items: start; margin-bottom: 1rem; }
+    .ob-ai-icon { font-size: 1.8rem; }
+    .ob-ai h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; margin: 0 0 .3rem; color: var(--primary); }
+    .ob-ai p { font-size: .92rem; color: var(--tmid); margin: 0; line-height: 1.45; }
+    .ob-ai-label { display: block; font-size: .78rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--tmid); margin-bottom: .45rem; }
+    .ob-ai-text { width: 100%; min-height: 120px; border: 1.5px solid #d4a257; border-radius: var(--rs); padding: .85rem .95rem; resize: vertical; font: inherit; font-size: .95rem; background: #fff; color: var(--text); }
+    .ob-ai-text:focus { outline: none; border-color: var(--accent); }
+    .ob-ai-actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .9rem; }
+    .ob-btn { font-family: inherit; font-size: .9rem; font-weight: 600; padding: .55rem 1.1rem; border-radius: var(--rs); border: 1.5px solid var(--border); background: transparent; color: var(--tmid); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; transition: all .15s; }
+    .ob-btn:hover { border-color: var(--mid); color: var(--mid); }
+    .ob-btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .ob-btn-primary:hover { background: #b5721f; border-color: #b5721f; color: #fff; }
+    .ob-ai-status { font-size: .82rem; color: var(--tmuted); margin-top: .65rem; }
+
+    /* GRUPPE-TITLAR */
+    .ob-group-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--primary); margin: 2rem 0 .75rem; padding-bottom: .35rem; border-bottom: 2px solid var(--border); }
+
+    /* KATEGORI-GRID */
+    .ob-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    .ob-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 1.1rem 1.2rem; transition: box-shadow .15s, transform .15s; cursor: pointer; text-decoration: none; color: var(--text); display: block; }
+    .ob-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+    .ob-card-head { display: flex; align-items: center; gap: .55rem; margin-bottom: .5rem; }
+    .ob-card-icon { font-size: 1.3rem; }
+    .ob-card-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--primary); }
+    .ob-card-meta { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .5rem; }
+    .ob-tag { font-size: .72rem; font-weight: 600; padding: .18rem .5rem; border-radius: 999px; background: var(--plight); color: var(--mid); }
+    .ob-card-desc { font-size: .84rem; color: var(--tmuted); line-height: 1.45; margin-bottom: .75rem; }
+    .ob-card-action { font-size: .82rem; font-weight: 700; color: var(--primary); opacity: .7; }
+    .ob-card:hover .ob-card-action { opacity: 1; }
+
+    /* FOOTER */
+    footer { text-align: center; padding: 2rem 1.5rem; color: var(--tmuted); font-size: .83rem; border-top: 1px solid var(--border); }
+
+    @media (max-width: 600px) {
+      .ob-grid { grid-template-columns: 1fr; }
+      .ob-ai-headline { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Norsk<span>laben</span></a>
+  <nav>
+    <a href="skrivemeisteren.html">Skrivemeisteren</a>
+    <a href="tekstsjekk.html" class="active">Tekstsjekk</a>
+    <a href="nynorsklab.html">Nynorsklab</a>
+    <div class="nav-dropdown" data-nl-nav="verktoykassa">
+      <button class="nav-dropbtn" type="button" aria-expanded="false">Verktøykassa</button>
+      <div class="nav-dropmenu">
+        <div class="nav-dropsection">For lærar</div>
+        <a href="undervisingsbank.html">Undervisingsbank</a>
+        <div class="nav-dropdivider" role="separator" aria-hidden="true"></div>
+        <div class="nav-dropsection">For elev</div>
+        <a href="verktoyskasse.html">Verktøykasse</a>
+        <a href="mad-libs.html">Mad Libs</a>
+        <a href="vurderingslab.html">Vurderingslab</a>
+      </div>
+    </div>
+    <div class="lang-toggle">
+      <a href="tekstsjekk.html" class="active">NN</a>
+      <a href="tekstsjekk-bm.html">BM</a>
+    </div>
+    <a href="elevprofil.html" class="profile-btn" title="Elevprofil" aria-label="Gå til elevprofil">👤</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="htag">Tekstanalyse + øving</div>
+    <h1>Tekstsjekk</h1>
+    <p>Lim inn teksten din, få forslag til kva du bør øve på, og hopp rett inn i oppgåvene.</p>
+    <div class="hero-stats">
+      <div><div class="stat-n">24</div><div class="stat-l">Kategoriar</div></div>
+      <div><div class="stat-n">250+</div><div class="stat-l">Oppgåver</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="ob-wrap">
+
+  <div class="ob-ai" id="ob-ai-scan">
+    <div class="ob-ai-headline">
+      <div class="ob-ai-icon">🤖</div>
+      <div>
+        <h3>Tekstskanning og elevprofil</h3>
+        <p>Lim inn teksten din, få forslag til øvingskategoriar og lagre tilrådingane lokalt i elevprofilen.</p>
+      </div>
+    </div>
+    <label class="ob-ai-label" for="ob-ai-text">Teksten din</label>
+    <textarea id="ob-ai-text" class="ob-ai-text" placeholder="Lim inn teksten din her..."></textarea>
+    <div class="ob-ai-actions">
+      <button type="button" class="ob-btn ob-btn-primary">Få forslag og lagre</button>
+      <a class="ob-btn" href="elevprofil.html">Opne elevprofil</a>
+    </div>
+    <p class="ob-ai-status">Data vert berre lagra lokalt i nettlesaren på denne eininga.</p>
+  </div>
+
+  <div id="ob-content">
+
+    <div class="ob-group-title">Grunnleggjande grammatikk</div>
+    <div class="ob-grid">
+      <div class="ob-card">
+        <div class="ob-card-head"><span class="ob-card-icon">✏️</span><span class="ob-card-title">Og / å</span></div>
+        <div class="ob-card-meta"><span class="ob-tag">18 oppgåver</span><span class="ob-tag">Grunnleggjande</span></div>
+        <div class="ob-card-desc">Øv på når du skal skrive «og» og når du skal skrive «å».</div>
+        <div class="ob-card-action">Øv på denne kategorien →</div>
+      </div>
+      <div class="ob-card">
+        <div class="ob-card-head"><span class="ob-card-icon">✏️</span><span class="ob-card-title">Komma og teiknsetting</span></div>
+        <div class="ob-card-meta"><span class="ob-tag">14 oppgåver</span><span class="ob-tag">Middels</span></div>
+        <div class="ob-card-desc">Lær deg når du skal bruke komma, punktum og andre teikn.</div>
+        <div class="ob-card-action">Øv på denne kategorien →</div>
+      </div>
+      <div class="ob-card">
+        <div class="ob-card-head"><span class="ob-card-icon">✏️</span><span class="ob-card-title">Dobbel konsonant</span></div>
+        <div class="ob-card-meta"><span class="ob-tag">12 oppgåver</span><span class="ob-tag">Grunnleggjande</span></div>
+        <div class="ob-card-desc">Når skal du skrive éin konsonant, og når skal du skrive to?</div>
+        <div class="ob-card-action">Øv på denne kategorien →</div>
+      </div>
+    </div>
+
+    <div class="ob-group-title">Setning og avsnitt</div>
+    <div class="ob-grid">
+      <div class="ob-card">
+        <div class="ob-card-head"><span class="ob-card-icon">📝</span><span class="ob-card-title">Setningsbygging</span></div>
+        <div class="ob-card-meta"><span class="ob-tag">16 oppgåver</span><span class="ob-tag">Middels</span></div>
+        <div class="ob-card-desc">Skriv klare og varierte setningar utan unødvendige gjentakingar.</div>
+        <div class="ob-card-action">Øv på denne kategorien →</div>
+      </div>
+      <div class="ob-card">
+        <div class="ob-card-head"><span class="ob-card-icon">📝</span><span class="ob-card-title">Temasetning</span></div>
+        <div class="ob-card-meta"><span class="ob-tag">10 oppgåver</span><span class="ob-tag">Middels</span></div>
+        <div class="ob-card-desc">Kvar avsnitt treng ei setning som fortel kva avsnittet handlar om.</div>
+        <div class="ob-card-action">Øv på denne kategorien →</div>
+      </div>
+    </div>
+
+    <div class="ob-group-title">Tekst og sjanger</div>
+    <div class="ob-grid">
+      <div class="ob-card">
+        <div class="ob-card-head"><span class="ob-card-icon">📄</span><span class="ob-card-title">Tekststruktur</span></div>
+        <div class="ob-card-meta"><span class="ob-tag">15 oppgåver</span><span class="ob-tag">Middels</span></div>
+        <div class="ob-card-desc">Bygg tekstar med tydeleg innleiing, hovuddel og avslutting.</div>
+        <div class="ob-card-action">Øv på denne kategorien →</div>
+      </div>
+      <div class="ob-card">
+        <div class="ob-card-head"><span class="ob-card-icon">📄</span><span class="ob-card-title">Sjangerkompetanse</span></div>
+        <div class="ob-card-meta"><span class="ob-tag">12 oppgåver</span><span class="ob-tag">Avansert</span></div>
+        <div class="ob-card-desc">Kva kjenneteiknar ein fagartikkel, eit debattinnlegg eller ein kåseri?</div>
+        <div class="ob-card-action">Øv på denne kategorien →</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>Norsklaben • av Lektor Tørrkvist • 2026</p>
+</footer>
+
+</body>
+</html>
