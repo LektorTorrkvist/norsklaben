@@ -657,6 +657,7 @@ var BANKV2 = [
  regel:'Etter en framskutt leddsetning (som «Fordi hun øvde mye, …») kommer verbet som ledd nummer to i hovedsetningen. Det betyr at «vant» kommer før «hun».',
  eks:'Fordi hun øvde mye, vant hun. · Da han la ned telefonen, oppnådde han bedre resultater.'},
 
+{kat:'bindeord',kat_label:'Bindeord',type:'drag_kolonne',vanske:'medium',
  q:'Sorter bindeordene etter funksjon: årsak eller kontrast?',
  kolonner:['Årsak / konsekvens','Kontrast / motsetning'],
  ord:[
