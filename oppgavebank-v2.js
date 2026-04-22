@@ -657,6 +657,7 @@ var BANKV2 = [
  regel:'Etter ei framskuven leddsetning (som «Fordi ho øvde mykje, …») kjem verbet som ledd nummer to i hovudsetninga. Det betyr at «vann» kjem før «ho».',
  eks:'Fordi ho øvde mykje, vann ho. · Då han la ned på telefonen, oppnådde han betre resultat.'},
 
+{kat:'bindeord',kat_label:'Bindeord',type:'drag_kolonne',vanske:'medium',
  q:'Sorter bindeorda etter funksjon: årsak eller kontrast?',
  kolonner:['Årsak / konsekvens','Kontrast / motsetnad'],
  ord:[
