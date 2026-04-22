@@ -188,7 +188,10 @@
 '.nl-ta-radar .grid{stroke:#e6dfd2;stroke-width:1;fill:none;}' +
 '.nl-ta-radar .area{fill:rgba(200,131,42,.28);stroke:#C8832A;stroke-width:2;stroke-linejoin:round;}' +
 '.nl-ta-radar .point{fill:#C8832A;}' +
+'.nl-ta-radar .point-hit{cursor:pointer;}' +
 '.nl-ta-radar .label{font:600 11px "Source Sans 3",sans-serif;fill:#1A3D2B;}' +
+'.nl-ta-radar-tip{min-height:1.6em;margin:.45rem auto 0;padding:.35rem .8rem;background:#1A3D2B;color:#fff;border-radius:8px;font-size:.86rem;line-height:1.4;text-align:center;max-width:300px;opacity:0;transition:opacity .15s;pointer-events:none;}' +
+'.nl-ta-radar-tip.vis{opacity:1;}' +
 '.nl-ta-strengths{list-style:none;padding:0;margin:0;display:grid;gap:.5rem;}' +
 '.nl-ta-strength{display:flex;align-items:flex-start;gap:.5rem;background:#fffaf1;border:1px solid #f1e2c4;border-left:4px solid #C8832A;border-radius:0 10px 10px 0;padding:.6rem .8rem;color:#5a4a25;font-size:.93rem;line-height:1.5;}' +
 '.nl-ta-strength::before{content:"\u2728";flex:0 0 auto;}' +
@@ -429,7 +432,7 @@
     resultsEl.innerHTML = html;
   }
 
-  function buildRadarSvg(radar) {
+  function buildRadarSvg(radar, forklaring) {
     var size = 280;
     var cx = size / 2, cy = size / 2;
     var rMax = 105;
@@ -465,12 +468,21 @@
 
     var areaPts = [], dots = '';
     for (var k = 0; k < n; k++) {
-      var v = Number(radar[RADAR_AKSAR[k].key]);
+      var key = RADAR_AKSAR[k].key;
+      var v = Number(radar[key]);
       if (!Number.isFinite(v)) v = 1;
       v = Math.max(1, Math.min(6, v));
       var pp = point(k, v);
+      var tipTxt = (forklaring && forklaring[key]) ? String(forklaring[key]) : '';
       areaPts.push(pp[0].toFixed(1) + ',' + pp[1].toFixed(1));
-      dots += '<circle class="point" cx="' + pp[0].toFixed(1) + '" cy="' + pp[1].toFixed(1) + '" r="3.5"/>';
+      dots += '<g class="nl-ta-point-group" data-nl-ax="' + key +
+              '" data-nl-score="' + v +
+              '" data-nl-tip="' + esc(tipTxt) +
+              '" data-nl-label="' + esc(RADAR_AKSAR[k].label) + '">' +
+              '<circle class="point" cx="' + pp[0].toFixed(1) + '" cy="' + pp[1].toFixed(1) + '" r="3.5"/>' +
+              '<circle class="point-hit" cx="' + pp[0].toFixed(1) + '" cy="' + pp[1].toFixed(1) + '" r="14" fill="transparent"/>' +
+              '<title>' + esc(RADAR_AKSAR[k].label + ' ' + v + '/6' + (tipTxt ? ': ' + tipTxt : '')) + '</title>' +
+              '</g>';
     }
 
     return '<svg class="nl-ta-radar" viewBox="0 0 ' + size + ' ' + size + '" role="img" aria-label="' + esc(T.radarTitle) + '">' +
@@ -495,7 +507,7 @@
     if (hasRadar || hasStrengths) {
       html += '<div class="nl-ta-grid">';
       if (hasRadar) {
-        html += '<div><h4>' + esc(T.radarTitle) + '</h4><div class="nl-ta-radar-wrap">' + buildRadarSvg(data.radar) + '</div></div>';
+        html += '<div><h4>' + esc(T.radarTitle) + '</h4><div class="nl-ta-radar-wrap">' + buildRadarSvg(data.radar, data.radar_forklaring) + '</div><div class="nl-ta-radar-tip" data-nl-radar-tip></div></div>';
       }
       if (hasStrengths) {
         html += '<div><h4>' + esc(T.strengthsTitle) + '</h4><ul class="nl-ta-strengths">';
@@ -540,6 +552,21 @@
 
     var resultsEl = host.querySelector('[data-nl-ta-results]');
     if (resultsEl) resultsEl.innerHTML = html;
+
+    var tipEl = resultsEl && resultsEl.querySelector('[data-nl-radar-tip]');
+    var ptGroups = resultsEl ? Array.prototype.slice.call(resultsEl.querySelectorAll('.nl-ta-point-group')) : [];
+    if (tipEl && ptGroups.length) {
+      ptGroups.forEach(function (g) {
+        g.addEventListener('mouseenter', function () {
+          var lbl = g.getAttribute('data-nl-label') || '';
+          var sc  = g.getAttribute('data-nl-score') || '';
+          var tip = g.getAttribute('data-nl-tip') || '';
+          tipEl.textContent = lbl + ' ' + sc + '/6' + (tip ? ' – ' + tip : '');
+          tipEl.classList.add('vis');
+        });
+        g.addEventListener('mouseleave', function () { tipEl.classList.remove('vis'); });
+      });
+    }
   }
 
   function startSkrivemeisterenMedKats(kats) {

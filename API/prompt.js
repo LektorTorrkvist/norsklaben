@@ -85,6 +85,8 @@ RADAR – sett heltall 1–6 for hvert av disse fem feltene:
   kjeldebruk    = ${rk.kjeldebruk}
 Hvis et område ikke er relevant (f.eks. kildebruk i en novelle uten kilder): sett 1 og forklar kort, og ta ikke med som del av gjennomsnitt i radaroversikt i elevprofilen.
 
+RADAR_FORKLARING: For hvert av de fem radarfeltene, skriv en kort begrunnelse (maks 12 ord) i feltet "radar_forklaring". Særlig viktig for innhold: forklar om eleven svarte på det oppgaven krever, eller om oppgavetekst mangler.
+
 INNHOLDSDEKNING (eget felt "innholdDekning"):
 - Hvis oppgavetekst er gitt: vurder strengt om eleven svarer på det oppgaven faktisk krever. Gi score 1–6.
 - Hvis oppgavetekst MANGLER: sett "innholdDekning.score": 0 og begrunnelse: "Ingen oppgavetekst gitt." I dette tilfellet skal "radar.innhald" aldri være over 4.
@@ -123,6 +125,8 @@ RADAR – sett heiltal 1–6 for kvart av desse fem felta:
   kjeldebruk    = ${rk.kjeldebruk}
 Om eit område ikkje er relevant (t.d. kjeldebruk i ei novelle utan kjelder): set 1 og forklar kort.
 
+RADAR_FORKLARING: For kvart av dei fem radarfelta, skriv ei kort grunngjeving (maks 12 ord) i feltet "radar_forklaring". Særleg viktig for innhald: forklar om eleven svara på det oppgåva krev, eller om oppgåvetekst manglar.
+
 INNHALDSDEKNING (eige felt "innholdDekning"):
 - Om oppgåvetekst er gjeven: vurder strengt om eleven svarar på det oppgåva faktisk krev. Gje score 1–6.
 - Om oppgåvetekst MANGLAR: set "innholdDekning.score": 0 og grunngje med "Inga oppgåvetekst gjeven." I dette tilfellet skal "radar.innhald" aldri vere over 4.
@@ -160,6 +164,7 @@ function buildUserPrompt(elevtekst, maal = 'nn', oppgavetekst = '') {
   "sammendrag": "...",
   "styrker": ["...", "..."],
   "radar": { "innhald": 0, "struktur": 0, "spraak_stil": 0, "rettskriving": 0, "kjeldebruk": 0 },
+  "radar_forklaring": { "innhald": "...", "struktur": "...", "spraak_stil": "...", "rettskriving": "...", "kjeldebruk": "..." },
   "innholdDekning": { "score": 0, "begrunnelse": "..." },
   "forslag": [
     { "kategori": "nøkkel_fra_liste", "tittel": "...", "forklaring": "...", "eksempel_fra_teksten": "..." }
@@ -169,6 +174,7 @@ function buildUserPrompt(elevtekst, maal = 'nn', oppgavetekst = '') {
   "sammendrag": "...",
   "styrker": ["...", "..."],
   "radar": { "innhald": 0, "struktur": 0, "spraak_stil": 0, "rettskriving": 0, "kjeldebruk": 0 },
+  "radar_forklaring": { "innhald": "...", "struktur": "...", "spraak_stil": "...", "rettskriving": "...", "kjeldebruk": "..." },
   "innholdDekning": { "score": 0, "begrunnelse": "..." },
   "forslag": [
     { "kategori": "nokkel_fra_liste", "tittel": "...", "forklaring": "...", "eksempel_fra_teksten": "..." }
