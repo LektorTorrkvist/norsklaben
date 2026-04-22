@@ -280,6 +280,11 @@ function enqueueAnalyse(payload) {
     updatedAt: Date.now()
   };
 
+  job.promise = new Promise((resolve, reject) => {
+    job.resolve = resolve;
+    job.reject = reject;
+  });
+
   analyseJobs.set(id, job);
   analyseQueue.push(id);
   processAnalyseQueue().catch(err => console.error('[analyseQueue]', err));
@@ -303,9 +308,11 @@ async function processAnalyseQueue() {
       try {
         job.resultat = await analysePayload(job.payload);
         job.status = 'done';
+        if (typeof job.resolve === 'function') job.resolve(job.resultat);
       } catch (e) {
         job.error = String(e.message || e);
         job.status = 'error';
+        if (typeof job.reject === 'function') job.reject(e);
         console.error('[analyser-tekst]', e);
       } finally {
         job.updatedAt = Date.now();
@@ -413,7 +420,7 @@ app.get('/api/analyser-status/:jobbId', (req, res) => {
   res.json(serialiseJob(job));
 });
 
-app.post('/api/analyser-tekst', (req, res) => {
+app.post('/api/analyser-tekst', async (req, res) => {
   try {
     const tekst = String(req.body?.tekst || '').trim();
     const maal  = req.body?.maal === 'bm' ? 'bm' : 'nn';
@@ -428,7 +435,8 @@ app.post('/api/analyser-tekst', (req, res) => {
     }
 
     const job = enqueueAnalyse({ tekst, maal, sjanger, oppgave });
-    return res.status(202).json(serialiseJob(job));
+    const resultat = await job.promise;
+    return res.json(resultat);
   } catch (e) {
     console.error('[analyser-tekst]', e);
     res.status(500).json({ feil: String(e.message || e) });
