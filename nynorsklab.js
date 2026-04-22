@@ -749,11 +749,11 @@ const BANK = [
 /* ── 5. fix – verb ──────────────────────────────── */
 {emne:'verb',emne_label:'Verb – preteritum',type:'fix',vanske:'vanskeleg',
  sporsmal:'Rett dei to verbformene som er feil i teksten.',
- tekst:'Ho tenkte mykje og skrevet eit langt brev. Så ringte ho venninna si.',
- errors:{'skrevet':'skreiv','ringte':'ringde'},
- fasit:'skreiv, ringde',
- regel:'«Å skrive» er sterkt verb: skreiv (preteritum). «Å ringje» er svakt e-verb: ringde.',
- eksempel:'skreiv (pret.), har skrive (perf.) · ringde (pret.), har ringt (perf.)'},
+ tekst:'Ho tenkte lenge og skreiv eit langt brev. Då ringte ho venninna si og spurte kva ho burde gjøre.',
+ errors:{'ringte':'ringde','spurte':'spurde'},
+ fasit:'ringde, spurde',
+ regel:'Svake e-verb som «ringje» og «spyrje/spørje» får preteritumssuffikset -de på nynorsk: ringde, spurde.',
+ eksempel:'ringde (pret.), har ringt · spurde (pret.), har spurt'},
 
 /* ── 6. fix – eigedomsord ──────────────────────── */
 {emne:'eigedomsord',emne_label:'Eigedomsord',type:'fix',vanske:'medium',

@@ -328,7 +328,7 @@ var BANKV2 = [
  q:'Velg rett skrivemåte i hver setning.',
  items:[
   {pre:'Det var en',alt:['kjønn','skjønn'],fasit:'skjønn',post:'solnedgang.'},
-  {pre:'Hun ville ikke',alt:['kjenne','skjenne'],fasit:'kjenne',post:'seg igjen.'},
+  {pre:'Hun ville ikke',alt:['kjenne','sjenne'],fasit:'kjenne',post:'seg igjen.'},
   {pre:'Han tok på seg en ny',alt:['kjorte','skjorte'],fasit:'skjorte',post:'til festen.'},
   {pre:'De ville',alt:['kjøpe','skjøpe'],fasit:'kjøpe',post:'ny bil.'}
  ],
@@ -567,9 +567,9 @@ var BANKV2 = [
 
 {kat:'setningsbygging',kat_label:'Setningsbygging',type:'mc',vanske:'vanskeleg',
  q:'Hva er den beste faglige omskrivingen av: «Klimaendringer er et veldig stort problem og sånn, og det påvirker alle.»?',
- alt:['Klimaendringer er et alvorlig globalt problem som krever handling fra alle.','Klimaendringer er et veldig alvorlig og stort problem.','Klimaendringene er store og alle bør gjøre noe.','Klimaendringer er et problem som påvirker oss.'],
- fasit:'Klimaendringer er et alvorlig globalt problem som krever handling fra alle.',
- regel:'Fjern «og sånn», vage ord og samkobling. Bruk presist og variert ordvalg.',
+ alt:['Klimaendringer er et alvorlig globalt problem som påvirker økosystem, økonomi og folkehelse.','Klimaendringer er et veldig alvorlig og stort problem.','Klimaendringene er store og alle bør gjøre noe.','Klimaendringer er et problem som påvirker oss.'],
+ fasit:'Klimaendringer er et alvorlig globalt problem som påvirker økosystem, økonomi og folkehelse.',
+ regel:'Fjern «og sånn», vage ord og samkobling. Bruk presist og faglig ordvalg uten politisk ladd formulering.',
  eks:'«veldig stort» -> «alvorlig globalt» · «og sånn» -> fjern'},
 
 {kat:'setningsbygging',kat_label:'Setningsbygging',type:'sorter_rekke',vanske:'medium',
@@ -602,11 +602,11 @@ var BANKV2 = [
  eks:'Hun var trøtt, derfor gikk hun hjem.'},
 
 {kat:'bindeord',kat_label:'Bindeord',type:'mc',vanske:'lett',
- q:'Velg rett bindeord: «Det regner, ___ vi går ut likevel.»',
+ q:'Velg rett bindeord: «Det regner, ___ vi går ut.»',
  alt:['men','derfor','fordi','og'],
  fasit:'men',
  regel:'«Men» viser kontrast – to ting som går mot hverandre.',
- eks:'Det regner, men vi går ut likevel.'},
+ eks:'Det regner, men vi går ut.'},
 
 {kat:'bindeord',kat_label:'Bindeord',type:'mc',vanske:'medium',
  q:'Hva er forskjellen mellom «men» og «selv om»?',
@@ -640,17 +640,23 @@ var BANKV2 = [
  q:'Sett ordene i riktig rekkefølge (V2 etter «derfor»).',
  ord:['Derfor','gikk','hun','hjem','tidlig','.'],
  fasit:'Derfor gikk hun hjem tidlig .',
- regel:'Etter «derfor» kommer verbet foran subjektet (V2-regelen).',
+ regel:'Når et adverbial står først, kommer verbet som ledd nummer to. Derfor heter det «Derfor gikk hun …», ikke «Derfor hun gikk …».',
  eks:'Derfor gikk hun … · Likevel møtte han …'},
 
 {kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'medium',
  q:'Sett ordene i riktig rekkefølge (V2 etter «likevel»).',
  ord:['Likevel','møtte','han','opp','på','skolen','.'],
  fasit:'Likevel møtte han opp på skolen .',
- regel:'Etter «likevel» kommer verbet foran subjektet (V2-regelen).',
+ regel:'Dette er V2-regelen i hovedsetninger: Når et adverbial kommer først, må verbet stå som nummer to.',
  eks:'Likevel møtte han … · Dessuten er det …'},
 
-{kat:'bindeord',kat_label:'Bindeord',type:'drag_kolonne',vanske:'medium',
+{kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'vanskeleg',
+ q:'Sett ordene i riktig rekkefølge. «Fordi hun øvde mye» kommer først – hva skjer med resten?',
+ ord:['Fordi','hun','øvde','mye',',','vant','hun','.'],
+ fasit:'Fordi hun øvde mye , vant hun .',
+ regel:'Etter en framskutt leddsetning (som «Fordi hun øvde mye, …») kommer verbet som ledd nummer to i hovedsetningen. Det betyr at «vant» kommer før «hun».',
+ eks:'Fordi hun øvde mye, vant hun. · Da han la ned telefonen, oppnådde han bedre resultater.'},
+
  q:'Sorter bindeordene etter funksjon: årsak eller kontrast?',
  kolonner:['Årsak / konsekvens','Kontrast / motsetning'],
  ord:[
@@ -1016,12 +1022,12 @@ var BANKV2 = [
   {tekst:'Dette beviser definitivt at tiltaket virker.',fasit:0},
   {tekst:'Funnene tyder på at tiltaket kan ha effekt.',fasit:1},
   {tekst:'Alle forskere er enige om dette.',fasit:0},
-  {tekst:'Flere studier indikerer en mulig sammenheng.',fasit:1},
+  {tekst:'Flere studier viser en mulig sammenheng.',fasit:1},
   {tekst:'Det er et faktum at skolen svikter ungdom.',fasit:0},
   {tekst:'Man kan argumentere for at skolen trenger mer ressurser.',fasit:1}
  ],
- regel:'Faglig skriving uttrykker bare det man kan dokumentere. «Tyder på» og «indikerer» viser nøyaktighet.',
- eks:'Blokkert: «beviser definitivt». Passerer: «tyder på, indikerer, kan argumentere for».'},
+ regel:'Faglig skriving uttrykker bare det man kan dokumentere. «Tyder på» og «viser» gir en presis og forsiktig faglig tone.',
+ eks:'Blokkert: «beviser definitivt». Passerer: «tyder på, viser, kan argumentere for».'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'cloze',vanske:'lett',
  q:'Bytt ut «kjempeviktig» med et formelt ord: «Tiltaket var ___ for å redusere frafall i skolen.»',
@@ -1044,9 +1050,9 @@ var BANKV2 = [
  items:[
   {pre:'',alt:['Det er jo klart at','Forskning tyder på at'],fasit:'Forskning tyder på at',post:'sosiale medier påvirker ungdom.'},
   {pre:'Tiltaket har',alt:['supergode resultater','dokumenterte positive effekter'],fasit:'dokumenterte positive effekter',post:'.'},
-  {pre:'',alt:['Masse folk mener at','Flere studier indikerer at'],fasit:'Flere studier indikerer at',post:'problemet øker.'}
+  {pre:'',alt:['Masse folk mener at','Flere studier viser at'],fasit:'Flere studier viser at',post:'problemet øker.'}
  ],
- regel:'Faglig stil: «forskning tyder på», «dokumenterte effekter», «flere studier indikerer».',
+ regel:'Faglig stil: «forskning tyder på», «dokumenterte effekter», «flere studier viser».',
  eks:'Uformelt → formelt: «jo klart» → «forskning tyder på»'},
 
 /* ═══════════════════════════════════════════════════
@@ -1200,13 +1206,13 @@ var BANKV2 = [
  regel:'Referansekjeder bruker pronomen, synonym og overbegrep til å binde teksten sammen uten gjentagelse.',
  eks:'isbjørn → dyret · plastproblem → denne utfordringen'},
 
-{kat:'referansekjede',kat_label:'Referansekjede',type:'omskriv',vanske:'vanskeleg',
- q:'Skriv om avsnittet slik at «ungdom» bare brukes én gang.',
+{kat:'referansekjede',kat_label:'Referansekjede',type:'omskriv',vanske:'medium',
+ q:'Skriv om avsnittet som en kort fagtekst der du varierer ordvalget.',
  tekst:'Ungdom bruker mye tid på sosiale medier. Ungdom blir påvirket av det de ser. Ungdom kan utvikle dårlig selvbilde. Ungdom trenger veiledning fra voksne.',
- instruksjon:'Bruk pronomen, synonym og overbegrep i stedet for gjentagelse.',
- maa_ha:['de','generasjonen'],
+ instruksjon:'Tenk at du skriver for klassen. Bruk pronomen, synonymer eller overbegrep i stedet for å gjenta samme ordet.',
+ maa_ha:[],
  maa_ikkje_ha:[],
- regel:'Varier med pronomen (de), synonym (tenåringene) og overbegrep (generasjonen / de unge).',
+ regel:'Det finnes flere gode løsninger. Varier med pronomen, synonymer og overbegrep for å skape flyt i teksten.',
  eks:'Ungdom → de → tenåringene → denne generasjonen → de unge'},
 
 /* ═══════════════════════════════════════════════════
@@ -1263,7 +1269,7 @@ var BANKV2 = [
  paastandar:[
   {tekst:'Innledningen bør presentere temaet og fange interessen til leseren.',sann:true},
   {tekst:'Man kan ta opp nye argumenter i avslutningen.',sann:false},
-  {tekst:'Avsnitt i hoveddelen bør komme i vilkårlig rekkefølge.',sann:false},
+  {tekst:'Avsnitt i hoveddelen kan ordnes kronologisk, viktigst først eller fra generelt til spesifikt.',sann:true},
   {tekst:'Hvert avsnitt bør ha en temasetning.',sann:true},
   {tekst:'Avslutningen bør oppsummere og konkludere.',sann:true}
  ],
@@ -1428,7 +1434,7 @@ var BANKV2 = [
 {kat:'fagartikkel',kat_label:'Fagartikkel',type:'cloze',vanske:'lett',
  q:'Skriv inn riktig ord: «___ Helsedirektoratet (2023) har fysisk aktivitet minket blant ungdom.»',
  hint:'Et ord som viser til en navngitt kilde.',
- fasit:'Ifølge',fasit_v:['Ifølge','ifølge','I følge','Ifølgje','ifølgje'],
+ fasit:'Ifølge',fasit_v:['Ifølge','ifølge'],
  regel:'«Ifølge» + kilde innleder et kildefestet argument i fagprosa.',
  eks:'Ifølge SSB … / Ifølge Helsedirektoratet … / Ifølge forskerne …'},
 
@@ -1519,7 +1525,7 @@ var BANKV2 = [
 {kat:'debattinnlegg',kat_label:'Debattinnlegg',type:'cloze',vanske:'lett',
  q:'Skriv inn riktig ord: «Vi ___ kommunepolitikerne til å øke budsjettet for skolebibliotek.»',
  hint:'Et verb som betyr å be noen om å handle.',
- fasit:'oppfordrer',fasit_v:['oppfordrer','ber','henstiller til'],
+ fasit:'oppfordrer',fasit_v:['oppfordrer','ber'],
  regel:'«Oppfordrer» er et vanlig verb i oppfordring/avslutning av debattinnlegg.',
  eks:'Vi oppfordrer / Vi ber / Vi krever – typiske avslutningsverb i debatt'},
 
@@ -1547,12 +1553,14 @@ var BANKV2 = [
   {tekst:'Plast i havet – en økende trussel',fasit:0},
   {tekst:'Ting om plast og sånn',fasit:1},
   {tekst:'Ungdom og søvn: Hvordan skjermen stjeler nattero',fasit:0},
+  {tekst:'Om sosiale medier og søvn',fasit:1},
+  {tekst:'Plast i havet – et voksende problem',fasit:0},
   {tekst:'Min artikkel om et tema',fasit:1},
   {tekst:'KI på skolen: Mulighet eller trussel?',fasit:0},
-  {tekst:'Artikkel 1',fasit:1}
+  {tekst:'Fagartikkelen min om kunstig intelligens',fasit:1}
  ],
  regel:'Gode overskrifter er presise, informative og fengende. Dårlige er vage, uformelle eller intetsigende.',
- eks:'God: «Plast i havet – en økende trussel» · Dårlig: «Ting om plast og sånn»'},
+ eks:'God: «Ungdom og søvn: Hvordan skjermen stjeler nattero» · Dårlig: «Om sosiale medier og søvn»'},
 
 {kat:'overskrift_ingress',kat_label:'Overskrift og ingress',type:'fillsel',vanske:'medium',
  q:'Velg den beste overskriften for hver tekst.',
@@ -1584,13 +1592,13 @@ var BANKV2 = [
  regel:'Overskrift: kort, presis, fengende. Ingress: oppsummerer det viktigste. Begge gir leseren lyst til å lese videre.',
  eks:'Overskrift med spørsmål: «Hvorfor sover ungdom for lite?» Ingress: «Ny forskning viser at …»'},
 
-{kat:'overskrift_ingress',kat_label:'Overskrift og ingress',type:'omskriv',vanske:'vanskeleg',
+{kat:'overskrift_ingress',kat_label:'Overskrift og ingress',type:'omskriv',vanske:'medium',
  q:'Skriv en bedre overskrift og en bedre ingress for denne fagartikkelen.',
  tekst:'Tekst om ungdom. Ungdom bruker mye telefon. Det er kanskje ikke bra.',
- instruksjon:'Gjør overskriften fengende og ingressen saklig med minst én faktareferanse.',
+ instruksjon:'Tenk at du skriver for skoleavisa. Lag en overskrift på 4–8 ord og en ingress på 1–2 saklige setninger med minst én faktareferanse.',
  maa_ha:['ungdom'],
  maa_ikkje_ha:['kanskje','tekst om'],
- regel:'Overskrift: konkret og fengende. Ingress: kort, saklig, informativ.',
+ regel:'Overskrift: konkret og fengende. Ingress: kort, saklig og informativ.',
  eks:'«Skjermtid og ungdom: Hva sier forskningen?» + «Ny undersøkelse viser at …»'},
 
 {kat:'overskrift_ingress',kat_label:'Overskrift og ingress',type:'cloze',vanske:'medium',
@@ -2005,11 +2013,11 @@ var BANKV2 = [
 
 {kat:'djupneoppgaver',kat_label:'Langsvar og refleksjonsoppgaver',type:'open',vanske:'vanskeleg',
  q:'Skriv et drøftende miniinnlegg (10-30 min): Bør kunstig intelligens være tillatt i norsk skriftlig arbeid?',
- hint:'Presenter to tydelige argumenter for og to mot, og ta stilling til slutt.',
- regel:'En god drøfting viser flere perspektiver før konklusjon. Bruk koblingsord som «på den ene siden», «samtidig» og «derfor».',
+ hint:'Presenter to tydelige argumenter for og to mot. Du bestemmer selv hvilken konklusjon du lander på – det finnes ikke ett riktig svar.',
+ regel:'En god drøfting viser flere perspektiver før konklusjon. Bruk koblingsord som «på den ene siden», «samtidig» og «derfor». Hvilken konklusjon du velger, teller ikke – hvordan du argumenterer, gjør det.',
  eksempel_svak:'KI kan være bra, men også litt dumt. Jeg synes det kommer an på.',
- eksempel_god:'På den ene siden kan KI støtte elever i idéutvikling og struktur, særlig i tidlig skrivefase. Samtidig kan ukritisk bruk svekke egen språkmestring og kildekritikk. Derfor bør KI være tillatt som støtteverktøy, men med krav om åpen bruk og tydelig elevansvar.',
- eks:'Gjør argumentene konkrete med eksempler fra skolearbeid og skriv en tydelig konklusjon.'},
+ eksempel_god:'På den ene siden kan KI støtte elever i idéutvikling og struktur, særlig i tidlig skrivefase. Samtidig kan ukritisk bruk svekke egen språkmestring og kildekritikk. Her er det gode argumenter på begge sider – og det er nettopp det som gjør spørsmålet til en ekte drøfting.',
+ eks:'Gjør argumentene konkrete med eksempler fra skolearbeid. Konklusjonen din kan gå begge veier – det viktige er at den er begrunnet.'},
 
 /* ═══════════════════════════════════════════════════
    25. BRUKE EKSEMPLER  (8 oppgaver, kun BM)
@@ -2188,20 +2196,20 @@ var BANKV2 = [
  eks:'kjøpe (kj-lyd) · kjenne (kj-lyd) · skjorte (skj-lyd)'},
 
 {kat:'bindeord',kat_label:'Bindeord',type:'fix',vanske:'medium',
- q:'Rett de tre feil brukte bindeordene.',
+ q:'Bytt ut de tre minst presise bindeordene.',
  tekst:'Eleven øvde mye, så han fikk dårlig karakter på prøven. Han var skuffet, og han bestemte seg for å prøve igjen. Dessuten leste han pensum på nytt og klarte det bedre neste gang.',
  errors:{'mye, så':'mye, men','skuffet, og':'skuffet, derfor','Dessuten':'Deretter'},
  fasit:'mye, men · skuffet, derfor · Deretter',
- regel:'Bindeord signaliserer forholdet mellom setninger: «men» = motsetning, «derfor» = årsak–virkning, «deretter» = rekkefølge.',
+ regel:'Her finnes det flere mulige bindeord, men «men», «derfor» og «deretter» er de mest presise valgene fordi de viser motsetning, årsak–virkning og rekkefølge tydelig.',
  eks:'Han øvde, men fikk dårlig resultat (motsetning) · Han var skuffet, derfor prøvde han igjen (virkning)'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'fix',vanske:'medium',
  q:'Bytt ut de fire uformelle uttrykkene med saklig språk.',
- tekst:'Undersøkelser viser at mange drar til syden om sommeren. Det er dritkult med sol og varme. Turister chiller på stranda og tar selfier. Konklusjonen er at ferie liksom er viktig for helsa.',
- errors:{'dritkult':'svært populært','chiller':'slapper av','selfier':'bilder av seg selv','liksom':'åpenbart'},
- fasit:'svært populært · slapper av · bilder av seg selv · åpenbart',
+ tekst:'Undersøkelser viser at mange drar til syden om sommeren. Det er dritkult med sol og varme. Turister chiller på stranda og legger ut sykt mange bilder. Konklusjonen er at ferie liksom er viktig for helsa.',
+ errors:{'dritkult':'svært populært','chiller':'slapper av','sykt mange':'svært mange','liksom':'åpenbart'},
+ fasit:'svært populært · slapper av · svært mange · åpenbart',
  regel:'Sakprosa bruker nøytralt, formelt språk. Slang og muntlige uttrykk hører hjemme i uformelle tekster.',
- eks:'«dritkult» → «svært populært» · «chiller» → «slapper av» · «liksom» → «åpenbart»'},
+ eks:'«dritkult» → «svært populært» · «chiller» → «slapper av» · «sykt mange» → «svært mange»'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
  q:'Rett de tre og/å-feilene.',
