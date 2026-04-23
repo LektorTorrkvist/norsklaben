@@ -73,10 +73,19 @@
     error: 'Noe gikk galt. Sjekk at API-et kjører.',
     short: 'Teksten er kort – analysen blir bedre med en lengre tekst.',
     gemma4Info: 'Lokal LLM: Gemma 4',
-    etaPrefix: 'Analyserer med Gemma 4 –',
-    etaSuffix: 'sek. igjen …',
+    etaPrefix: 'Analyserer med Gemma 4 – ca.',
+    etaSuffix: 'sek. igjen (estimat) …',
     queueWaiting: 'Du er nummer {n} i køen. Det startar straks …',
     queueNext: 'Du er neste i køen …',
+    runningMsgs: [
+      'Magien skjer i bakgrunnen – Gemma 4 leser teksten din ord for ord …',
+      'AI-en studerer setningsbygging og sammenheng nøye …',
+      'Vurderer ordvalg, stil og språklig variasjon …',
+      'Sammenligner mot læreplanen i norsk …',
+      'Bygger den personlige elevprofilen din …',
+      'Det er verdt å vente – grundig vurdering tar tid …',
+      'Velger ut de mest treffende øvingene til deg …'
+    ],
     overtimeMsgs: [
       'Tar litt lenger enn ventet – AI-en leser nøye …',
       'Bygger elevprofilen din …',
@@ -120,10 +129,19 @@
     error: 'Noko gjekk gale. Sjekk at API-et køyrer.',
     short: 'Teksten er kort – analysen blir betre med ein lengre tekst.',
     gemma4Info: 'Lokal LLM: Gemma 4',
-    etaPrefix: 'Analyserer med Gemma 4 –',
-    etaSuffix: 'sek. att …',
+    etaPrefix: 'Analyserer med Gemma 4 – om lag',
+    etaSuffix: 'sek. att (estimat) …',
     queueWaiting: 'Du er nummer {n} i køen. Det startar straks …',
     queueNext: 'Du er neste i køen …',
+    runningMsgs: [
+      'Magien skjer i bakgrunnen – Gemma 4 les teksten din ord for ord …',
+      'AI-en studerer setningsbygging og samanheng nøye …',
+      'Vurderer ordval, stil og språkleg variasjon …',
+      'Samanliknar mot læreplanen i norsk …',
+      'Byggjer den personlege elevprofilen din …',
+      'Det er verdt å vente – grundig vurdering tek tid …',
+      'Vel ut dei mest treffande øvingane til deg …'
+    ],
     overtimeMsgs: [
       'Tek litt lenger enn venta – AI-en les nøye …',
       'Byggjer elevprofilen din …',
@@ -243,6 +261,9 @@
 '.nl-ta-model-info{display:flex;align-items:center;gap:.45rem;margin-top:.5rem;font-size:.82rem;color:#6b5a3a;}' +
 '.nl-ta-model-dot{width:8px;height:8px;border-radius:50%;background:#2E6B4F;flex-shrink:0;display:inline-block;}' +
 '.nl-ta-model-dot--pulse{animation:nl-ta-pulse 1.4s ease-in-out infinite;}' +
+'.nl-ta-model-info{flex-wrap:wrap;}' +
+'.nl-ta-rotmsg{display:inline-block;width:100%;margin-top:.25rem;color:#7b5fb1;font-style:italic;font-size:.82rem;animation:nl-ta-fade .5s ease-in;}' +
+'@keyframes nl-ta-fade{from{opacity:0;}to{opacity:1;}}' +
 '@keyframes nl-ta-pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(1.3);}}';
 
   function injectCss() {
@@ -938,23 +959,29 @@
     var queuePos = 0;
     var phase = 'pending';   // 'pending' (i kø) | 'running' | 'overtime'
     var overtimeIdx = 0;
+    var runningIdx = 0;
+    var lastRotateAt = Date.now();
     var modelInfo = host.querySelector('[data-nl-ta-model-info]');
 
     function renderProgress() {
       if (!modelInfo) return;
-      var html = '<span class="nl-ta-model-dot nl-ta-model-dot--pulse"></span> ';
+      var dot = '<span class="nl-ta-model-dot nl-ta-model-dot--pulse"></span> ';
       if (phase === 'pending' && queuePos > 1) {
-        html += esc(T.queueWaiting.replace('{n}', String(queuePos - 1)));
-      } else if (phase === 'overtime') {
-        var msgs = T.overtimeMsgs || [];
-        var msg = msgs[overtimeIdx % Math.max(1, msgs.length)] || '';
-        html += esc(msg);
-      } else {
-        var elapsed = Math.round((Date.now() - etaStart) / 1000);
-        var remaining = Math.max(0, etaTotal - elapsed);
-        html += esc(T.etaPrefix) + ' <strong>' + remaining + '</strong> ' + esc(T.etaSuffix);
+        modelInfo.innerHTML = dot + esc(T.queueWaiting.replace('{n}', String(queuePos - 1)));
+        return;
       }
-      modelInfo.innerHTML = html;
+      if (phase === 'overtime') {
+        var oMsgs = T.overtimeMsgs || [];
+        var oMsg = oMsgs[overtimeIdx % Math.max(1, oMsgs.length)] || '';
+        modelInfo.innerHTML = dot + esc(oMsg);
+        return;
+      }
+      var elapsed = Math.round((Date.now() - etaStart) / 1000);
+      var remaining = Math.max(0, etaTotal - elapsed);
+      var rMsgs = T.runningMsgs || [];
+      var rMsg = rMsgs.length ? rMsgs[runningIdx % rMsgs.length] : '';
+      modelInfo.innerHTML = dot + esc(T.etaPrefix) + ' <strong>' + remaining + '</strong> ' + esc(T.etaSuffix) +
+        (rMsg ? '<br><span class="nl-ta-rotmsg">' + esc(rMsg) + '</span>' : '');
     }
 
     // Poll kø-status kvart 2. sek.
@@ -966,23 +993,32 @@
           if (queuePos <= 1 && phase === 'pending') {
             phase = 'running';
             etaStart = Date.now(); // resett ETA når vi faktisk startar
+            lastRotateAt = etaStart;
+            runningIdx = 0;
           }
           renderProgress();
         })
         .catch(function () {});
     }, 2000);
 
-    // Tick kvart sek for nedteljing/overtime-rotasjon
+    // Tick kvart sek for nedteljing/rotasjon
     var etaInterval = setInterval(function () {
+      var now = Date.now();
       if (phase === 'running') {
-        var elapsed = Math.round((Date.now() - etaStart) / 1000);
+        var elapsed = Math.round((now - etaStart) / 1000);
         if (elapsed >= etaTotal) {
           phase = 'overtime';
           overtimeIdx = 0;
+          lastRotateAt = now;
+        } else if (now - lastRotateAt >= 5000) {
+          runningIdx++;
+          lastRotateAt = now;
         }
       } else if (phase === 'overtime') {
-        // Roter melding kvart 6. sek
-        if (((Date.now() - etaStart) / 1000) % 6 < 1) overtimeIdx++;
+        if (now - lastRotateAt >= 6000) {
+          overtimeIdx++;
+          lastRotateAt = now;
+        }
       }
       renderProgress();
     }, 1000);

@@ -1,4 +1,4 @@
-(function() {
+﻿(function() {
   'use strict';
 
   var ANALYSIS_KEY = 'norsklaben-elevprofil-v1';
@@ -779,6 +779,29 @@
       }).join('');
     }
 
+    function aiStrengthRows(analyses) {
+      var seen = {};
+      var items = [];
+      (analyses || []).forEach(function(a) {
+        var arr = Array.isArray(a && a.strengths) ? a.strengths : [];
+        arr.forEach(function(s) {
+          var txt = String(s || '').trim();
+          if (!txt) return;
+          var key = txt.toLowerCase().slice(0, 80);
+          if (seen[key]) return;
+          seen[key] = true;
+          items.push({ text: txt, ts: a.ts, title: a.title || '' });
+        });
+      });
+      if (!items.length) return '';
+      var top = items.slice(0, 4);
+      var rows = top.map(function(it) {
+        var meta = (it.title ? escapeHtml(it.title) + ' · ' : '') + escapeHtml(formatDate(it.ts));
+        return '<div class="ep-ai-strength">' + escapeHtml(it.text) + '<span class="ep-ai-strength-meta">' + meta + '</span></div>';
+      }).join('');
+      return '<div class="ep-ai-strengths"><p class="ep-ai-strengths-title">Fra tekstanalysene dine</p>' + rows + '</div>';
+    }
+
     function recommendationRows(list) {
       if (!list.length) return '<div class="ep-empty">Ingen tydelige anbefalinger ennå. Lim inn en oppgavetekst eller fullfør noen økter først.</div>';
       return list.map(function(item) {
@@ -863,7 +886,7 @@
           (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES, kildebrukIsBorrowed ? [5] : []) + (kildebrukIsBorrowed ? '<div class="ep-radar-note">* Kildebruk: snittet er regnet ut fra ' + kildebrukCount + ' av ' + radarCount + ' tekster. Tekster uten krav til kildebruk (f.eks. fortellinger) er holdt utenfor, slik at aksen ikke blir trukket ned av irrelevant data.</div>' : '') : '<div class="ep-radar-empty">Radardiagrammet vises når tekster har blitt vurdert i Tekstsjekk.</div>') +
         '</div>' +
         '<div class="ep-strengths-weak">' +
-          '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Styrker</h3><span>Basert på ' + escapeHtml(String(insights.totalAnalyses)) + ' analyserte tekster, koblet mot treffprosent i matchende oppgaver.</span></div><span class="ep-sw-icon">🌟</span></div>' + statRows(strengths, 'Ingen styrkedata fra tekstanalyser ennå. Analyser flere tekster først.', 'ok') + '</div>' +
+          '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Styrker</h3><span>Basert på ' + escapeHtml(String(insights.totalAnalyses)) + ' analyserte tekster, koblet mot treffprosent i matchende oppgaver.</span></div><span class="ep-sw-icon">🌟</span></div>' + statRows(strengths, 'Ingen styrkedata fra tekstanalyser ennå. Analyser flere tekster først.', 'ok') + aiStrengthRows(includedAnalyses) + '</div>' + 
           '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Svakheter</h3><span>Basert på kategorier som går igjen i tekstanalysene, med lav treffprosent eller manglende øvingsdata.</span></div><span class="ep-sw-icon">🎯</span></div>' + statRows(weaknesses, 'Ingen svakhetsdata fra tekstanalyser ennå.', 'warn') + '</div>' +
         '</div>' +
       '</div>' +

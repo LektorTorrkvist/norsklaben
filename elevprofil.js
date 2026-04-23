@@ -712,6 +712,29 @@
       }).join('');
     }
 
+    function aiStrengthRows(analyses) {
+      var seen = {};
+      var items = [];
+      (analyses || []).forEach(function(a) {
+        var arr = Array.isArray(a && a.strengths) ? a.strengths : [];
+        arr.forEach(function(s) {
+          var txt = String(s || '').trim();
+          if (!txt) return;
+          var key = txt.toLowerCase().slice(0, 80);
+          if (seen[key]) return;
+          seen[key] = true;
+          items.push({ text: txt, ts: a.ts, title: a.title || '' });
+        });
+      });
+      if (!items.length) return '';
+      var top = items.slice(0, 4);
+      var rows = top.map(function(it) {
+        var meta = (it.title ? escapeHtml(it.title) + ' · ' : '') + escapeHtml(formatDate(it.ts));
+        return '<div class="ep-ai-strength">' + escapeHtml(it.text) + '<span class="ep-ai-strength-meta">' + meta + '</span></div>';
+      }).join('');
+      return '<div class="ep-ai-strengths"><p class="ep-ai-strengths-title">Frå tekstanalysane dine</p>' + rows + '</div>';
+    }
+
     function recommendationRows(list) {
       if (!list.length) return '<div class="ep-empty">Ingen tydelege tilrådingar enno. Lim inn ein oppgåvetekst eller fullfør nokre økter først.</div>';
       return list.map(function(item) {
@@ -784,7 +807,7 @@
           (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES, kildebrukIsBorrowed ? [5] : []) + (kildebrukIsBorrowed ? '<div class="ep-radar-note">* Kjeldebruk: snittet er rekna ut frå ' + kildebrukCount + ' av ' + radarCount + ' tekstar. Tekstar utan krav til kjeldebruk (t.d. forteljingar) er haldne utanfor, slik at aksen ikkje blir trekt ned av irrelevant data.</div>' : '') : '<div class="ep-radar-empty">Radardiagrammet kjem når tekstar har blitt vurderte i Tekstsjekk.</div>') +
         '</div>' +
         '<div class="ep-strengths-weak">' +
-          '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Styrkar</h3><span>Basert på ' + escapeHtml(String(insights.totalAnalyses)) + ' analyserte tekstar, kopla mot treffprosent i samsvarande oppgåver.</span></div><span class="ep-sw-icon">🌟</span></div>' + statRows(strengths, 'Ingen styrkedata frå tekstanalysar enno. Analyser fleire tekstar først.', 'ok') + '</div>' +
+          '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Styrkar</h3><span>Basert på ' + escapeHtml(String(insights.totalAnalyses)) + ' analyserte tekstar, kopla mot treffprosent i samsvarande oppgåver.</span></div><span class="ep-sw-icon">🌟</span></div>' + statRows(strengths, 'Ingen styrkedata frå tekstanalysar enno. Analyser fleire tekstar først.', 'ok') + aiStrengthRows(includedAnalyses) + '</div>' +
           '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Svakheiter</h3><span>Basert på kategoriar som går att i tekstanalysane, med låg treffprosent eller manglande øvingsdata.</span></div><span class="ep-sw-icon">🎯</span></div>' + statRows(weaknesses, 'Ingen svakheitsdata frå tekstanalysar enno.', 'warn') + '</div>' +
         '</div>' +
       '</div>' +

@@ -4735,6 +4735,38 @@ tr:nth-child(even) td { background: var(--bg); }
 .ep-stat-row.ok .ep-stat-row-pct { color: #1b6a45; }
 .ep-stat-row.warn .ep-stat-row-pct { color: #8a5a1e; }
 
+/* AI-styrker frå Tekstsjekk (sitater) */
+.ep-ai-strengths {
+  margin-top: .75rem;
+  padding-top: .65rem;
+  border-top: 1px dashed #d2ead7;
+  display: grid;
+  gap: .45rem;
+}
+.ep-ai-strengths-title {
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #1b6a45;
+  font-weight: 700;
+  margin: 0 0 .15rem;
+}
+.ep-ai-strength {
+  background: #f4fbf5;
+  border-left: 3px solid #2E6B4F;
+  border-radius: 6px;
+  padding: .45rem .65rem;
+  font-size: .88rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+.ep-ai-strength-meta {
+  display: block;
+  font-size: .72rem;
+  color: var(--tmuted);
+  margin-top: .2rem;
+}
+
 /* ═══════ SONE 3: TILRÅDINGAR ═══════ */
 .ep-reco-intro {
   background: linear-gradient(135deg, #fdf8ee 0%, #fdf4e0 100%);
