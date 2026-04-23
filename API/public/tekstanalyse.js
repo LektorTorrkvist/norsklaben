@@ -40,7 +40,7 @@
 
   var T = MAAL === 'bm' ? {
     title: 'Elevprofil',
-    intro: 'Få en grundig analyse av en tekst, en personlig elevprofil og konkrete øvingsoppgaver – basert på din skrivekompetanse.',
+    intro: 'Få en grundig analyse av en tekst, en personlig elevprofil og konkrete øvingsoppgaver – basert på din skrivekompetanse. Elevprofilen viser hva du mestrer i skriving og hva du bør øve mer på, slik at du kan jobbe målrettet med de riktige oppgavene.',
     pathsTitle: 'Det finnes to måter å lage en elevprofil på:',
     path1Title: 'Velg en oppgave fra Skrivemesteren',
     path1Desc: 'Velg en åpen oppgave fra nedtrekksmenyen, skriv et svar, og lim det inn nedenfor.',
@@ -112,7 +112,7 @@
     ]
   } : {
     title: 'Elevprofil',
-    intro: 'Få ein grundig analyse av ein tekst, ein personleg elevprofil og konkrete øvingsoppgåver – basert på din skrivekompetanse.',
+    intro: 'Få ein grundig analyse av ein tekst, ein personleg elevprofil og konkrete øvingsoppgåver – basert på din skrivekompetanse. Elevprofilen viser kva du meistrar i skriving og kva du bør øve meir på, slik at du kan jobbe målretta med dei rette oppgåvene.',
     pathsTitle: 'Det finst to måtar å lage ein elevprofil på:',
     path1Title: 'Vel ei oppgåve frå Skrivemeisteren',
     path1Desc: 'Vel ei open oppgåve frå nedtrekksmenyen, skriv eit svar, og lim det inn nedanfor.',
@@ -899,10 +899,6 @@
             '<li><span class="nl-ta-paths-num">2</span><div><strong>' + esc(T.path2Title) + '</strong><span>' + esc(T.path2Desc) + '</span></div></li>' +
           '</ol>' +
         '</div>' +
-        '<div class="nl-ta-actions nl-ta-actions-top">' +
-          '<button type="button" class="nl-ta-btn nl-ta-btn-ghost" data-nl-ta-open-last="1">' + esc(T.openLast) + '</button>' +
-          '<button type="button" class="nl-ta-btn nl-ta-btn-ghost" data-nl-ta-show-history="1">' + esc(T.history) + '</button>' +
-        '</div>' +
         '<div class="nl-ta-storage-note" data-nl-ta-storage-note></div>' +
         '<div class="nl-ta-meta">' +
           '<div class="nl-ta-meta-field">' +
@@ -939,6 +935,8 @@
         '</section>' +
         '<div class="nl-ta-actions">' +
           '<button type="button" class="nl-ta-btn" data-nl-ta-go="1">' + esc(T.analyze) + '</button>' +
+          '<button type="button" class="nl-ta-btn nl-ta-btn-ghost" data-nl-ta-open-last="1">' + esc(T.openLast) + '</button>' +
+          '<button type="button" class="nl-ta-btn nl-ta-btn-ghost" data-nl-ta-show-history="1">' + esc(T.history) + '</button>' +
         '</div>' +
         '<div class="nl-ta-model-info" data-nl-ta-model-info>' +
           '<span class="nl-ta-model-dot"></span> ' + esc(T.gemma4Info) +
