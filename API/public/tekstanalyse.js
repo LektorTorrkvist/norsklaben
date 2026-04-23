@@ -51,7 +51,7 @@
     maalLabel: 'Målform',
     sjangerLabel: 'Sjanger',
     sjangerPlaceholder: 'Velg sjanger (valgfritt)',
-    oppgaveLabel: 'Oppgavetekst (oppgavebeskrivelsen fra læreren – valgfritt, men anbefalt)',
+    oppgaveLabel: 'Oppgavetekst (valgfritt, men anbefalt)',
     oppgavePlaceholder: 'Lim inn oppgavebeskrivelsen du fikk fra læreren – da kan AI-en vurdere om innholdet treffer.',
     oppgaveHint: 'Uten oppgavetekst settes innhold til maks 4 av 6 i radardiagrammet.',
     oppgavePickLabel: 'Vil du teste skriveprofilen din? Velg en åpen oppgave fra Skrivemesteren',
@@ -123,7 +123,7 @@
     maalLabel: 'Målform',
     sjangerLabel: 'Sjanger',
     sjangerPlaceholder: 'Vel sjanger (valfritt)',
-    oppgaveLabel: 'Oppgåvetekst (oppgåvebeskrivinga frå læraren – valfritt, men tilrådd)',
+    oppgaveLabel: 'Oppgåvetekst (valfritt, men tilrådd)',
     oppgavePlaceholder: 'Lim inn oppgåvebeskrivinga du fekk frå læraren – då kan AI-en vurdere om innhaldet treff.',
     oppgaveHint: 'Utan oppgåvetekst blir innhald sett til maks 4 av 6 i radardiagrammet.',
     oppgavePickLabel: 'Vil du teste skriveprofilen din? Vel ei open oppgåve frå Skrivemeisteren',
@@ -250,7 +250,7 @@
 '.nl-ta-paths-list li > div{display:flex;flex-direction:column;gap:.1rem;line-height:1.4;}' +
 '.nl-ta-paths-list strong{color:#1A3D2B;font-size:.95rem;}' +
 '.nl-ta-paths-list span{color:#3a4a3f;font-size:.88rem;}' +
-'.nl-ta-paths-num{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:1.65rem;height:1.65rem;border-radius:50%;background:#1A3D2B;color:#fff;font:700 .9rem "Source Sans 3",sans-serif;}' +
+'.nl-ta-paths-num{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:1.65rem;height:1.65rem;border-radius:50%;background:#E2EFE6;color:#1A3D2B;border:1px solid #BBD3C2;font:700 .9rem "Source Sans 3",sans-serif;}' +
 '.nl-ta-step{margin:1.1rem 0 .25rem;padding-top:.85rem;border-top:1px solid #ece5d4;}' +
 '.nl-ta-step:first-of-type{border-top:none;padding-top:.4rem;}' +
 '.nl-ta-step-title{display:flex;align-items:center;gap:.55rem;font-family:"Playfair Display",serif;font-size:1.05rem;color:#1A3D2B;margin:0 0 .65rem;font-weight:600;}' +
@@ -936,7 +936,6 @@
           '<button type="button" class="nl-ta-fbtn nl-ta-fbtn-u" data-nl-ta-fmt="underline" title="' + esc(T.formatUnderlineTitle) + '" aria-label="' + esc(T.formatUnderline) + '">U</button>' +
         '</div>' +
         '<div id="nl-ta-input" class="nl-ta-richinput" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" data-placeholder="' + esc(T.placeholder) + '" data-empty="1"></div>' +
-        '<p class="nl-ta-hint">' + esc(T.richHint) + '</p>' +
         '</section>' +
         '<div class="nl-ta-actions">' +
           '<button type="button" class="nl-ta-btn" data-nl-ta-go="1">' + esc(T.analyze) + '</button>' +
