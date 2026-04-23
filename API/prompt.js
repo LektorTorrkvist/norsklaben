@@ -41,21 +41,31 @@ function rubrikk(maal) {
   // Eleven ser ikkje skalaen som karakter, men som radar i profilen sin.
   return maal === 'bm'
     ? `RADAR-SKALA 1–6 (intern diagnose – kalibrert for 8.–10. trinn):
-  6 = framifrå tekst fra en ungdomsskoleelev. Sjelden, men oppnåelig.
-  5 = svært god ungdomsskoletekst. Tydelig over snittet for trinnet.
-  4 = solid tekst på forventet nivå.
-  3 = noe under forventet. Flere svakheter.
-  2 = svak. Store mangler.
+  6 = framifrå tekst på trinnet. Helhetlig, tydelig og engasjerende. Få eller ingen vesentlige feil.
+  5 = svært god ungdomsskoletekst. Treffer godt på alle krav, mindre svakheter eller småfeil som ikke trekker ned helhetsinntrykket.
+  4 = solid tekst på forventet nivå. Klar struktur og innhold, men noen tydelige svakheter.
+  3 = noe under forventet. Flere svakheter, men kommunikasjonen kommer fram.
+  2 = svak. Store mangler i innhold, struktur eller språk.
   1 = svært svak / nesten ikke besvart.
-Bruk hele skalaen. Belønn det eleven faktisk mestrer: en 10.-elev som leverer en helhetlig, tydelig tekst med få mønstrede feil skal kunne få 5. Vær ærlig, men ikke kunstig streng – realistiske tall som gjenspeiler trinnet motiverer mer enn systematisk underrating.`
+
+VIKTIGE PRINSIPP for vurderingen:
+- Belønn det eleven faktisk mestrer. En elev som svarer utfyllende på alle punkt i oppgavebeskrivelsen og leverer en helhetlig, engasjerende tekst SKAL få 5 eller 6 på innhold – også om språket har enkeltfeil.
+- Enkeltfeil som i liten grad påvirker forståelsen skal trekke LITE ned. Trekk for mønster (3+ samme type feil) eller for feil som faktisk hindrer lesingen.
+- Skill mellom aksene: høy innholdsdekning kan godt gi 6 på innhold selv om rettskriving står på 4.
+- Realistisk og oppmuntrende. Systematisk underrating motiverer ikke 13–16-åringer.`
     : `RADAR-SKALA 1–6 (intern diagnose – kalibrert for 8.–10. trinn):
-  6 = framifrå tekst frå ein ungdomsskuleelev. Sjeldan, men oppnåeleg.
-  5 = svært god ungdomsskuletekst. Tydeleg over snittet for trinnet.
-  4 = solid tekst på forventa nivå.
-  3 = litt under forventa. Fleire svakheiter.
-  2 = svak. Store manglar.
-  1 = svært svak / nesten ikkje besvart.
-Bruk heile skalaen. Belønn det eleven faktisk meistrar: ein 10.-elev som leverer ein heilskapleg, tydeleg tekst med få mønstra feil skal kunne få 5. Ver ærleg, men ikkje kunstig streng – realistiske tal som speglar trinnet motiverer meir enn systematisk underrating.`;
+  6 = framifrå tekst på trinnet. Heilskapleg, tydeleg og engasjerande. Få eller ingen vesentlege feil.
+  5 = svært god ungdomsskuletekst. Treff godt på alle krav, mindre svakheiter eller småfeil som ikkje trekkjer ned heilskapsinntrykket.
+  4 = solid tekst på forventa nivå. Klar struktur og innhald, men nokre tydelege svakheiter.
+  3 = noko under forventa. Fleire svakheiter, men kommunikasjonen kjem fram.
+  2 = svak. Store manglar i innhald, struktur eller språk.
+  1 = svært svak / nesten ikkje svart.
+
+VIKTIGE PRINSIPP for vurderinga:
+- Belønn det eleven faktisk meistrar. Ein elev som svarar utfyllande på alle punkt i oppgåvebeskrivinga og leverer ein heilskapleg, engasjerande tekst SKAL få 5 eller 6 på innhald – også om språket har enkeltfeil.
+- Enkeltfeil som i liten grad påverkar forståinga skal trekkje LITE ned. Trekk for mønster (3+ same type feil) eller for feil som faktisk hindrar lesinga.
+- Skil mellom aksane: høg innhaldsdekning kan godt gje 6 på innhald sjølv om rettskriving står på 4.
+- Realistisk og oppmuntrande. Systematisk underrating motiverer ikkje 13–16-åringar.`;
 }
 
 /* ─── System-prompt ─────────────────────────────────── */
