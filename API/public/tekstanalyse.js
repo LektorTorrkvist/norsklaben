@@ -49,6 +49,7 @@
     oppgaveHint: 'Uten oppgavetekst settes innhold til maks 4 av 6 i radardiagrammet.',
     label: 'Lim inn elevteksten din',
     placeholder: 'Lim inn teksten din her …',
+    richHint: 'Tips: lim inn rett frå Word eller Google Docs – feit skrift på overskrifter og ingress blir teken vare på, og AI-en kan dermed skilje dei frå brødtekst.',
     analyze: 'Analyser teksten',
     analyzing: 'Analyserer …',
     again: 'Analyser ny tekst',
@@ -85,6 +86,7 @@
     oppgaveHint: 'Utan oppgåvetekst blir innhald sett til maks 4 av 6 i radardiagrammet.',
     label: 'Lim inn elevteksten din',
     placeholder: 'Lim inn teksten din her …',
+    richHint: 'Tips: lim inn rett fra Word eller Google Docs – fet skrift på overskrifter og ingress blir tatt vare på, og AI-en kan dermed skille dem fra brødteksten.',
     analyze: 'Analyser teksten',
     analyzing: 'Analyserer …',
     again: 'Analyser ny tekst',
@@ -162,6 +164,12 @@
 '.nl-ta-textarea{width:100%;min-height:160px;padding:.85rem 1rem;border:1.5px solid #E6DFD2;border-radius:12px;font-family:inherit;font-size:1rem;line-height:1.55;color:#1A3D2B;background:#fffdf8;resize:vertical;box-sizing:border-box;}' +
 '.nl-ta-textarea:focus{outline:none;border-color:#1A3D2B;box-shadow:0 0 0 3px rgba(26,61,43,.12);}' +
 '.nl-ta-textarea-small{min-height:78px;background:#fffaf0;border-color:#E6CFA8;}' +
+'.nl-ta-richinput{width:100%;min-height:200px;max-height:520px;overflow-y:auto;padding:.85rem 1rem;border:1.5px solid #E6DFD2;border-radius:12px;font-family:inherit;font-size:1rem;line-height:1.6;color:#1A3D2B;background:#fffdf8;box-sizing:border-box;white-space:pre-wrap;word-wrap:break-word;cursor:text;}' +
+'.nl-ta-richinput:focus{outline:none;border-color:#1A3D2B;box-shadow:0 0 0 3px rgba(26,61,43,.12);}' +
+'.nl-ta-richinput[data-empty="1"]::before{content:attr(data-placeholder);color:#a89c82;pointer-events:none;font-style:italic;}' +
+'.nl-ta-richinput strong,.nl-ta-richinput b{font-weight:700;color:#1A3D2B;}' +
+'.nl-ta-richinput p{margin:0 0 .55rem;}' +
+'.nl-ta-richinput p:last-child{margin-bottom:0;}' +
 '.nl-ta-hint{font-size:.85rem;color:#7d6a3d;margin:.25rem 0 .9rem;font-style:italic;}' +
 '.nl-ta-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem;}' +
 '.nl-ta-actions-top{margin-top:0;margin-bottom:.85rem;}' +
@@ -238,6 +246,132 @@
       .replace(/&/g, '&amp;').replace(/</g, '&lt;')
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
+
+  /* ─── Rik-tekst (contenteditable) ─────────────────── */
+  // Hent tekst frå contenteditable og marker feit skrift med **…**
+  // (Markdown-stil) slik at AI-en ser kva som er overskrifter/ingress.
+  function getRichText(el) {
+    if (!el) return '';
+    var out = [];
+    function isBoldNode(node) {
+      if (!node || node.nodeType !== 1) return false;
+      var tag = node.nodeName;
+      if (tag === 'STRONG' || tag === 'B') return true;
+      if (/^H[1-6]$/.test(tag)) return true;
+      var fw = node.style && node.style.fontWeight;
+      if (fw && (fw === 'bold' || (parseInt(fw, 10) >= 600))) return true;
+      return false;
+    }
+    function isBlockNode(node) {
+      if (!node || node.nodeType !== 1) return false;
+      var tag = node.nodeName;
+      return tag === 'P' || tag === 'DIV' || tag === 'LI' || /^H[1-6]$/.test(tag) ||
+             tag === 'BLOCKQUOTE' || tag === 'TR' || tag === 'PRE';
+    }
+    function walk(node, boldDepth) {
+      if (node.nodeType === 3) {
+        var t = node.nodeValue || '';
+        if (!t) return;
+        if (boldDepth > 0) out.push('**' + t + '**');
+        else out.push(t);
+        return;
+      }
+      if (node.nodeType !== 1) return;
+      if (node.nodeName === 'BR') { out.push('\n'); return; }
+      var addedBlock = false;
+      if (isBlockNode(node) && out.length && !/\n$/.test(out[out.length - 1])) {
+        out.push('\n');
+        addedBlock = true;
+      }
+      var bold = boldDepth + (isBoldNode(node) ? 1 : 0);
+      var c = node.childNodes;
+      for (var i = 0; i < c.length; i++) walk(c[i], bold);
+      if (addedBlock && !/\n$/.test(out.length ? out[out.length - 1] : '')) {
+        out.push('\n');
+      } else if (isBlockNode(node)) {
+        out.push('\n');
+      }
+    }
+    walk(el, 0);
+    // Rydd opp: kollaps **fragment**-naboar, fjern dobbel/tredobbel newline
+    var s = out.join('')
+      .replace(/\*\*\s*\*\*/g, '')        // tomme bold
+      .replace(/\*\*([^*]*)\*\*\*\*([^*]*)\*\*/g, '**$1$2**') // slå saman naboar
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n{3,}/g, '\n\n');
+    return s;
+  }
+
+  // Set tekst i contenteditable og rendr **bold**-merker som <strong>.
+  function setRichText(el, str) {
+    if (!el) return;
+    var s = String(str == null ? '' : str);
+    if (!s) {
+      el.innerHTML = '';
+      el.setAttribute('data-empty', '1');
+      return;
+    }
+    var paras = s.split(/\n{2,}/);
+    var html = paras.map(function (p) {
+      var lines = p.split('\n').map(function (ln) {
+        // Konverter **…** til <strong>…</strong> (esc først)
+        var safe = esc(ln);
+        // Vi mista dei opphavlege ** i esc? Nei – ** er ikkje special.
+        return safe.replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>');
+      });
+      return '<p>' + lines.join('<br>') + '</p>';
+    }).join('');
+    el.innerHTML = html;
+    el.setAttribute('data-empty', html ? '0' : '1');
+  }
+
+  function updateRichEmptyState(el) {
+    if (!el) return;
+    var hasText = (el.textContent || '').replace(/\s+/g, '') !== '';
+    el.setAttribute('data-empty', hasText ? '0' : '1');
+  }
+
+  // Reinsk pasta-HTML: behald berre tekst, feit skrift og linjeskift.
+  function sanitizePastedHtml(html) {
+    var doc;
+    try {
+      doc = new DOMParser().parseFromString(html, 'text/html');
+    } catch (err) {
+      return null;
+    }
+    if (!doc || !doc.body) return null;
+    function clean(node) {
+      var children = Array.prototype.slice.call(node.childNodes);
+      children.forEach(function (child) {
+        if (child.nodeType === 1) {
+          var tag = child.nodeName;
+          if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'META' || tag === 'LINK') {
+            child.remove(); return;
+          }
+          // Marker H1–H6 og element med font-weight≥600 som <strong>
+          var fw = child.style && child.style.fontWeight;
+          var isBold = tag === 'B' || tag === 'STRONG' || /^H[1-6]$/.test(tag) ||
+                       (fw && (fw === 'bold' || parseInt(fw, 10) >= 600));
+          // Behald struktur for blokkelement; alt anna blir spans/strong/br.
+          if (isBold && tag !== 'STRONG') {
+            var s = doc.createElement('strong');
+            while (child.firstChild) s.appendChild(child.firstChild);
+            child.parentNode.replaceChild(s, child);
+            child = s;
+          }
+          if (child.removeAttribute) {
+            // Fjern alle attributt
+            var attrs = Array.prototype.slice.call(child.attributes || []);
+            attrs.forEach(function (a) { child.removeAttribute(a.name); });
+          }
+          clean(child);
+        }
+      });
+    }
+    clean(doc.body);
+    return doc.body.innerHTML;
+  }
+
 
   function loadHistory() {
     try {
@@ -386,7 +520,7 @@
     var oppgaveEl = host.querySelector('#nl-ta-oppgave');
     var maalSel = host.querySelector('#nl-ta-maal');
     var sjangerSel = host.querySelector('#nl-ta-sjanger');
-    if (ta) ta.value = String(entry.tekst || '');
+    if (ta) setRichText(ta, String(entry.tekst || ''));
     if (oppgaveEl) oppgaveEl.value = String(entry.oppgaveText || '');
     if (maalSel) maalSel.value = entry.maal === 'bm' ? 'bm' : 'nn';
     if (sjangerSel) sjangerSel.value = String(entry.sjanger || '');
@@ -635,7 +769,8 @@
         '<textarea id="nl-ta-oppgave" class="nl-ta-textarea nl-ta-textarea-small" placeholder="' + esc(T.oppgavePlaceholder) + '" rows="3"></textarea>' +
         '<p class="nl-ta-hint">' + esc(T.oppgaveHint) + '</p>' +
         '<label class="nl-ta-label" for="nl-ta-input">' + esc(T.label) + '</label>' +
-        '<textarea id="nl-ta-input" class="nl-ta-textarea" placeholder="' + esc(T.placeholder) + '"></textarea>' +
+        '<div id="nl-ta-input" class="nl-ta-richinput" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" data-placeholder="' + esc(T.placeholder) + '" data-empty="1"></div>' +
+        '<p class="nl-ta-hint">' + esc(T.richHint) + '</p>' +
         '<div class="nl-ta-actions">' +
           '<button type="button" class="nl-ta-btn" data-nl-ta-go="1">' + esc(T.analyze) + '</button>' +
         '</div>' +
@@ -707,6 +842,36 @@
         return;
       }
     });
+
+    /* ─── Rik-tekst-input: paste-sanitering + tom-status ─── */
+    var richInput = host.querySelector('#nl-ta-input');
+    if (richInput) {
+      richInput.addEventListener('paste', function (e) {
+        var cd = e.clipboardData || window.clipboardData;
+        if (!cd) return;
+        var html = cd.getData && cd.getData('text/html');
+        var txt = cd.getData && cd.getData('text/plain');
+        e.preventDefault();
+        var insert = '';
+        if (html) {
+          var clean = sanitizePastedHtml(html);
+          if (clean != null) insert = clean;
+        }
+        if (!insert && txt) {
+          insert = esc(txt).replace(/\n/g, '<br>');
+        }
+        if (!insert) return;
+        if (document.queryCommandSupported && document.queryCommandSupported('insertHTML')) {
+          document.execCommand('insertHTML', false, insert);
+        } else {
+          // Fallback: append som tekst
+          richInput.appendChild(document.createTextNode(txt || ''));
+        }
+        updateRichEmptyState(richInput);
+      });
+      richInput.addEventListener('input', function () { updateRichEmptyState(richInput); });
+      richInput.addEventListener('blur', function () { updateRichEmptyState(richInput); });
+    }
   }
 
   function doAnalyse(host, btn) {
@@ -715,7 +880,7 @@
     var maalSel = host.querySelector('#nl-ta-maal');
     var sjangerSel = host.querySelector('#nl-ta-sjanger');
     var status = host.querySelector('[data-nl-ta-status]');
-    var tekst = (ta && ta.value || '').trim();
+    var tekst = (ta ? getRichText(ta) : '').trim();
     var oppgaveText = (oppgaveEl && oppgaveEl.value || '').trim();
     var valgtMaal = (maalSel && maalSel.value === 'bm') ? 'bm' : 'nn';
     var sjanger = (sjangerSel && sjangerSel.value || '').trim();

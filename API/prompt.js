@@ -75,6 +75,8 @@ Du skal:
 
 OPPGAVE: Les elevteksten. Returner ett JSON-objekt – ingenting annet (ingen markdown, ingen forklaring utenfor JSON).
 
+FORMATERING I ELEVTEKSTEN: Tekst mellom **dobbel asterisk** kommer fra fet skrift i originalen og markerer som regel overskrift, mellomtittel eller ingress. Bruk dette til å skille overskrift, ingress og brødtekst når du vurderer struktur og sjanger – men IKKE kommenter selve **-tegnene i tilbakemeldingen til eleven.
+
 ${rub}
 
 RADAR – sett heltall 1–6 for hvert av disse fem feltene:
@@ -114,6 +116,8 @@ Du skal:
 3. SKRIVE tilbakemeldingar som motiverer eleven til å øve vidare.
 
 OPPGÅVE: Les elevteksten. Returner eitt JSON-objekt – ingenting anna (ingen markdown, ingen forklaring utanfor JSON).
+
+FORMATERING I ELEVTEKSTEN: Tekst mellom **doble asteriskar** kjem frå feit skrift i originalen og markerer som regel overskrift, mellomtittel eller ingress. Bruk dette til å skilje overskrift, ingress og brødtekst når du vurderer struktur og sjanger – men IKKJE kommenter sjølve **-teikna i tilbakemeldinga til eleven.
 
 ${rub}
 
