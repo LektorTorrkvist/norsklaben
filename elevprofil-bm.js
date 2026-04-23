@@ -634,76 +634,9 @@
     var streak = mastery.streak.current || adaptiveProfile.streak || 0;
     var categoryStats = getCategoryStats(mastery);
 
-    function buildAnalysisInsights(analyses, stats) {
-      var statById = {};
-      (stats || []).forEach(function(s) { statById[s.id] = s; });
-
-      var map = {};
-      (analyses || []).forEach(function(a) {
-        var seenInText = {};
-        (a && Array.isArray(a.categories) ? a.categories : []).forEach(function(cat) {
-          if (!cat || !cat.id) return;
-          if (seenInText[cat.id]) return;
-          seenInText[cat.id] = true;
-          if (!map[cat.id]) {
-            map[cat.id] = {
-              id: cat.id,
-              label: getCategoryLabel(cat.id),
-              hits: 0,
-              latestReason: ''
-            };
-          }
-          map[cat.id].hits += 1;
-          if (!map[cat.id].latestReason && cat.reason) map[cat.id].latestReason = String(cat.reason);
-        });
-      });
-
-      var merged = Object.keys(map).map(function(id) {
-        var item = map[id];
-        var s = statById[id] || null;
-        return {
-          id: id,
-          label: item.label,
-          hits: item.hits,
-          reason: item.latestReason,
-          total: s ? s.total : 0,
-          pct: s && s.total > 0 ? s.pct : null,
-          hasTaskData: !!(s && s.total > 0)
-        };
-      });
-
-      var strengths = merged.filter(function(x) { return x.hasTaskData && x.pct >= 70; }).sort(function(a, b) {
-        if (b.pct !== a.pct) return b.pct - a.pct;
-        return b.hits - a.hits;
-      }).slice(0, 3);
-      if (!strengths.length) {
-        strengths = merged.filter(function(x) { return x.hasTaskData; }).sort(function(a, b) {
-          if (b.pct !== a.pct) return b.pct - a.pct;
-          return b.hits - a.hits;
-        }).slice(0, 3);
-      }
-
-      var weaknesses = merged.slice().sort(function(a, b) {
-        if (a.hasTaskData !== b.hasTaskData) return a.hasTaskData ? 1 : -1;
-        var ap = a.hasTaskData ? a.pct : -1;
-        var bp = b.hasTaskData ? b.pct : -1;
-        if (ap !== bp) return ap - bp;
-        return b.hits - a.hits;
-      }).slice(0, 3);
-
-      return {
-        strengths: strengths,
-        weaknesses: weaknesses,
-        totalAnalyses: Math.max(0, (analyses || []).length)
-      };
-    }
-
     var excludedSet = {};
     readRadarExcluded().forEach(function(k) { excludedSet[String(k)] = true; });
     var includedAnalyses = analysisStore.analyses.filter(function(a) { return !excludedSet[String(a.ts)]; });
-    var insights = buildAnalysisInsights(includedAnalyses, categoryStats);
-    var strengths = insights.strengths;
-    var weaknesses = insights.weaknesses;
     var feilloggCounts = aggregateFeillogg(mastery.feillogg);
     var recommendations = buildRecommendations(categoryStats, includedAnalyses, feilloggCounts);
     var recentAnalyses = analysisStore.analyses.slice(0, 8);
@@ -728,6 +661,65 @@
     }
     var averageRadar = radarCount > 0 ? radarSums.slice(0, 5).map(function(s) { return Math.round(s / radarCount * 10) / 10; }).concat([kildebrukCount > 0 ? Math.round(kildebrukSum / kildebrukCount * 10) / 10 : 0]) : null;
     var kildebrukIsBorrowed = radarCount > 0 && kildebrukCount > 0 && kildebrukCount < radarCount;
+
+    function buildRadarInsights(avg, analyses) {
+      var totalAnalyses = (analyses || []).length;
+      if (!avg) {
+        return { strengths: [], weaknesses: [], totalAnalyses: totalAnalyses, hasRadar: false };
+      }
+      var axisDefs = [
+        { idx: 0, label: 'Innhold' },
+        { idx: 1, label: 'Struktur' },
+        { idx: 2, label: 'Språk og stil' },
+        { idx: 3, label: 'Rettskriving' },
+        { idx: 4, label: 'Grammatikk og tegnsetting' },
+        { idx: 5, label: 'Kildebruk' }
+      ];
+      var axes = axisDefs.map(function(d) {
+        var note = '';
+        if (d.idx === 5) {
+          if (kildebrukCount === 0) return null;
+          if (kildebrukIsBorrowed) note = 'snitt fra ' + kildebrukCount + ' av ' + radarCount + ' tekster';
+          else note = 'snitt fra ' + kildebrukCount + ' tekst' + (kildebrukCount === 1 ? '' : 'er');
+        } else {
+          note = 'snitt fra ' + radarCount + ' tekst' + (radarCount === 1 ? '' : 'er');
+        }
+        return { label: d.label, score: avg[d.idx] || 0, note: note, isAxis: true };
+      }).filter(Boolean).filter(function(a) { return a.score > 0; });
+
+      var strengths = axes.slice().sort(function(a, b) { return b.score - a.score; }).slice(0, 3);
+      var weaknesses = axes.slice().sort(function(a, b) { return a.score - b.score; }).slice(0, 3);
+
+      var forslagMap = {};
+      (analyses || []).forEach(function(a) {
+        var seen = {};
+        (a && Array.isArray(a.categories) ? a.categories : []).forEach(function(cat) {
+          if (!cat || !cat.id || seen[cat.id]) return;
+          seen[cat.id] = true;
+          if (!forslagMap[cat.id]) {
+            forslagMap[cat.id] = { id: cat.id, label: getCategoryLabel(cat.id), hits: 0, reason: '' };
+          }
+          forslagMap[cat.id].hits += 1;
+          if (!forslagMap[cat.id].reason && cat.reason) forslagMap[cat.id].reason = String(cat.reason);
+        });
+      });
+      var forslag = Object.keys(forslagMap).map(function(k) { return forslagMap[k]; })
+        .sort(function(a, b) { return b.hits - a.hits; })
+        .slice(0, 3);
+
+      return {
+        strengths: strengths,
+        weaknesses: weaknesses,
+        forslag: forslag,
+        totalAnalyses: totalAnalyses,
+        hasRadar: true,
+        radarCount: radarCount
+      };
+    }
+
+    var insights = buildRadarInsights(averageRadar, includedAnalyses);
+    var strengths = insights.strengths;
+    var weaknesses = insights.weaknesses;
 
     var innhaldCapped = false;
     if (averageRadar && analysisStore.analyses.length) {
@@ -766,6 +758,14 @@
     function statRows(list, emptyText, variant) {
       if (!list.length) return '<div class="ep-empty">' + escapeHtml(emptyText) + '</div>';
       return list.map(function(item) {
+        if (item.isAxis) {
+          var scoreText = (Math.round((item.score || 0) * 10) / 10).toFixed(1) + ' / 6';
+          return '' +
+            '<div class="ep-stat-row ' + variant + '">' +
+              '<div><div class="ep-stat-row-label">' + escapeHtml(item.label) + '</div><div class="ep-stat-row-meta">' + escapeHtml(item.note || '') + '</div></div>' +
+              '<span class="ep-stat-row-pct">' + escapeHtml(scoreText) + '</span>' +
+            '</div>';
+        }
         var hasTaskData = item.hasTaskData !== false && item.pct !== null;
         var meta = hasTaskData
           ? (item.hits + ' tekstanalysefunn · ' + item.total + ' oppgaver')
@@ -777,6 +777,15 @@
             '<span class="ep-stat-row-pct">' + escapeHtml(pctText) + '</span>' +
           '</div>';
       }).join('');
+    }
+
+    function forslagRows(list) {
+      if (!list || !list.length) return '';
+      var rows = list.map(function(it) {
+        var meta = it.hits + ' gjentakelse' + (it.hits === 1 ? '' : 'r') + ' i tekstanalysene' + (it.reason ? ' · ' + it.reason : '');
+        return '<div class="ep-ai-strength">' + escapeHtml(getCategoryIcon(it.id) + ' ' + it.label) + '<span class="ep-ai-strength-meta">' + escapeHtml(meta) + '</span></div>';
+      }).join('');
+      return '<div class="ep-ai-strengths"><p class="ep-ai-strengths-title">Konkrete utviklingsområder fra tekstanalysene</p>' + rows + '</div>';
     }
 
     function aiStrengthRows(analyses) {
@@ -886,8 +895,8 @@
           (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES, kildebrukIsBorrowed ? [5] : []) + (kildebrukIsBorrowed ? '<div class="ep-radar-note">* Kildebruk: snittet er regnet ut fra ' + kildebrukCount + ' av ' + radarCount + ' tekster. Tekster uten krav til kildebruk (f.eks. fortellinger) er holdt utenfor, slik at aksen ikke blir trukket ned av irrelevant data.</div>' : '') : '<div class="ep-radar-empty">Radardiagrammet vises når tekster har blitt vurdert i Tekstsjekk.</div>') +
         '</div>' +
         '<div class="ep-strengths-weak">' +
-          '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Styrker</h3><span>Basert på ' + escapeHtml(String(insights.totalAnalyses)) + ' analyserte tekster, koblet mot treffprosent i matchende oppgaver.</span></div><span class="ep-sw-icon">🌟</span></div>' + statRows(strengths, 'Ingen styrkedata fra tekstanalyser ennå. Analyser flere tekster først.', 'ok') + aiStrengthRows(includedAnalyses) + '</div>' + 
-          '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Svakheter</h3><span>Basert på kategorier som går igjen i tekstanalysene, med lav treffprosent eller manglende øvingsdata.</span></div><span class="ep-sw-icon">🎯</span></div>' + statRows(weaknesses, 'Ingen svakhetsdata fra tekstanalyser ennå.', 'warn') + '</div>' +
+          '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Styrker</h3><span>De tre høyeste aksene i radardiagrammet – snitt fra tekstanalysene.</span></div><span class="ep-sw-icon">🌟</span></div>' + statRows(strengths, 'Ingen styrkedata ennå. Få en tekst vurdert i Tekstsjekk først.', 'ok') + aiStrengthRows(includedAnalyses) + '</div>' + 
+          '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Svakheter</h3><span>De tre laveste aksene i radardiagrammet – det er her det er mest å hente.</span></div><span class="ep-sw-icon">🎯</span></div>' + statRows(weaknesses, 'Ingen svakhetsdata ennå. Få en tekst vurdert i Tekstsjekk først.', 'warn') + forslagRows(insights.forslag) + '</div>' +
         '</div>' +
       '</div>' +
       '<div class="ep-sp-actions"><button type="button" class="ep-btn-ghost" data-ep-reset-skriveprofil="1">Tilbakestill skriveprofil</button><span class="ep-sp-actions-hint">Sletter bare tekstanalysene og radarvalget på denne enheten. XP, økter og feillogg blir ikke rørt.</span></div>';
