@@ -24,14 +24,14 @@ function radarKeys(maal) {
         innhald:      'innhold – måler om eleven svarer på oppgaven og oppgavetypen, og hvilket nivå innholdet er på: viser innholdet enkel kompetanse, kompetent eller svært kompetent?',
         struktur:     'struktur – alt fra overordnet tekststruktur (innledning, hoveddel, avslutning, avsnitt) til setningsstruktur. VIKTIG: matche forventningene i oppgaveformuleringen – ikke forvent strukturer som ikke samsvarer med bestillingen i oppgaveteksten (en kort SMS, et dikt eller et leserinnlegg har andre strukturkrav enn en artikkel). Har eleven svart med god struktur i forhold til bestillingen, gi 5 eller 6.',
         spraak_stil:  'språk og stil – måler om språket er tilpasset oppgaven og mottakeren, og om det passer til sjangeren. Belønn elever som treffer: skriver konkret, tydelig, fagriktig og godt for situasjonen, eller som finner riktig stemme i kreative tekster. Treffer eleven godt på språk og stil, gi 5 eller 6.',
-        rettskriving: 'rettskriving, grammatikk og tegnsetting',
+        rettskriving: 'rettskriving, grammatikk og tegnsetting. KALIBRERING: På ungdomstrinnet er 5 og 6 fullt oppnåelig. Tell ikke smutthull eller enkeltfeil hardt – se etter MØNSTER (3+ samme type feil) eller feil som hindrer lesingen. Få mindre feil i en ellers godt skrevet tekst ⇒ 5. Tilnaerma feilfritt og stø grammatikk ⇒ 6. Hyppige mønsterfeil eller feil som forstyrrer lesingen ⇒ 2–3.',
         kjeldebruk:   'kildebruk (sitat, referanser, kildeliste). KALIBRERING: Hvis eleven har gjort et synlig forsøk på å føre kilder (f.eks. nevnt en kilde i teksten, satt inn en lenke eller listet opp én kilde), gi MINST 2. Hvis eleven har korrekte parentesreferanser i teksten OG en korrekt kildeliste, gi 5 eller 6 avhengig av nivå og presisjon på kildeføringen.'
       }
     : {
         innhald:      'innhald – måler om eleven svarar på oppgåva og oppgåvetypen, og kva nivå innhaldet er på: viser innhaldet enkel kompetanse, kompetent eller svært kompetent?',
         struktur:     'struktur – alt frå overordna tekststruktur (innleiing, hovuddel, avslutning, avsnitt) til setningsstruktur. VIKTIG: match forventingane i oppgåveformuleringa – ikkje forvent strukturar som ikkje samsvarar med bestillinga i oppgåveteksten (ein kort SMS, eit dikt eller eit lesarinnlegg har andre strukturkrav enn ein artikkel). Har eleven svara med god struktur i forhold til bestillinga, gje 5 eller 6.',
         spraak_stil:  'språk og stil – måler om språket er tilpassa oppgåva og mottakaren, og om det høver til sjangeren. Lønn elevar som treff: skriv konkret, tydeleg, fagleg rett og godt for situasjonen, eller som finn rett stemme i kreative tekstar. Treff eleven godt på språk og stil, gje 5 eller 6.',
-        rettskriving: 'rettskriving, grammatikk og teiknsetting',
+        rettskriving: 'rettskriving, grammatikk og teiknsetting. KALIBRERING: På ungdomstrinnet er 5 og 6 fullt oppnåeleg. Tel ikkje smutthol eller enkeltfeil hardt – sjå etter MØNSTER (3+ same type feil) eller feil som hindrar lesinga. Få mindre feil i ein elles godt skriven tekst ⇒ 5. Tilnaerma feilfritt og stø grammatikk ⇒ 6. Hyppige mønsterfeil eller feil som forstyrrar lesinga ⇒ 2–3.',
         kjeldebruk:   'kjeldebruk (sitat, referansar, kjeldeliste). KALIBRERING: Om eleven har gjort eit synleg forsøk på å føre kjelder (t.d. nemnt ei kjelde i teksten, sett inn ei lenkje eller lista opp éi kjelde), gje MINST 2. Om eleven har korrekte parentesreferansar i teksten OG ei korrekt kjeldeliste, gje 5 eller 6 avhengig av nivå og presisjon på kjeldeføringa.'
       };
 }
@@ -99,7 +99,7 @@ RADAR – sett heltall 1–6 for hvert av disse fem feltene:
   spraak_stil   = ${rk.spraak_stil}
   rettskriving  = ${rk.rettskriving}
   kjeldebruk    = ${rk.kjeldebruk}
-Hvis et område ikke er relevant (f.eks. kildebruk i en novelle uten kilder): sett 1 og forklar kort, og ta ikke med som del av gjennomsnitt i radaroversikt i elevprofilen.
+Hvis et område ikke er relevant (f.eks. kildebruk i en novelle uten kilder): sett score 1, marker i radar_forklaring at området ikke er relevant for sjangeren, og det blir ikke tatt med som del av gjennomsnitt i radaroversikten i elevprofilen. Dette er ikke en svakhet hos eleven.
 
 RADAR_FORKLARING: For hvert av de fem radarfeltene, skriv en kort begrunnelse (maks 12 ord) i feltet "radar_forklaring". Særlig viktig for innhold: forklar om eleven svarte på det oppgaven krever, eller om oppgavetekst mangler.
 
@@ -147,7 +147,7 @@ RADAR – sett heiltal 1–6 for kvart av desse fem felta:
   spraak_stil   = ${rk.spraak_stil}
   rettskriving  = ${rk.rettskriving}
   kjeldebruk    = ${rk.kjeldebruk}
-Om eit område ikkje er relevant (t.d. kjeldebruk i ei novelle utan kjelder): set 1 og forklar kort.
+Om eit område ikkje er relevant (t.d. kjeldebruk i ei novelle utan kjelder): set score 1, marker i radar_forklaring at området ikkje er relevant for sjangeren, og det vert ikkje teke med som del av gjennomsnittet i radaroversikta. Dette er ikkje ei svakheit hos eleven.
 
 RADAR_FORKLARING: For kvart av dei fem radarfelta, skriv ei kort grunngjeving (maks 12 ord) i feltet "radar_forklaring". Særleg viktig for innhald: forklar om eleven svara på det oppgåva krev, eller om oppgåvetekst manglar.
 
