@@ -1917,7 +1917,7 @@ var BANKV2 = [
  eks:'Kort sitat: « » + kilde. Blokksitat: innrykket + kilde. Parafrase: egne ord + kilde.'},
 
 {kat:'sitat',kat_label:'Sitat og sitatbruk',type:'fix',vanske:'medium',
- q:'Rett de tre sitatfeilene i teksten.',
+ q:'Rett de to sitatfeilene i teksten.',
  tekst:'Forskning viser at ungdom leser mindre. Ifølge SSB leser 60 % av ungdom bøker daglig. Eksperten sa at plast er farlig for dyr og det er et stort problem.',
  errors:{'Ifølge SSB leser 60 % av ungdom bøker daglig':'Ifølge SSB (2023) leser «60 % av ungdom bøker daglig»','Eksperten sa at plast er farlig for dyr og det er et stort problem':'Eksperten sa: «Plast er farlig for dyr, og det er et stort problem» (Hansen, 2023)'},
  fasit:'SSB (2023) + anførselstegn · Eksperten sa: « » + kilde',
@@ -2428,7 +2428,7 @@ var BANKV2 = [
  eks:'ba oss om å lese · prøvde å konsentrere · vanskelig å la merke til'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
- q:'Rett de 4 og/å-feilene i teksten.',
+ q:'Rett de tre og/å-feilene i teksten.',
  tekst:'Familien min pleier og reise til hytta om sommeren. Vi liker å bade og fiske. Pappa forsøkte og reparere brygga, men det var umulig og finne de riktige verktøyene. Jeg og søsteren min gikk heller en tur og plukket bær.',
  errors:{'pleier og reise':'pleier å reise','forsøkte og reparere':'forsøkte å reparere','umulig og finne':'umulig å finne'},
  fasit:'pleier å reise · forsøkte å reparere · umulig å finne',
@@ -2460,7 +2460,7 @@ var BANKV2 = [
  eks:'handler om å pushe · har lært å varme opp · husker å tøye ut'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
- q:'Rett de 4 og/å-feilene i teksten.',
+ q:'Rett de tre og/å-feilene i teksten.',
  tekst:'Vi ble enige om og dele oppgavene mellom oss. Noen skulle lage mat og andre skulle dekke bordet og rydde. Det var lett og bli enige, men vanskeligere og faktisk gjennomføre planen. Til slutt fikk vi det til og og hadde en fin kveld.',
  errors:{'om og dele':'om å dele','lett og bli':'lett å bli','vanskeligere og faktisk':'vanskeligere å faktisk'},
  fasit:'om å dele · lett å bli · vanskeligere å faktisk',
@@ -2716,8 +2716,8 @@ var BANKV2 = [
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'vanskeleg',
  q:'Rett de fem og/å-feilene. Mange «og» i teksten er korrekte – ikke endre dem!',
  tekst:'Legen og sykepleieren samarbeidet godt om og gi pasienten den beste behandlingen. Pasienten prøvde og hvile, men det var vanskelig og sove i den støyende korridoren. Det var viktig og drikke nok vann og ta medisinene jevnlig. Til slutt forsøkte de og gi ham et eget rom, og det hjalp.',
- errors:{'om og gi':'om å gi','prøvde og hvile':'prøvde å hvile','vanskelig og sove':'vanskelig å sove','viktig og drikke':'viktig å drikke','forsøkte og gi':'forsøkte å gi'},
- fasit:'om å gi · prøvde å hvile · vanskelig å sove · viktig å drikke · forsøkte å gi',
+ errors:{'om og gi':'om å gi','prøvde og hvile':'prøvde å hvile','vanskelig og sove':'vanskelig å sove','viktig og drikke':'viktig å drikke','de og gi':'de å gi'},
+ fasit:'om å gi · prøvde å hvile · vanskelig å sove · viktig å drikke · de å gi',
  regel:'«Og ta medisinene» er riktig – det er eit parallelt infinitiv til «å drikke». «Om», «prøve», «vanskelig», «viktig» og «forsøke» krev «å».',
  eks:'viktig å drikke nok vann og ta medisinene (begge infinitiver, «og» binder)'},
 
@@ -2751,7 +2751,7 @@ var BANKV2 = [
  eks:'å sette → satte (kort a) · natt → natten (kort a) · gate → gaten (lang a)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'medium',
- q:'Rett de tre rettskrivingsfeilene. «Maten», «hagen» og «solen» er riktige.',
+ q:'Rett de tre rettskrivingsfeilene i teksten.',
  tekst:'Familien sate seg til bords og spiste midagsmat. Etter maten hopet ungene opp og sprang ut i hagen der solen skinte.',
  errors:{'sate':'satte','midagsmat':'middagsmat','hopet':'hoppet'},
  fasit:'satte · middagsmat · hoppet',
@@ -2759,7 +2759,7 @@ var BANKV2 = [
  eks:'å sette → satte · middag (kort i) → middagsmat · å hoppe → hoppet'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'medium',
- q:'Rett de tre rettskrivingsfeilene i teksten.',
+ q:'Rett de to rettskrivingsfeilene i teksten.',
  tekst:'Mange ungdomer er opptatt av trening. De hopper og løper for å holde seg i form, og noen tar seg en kop kaffe etterpå. Koppen er gjerne liten, men smaken er god.',
  errors:{'ungdomer':'ungdommer','kop':'kopp'},
  fasit:'ungdommer · kopp',

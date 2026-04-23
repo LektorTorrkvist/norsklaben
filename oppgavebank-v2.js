@@ -1913,7 +1913,7 @@ var BANKV2 = [
  eks:'Kort sitat: « » + kjelde. Blokksitat: innrykka + kjelde. Parafrase: eigne ord + kjelde.'},
 
 {kat:'sitat',kat_label:'Sitat og sitatbruk',type:'fix',vanske:'medium',
- q:'Rett dei tre sitatfeila i teksten.',
+ q:'Rett dei to sitatfeila i teksten.',
  tekst:'Forsking viser at ungdom les mindre. Ifølgje SSB les 60 % av ungdom bøker dagleg. Eksperten sa at plast er farleg for dyr og det er eit stort problem.',
  errors:{'Ifølgje SSB les 60 % av ungdom bøker dagleg':'Ifølgje SSB (2023) les «60 % av ungdom bøker dagleg»','Eksperten sa at plast er farleg for dyr og det er eit stort problem':'Eksperten sa: «Plast er farleg for dyr, og det er eit stort problem» (Hansen, 2023)'},
  fasit:'SSB (2023) + hermeteikn · Eksperten sa: « » + kjelde',
@@ -2175,7 +2175,7 @@ var BANKV2 = [
  eks:'bad oss om å lese · prøvde å konsentrere · vanskeleg å leggje merke til'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
- q:'Rett dei 4 og/å-feila i teksten.',
+ q:'Rett dei tre og/å-feila i teksten.',
  tekst:'Familien min pleier og reise til hytta om sumaren. Vi likar å bade og fiske. Pappa forsøkte og reparere bryggja, men det var umogleg og finne dei rette verktøya. Eg og systera mi gjekk heller ein tur og plukka bær.',
  errors:{'pleier og reise':'pleier å reise','forsøkte og reparere':'forsøkte å reparere','umogleg og finne':'umogleg å finne'},
  fasit:'pleier å reise · forsøkte å reparere · umogleg å finne',
@@ -2503,8 +2503,8 @@ var BANKV2 = [
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'vanskeleg',
  q:'Rett dei fem og/å-feila. Mange «og» i teksten er korrekte – ikkje endre dei!',
  tekst:'Legen og sjukepleieren samarbeidde godt om og gi pasienten den beste behandlinga. Pasienten prøvde og kvile, men det var vanskeleg og sove i den støyande korridoren. Det var viktig og drikke nok vatn og ta medisinane jamt. Til slutt freista dei og gi han eit eige rom, og det hjelpte.',
- errors:{'om og gi':'om å gi','prøvde og kvile':'prøvde å kvile','vanskeleg og sove':'vanskeleg å sove','viktig og drikke':'viktig å drikke','freista og gi':'freista å gi'},
- fasit:'om å gi · prøvde å kvile · vanskeleg å sove · viktig å drikke · freista å gi',
+ errors:{'om og gi':'om å gi','prøvde og kvile':'prøvde å kvile','vanskeleg og sove':'vanskeleg å sove','viktig og drikke':'viktig å drikke','dei og gi':'dei å gi'},
+ fasit:'om å gi · prøvde å kvile · vanskeleg å sove · viktig å drikke · dei å gi',
  regel:'«Og ta medisinane» er riktig – det er eit parallelt infinitiv til «å drikke». «Om», «prøve», «vanskeleg», «viktig» og «freiste» krev «å».',
  eks:'viktig å drikke nok vatn og ta medisinane (begge infinitivar, «og» bind)'},
 
@@ -2538,7 +2538,7 @@ var BANKV2 = [
  eks:'å setje → sette (kort e) · natt → natta (kort a) · gate → gata (lang a)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'medium',
- q:'Rett dei tre rettskrivingsfeila. «Maten», «hagen» og «sola» er rette.',
+ q:'Rett dei to rettskrivingsfeila i teksten.',
  tekst:'Familien sate seg til bords og åt middagsmat. Etter maten hopet ungane opp og sprang ut i hagen der sola skein.',
  errors:{'sate':'sette','hopet':'hoppa'},
  fasit:'sette · hoppa',
@@ -2554,7 +2554,7 @@ var BANKV2 = [
  eks:'ungdommar (kort o) · kopp (kort o) · spring (lang i, enkel konsonant)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'vanskeleg',
- q:'Rett dei fire rettskrivingsfeila. Legg merke til at «Guten» og «Katten» er rette lenger nede i teksten.',
+ q:'Rett dei tre rettskrivingsfeila i teksten.',
  tekst:'Gut og kate leika i hagen. Guten hopet ned frå eit tre og sate seg i graset. Katten sprang bort og snusa nysgjerrig på han.',
  errors:{'kate':'katten','hopet':'hoppa','sate':'sette'},
  fasit:'katten · hoppa · sette',
