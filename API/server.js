@@ -25,6 +25,9 @@ const PORT        = process.env.PORT        || 3000;
 const OLLAMA_URL  = process.env.OLLAMA_URL  || 'http://localhost:11434';
 const OLLAMA_MODEL= process.env.OLLAMA_MODEL|| 'gemma4:e4b';
 const MAX_TEKST   = parseInt(process.env.MAX_TEKST || '6000', 10);
+const NUM_THREAD  = parseInt(process.env.OLLAMA_NUM_THREAD || String(Math.max(1, os.cpus().length)), 10);
+const NUM_CTX     = parseInt(process.env.OLLAMA_NUM_CTX || '4096', 10);
+const KEEP_ALIVE  = process.env.OLLAMA_KEEP_ALIVE || '24h';
 
 // Finn lokal IP-adresse (første ikke-interne nettverksadresse)
 function getLocalIp() {
@@ -181,7 +184,28 @@ function normaliser(json, maal) {
 
 /* ─── Ollama-klient ────────────────────────────────── */
 
+/* Enkel FIFO-kø: CPU-inferens er single-stream, så to samtidige
+   requests blir samla tregare enn éin etter éin. Køen serialiserer
+   kall til Ollama. */
+let ollamaQueue = Promise.resolve();
+let ollamaQueueLen = 0;
+function enqueueOllama(taskFn) {
+  ollamaQueueLen++;
+  const myPos = ollamaQueueLen;
+  if (myPos > 1) console.log(`┃ Kø: ventar (posisjon ${myPos})`);
+  const run = ollamaQueue.then(() => {
+    if (myPos > 1) console.log(`┃ Kø: startar (var posisjon ${myPos})`);
+    return taskFn();
+  });
+  ollamaQueue = run.catch(() => {}).finally(() => { ollamaQueueLen--; });
+  return run;
+}
+
 async function kallOllama(systemPrompt, userPrompt) {
+  return enqueueOllama(() => kallOllamaRaw(systemPrompt, userPrompt));
+}
+
+async function kallOllamaRaw(systemPrompt, userPrompt) {
   // Brukar /api/chat med messages-format — fungerer best med
   // instruksjonsmodeller (NorMistral warm, Qwen, osv.)
   const body = {
@@ -191,15 +215,17 @@ async function kallOllama(systemPrompt, userPrompt) {
       { role: 'user',      content: userPrompt   }
     ],
     stream: false,
+    keep_alive: KEEP_ALIVE,
     // Tvingar JSON-format frå Ollama (støtta av Gemma og dei fleste moderne modellar).
     // Gjer at modellen sluttar når JSON-objektet er ferdig → mykje raskare svar.
     format: 'json',
     options: {
       temperature: 0.3,   // lågare → meir konsistente vurderingar
       top_p: 0.9,
-      num_ctx: 4096,
+      num_ctx: NUM_CTX,
       num_predict: 1200,  // nok til JSON-svaret, ikkje meir
-      repeat_penalty: 1.1
+      repeat_penalty: 1.1,
+      num_thread: NUM_THREAD
     },
     think: false
   };
@@ -323,6 +349,7 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`║  Tekstsjekk:      http://${ip}:${PORT}/tekstsjekk.html      ║`);
   console.log('╠══════════════════════════════════════════════════╣');
   console.log(`║  Modell: ${OLLAMA_MODEL.padEnd(41)}║`);
+  console.log(`║  Trådar: ${String(NUM_THREAD).padEnd(4)} · num_ctx: ${String(NUM_CTX).padEnd(5)} · keep_alive: ${KEEP_ALIVE.padEnd(6)}║`);
   console.log('╚══════════════════════════════════════════════════╝');
   console.log('');
 });
