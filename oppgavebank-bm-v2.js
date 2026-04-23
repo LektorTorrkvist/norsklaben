@@ -83,8 +83,8 @@ var BANKV2 = [
   {pre:'Han kjøpte brød',alt:['og','å'],fasit:'og',post:'melk.'},
   {pre:'Vi dro for',alt:['og','å'],fasit:'å',post:'oppleve noe nytt.'}
  ],
- regel:'«Å» kommer foran infinitiv (verb i grunnform). «Og» binder sammen ledd.',
- eks:'prøvde å forstå · katten og hunden · for å oppleve'},
+ regel:'«Å» kommer foran et verb i infinitiv (å lese, å spise). «Og» binder sammen to ord, ledd eller setninger. Test: bytt ut ordet med «det å gjøre noe» – hvis det passer, er det «å». Bytt ut med «pluss» – hvis det passer, er det «og».',
+ eks:'prøvde å forstå (infinitiv) · katten og hunden (bindeord) · for å oppleve (infinitiv)'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'finn_feil',vanske:'lett',
  q:'Klikk på det ene ordet som er feil brukt.',
@@ -124,18 +124,18 @@ var BANKV2 = [
 
 {kat:'og_aa',kat_label:'Og / å',type:'mc',vanske:'medium',
  q:'Hva er rett? «Han ___ hjelpe til.»',
- alt:['vil å hjelpe','vil hjelpe','vil og hjelpe','ønsker å ikke hjelpe'],
+ alt:['vil å hjelpe','vil hjelpe','vil og hjelper','vil og hjelpa'],
  fasit:'vil hjelpe',
- regel:'Etter modalverbene «vil», «kan», «skal», «bør», «må» kommer infinitiv uten «å».',
- eks:'vil hjelpe · kan gå · skal komme · bør lese'},
+ regel:'Etter modalverbene «vil», «kan», «skal», «bør», «må» kommer verbet rett i infinitiv – uten «å» og uten «og». Huskeregel: modalverb tar infinitiv direkte.',
+ eks:'vil hjelpe · kan gå · skal komme · bør lese · må sove'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'vanskeleg',
  q:'Rett de fire og/å-feilene i teksten.',
  tekst:'Jeg har alltid hatt lyst og reise til Spania. Broren min lovde og komme med, men han prøvde og finne billigere billetter. Til slutt bestemte vi oss og dra til Sverige i stedet.',
  errors:{'lyst og reise':'lyst å reise','lovde og komme':'lovde å komme','prøvde og finne':'prøvde å finne','oss og dra':'oss å dra'},
  fasit:'lyst å reise · lovde å komme · prøvde å finne · oss å dra',
- regel:'Infinitivsmerket «å» kommer etter verb som «ha lyst til», «love», «prøve», «bestemme seg».',
- eks:'hatt lyst å reise · lovde å komme · prøvde å finne'},
+ regel:'Mange verb og uttrykk styrer infinitiv med «å»: «ha lyst til å», «love å», «prøve å», «bestemme seg for å», «klare å», «glemme å». Huskeregel: kan du sette inn «det å» foran? Da er det «å».',
+ eks:'hatt lyst å reise · lovde å komme · prøvde å finne · bestemte oss for å dra'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'sann_usann_serie',vanske:'vanskeleg',
  q:'Er påstandene om «og» / «å» sanne eller usanne?',
@@ -149,6 +149,27 @@ var BANKV2 = [
  regel:'«Å» = infinitivsmerke. «Og» = bindeord. Modalverb styrer infinitiv uten «å».',
  eks:'å lese (infinitiv) · hun og han (bindeord) · kan lese (uten å)'},
 
+{kat:'og_aa',kat_label:'Og / å',type:'finn_feil',vanske:'medium',
+ q:'Klikk på det ene ordet som er feil brukt.',
+ tekst:'Læreren ba elevene og lese teksten før prøven.',
+ fasit_feil:['og'],
+ regel:'Etter «ba noen» kommer alltid «å + infinitiv»: «ba elevene å lese». «Og» ville bare passet hvis det bandt sammen to handlinger (f.eks. «ba elevene og prøvde selv»).',
+ eks:'ba oss å hjelpe · ba henne å vente · ba dem å tenke'},
+
+{kat:'og_aa',kat_label:'Og / å',type:'drag_kolonne',vanske:'medium',
+ q:'Sorter: skal det være «og» eller «å»?',
+ kolonner:['Bruk «å»','Bruk «og»'],
+ ord:[
+  {tekst:'Jeg prøvde ___ forstå',fasit:0},
+  {tekst:'brød ___ smør',fasit:1},
+  {tekst:'Det er viktig ___ sove',fasit:0},
+  {tekst:'hun leste ___ han skrev',fasit:1},
+  {tekst:'Han begynte ___ gråte',fasit:0},
+  {tekst:'mamma ___ pappa',fasit:1}
+ ],
+ regel:'«Å» står foran verb i infinitiv (å forstå, å sove, å gråte). «Og» binder sammen to ting eller setninger (brød og smør).',
+ eks:'prøvde å forstå · brød og smør · begynte å gråte · mamma og pappa'},
+
 /* ═══════════════════════════════════════════════════
   2. SAMMENSATTE ORD  (8 oppgaver)
   ═══════════════════════════════════════════════════ */
@@ -160,11 +181,11 @@ var BANKV2 = [
  eks:'sjokoladekake, fotballbane, barneskole'},
 
 {kat:'sammensatt',kat_label:'Sammensatte ord',type:'mc',vanske:'medium',
- q:'«Ananas ringer» i stedet for «ananasringer» – hva betyr særskrivingen?',
- alt:['Ringer laget av ananas','At ananasfrukten ringer med telefon','Samme betydning begge veier','At ringen er formet som en ananas'],
- fasit:'At ananasfrukten ringer med telefon',
- regel:'Særskriving kan gi helt ny betydning. «Ananasringer» = mat. «Ananas ringer» = frukt med telefon.',
- eks:'ananasringer (mat) vs. ananas ringer (absurd betydning)'},
+ q:'«Lamme lår» i stedet for «lammelår» – hva skjer med betydningen?',
+ alt:['Samme betydning begge måter','«Lamme lår» blir mat fra lam, «lammelår» blir lammets kroppsdeler','«Lammelår» blir mat (kjøtt fra lam); «lamme lår» blir lår som er lammet/paralyserte','«Lamme lår» er bare en gammeldags skrivemåte'],
+ fasit:'«Lammelår» blir mat (kjøtt fra lam); «lamme lår» blir lår som er lammet/paralyserte',
+ regel:'Særskriving kan endre betydningen helt. I sammensatte ord bindes ordene til ett begrep; særskrevet blir de to ord – det første blir gjerne et adjektiv som beskriver det andre.',
+ eks:'lammelår (mat) vs. lamme lår (kroppsdeler uten kraft) · tunfiskbiter (mat) vs. tunfisk biter (en fisk som biter)'},
 
 {kat:'sammensatt',kat_label:'Sammensatte ord',type:'fix',vanske:'lett',
  q:'Rett de fire særskrivingsfeilene i teksten.',
@@ -221,6 +242,31 @@ var BANKV2 = [
  regel:'Bindestrek mellom norsk ord og forkorting: barne-tv, mini-golf, e-post.',
  eks:'barne-tv, e-post, 17-åring, IT-avdeling'},
 
+{kat:'sammensatt',kat_label:'Sammensatte ord',type:'fillsel',vanske:'medium',
+ q:'Sett sammen ordene riktig. Skriv som ett ord når det er sammensatt.',
+ items:[
+  {pre:'jordbær + syltethøy =',alt:['jordbær syltethøy','jordbærsyltethøy','jordbær-syltethøy'],fasit:'jordbærsyltethøy',post:''},
+  {pre:'barne + TV =',alt:['barneTV','barne TV','barne-TV'],fasit:'barne-TV',post:''},
+  {pre:'fotball + kamp =',alt:['fotball kamp','fotballkamp','fotball-kamp'],fasit:'fotballkamp',post:''},
+  {pre:'17 + åring =',alt:['17åring','17 åring','17-åring'],fasit:'17-åring',post:''}
+ ],
+ regel:'Sammensatte ord skriver du i ett: jordbærsyltethøy, fotballkamp. Men: bruk bindestrek når ett av leddene er en forkortelse (barne-TV, e-post) eller et tall (17-åring).',
+ eks:'jordbærsyltethøy (ord+ord) · barne-TV (ord+forkortelse) · 17-åring (tall+ord)'},
+
+{kat:'sammensatt',kat_label:'Sammensatte ord',type:'drag_kolonne',vanske:'vanskeleg',
+ q:'Skal det skrives i ett ord, eller er det faktisk to ord? Sorter.',
+ kolonner:['Ett ord','To ord'],
+ ord:[
+  {tekst:'klimaendring',fasit:0},
+  {tekst:'sosiale medier',fasit:1},
+  {tekst:'ungdomsskole',fasit:0},
+  {tekst:'gul farge',fasit:1},
+  {tekst:'fotballkamp',fasit:0},
+  {tekst:'stor by',fasit:1}
+ ],
+ regel:'Sammensatte substantiver = ett ord (klimaendring, fotballkamp). Adjektiv + substantiv der begge bøyes = to ord (sosiale medier, gul farge, stor by). Test: Kan du sette «veldig» foran det første ordet? Ja → to ord (veldig gul farge, veldig stor by).',
+ eks:'storby (fast begrep, en by av en viss størrelse) vs. stor by (beskrivelse: en by som er stor)'},
+
 /* ═══════════════════════════════════════════════════
   3. DOBBEL KONSONANT  (8 oppgaver)
   ═══════════════════════════════════════════════════ */
@@ -260,15 +306,15 @@ var BANKV2 = [
  ord:[
   {tekst:'stille',fasit:0},
   {tekst:'stile',fasit:1},
-  {tekst:'grønn',fasit:0},
-  {tekst:'gron',fasit:1},
   {tekst:'liten',fasit:0},
   {tekst:'litten',fasit:1},
+  {tekst:'grønn',fasit:0},
+  {tekst:'grøn',fasit:1},
   {tekst:'bitter',fasit:0},
   {tekst:'biter',fasit:1}
  ],
- regel:'Dobbel konsonant etter kort vokal: stille, bitter. En konsonant etter lang vokal: liten.',
- eks:'stille (kort i) · gronn (kort o) · liten (lang i)'},
+ regel:'Dobbel konsonant etter kort vokal: stille (kort i), grønn (kort ø), bitter (kort i). Én konsonant etter lang vokal: liten (lang i).',
+ eks:'stille (kort i → dobbel l) · liten (lang i → én t) · bitter (kort i → dobbel t) · grønn (kort ø → dobbel n)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'lett',
  q:'Rett de fire rettskrivingsfeilene.',
@@ -286,8 +332,8 @@ var BANKV2 = [
   {pre:'Han',alt:['løper','løpper'],fasit:'løper',post:'fort.'},
   {pre:'Vi',alt:['lager','lagger'],fasit:'lager',post:'middag.'}
  ],
- regel:'«Hopper» (kort o -> pp). «Sover» (lang o -> en v). «Loper» (lang o -> en p).',
- eks:'hopper (kort vokal) · sover (lang vokal) · loper (lang vokal)'},
+ regel:'«Hopper» (kort o → pp). «Sover» (lang o → én v). «Løper» (lang ø → én p). Kort vokal krever dobbel konsonant; lang vokal gir enkel konsonant.',
+ eks:'hopper (kort vokal) · sover (lang vokal) · løper (lang vokal) · lager (lang vokal)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'cloze',vanske:'lett',
  q:'Fyll inn: «Hun ___ på stolen» (å sitte, presens).',
@@ -299,23 +345,40 @@ var BANKV2 = [
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'sann_usann_serie',vanske:'vanskeleg',
  q:'Er påstandene om dobbel konsonant sanne eller usanne?',
  paastandar:[
-  {tekst:'Etter kort vokal kommer ofte dobbel konsonant.',sann:true},
+  {tekst:'Etter kort vokal kommer det som hovedregel dobbel konsonant.',sann:true},
   {tekst:'«Bil» har dobbel l fordi i-en er kort.',sann:false},
   {tekst:'«Hoppe» har dobbel p fordi o-en er kort.',sann:true},
-  {tekst:'«Dag» har en g fordi a-en er lang.',sann:true}
+  {tekst:'«Dag» har en g fordi a-en er lang.',sann:true},
+  {tekst:'Alle korte ord får dobbel konsonant.',sann:false}
  ],
- regel:'Lang vokal -> en konsonant. Kort vokal -> dobbel konsonant. «Bil» har lang i.',
- eks:'bil (lang i, en l) · ball (kort a, dobbel l)'},
+ regel:'Hovedregel: Lang vokal → én konsonant. Kort vokal → dobbel konsonant. Viktige unntak: korte småord som «han», «men», «som», «vil», «kan», «skal» har én konsonant selv om vokalen er kort.',
+ eks:'bil (lang i, én l) · ball (kort a, dobbel l) · UNNTAK: han, men, vil, kan (én konsonant likevel)'},
+
+{kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'drag_kolonne',vanske:'lett',
+ q:'Sorter ordene etter vokallengden – kort eller lang?',
+ kolonner:['Kort vokal → dobbel konsonant','Lang vokal → én konsonant'],
+ ord:[
+  {tekst:'katt',fasit:0},
+  {tekst:'kake',fasit:1},
+  {tekst:'ball',fasit:0},
+  {tekst:'bil',fasit:1},
+  {tekst:'hatt',fasit:0},
+  {tekst:'hus',fasit:1},
+  {tekst:'sopp',fasit:0},
+  {tekst:'sol',fasit:1}
+ ],
+ regel:'Kort vokal → dobbel konsonant (katt, ball, hatt, sopp). Lang vokal → én konsonant (kake, bil, hus, sol). Test: Dra vokalen langt når du sier ordet – hvis det blir rart, er vokalen kort.',
+ eks:'katt (kort a) vs. kake (lang a) · ball (kort a) vs. bil (lang i) · sopp (kort o) vs. sol (lang o)'},
 
 /* ═══════════════════════════════════════════════════
   4. KJ / SKJ-LYDEN  (6 oppgaver)
   ═══════════════════════════════════════════════════ */
 {kat:'kj_skj',kat_label:'Kj / skj-lyden',type:'mc',vanske:'lett',
- q:'Hva er rett skrivemåte av klesplagget med knapper?',
- alt:['kjorte','skjorte','sjorte','chorte'],
+ q:'Hva er rett skrivemåte på et klesplagg med knapper foran?',
+ alt:['skorte','sjorte','skjorte','kjorte'],
  fasit:'skjorte',
- regel:'«Skjorte» skriver man med «skj».',
- eks:'En hvit skjorte. Et skjørt.'},
+ regel:'«Skjorte» skriver du med «skj». Typisk elevfeil: å skrive «sjorte» fordi det høres slik ut. Husk: klesplagg med knapper = skj.',
+ eks:'en hvit skjorte · en blå skjorte · en ny skjorte'},
 
 {kat:'kj_skj',kat_label:'Kj / skj-lyden',type:'mc',vanske:'medium',
  q:'Hva er rett skrivemåte av det grammatiske begrepet (hankjønn, hunkjønn, intetkjønn)?',
@@ -358,10 +421,17 @@ var BANKV2 = [
 
 {kat:'kj_skj',kat_label:'Kj / skj-lyden',type:'cloze',vanske:'vanskeleg',
  q:'Fyll inn: «Hun ___ igjen lukta fra barndommen.» (å kjenne, preteritum)',
- hint:'Preteritum av «å kjenne». Skriv med «kj».',
+ hint:'Preteritum av å kjenne. Skriv med «kj».',
  fasit:'kjente',fasit_v:['kjente','kjende'],
  regel:'«Å kjenne» → preteritum «kjente». Skriv med «kj».',
  eks:'Hun kjente igjen lukta. Han kjente seg igjen.'},
+
+{kat:'kj_skj',kat_label:'Kj / skj-lyden',type:'finn_feil',vanske:'medium',
+ q:'Klikk på de to ordene som er feil stavet.',
+ tekst:'Hun tok på seg en hvit sjorte og skjøpte seg en kopp varm sjokolade på kjøpesenteret.',
+ fasit_feil:['sjorte','skjøpte'],
+ regel:'«Skjorte» skriver du med «skj» (klesplagg). «Kjøpte» skriver du med «kj» (preteritum av å kjøpe). «Sjokolade» er korrekt med «sj».',
+ eks:'skjorte (skj) · kjøpe/kjøpte (kj) · sjokolade (sj) – hvert ord har sin egen skrivemåte, selv om lydene ligner på hverandre.'},
 
 /* ═══════════════════════════════════════════════════
   5. TEGNSETTING  (8 oppgaver)
@@ -436,6 +506,27 @@ var BANKV2 = [
  ],
  regel:'Ikke komma foran siste «og» i oppramsing. Ikke komma foran «at». Kolon = «nemlig».',
  eks:'brød, melk og ost (ikke komma før og)'},
+
+{kat:'tegnsetting',kat_label:'Tegnsetting',type:'mc',vanske:'lett',
+ q:'Hva er rett? «Han sa at han var trøtt.»',
+ alt:['Han sa, at han var trøtt.','Han sa at han var trøtt.','Han sa: at han var trøtt.','Han sa – at han var trøtt.'],
+ fasit:'Han sa at han var trøtt.',
+ regel:'På norsk setter vi IKKE komma foran «at». «At» er et lite bindeord som innleder en leddsetning, og setningen flyter uten pause. Samme regel gjelder «om», «fordi», «når» når de står midt i setningen.',
+ eks:'Han sa at han var trøtt. · Hun tror at det regner. · Vi vet at du kommer.'},
+
+{kat:'tegnsetting',kat_label:'Tegnsetting',type:'drag_kolonne',vanske:'medium',
+ q:'Trenger setningen komma der det er markert med ___?',
+ kolonner:['Ja, komma skal stå','Nei, ingen komma'],
+ ord:[
+  {tekst:'Da jeg kom hjem ___ lagde jeg middag.',fasit:0},
+  {tekst:'Hun sa ___ at hun kom snart.',fasit:1},
+  {tekst:'Vi spiste brød ___ ost og melk.',fasit:0},
+  {tekst:'Jeg leser ___ og skriver hver dag.',fasit:1},
+  {tekst:'Boka ___ som hun skrev ___ ble en suksess.',fasit:0},
+  {tekst:'Han kommer ___ fordi han må.',fasit:1}
+ ],
+ regel:'Komma: etter innledende leddsetning (Da jeg kom hjem, …), mellom ledd i oppramsing (brød, ost og melk), rundt innskutte leddsetninger (boka, som hun skrev, …). Ikke komma: foran «at», «fordi», «når», «om» som står midt i setningen, eller mellom to verb med samme subjekt (leser og skriver).',
+ eks:'Da jeg kom hjem, lagde jeg middag. · Hun sa at hun kom. · Han kommer fordi han må.'},
 
 /* ═══════════════════════════════════════════════════
   6. ORDKLASSER  (10 oppgaver)
@@ -527,6 +618,21 @@ var BANKV2 = [
  regel:'Subjunksjoner innleder leddsetninger. «Fordi» innleder en årsaks-leddsetning.',
  eks:'fordi, at, når, om, selv om, mens, siden, dersom'},
 
+{kat:'ordklasser',kat_label:'Ordklasser',type:'klikk_marker',vanske:'medium',
+ q:'Klikk på alle verbene i setningen.',
+ tekst:'Eleven åpnet boken, leste første avsnitt og skrev et sammendrag i notatboken sin.',
+ maalordklasse:'verb',
+ fasit_ord:['åpnet','leste','skrev'],
+ regel:'Verb er handlingsord eller tilstandsord. De sier hva noen gjør, tenker eller er. Test: Kan du sette «å» foran ordet og få en meningsfull handling? Ja → verb.',
+ eks:'åpnet (å åpne) · leste (å lese) · skrev (å skrive) – alle er preteritum av sterke/svake verb.'},
+
+{kat:'ordklasser',kat_label:'Ordklasser',type:'mc',vanske:'vanskeleg',
+ q:'Samme ordet kan ha ulik ordklasse. Hva er «raskt» i denne setningen? «Hun svarte raskt på e-posten.»',
+ alt:['Adjektiv – beskriver «e-posten»','Adverb – beskriver «svarte»','Substantiv – navn på en ting','Preposisjon – stedsord'],
+ fasit:'Adverb – beskriver «svarte»',
+ regel:'Ordklassen bestemmes av hvordan ordet fungerer i setningen. «Raskt» her beskriver verbet «svarte» (hvordan svarte hun?) = adverb. I setningen «hun ga et raskt svar» beskriver «raskt» substantivet «svar» = adjektiv.',
+ eks:'Hun svarte raskt. (adverb – hvordan?) · Hun ga et raskt svar. (adjektiv – hva slags svar?)'},
+
 /* ═══════════════════════════════════════════════════
   7. SETNINGSBYGGING  (8 oppgaver)
   ═══════════════════════════════════════════════════ */
@@ -588,8 +694,23 @@ var BANKV2 = [
  tekst:'Det er bra å trene fordi det er bra for helsa. Trening er bra og trening gjør at du blir sterkere og sånt.',
  errors:{'Det er bra å trene fordi det er bra for helsa.':'Regelmessig trening styrker helsa.','Trening er bra og trening gjør at du blir sterkere og sånt.':'Fysisk aktivitet forbedrer både kondisjon og muskelstyrke.'},
  fasit:'Regelmessig trening styrker helsa. Fysisk aktivitet forbedrer både kondisjon og muskelstyrke.',
- regel:'Unngå å gjenta samme ord. Bruk synonymer og variert ordvalg. Fjern «og sånt».',
- eks:'«bra» → «styrker helsa» · «sterkere og sånt» → «forbedrer kondisjon og muskelstyrke»'},
+ regel:'Unngå gjentakelse og fyllord. Tre grep for faglig stil: (1) Bytt ut gjentatte ord med synonymer eller overbegrep. (2) Fjern «og sånt», «liksom», «litt». (3) Velg presise fagord i stedet for vage ord («bra» → «effektiv», «nyttig», «styrkende»).',
+ eks:'«bra for helsa» → «styrker helsa» · «sterkere og sånt» → «forbedrer kondisjon og muskelstyrke» · «trening er bra» → «regelmessig trening gir helsegevinst»'},
+
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'klikk_marker',vanske:'medium',
+ q:'Klikk på subjektet i hver setning. Subjektet er den som gjør handlingen.',
+ tekst:'Læreren leste teksten. Elevene fulgte med. Jonas rakte opp hånden.',
+ maalordklasse:'subjekt',
+ fasit_ord:['Læreren','Elevene','Jonas'],
+ regel:'Subjektet er den personen eller tingen som gjør handlingen i setningen. Test: Spør «hvem gjør dette?» – svaret er subjektet.',
+ eks:'Læreren leste. (hvem leste? → Læreren) · Elevene fulgte med. (hvem fulgte med? → Elevene)'},
+
+{kat:'setningsbygging',kat_label:'Setningsbygging',type:'drag_ord',vanske:'medium',
+ q:'Sett ordene i riktig rekkefølge. Husk V2-regelen når setningen starter med tid eller sted.',
+ ord:['I','går','leste','jeg','hele','boka','.'],
+ fasit:'I går leste jeg hele boka .',
+ regel:'V2-regelen: Verbet skal alltid være det andre leddet i en norsk hovedsetning. Når setningen starter med et tidsord eller stedord (I går, Ute, Derfor), må verbet likevel komme rett etter – før subjektet.',
+ eks:'I går leste jeg. (ikke: I går jeg leste) · Ute snør det. (ikke: Ute det snør)'},
 
 /* ═══════════════════════════════════════════════════
   8. BINDEORD  (10 oppgaver)
@@ -631,17 +752,17 @@ var BANKV2 = [
  items:[
   {pre:'KI kan være nyttig,',alt:['men','og','derfor'],fasit:'men',post:'det reiser etiske spørsmål.'},
   {pre:'Hun øvde mye.',alt:['Dessuten','Likevel','Derfor'],fasit:'Dessuten',post:'leste hun teori hver kveld.'},
-  {pre:'Han studerte flittig,',alt:['altså','likevel','og'],fasit:'likevel',post:'strøk han på eksamen.'}
+  {pre:'Han studerte flittig,',alt:['men','fordi','og'],fasit:'men',post:'strøk han på eksamen.'}
  ],
- regel:'Men = motsetning. Dessuten = tillegg. Likevel = uventet kontrast.',
- eks:'nyttig, men etiske spørsmål · øvde, dessuten leste teori · studerte, likevel strøk'},
+ regel:'Men = motsetning mellom to like viktige påstander. Dessuten = tillegg, noe i samme retning. Likevel = kontrast etter en forventning. Altså = oppsummerende konklusjon (= «med andre ord»). Derfor = årsak → virkning.',
+ eks:'nyttig, men etiske spørsmål (motsetning) · øvde, dessuten leste teori (tillegg) · studerte, men strøk (uventet utfall) · han øvde, altså kan han det (oppsummering)'},
 
 {kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'medium',
- q:'Sett ordene i riktig rekkefølge (V2 etter «derfor»).',
+ q:'Sett ordene i riktig rekkefølge. Husk V2-regelen.',
  ord:['Derfor','gikk','hun','hjem','tidlig','.'],
  fasit:'Derfor gikk hun hjem tidlig .',
- regel:'Når et adverbial står først, kommer verbet som ledd nummer to. Derfor heter det «Derfor gikk hun …», ikke «Derfor hun gikk …».',
- eks:'Derfor gikk hun … · Likevel møtte han …'},
+ regel:'V2-regelen: Verbet skal være det andre leddet i alle norske hovedsetninger. Når setningen starter med et framskutt adverbial (derfor, i dag, likevel), må verbet komme rett etter – før subjektet.',
+ eks:'Derfor gikk hun hjem. (ikke: Derfor hun gikk hjem) · Likevel møtte han opp. · I dag kommer de.'},
 
 {kat:'bindeord',kat_label:'Bindeord',type:'drag_ord',vanske:'medium',
  q:'Sett ordene i riktig rekkefølge (V2 etter «likevel»).',
@@ -2225,16 +2346,16 @@ var BANKV2 = [
  tekst:'Ungdoms skolen arrangerte en bok kveld i kultur huset. Elever og foreldre var invitert til en koselig lesestund med bolle salg.',
  errors:{'Ungdoms skolen':'Ungdomsskolen','bok kveld':'bokkveld','kultur huset':'kulturhuset','bolle salg':'bollesalg'},
  fasit:'Ungdomsskolen · bokkveld · kulturhuset · bollesalg',
- regel:'Sammensatte substantiv skrives i ett ord på norsk: ungdomsskole, bokkveld, kulturhus.',
- eks:'Ungdomsskolen (ungdom + skole) · kulturhuset (kultur + hus)'},
+ regel:'Sammensatte substantiver skriver du alltid som ett ord på norsk. Huskeregel: Uttal ordet høyt. Hører du det som ett begrep (trykk bare på første del)? Da skriver du det sammen. «UNGdomsskole» = ett trykk = ett ord. «ungdoms SKOLE» = to trykk = feil.',
+ eks:'ungdomsskole (ung+dom+skole) · bokkveld (bok+kveld) · kulturhus (kultur+hus) · bollesalg (bolle+salg)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'medium',
  q:'Rett de fire feilene med enkel og dobbel konsonant.',
  tekst:'Guten lekte med katen i hagen. Balen spratt over gjerdet og havnet hos naboen. Om naten drømte han at han var fotballspiller.',
  errors:{'Guten':'Gutten','katen':'katten','Balen':'Ballen','naten':'natten'},
  fasit:'Gutten · katten · Ballen · natten',
- regel:'Etter kort vokal skrives dobbel konsonant: gutt (kort u), katt (kort a), ball (kort a), natt (kort a).',
- eks:'gutt (kort u → tt) · katt (kort a → tt) · ball (kort a → ll)'},
+ regel:'Etter kort vokal skriver du dobbel konsonant: gutt (kort u → tt), katt (kort a → tt), ball (kort a → ll), natt (kort a → tt). Huskeregel: les ordet høyt og lytt. Kort trykk på vokalen = dobbel konsonant.',
+ eks:'gutt (kort u) · katt (kort a) · ball (kort a) · natt (kort a) · SAMMENLIGN: gate/gaten har lang a → én t'},
 
 {kat:'tegnsetting',kat_label:'Tegnsetting',type:'fix',vanske:'lett',
  q:'Rett de tre tegnsettingsfeilene.',
