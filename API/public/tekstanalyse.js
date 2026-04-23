@@ -47,6 +47,14 @@
     oppgaveLabel: 'Oppgavetekst (valgfritt, men anbefalt)',
     oppgavePlaceholder: 'Lim inn oppgaveteksten du fikk – da kan AI-en vurdere om innholdet treffer.',
     oppgaveHint: 'Uten oppgavetekst settes innhold til maks 4 av 6 i radardiagrammet.',
+    oppgavePickLabel: 'Eller velg en oppgave fra Skrivemesteren',
+    oppgavePickPlaceholder: '— Velg ferdig oppgave —',
+    formatBold: 'Fet',
+    formatItalic: 'Kursiv',
+    formatUnderline: 'Understreket',
+    formatBoldTitle: 'Gjør markert tekst fet (Ctrl+B)',
+    formatItalicTitle: 'Gjør markert tekst kursiv (Ctrl+I)',
+    formatUnderlineTitle: 'Understrek markert tekst (Ctrl+U)',
     label: 'Lim inn elevteksten din',
     placeholder: 'Lim inn teksten din her …',
     richHint: 'Tips: lim inn rett frå Word eller Google Docs – feit skrift på overskrifter og ingress blir teken vare på, og AI-en kan dermed skilje dei frå brødtekst.',
@@ -103,6 +111,14 @@
     oppgaveLabel: 'Oppgåvetekst (valfritt, men tilrådd)',
     oppgavePlaceholder: 'Lim inn oppgåveteksten du fekk – då kan AI-en vurdere om innhaldet treff.',
     oppgaveHint: 'Utan oppgåvetekst blir innhald sett til maks 4 av 6 i radardiagrammet.',
+    oppgavePickLabel: 'Eller vel ei oppgåve frå Skrivemeisteren',
+    oppgavePickPlaceholder: '— Vel ferdig oppgåve —',
+    formatBold: 'Feit',
+    formatItalic: 'Kursiv',
+    formatUnderline: 'Understreking',
+    formatBoldTitle: 'Gjer markert tekst feit (Ctrl+B)',
+    formatItalicTitle: 'Gjer markert tekst kursiv (Ctrl+I)',
+    formatUnderlineTitle: 'Understrek markert tekst (Ctrl+U)',
     label: 'Lim inn elevteksten din',
     placeholder: 'Lim inn teksten din her …',
     richHint: 'Tips: lim inn rett fra Word eller Google Docs – fet skrift på overskrifter og ingress blir tatt vare på, og AI-en kan dermed skille dem fra brødteksten.',
@@ -206,8 +222,17 @@
 '.nl-ta-richinput:focus{outline:none;border-color:#1A3D2B;box-shadow:0 0 0 3px rgba(26,61,43,.12);}' +
 '.nl-ta-richinput[data-empty="1"]::before{content:attr(data-placeholder);color:#a89c82;pointer-events:none;font-style:italic;}' +
 '.nl-ta-richinput strong,.nl-ta-richinput b{font-weight:700;color:#1A3D2B;}' +
+'.nl-ta-richinput em,.nl-ta-richinput i{font-style:italic;color:#1A3D2B;}' +
+'.nl-ta-richinput u{text-decoration:underline;text-decoration-color:#C8832A;text-decoration-thickness:2px;text-underline-offset:2px;}' +
 '.nl-ta-richinput p{margin:0 0 .55rem;}' +
 '.nl-ta-richinput p:last-child{margin-bottom:0;}' +
+'.nl-ta-toolbar{display:flex;gap:.35rem;flex-wrap:wrap;margin:.1rem 0 .35rem;}' +
+'.nl-ta-fbtn{display:inline-flex;align-items:center;justify-content:center;min-width:2.2rem;padding:.35rem .55rem;border:1.5px solid #E6DFD2;background:#fffdf8;color:#1A3D2B;border-radius:8px;font:600 .92rem "Source Sans 3",sans-serif;cursor:pointer;line-height:1;transition:background .15s,border-color .15s;}' +
+'.nl-ta-fbtn:hover{background:#f5f1ea;border-color:#C8832A;}' +
+'.nl-ta-fbtn:active{background:#efe7d8;}' +
+'.nl-ta-fbtn-b{font-weight:800;}' +
+'.nl-ta-fbtn-i{font-style:italic;}' +
+'.nl-ta-fbtn-u{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;}' +
 '.nl-ta-hint{font-size:.85rem;color:#7d6a3d;margin:.25rem 0 .9rem;font-style:italic;}' +
 '.nl-ta-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem;}' +
 '.nl-ta-actions-top{margin-top:0;margin-bottom:.85rem;}' +
@@ -303,18 +328,37 @@
       if (fw && (fw === 'bold' || (parseInt(fw, 10) >= 600))) return true;
       return false;
     }
+    function isItalicNode(node) {
+      if (!node || node.nodeType !== 1) return false;
+      var tag = node.nodeName;
+      if (tag === 'EM' || tag === 'I') return true;
+      var fs = node.style && node.style.fontStyle;
+      if (fs && fs.indexOf('italic') !== -1) return true;
+      return false;
+    }
+    function isUnderlineNode(node) {
+      if (!node || node.nodeType !== 1) return false;
+      var tag = node.nodeName;
+      if (tag === 'U') return true;
+      var td = node.style && node.style.textDecoration;
+      if (td && td.indexOf('underline') !== -1) return true;
+      return false;
+    }
     function isBlockNode(node) {
       if (!node || node.nodeType !== 1) return false;
       var tag = node.nodeName;
       return tag === 'P' || tag === 'DIV' || tag === 'LI' || /^H[1-6]$/.test(tag) ||
              tag === 'BLOCKQUOTE' || tag === 'TR' || tag === 'PRE';
     }
-    function walk(node, boldDepth) {
+    function walk(node, boldDepth, italicDepth, underlineDepth) {
       if (node.nodeType === 3) {
         var t = node.nodeValue || '';
         if (!t) return;
-        if (boldDepth > 0) out.push('**' + t + '**');
-        else out.push(t);
+        // Wrap i fast rekkefølgje: bold → italic → underline (innerst → ytst).
+        if (boldDepth > 0) t = '**' + t + '**';
+        if (italicDepth > 0) t = '*' + t + '*';
+        if (underlineDepth > 0) t = '__' + t + '__';
+        out.push(t);
         return;
       }
       if (node.nodeType !== 1) return;
@@ -324,20 +368,24 @@
         out.push('\n');
         addedBlock = true;
       }
-      var bold = boldDepth + (isBoldNode(node) ? 1 : 0);
+      var b = boldDepth + (isBoldNode(node) ? 1 : 0);
+      var i2 = italicDepth + (isItalicNode(node) ? 1 : 0);
+      var u = underlineDepth + (isUnderlineNode(node) ? 1 : 0);
       var c = node.childNodes;
-      for (var i = 0; i < c.length; i++) walk(c[i], bold);
+      for (var i = 0; i < c.length; i++) walk(c[i], b, i2, u);
       if (addedBlock && !/\n$/.test(out.length ? out[out.length - 1] : '')) {
         out.push('\n');
       } else if (isBlockNode(node)) {
         out.push('\n');
       }
     }
-    walk(el, 0);
-    // Rydd opp: kollaps **fragment**-naboar, fjern dobbel/tredobbel newline
+    walk(el, 0, 0, 0);
+    // Rydd opp: kollaps tomme markørar og fjern dobbel/tredobbel newline
     var s = out.join('')
-      .replace(/\*\*\s*\*\*/g, '')        // tomme bold
-      .replace(/\*\*([^*]*)\*\*\*\*([^*]*)\*\*/g, '**$1$2**') // slå saman naboar
+      .replace(/\*\*\s*\*\*/g, '')
+      .replace(/(?:^|[^*])\*\s*\*(?!\*)/g, function (m) { return m.charAt(0) === '*' ? '' : m.charAt(0); })
+      .replace(/__\s*__/g, '')
+      .replace(/\*\*([^*]*)\*\*\*\*([^*]*)\*\*/g, '**$1$2**')
       .replace(/[ \t]+\n/g, '\n')
       .replace(/\n{3,}/g, '\n\n');
     return s;
@@ -391,14 +439,28 @@
           }
           // Marker H1–H6 og element med font-weight≥600 som <strong>
           var fw = child.style && child.style.fontWeight;
+          var fs = child.style && child.style.fontStyle;
+          var td = child.style && child.style.textDecoration;
           var isBold = tag === 'B' || tag === 'STRONG' || /^H[1-6]$/.test(tag) ||
                        (fw && (fw === 'bold' || parseInt(fw, 10) >= 600));
-          // Behald struktur for blokkelement; alt anna blir spans/strong/br.
+          var isItalic = tag === 'I' || tag === 'EM' || (fs && fs.indexOf('italic') !== -1);
+          var isUnderline = tag === 'U' || (td && td.indexOf('underline') !== -1);
+          // Behald struktur for blokkelement; alt anna blir spans/strong/em/u/br.
           if (isBold && tag !== 'STRONG') {
             var s = doc.createElement('strong');
             while (child.firstChild) s.appendChild(child.firstChild);
             child.parentNode.replaceChild(s, child);
             child = s;
+          } else if (isItalic && tag !== 'EM' && tag !== 'I') {
+            var em = doc.createElement('em');
+            while (child.firstChild) em.appendChild(child.firstChild);
+            child.parentNode.replaceChild(em, child);
+            child = em;
+          } else if (isUnderline && tag !== 'U') {
+            var u = doc.createElement('u');
+            while (child.firstChild) u.appendChild(child.firstChild);
+            child.parentNode.replaceChild(u, child);
+            child = u;
           }
           if (child.removeAttribute) {
             // Fjern alle attributt
@@ -814,8 +876,17 @@
         '</div>' +
         '<label class="nl-ta-label" for="nl-ta-oppgave">' + esc(T.oppgaveLabel) + '</label>' +
         '<textarea id="nl-ta-oppgave" class="nl-ta-textarea nl-ta-textarea-small" placeholder="' + esc(T.oppgavePlaceholder) + '" rows="3"></textarea>' +
+        '<div class="nl-ta-meta-field" data-nl-ta-oppgave-pick-wrap hidden style="margin:.45rem 0 .15rem;">' +
+          '<label class="nl-ta-label" for="nl-ta-oppgave-pick">' + esc(T.oppgavePickLabel) + '</label>' +
+          '<select id="nl-ta-oppgave-pick" class="nl-ta-select"><option value="">' + esc(T.oppgavePickPlaceholder) + '</option></select>' +
+        '</div>' +
         '<p class="nl-ta-hint">' + esc(T.oppgaveHint) + '</p>' +
         '<label class="nl-ta-label" for="nl-ta-input">' + esc(T.label) + '</label>' +
+        '<div class="nl-ta-toolbar" role="toolbar" aria-label="Tekstformatering">' +
+          '<button type="button" class="nl-ta-fbtn nl-ta-fbtn-b" data-nl-ta-fmt="bold" title="' + esc(T.formatBoldTitle) + '" aria-label="' + esc(T.formatBold) + '">B</button>' +
+          '<button type="button" class="nl-ta-fbtn nl-ta-fbtn-i" data-nl-ta-fmt="italic" title="' + esc(T.formatItalicTitle) + '" aria-label="' + esc(T.formatItalic) + '">I</button>' +
+          '<button type="button" class="nl-ta-fbtn nl-ta-fbtn-u" data-nl-ta-fmt="underline" title="' + esc(T.formatUnderlineTitle) + '" aria-label="' + esc(T.formatUnderline) + '">U</button>' +
+        '</div>' +
         '<div id="nl-ta-input" class="nl-ta-richinput" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" data-placeholder="' + esc(T.placeholder) + '" data-empty="1"></div>' +
         '<p class="nl-ta-hint">' + esc(T.richHint) + '</p>' +
         '<div class="nl-ta-actions">' +
@@ -918,6 +989,60 @@
       });
       richInput.addEventListener('input', function () { updateRichEmptyState(richInput); });
       richInput.addEventListener('blur', function () { updateRichEmptyState(richInput); });
+    }
+
+    /* ─── Format-toolbar (B/I/U) ─── */
+    var fmtBtns = host.querySelectorAll('[data-nl-ta-fmt]');
+    for (var fi = 0; fi < fmtBtns.length; fi++) {
+      fmtBtns[fi].addEventListener('mousedown', function (e) {
+        // Hindre at knappen tek fokus frå contenteditable (slik at vi mister markeringa).
+        e.preventDefault();
+      });
+      fmtBtns[fi].addEventListener('click', function (e) {
+        e.preventDefault();
+        var cmd = this.getAttribute('data-nl-ta-fmt') || '';
+        if (!cmd) return;
+        var ta = host.querySelector('#nl-ta-input');
+        if (!ta) return;
+        // Sørg for at fokus er i contenteditable før kommando.
+        if (document.activeElement !== ta) ta.focus();
+        try {
+          document.execCommand(cmd, false, null);
+        } catch (err) { /* noop */ }
+        updateRichEmptyState(ta);
+      });
+    }
+
+    /* ─── Oppgåve-picker frå Skrivemeisteren-banken ─── */
+    var pickEl = host.querySelector('#nl-ta-oppgave-pick');
+    var pickWrap = host.querySelector('[data-nl-ta-oppgave-pick-wrap]');
+    if (pickEl && pickWrap && typeof window !== 'undefined' && Array.isArray(window.BANKV2)) {
+      var djupne = window.BANKV2.filter(function (t) { return t && t.kat === 'djupneoppgaver' && t.q; });
+      if (djupne.length) {
+        var frag = document.createDocumentFragment();
+        djupne.forEach(function (t, idx) {
+          var opt = document.createElement('option');
+          opt.value = String(idx);
+          var label = String(t.q || '');
+          if (label.length > 90) label = label.slice(0, 87) + '…';
+          opt.textContent = label;
+          frag.appendChild(opt);
+        });
+        pickEl.appendChild(frag);
+        pickWrap.hidden = false;
+        pickEl.addEventListener('change', function () {
+          var idx = parseInt(pickEl.value, 10);
+          if (isNaN(idx)) return;
+          var task = djupne[idx];
+          if (!task) return;
+          var oppgaveEl = host.querySelector('#nl-ta-oppgave');
+          if (!oppgaveEl) return;
+          var txt = String(task.q || '');
+          if (task.hint) txt += '\n\nTips: ' + String(task.hint);
+          oppgaveEl.value = txt;
+          oppgaveEl.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+      }
     }
   }
 
