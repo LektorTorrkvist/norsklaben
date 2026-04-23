@@ -781,7 +781,7 @@
         '<div class="ep-radar-card">' +
           '<div class="ep-panel-title">Skrivemeistring</div>' +
           '<div class="ep-panel-sub">Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'ar') + ' (1–6)' + (innhaldCapped ? ' · Innhald kappa til 4 utan oppgåvetekst' : '') + '</div>' +
-          (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES, kildebrukIsBorrowed ? [5] : []) + (kildebrukIsBorrowed ? '<div class="ep-radar-note">* Kjeldebruk: snitt frå ' + kildebrukCount + ' av ' + radarCount + ' tekstar med kjeldebruk-krav</div>' : '') : '<div class="ep-radar-empty">Radardiagrammet kjem når tekstar har blitt vurderte i Tekstsjekk.</div>') +
+          (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES, kildebrukIsBorrowed ? [5] : []) + (kildebrukIsBorrowed ? '<div class="ep-radar-note">* Kjeldebruk: snittet er rekna ut frå ' + kildebrukCount + ' av ' + radarCount + ' tekstar. Tekstar utan krav til kjeldebruk (t.d. forteljingar) er haldne utanfor, slik at aksen ikkje blir trekt ned av irrelevant data.</div>' : '') : '<div class="ep-radar-empty">Radardiagrammet kjem når tekstar har blitt vurderte i Tekstsjekk.</div>') +
         '</div>' +
         '<div class="ep-strengths-weak">' +
           '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Styrkar</h3><span>Basert på ' + escapeHtml(String(insights.totalAnalyses)) + ' analyserte tekstar, kopla mot treffprosent i samsvarande oppgåver.</span></div><span class="ep-sw-icon">🌟</span></div>' + statRows(strengths, 'Ingen styrkedata frå tekstanalysar enno. Analyser fleire tekstar først.', 'ok') + '</div>' +
