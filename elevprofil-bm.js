@@ -699,15 +699,21 @@
     var recentAnalyses = analysisStore.analyses.slice(0, 8);
     var recentHistory = adaptiveHistory.slice(-6);
     var radarSums = [0,0,0,0,0,0], radarCount = 0;
+    var kildebrukSum = 0, kildebrukCount = 0;
     for (var ri = 0; ri < analysisStore.analyses.length; ri++) {
       var aItem = analysisStore.analyses[ri];
       var rs = aItem.radarScores;
       if (!rs) continue;
       if (excludedSet[String(aItem.ts)]) continue;
-      for (var rj = 0; rj < 6; rj++) radarSums[rj] += rs[rj];
+      var hasKildebruk = Array.isArray(aItem.categories) && aItem.categories.some(function(c) { return c && c.id === 'kildebruk'; });
+      for (var rj = 0; rj < 5; rj++) radarSums[rj] += rs[rj];
       radarCount++;
+      if (hasKildebruk) {
+        kildebrukSum += rs[5];
+        kildebrukCount++;
+      }
     }
-    var averageRadar = radarCount > 0 ? radarSums.map(function(s) { return Math.round(s / radarCount * 10) / 10; }) : null;
+    var averageRadar = radarCount > 0 ? radarSums.slice(0, 5).map(function(s) { return Math.round(s / radarCount * 10) / 10; }).concat([kildebrukCount > 0 ? Math.round(kildebrukSum / kildebrukCount * 10) / 10 : 0]) : null;
 
     var innhaldCapped = false;
     if (averageRadar && analysisStore.analyses.length) {
