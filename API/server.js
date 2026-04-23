@@ -27,6 +27,7 @@ const OLLAMA_MODEL= process.env.OLLAMA_MODEL|| 'gemma4:e4b';
 const MAX_TEKST   = parseInt(process.env.MAX_TEKST || '6000', 10);
 const NUM_THREAD  = parseInt(process.env.OLLAMA_NUM_THREAD || String(Math.max(1, os.cpus().length)), 10);
 const NUM_CTX     = parseInt(process.env.OLLAMA_NUM_CTX || '4096', 10);
+const NUM_PREDICT = parseInt(process.env.OLLAMA_NUM_PREDICT || '2048', 10);
 const KEEP_ALIVE  = process.env.OLLAMA_KEEP_ALIVE || '24h';
 
 // Finn lokal IP-adresse (første ikke-interne nettverksadresse)
@@ -223,7 +224,7 @@ async function kallOllamaRaw(systemPrompt, userPrompt) {
       temperature: 0.3,   // lågare → meir konsistente vurderingar
       top_p: 0.9,
       num_ctx: NUM_CTX,
-      num_predict: 1200,  // nok til JSON-svaret, ikkje meir
+      num_predict: NUM_PREDICT,  // tak for JSON-svaret; aukast om svaret blir kutta
       repeat_penalty: 1.1,
       num_thread: NUM_THREAD
     },
@@ -242,9 +243,17 @@ async function kallOllamaRaw(systemPrompt, userPrompt) {
   }
 
   const data = await res.json();
-  console.log('\n─── FULL OLLAMA-RESPONS ─────────────────────────');
-  console.log(JSON.stringify(data).slice(0, 800));
-  console.log('─────────────────────────────────────────────────\n');
+  const doneReason = data.done_reason || data.done || '';
+  const evalCount  = data.eval_count || 0;
+  const promptCount = data.prompt_eval_count || 0;
+  const totalMs    = data.total_duration ? Math.round(data.total_duration / 1e6) : 0;
+  console.log(`\n─── OLLAMA-RESPONS ─── done_reason=${doneReason} prompt_tokens=${promptCount} eval_tokens=${evalCount} tid=${totalMs}ms`);
+  console.log(JSON.stringify(data).slice(0, 600));
+  console.log('─'.repeat(60) + '\n');
+
+  if (doneReason === 'length') {
+    console.warn(`⚠️  Svaret blei kutta (nådde num_predict=${NUM_PREDICT}). Vurder å auke OLLAMA_NUM_PREDICT.`);
+  }
 
   // Qwen3: content kan vere tom om modellen berre fyllte thinking-feltet.
   // Prøv content fyrst, fall tilbake til thinking om content er tom.
@@ -304,12 +313,22 @@ app.post('/api/analyser-tekst', async (req, res) => {
     const sys  = buildSystemPrompt(maal);
     const user = buildUserPrompt(tekst, maal, oppgave);
 
-    const raw  = await kallOllama(sys, user);
+    let raw  = await kallOllama(sys, user);
     console.log('\n─── RAW LLM-SVAR ───────────────────────────────');
     console.log(raw.slice(0, 1500));
-    console.log('────────────────────────────────────────────────\n');
+    console.log('─'.repeat(60) + '\n');
 
-    const json = extractJson(raw);
+    let json = extractJson(raw);
+
+    // Retry éin gong om svaret var tomt eller ikkje kunne tolkast som JSON
+    if (!json || !raw) {
+      console.warn('⚠️  Første forsok feila (tomt eller ugyldig JSON). Prøver éin gong til …');
+      raw = await kallOllama(sys, user);
+      console.log('\n─── RAW LLM-SVAR (retry) ──────────────────');
+      console.log(raw.slice(0, 1500));
+      console.log('─'.repeat(60) + '\n');
+      json = extractJson(raw);
+    }
 
     if (!json) {
       return res.status(502).json({
