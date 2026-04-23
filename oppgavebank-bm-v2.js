@@ -806,6 +806,29 @@ var BANKV2 = [
  regel:'«Selv om» innleder en leddsetning som viser kontrast.',
  eks:'Selv om det er vanskelig, prøver hun.'},
 
+{kat:'bindeord',kat_label:'Bindeord',type:'mc',vanske:'medium',
+ q:'Hvilke av disse bindeordene kan brukes i stedet for «fordi» i setningen: «Hun gikk til legen ___ hun var syk»?',
+ alt:[
+  'Bare «derfor»',
+  '«Siden» og «ettersom» – alle tre viser årsak',
+  'Bare «men»',
+  'Ingen andre bindeord passer'
+ ],
+ fasit:'«Siden» og «ettersom» – alle tre viser årsak',
+ regel:'«Fordi», «siden» og «ettersom» er alle årsaksbindeord som kan brukes om hverandre i de fleste sammenhenger. Merk: «derfor» viser også årsak, men står i motsatt ende av setningen («Hun var syk, derfor gikk hun til legen»).',
+ eks:'Hun gikk til legen fordi / siden / ettersom hun var syk. Hun var syk, derfor gikk hun til legen.'},
+
+{kat:'bindeord',kat_label:'Bindeord',type:'fillsel',vanske:'medium',
+ q:'Velg riktig bindeord i hver setning. Tenk etter: viser sammenhengen årsak, kontrast eller tillegg?',
+ items:[
+  {pre:'Hun bestod eksamen',alt:['fordi','men','dessuten'],fasit:'fordi',post:'hun hadde forberedt seg godt.'},
+  {pre:'Han øvde mye,',alt:['og','likevel','derfor'],fasit:'likevel',post:'vant han ikke konkurransen.'},
+  {pre:'Teksten var vanskelig.',alt:['Derfor','Dessuten','Men'],fasit:'Dessuten',post:'var den lang.'},
+  {pre:'',alt:['Selv om','Fordi','Derfor'],fasit:'Selv om',post:'det var kaldt, gikk vi tur.'}
+ ],
+ regel:'Årsak: fordi, siden, ettersom, derfor. Kontrast: men, likevel, selv om. Tillegg: dessuten, også, i tillegg. Spør deg selv: viser setningen at noe fører til noe, at noe er uventet, eller at noe kommer på toppen?',
+ eks:'Fordi = årsak · Likevel = uventet kontrast · Dessuten = tillegg · Selv om = innrømmelse av kontrast'},
+
 /* ═══════════════════════════════════════════════════
   9. TEKSTSTRUKTUR  (10 oppgaver)
   ═══════════════════════════════════════════════════ */
@@ -815,11 +838,12 @@ var BANKV2 = [
  avsnitt:[
   {tekst:'Plast i havet er et økende problem som påvirker dyr og natur over hele verden.',lag:0},
   {tekst:'En løsning er å innføre strengere regulering av engangsplast i alle EU-land.',lag:1},
-  {tekst:'Kildesortering og bedre infrastruktur kan også redusere problemet.',lag:1},
+  {tekst:'Mikroplast fra klær og bildekk havner også i næringskjeden og kan finnes i sjømat.',lag:1},
+  {tekst:'Kildesortering og bedre infrastruktur kan dessuten redusere problemet.',lag:1},
   {tekst:'Alt i alt viser dette at plastforurensning krever samarbeid på tvers av landegrenser.',lag:2}
  ],
- regel:'Innledningen presenterer temaet. Hoveddelen utdyper. Avslutningen konkluderer.',
- eks:'Innledning → tema · Hoveddel → argument · Avslutning → konklusjon'},
+ regel:'En fagartikkel følger mønsteret innledning → hoveddel → avslutning. Hoveddelen har oftest 2–3 avsnitt, ett poeng per avsnitt.',
+ eks:'Innledning: presenter tema · Hoveddel: 2–3 argument/utdypinger · Avslutning: konklusjon'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'burger_sort',vanske:'medium',
  q:'Sorter avsnittene fra et debattinnlegg om skjermtid til riktig del.',
@@ -856,7 +880,7 @@ var BANKV2 = [
   {id:'s3',tekst:'Mange land har allerede innført tiltak mot karbonutslipp.',first_word:'Mange'}
  ],
  fasit_breaks:['s2'],
- regel:'Nytt avsnitt ved nytt poeng. «For å stoppe …» skifter fra problem til løsning.',
+ regel:'Et nytt avsnitt markerer ofte et skifte i fokus eller funksjon. Her skifter teksten fra å beskrive problemet til å peke på løsninger ved «For å stoppe …». «Gjennomsnittstemperaturen …» hører ennå til problembeskrivelsen, så der trenger vi ikke nytt avsnitt.',
  eks:'Avsnitt 1: fakta om problemet · Avsnitt 2: hva som må gjøres'},
 
 {kat:'tekststruktur',kat_label:'Tekststruktur',type:'drag_kolonne',vanske:'medium',
@@ -910,6 +934,25 @@ var BANKV2 = [
  ],
  regel:'Temasetning → utdyping → kilde → kommentar = standard avsnittstruktur.',
  eks:'Plast er farlig [tema] → 80 % av sjøfugler [utdyping] → (WWF, 2023) [kilde] → Dette viser … [komm.]'},
+
+{kat:'tekststruktur',kat_label:'Tekststruktur',type:'klikk_marker',vanske:'medium',
+ q:'Klikk på alle ordene i temasetningen i avsnittet under.',
+ tekst:'Sosiale medier kan påvirke selvbildet til ungdom negativt. Mange unge sammenligner seg selv med andre de følger på nettet. Forskning viser at hyppig bruk av Instagram øker misnøye med eget utseende. Dette gjør at flere unge sliter med selvtillit i hverdagen.',
+ maalordklasse:'ordene i temasetningen',
+ fasit_ord:['Sosiale medier kan påvirke selvbildet til ungdom negativt'],
+ regel:'Temasetningen er den første setningen i avsnittet og forteller hva avsnittet handler om. Resten av avsnittet utdyper dette poenget.',
+ eks:'«Sosiale medier kan påvirke selvbildet …» → temasetning · de nærmeste setningene utdyper'},
+
+{kat:'tekststruktur',kat_label:'Tekststruktur',type:'sorter_rekke',vanske:'medium',
+ q:'Sett setningene i riktig rekkefølge slik at avsnittet blir logisk bygd opp (temasetning → utdyping → eksempel → konsekvens).',
+ items:[
+  {tekst:'Søvnmangel påvirker både læring og humør hos unge.'},
+  {tekst:'Mange ungdommer sover for lite om natten.'},
+  {tekst:'En studie fra FHI viser at bare 4 av 10 sover nok før skoledagen.'},
+  {tekst:'Dette kan føre til dårligere konsentrasjon på skolen.'}
+ ],
+ regel:'Et godt avsnitt har klar struktur: temasetning → utdyping → eksempel eller kilde → konsekvens/kommentar.',
+ eks:'Tema (søvnmangel) → utdyping (mange sover lite) → eksempel (FHI-studie) → konsekvens (konsentrasjon)'},
 
 /* ═══════════════════════════════════════════════════
   10. KILDEBRUK  (10 oppgaver)
@@ -1029,8 +1072,8 @@ var BANKV2 = [
  q:'Oppgaven sier: «Presenter hovedkarakteren, og drøft hvordan forfatteren bruker kontraster.» Hvor mange deler har oppgaven?',
  alt:['Én del','To deler','Tre deler','Fire deler'],
  fasit:'To deler',
- regel:'«Presenter … og drøft» = to bestillingsord = to deler. Tell alltid bestillingsordene.',
- eks:'Del 1: presenter hovedkarakteren. Del 2: drøft bruken av kontraster.'},
+ regel:'Strategi for å tolke oppgaver: stryk under hvert bestillingsord. «Presenter» (del 1) + «drøft» (del 2) = to deler. Et godt oppgavesvar gjør alle delene synlig – gjerne med avsnittskifte.',
+ eks:'Del 1: presenter hovedkarakteren (hvem er hun, hva gjør hun?). Del 2: drøft bruken av kontraster (hva slags kontraster, hvorfor bruker forfatteren dem?).'},
 
 {kat:'oppgavetolking',kat_label:'Oppgavetolking',type:'drag_kolonne',vanske:'lett',
  q:'Oppgaven er: «Drøft om skolen bør innføre mobilforbud.» Hva hører hjemme i svaret?',
@@ -1079,11 +1122,30 @@ var BANKV2 = [
  eks:'Hvordan bruker forfatteren metaforer? Hvordan skaper fortellerstemmen nærhet?'},
 
 {kat:'oppgavetolking',kat_label:'Oppgavetolking',type:'mc',vanske:'vanskeleg',
- q:'Tre elever svarer på «Drøft om teknologi gjør oss mer isolerte». Hvem er på bom?',
- alt:['Elev A viser argument for og mot, og konkluderer.','Elev B skriver om historien til internett og teknologien.','Elev C bruker tre kilder og veier side mot side.','Elev D starter personlig, drøfter og konkluderer.'],
- fasit:'Elev B skriver om historien til internett og teknologien.',
- regel:'«Drøft» = vei argument for og mot. Å skrive historikk er «grei ut», ikke drøfting.',
- eks:'Bom: svare med feil sjanger. «Grei ut»-svar der «drøft» var kravet.'},
+ q:'Tre elever svarer på «Drøft om teknologi gjør oss mer isolerte». Hvem bommer?',
+ alt:[
+  'Elev A viser argument for og mot, og konkluderer.',
+  'Elev B skriver bare om historien til internett, uten å drøfte om teknologi gjør oss isolerte.',
+  'Elev C bruker tre kilder og veier ulike sider mot hverandre.',
+  'Elev D starter personlig, drøfter og konkluderer.'
+ ],
+ fasit:'Elev B skriver bare om historien til internett, uten å drøfte om teknologi gjør oss isolerte.',
+ regel:'«Drøft» krever at du veier argument for og mot og svarer på det oppgaven faktisk spør om. Du kan godt ta med historikk som bakgrunn, men hovedjobben er å drøfte spørsmålet. Å bare skrive historikk er «gjør rede for» – feil sjanger for «drøft».',
+ eks:'God drøfting: historikk som bakgrunn + argument for + argument mot + konklusjon. Bomskudd: bare historikk uten drøfting.'},
+
+{kat:'oppgavetolking',kat_label:'Oppgavetolking',type:'drag_kolonne',vanske:'medium',
+ q:'Hvilke bestillingsord passer til hvilken type svar?',
+ kolonner:['Gjør rede for (forklar)','Drøft (vei argument)','Analyser (undersøk hvordan)','Reflekter (tenk over)'],
+ ord:[
+  {tekst:'Skriv en informerende forklaring uten å ta stilling',fasit:0},
+  {tekst:'Vis flere sider og trekk en konklusjon',fasit:1},
+  {tekst:'Undersøk hvordan en tekst er bygd opp',fasit:2},
+  {tekst:'Skriv dine egne tanker og vurderinger',fasit:3},
+  {tekst:'Forklar hva et begrep betyr og hvordan det brukes',fasit:0},
+  {tekst:'Vurder argument for og mot et tiltak',fasit:1}
+ ],
+ regel:'Bestillingsord bestemmer hva slags tekst du skriver. «Gjør rede for» = forklarende. «Drøft» = argumenterende med to sider. «Analyser» = undersøkende, systematisk. «Reflekter» = personlig og tankemessig, men faglig.',
+ eks:'Gjør rede for → informerende · Drøft → argumenterende · Analyser → systematisk undersøkelse · Reflekter → gjennomtenkt vurdering'},
 
 /* ═══════════════════════════════════════════════════
   12. SPRÅK OG STIL  (10 oppgaver)
@@ -1096,11 +1158,11 @@ var BANKV2 = [
  eks:'Unngå: «jo, helt, og sånn». Skriv: «Plast i havet er en dokumentert trussel mot dyrelivet.»'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'finn_feil',vanske:'medium',
- q:'Klikk på ordene som gjør teksten for subjektiv for en fagartikkel.',
+ q:'Klikk på ordene som gjør teksten for subjektiv eller uformell for en fagartikkel.',
  tekst:'Jeg synes egentlig at forskningen er superviktig, og at vi bare må handle nå.',
- fasit_feil:['jeg','synes','egentlig','superviktig','bare'],
- regel:'I faglig stil toner man ned personlige meninger og forsterkerord.',
- eks:'Unngå: «Jeg synes dette er superviktig». Skriv: «Forskningen tyder på at temaet er viktig.»'},
+ fasit_feil:['Jeg','synes','egentlig','superviktig','bare'],
+ regel:'Faglig stil bygger på dokumenterbare påstander, ikke personlige meninger. Fire ord-typer du bør unngå: (1) meningsmarkører («jeg synes/tror»), (2) forsterkere («super-», «kjempe-»), (3) fyllord («egentlig», «bare»), (4) absolutte ord («alle», «aldri»).',
+ eks:'Uformelt: «Jeg synes forskningen er superviktig.» Faglig: «Forskningen er viktig fordi den viser at …» eller «Flere studier tyder på at temaet har betydning for …»'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'finn_feil',vanske:'vanskeleg',
  q:'Klikk på ordene som gjør argumentasjonen for følelsesladet.',
@@ -1161,11 +1223,10 @@ var BANKV2 = [
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'omskriv',vanske:'medium',
  q:'Skriv om setningen til faglig stil.',
  tekst:'Jeg tror egentlig at skjermbruk er ganske dårlig for unge, for de blir jo helt oppslukte.',
- instruksjon:'Fjern personlige meningsmarkører og uformelle forsterkere. Bruk nøytral, faglig tone.',
- maa_ha:['skjermbruk','unge'],
- maa_ikkje_ha:['jeg','tror','egentlig','ganske','jo','helt'],
- regel:'I fagtekst bør du prioritere nøytral ordbruk og etterprøvbare påstander.',
- eks:'Mulig svar: «Høyt skjermbruk kan redusere konsentrasjon og søvnkvalitet hos unge.»'},
+ instruksjon:'Fjern personlige meningsmarkører (jeg tror, egentlig) og uformelle forsterkere (ganske, jo, helt). Bruk nøytral, faglig tone.',
+ maa_ha:['skjermbruk'],
+ regel:'Faglig stil bygger på etterprøvbare påstander, ikke personlige meninger. Grep: (1) fjern «jeg tror/synes/mener», (2) fjern forsterkere som «jo», «helt», «ganske», (3) bruk konkrete virkninger i stedet for vage vurderinger («dårlig» → «reduserer konsentrasjonen»).',
+ eks:'Forslag: «Høyt skjermbruk kan redusere konsentrasjon og søvnkvalitet hos unge.» Merk: «kan» viser forsiktig konklusjon, konkrete virkninger i stedet for «dårlig».'},
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'fillsel',vanske:'medium',
  q:'Velg den mest faglige formuleringen.',
@@ -1177,15 +1238,36 @@ var BANKV2 = [
  regel:'Faglig stil: «forskning tyder på», «dokumenterte effekter», «flere studier viser».',
  eks:'Uformelt → formelt: «jo klart» → «forskning tyder på»'},
 
+{kat:'spraak_stil',kat_label:'Språk og stil',type:'drag_kolonne',vanske:'vanskeleg',
+ q:'Sorter uttrykkene i tre register.',
+ kolonner:['Slang / ungdomsspråk','Hverdagslig (OK i f.eks. blogg)','Faglig (OK i fagartikkel)'],
+ ord:[
+  {tekst:'dritbra',fasit:0},
+  {tekst:'veldig bra',fasit:1},
+  {tekst:'svært vellykket',fasit:2},
+  {tekst:'chilla',fasit:0},
+  {tekst:'slappet av',fasit:1},
+  {tekst:'rekreasjon',fasit:2},
+  {tekst:'krise',fasit:1},
+  {tekst:'alvorlig problem',fasit:2}
+ ],
+ regel:'Språket har flere register: slang (ofte muntlig, blant venner), hverdagslig (nøytralt, blogg eller muntlige framføringer) og faglig (presist, forsknings- og utredningstekster). Valg av register skal passe til sjanger og leser.',
+ eks:'Til venner: «Det var dritbra!» Til lesere av blogg: «Det var veldig bra.» Til faglig rapport: «Det var svært vellykket.»'},
+
 /* ═══════════════════════════════════════════════════
   13. ÅRSAK OG SAMMENHENG  (8 oppgaver)
   ═══════════════════════════════════════════════════ */
 {kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'mc',vanske:'lett',
- q:'Hvilken setning uttrykker en årsak–virkning-sammenheng?',
- alt:['Sola skinner, og barna leker ute.','Sola skinner så sterkt at asfalten blir varm.','Sola skinner. Barna leker ute.','Sola skinner, men det er kaldt.'],
+ q:'Hvilken setning viser tydeligst at én ting fører til en annen?',
+ alt:[
+  'Sola skinner, og barna leker ute. (bare «og» – to ting skjer samtidig)',
+  'Sola skinner så sterkt at asfalten blir varm.',
+  'Sola skinner. Barna leker ute. (ingen kobling)',
+  'Sola skinner, men det er kaldt. (kontrast, ikke årsak)'
+ ],
  fasit:'Sola skinner så sterkt at asfalten blir varm.',
- regel:'«Så … at» markerer at årsaken (solskinn) fører til virkningen (varm asfalt).',
- eks:'«Hun leste så mye at hun ble trøtt.» = årsak–virkning'},
+ regel:'«Så … at» uttrykker årsak-virkning presist: A fører til B. Andre vanlige årsakskonstruksjoner: «fordi», «derfor», «som følge av», «dette fører til».',
+ eks:'Årsak-virkning: «Hun leste så mye at hun ble trøtt» eller «Hun leste mye, og derfor ble hun trøtt». «Og» alene er ikke nok – det sier bare at to ting skjer.'},
 
 {kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'mc',vanske:'medium',
  q:'Hvilken setning bruker det mest presise årsaksuttrykket?',
@@ -1253,20 +1335,35 @@ var BANKV2 = [
  eks:'Lite lesing → smalt ordforråd → vanskelig å forstå fagtekster → fagvansker'},
 
 {kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'finn_feil',vanske:'vanskeleg',
- q:'Klikk på det ene uttrykket som er feil brukt.',
+ q:'Klikk på det ene uttrykket som er feil brukt i sammenhengen.',
  tekst:'Hun fikk gode karakterer til tross for at hun jobbet hardt hver dag.',
  fasit_feil:['tross'],
- regel:'«Til tross for» markerer noe uventet. At hardt arbeid gir gode resultater er forventet → bruk «fordi».',
- eks:'Rett: «Hun fikk gode karakterer fordi hun jobbet hardt.» Kontrast: «… dårlige til tross for at hun jobbet hardt.»'},
+ regel:'«Til tross for» signaliserer at noe skjer på tross av en forventning. Hardt arbeid gir forventet gode resultater – ingen kontrast. Her er det en vanlig årsak-virkning: bruk «fordi», «siden» eller «ettersom». «Til tross for» passer når resultatet er uventet: «Hun strøk til tross for at hun jobbet hardt.»',
+ eks:'Rett bruk av «til tross for»: uventet utfall. «Hun vant til tross for dårlig forberedelse.» Rett bruk av «fordi»: forventet utfall. «Hun vant fordi hun hadde trent mye.»'},
+
+{kat:'aarsak_sammenheng',kat_label:'Årsak og sammenheng',type:'drag_kolonne',vanske:'vanskeleg',
+ q:'Viser setningen årsak–virkning, eller bare at to ting henger sammen (korrelasjon)?',
+ kolonner:['Årsak–virkning','Bare sammenheng (korrelasjon)'],
+ ord:[
+  {tekst:'Røyking fører til lungesykdom.',fasit:0},
+  {tekst:'Barn som spiser frokost, gjør det bedre på skolen.',fasit:1},
+  {tekst:'Fordi det regnet, brukte hun paraply.',fasit:0},
+  {tekst:'Ungdom som bruker mye skjerm, sover mindre.',fasit:1},
+  {tekst:'Sola varmer opp asfalten, som gjør at den blir myk.',fasit:0},
+  {tekst:'Land med mer sjokolade har flere Nobel-prisvinnere.',fasit:1}
+ ],
+ regel:'Årsak–virkning: A fører direkte til B, og man kan forklare hvordan. Korrelasjon: A og B henger sammen, men det kan være tilfeldig eller skyldes en tredje faktor. Tommelfingerregel: spør «hva er grunnen?» Hvis du får et tydelig svar, er det årsak.',
+ eks:'Årsak: røyking → lungesykdom (medisinsk forklart). Korrelasjon: mye sjokolade og mange Nobel-priser (begge følger rikdom, ikke hverandre).'},
 
 /* ═══════════════════════════════════════════════════
    14. REFERANSEKJEDE  (8 oppgaver)
    ═══════════════════════════════════════════════════ */
 {kat:'referansekjede',kat_label:'Referansekjede',type:'mc',vanske:'lett',
- q:'Hvilket ord kan erstatte «plast» i andre setning? «Plast i havet er farlig. ___ brytes ned til mikropartikler.»',
- alt:['Plast','Materialet','Plasten','Hun'],fasit:'Materialet',
- regel:'Bruk synonym eller overbegrep for å unngå gjentagelse. «Materialet» peker tilbake på «plast».',
- eks:'plast → materialet / søppelet / forurensningen'},
+ q:'Hvilket ord erstatter «plast» best i andre setning? «Plast i havet er farlig. ___ brytes ned til mikropartikler.»',
+ alt:['Plast (gjenta ordet)','Materialet','Plasten (bare med bestemt form)','Hun'],
+ fasit:'Materialet',
+ regel:'God tekst unngår gjentagelse. «Materialet» er et overbegrep som gjør teksten mer variert. «Plasten» blir også riktig, men det er fortsatt nesten samme ord. «Hun» passer ikke – «plast» er ikke en person.',
+ eks:'plast (det) → materialet → avfallet → forurensningen. Variasjonen gjør teksten lettere å lese.'},
 
 {kat:'referansekjede',kat_label:'Referansekjede',type:'mc',vanske:'medium',
  q:'Hva er en referansekjede?',
@@ -1308,13 +1405,13 @@ var BANKV2 = [
  regel:'Finn alle uttrykk som peker tilbake til samme person (referent).',
  eks:'Greta → den unge aktivisten → hun → klimaforkjemperen'},
 
-{kat:'referansekjede',kat_label:'Referansekjede',type:'fix',vanske:'medium',
- q:'Rett teksten slik at «plast» bare brukes én gang. Erstatt gjentagelsene.',
+{kat:'referansekjede',kat_label:'Referansekjede',type:'omskriv',vanske:'medium',
+ q:'Skriv om teksten slik at «plast» bare brukes én gang. Erstatt de andre forekomstene med noe annet.',
  tekst:'Plast er et stort problem. Plast finnes overalt i naturen. Plast brytes ned til små biter. Plast skader dyr og fugler.',
- errors:{'Plast finnes':'Det finnes','Plast brytes':'Materialet brytes','Plast skader':'Avfallet skader'},
- fasit:'Det finnes · Materialet brytes · Avfallet skader',
- regel:'Erstatt gjentatte substantiv med pronomen, synonym eller overbegrep for bedre flyt.',
- eks:'Plast → det / materialet / avfallet / forurensningen'},
+ instruksjon:'Varier med pronomen (det), synonym (materialet, avfallet, søppelet) eller overbegrep (forurensningen). Du velger selv hva som passer hvor.',
+ maa_ha:['plast'],
+ regel:'God referansekjede veksler mellom pronomen, synonym og overbegrep for å unngå gjentagelse. Det finnes flere gode løsninger – viktigst er at teksten flyter naturlig og at leseren forstår hva det er snakk om.',
+ eks:'Forslag: «Plast er et stort problem. Materialet finnes overalt i naturen. Det brytes ned til små biter som skader dyr og fugler.» Merk: «det» kan både stå alene som pronomen og vise tilbake til «materialet».'},
 
 {kat:'referansekjede',kat_label:'Referansekjede',type:'sann_usann_serie',vanske:'vanskeleg',
  q:'Er påstandene om referansekjeder sanne eller usanne?',
@@ -1336,6 +1433,18 @@ var BANKV2 = [
  maa_ikkje_ha:[],
  regel:'Det finnes flere gode løsninger. Varier med pronomen, synonymer og overbegrep for å skape flyt i teksten.',
  eks:'Ungdom → de → tenåringene → denne generasjonen → de unge'},
+
+{kat:'referansekjede',kat_label:'Referansekjede',type:'mc',vanske:'vanskeleg',
+ q:'Hva er problemet i denne setningen? «Jonas sa til Andreas at han hadde glemt bøkene sine.»',
+ alt:[
+  'Det er ingenting i veien med setningen.',
+  '«Han» er uklart – det kan vise tilbake til både Jonas og Andreas.',
+  '«Sine» skulle vært «hans».',
+  '«Glemt» er feil verbform.'
+ ],
+ fasit:'«Han» er uklart – det kan vise tilbake til både Jonas og Andreas.',
+ regel:'Pronomen må peke tydelig tilbake til en bestemt referent. Når to eller flere personer er omtalt, kan «han», «hun», «de» og «det» bli uklare. Bruk navnet eller omformuler.',
+ eks:'Uklart: «Jonas sa til Andreas at han hadde glemt bøkene sine.» Klarere: «Jonas sa til Andreas at Andreas hadde glemt bøkene.» Eller: «Jonas sa: \u2018Du har glemt bøkene dine.\u2019»'},
 
 /* ═══════════════════════════════════════════════════
    15. LOGISK STRUKTUR  (8 oppgaver)
@@ -1391,12 +1500,12 @@ var BANKV2 = [
  paastandar:[
   {tekst:'Innledningen bør presentere temaet og fange interessen til leseren.',sann:true},
   {tekst:'Man kan ta opp nye argumenter i avslutningen.',sann:false},
-  {tekst:'Avsnitt i hoveddelen kan ordnes kronologisk, viktigst først eller fra generelt til spesifikt.',sann:true},
+  {tekst:'Avsnitt i hoveddelen kan være ordnet kronologisk, etter viktighet eller fra det generelle til det spesifikke.',sann:true},
   {tekst:'Hvert avsnitt bør ha en temasetning.',sann:true},
   {tekst:'Avslutningen bør oppsummere og konkludere.',sann:true}
  ],
- regel:'God logikk: innledning presenterer, hoveddelen utdyper i naturlig rekkefølge, avslutningen konkluderer.',
- eks:'Innledning → tema. Hoveddel → argument i rekkefølge. Avslutning → konklusjon.'},
+ regel:'God logikk: innledning presenterer, hoveddelen utdyper i en tydelig rekkefølge (kronologisk, etter viktighet, eller fra generelt til spesifikt), avslutningen konkluderer.',
+ eks:'Kronologisk: først det som skjedde i 2020, så 2022, så 2024. Etter viktighet: det viktigste poenget først. Generelt → spesifikt: først det brede bildet, så detaljene.'},
 
 {kat:'logisk_struktur',kat_label:'Logisk struktur',type:'mcset',vanske:'vanskeleg',
  q:'Les teksten og svar.',
@@ -1415,6 +1524,25 @@ var BANKV2 = [
  fasit:'For det første',fasit_v:['For det første','for det første'],
  regel:'Nummereringsmarkører som «for det første», «for det andre», «til slutt» ordner argumenter.',
  eks:'For det første … For det andre … Til slutt …'},
+
+{kat:'logisk_struktur',kat_label:'Logisk struktur',type:'mc',vanske:'medium',
+ q:'Du skriver en fagartikkel om søvnvaner hos ungdom. Du har tre hovedargumenter: (A) skjermbruk om kvelden, (B) tidlig skolestart, (C) stress fra skolearbeid. Hvilken rekkefølge er mest logisk?',
+ alt:[
+  'Vilkårlig – rekkefølgen spiller ingen rolle.',
+  'Fra viktigste årsak til mindre viktig, eller fra det eleven kan kontrollere selv til det de ikke kan endre.',
+  'Fra minst viktig til viktigst, fordi leseren skal fortsette lesingen.',
+  'Alfabetisk etter første bokstav i argumentet.'
+ ],
+ fasit:'Fra viktigste årsak til mindre viktig, eller fra det eleven kan kontrollere selv til det de ikke kan endre.',
+ regel:'Rekkefølgen av argumenter skal ha en begrunnelse. Vanlige mønstre: (1) viktigst først, (2) kronologisk, (3) fra det konkrete til det abstrakte, (4) fra det eleven kan endre selv til det som krever samfunnsendring.',
+ eks:'Søvnartikkel: (1) Skjermbruk (eleven kan endre selv) → (2) Stress (skolen og hjemmet kan hjelpe) → (3) Tidlig skolestart (krever politisk endring).'},
+
+{kat:'logisk_struktur',kat_label:'Logisk struktur',type:'finn_feil',vanske:'vanskeleg',
+ q:'Klikk på det ene ordet som er feil brukt i teksten.',
+ tekst:'Ungdom bruker mye tid på sosiale medier. For det første former de identiteten sin der. For det andre lærer de nye ting. Dessuten kan det være skadelig for selvbildet.',
+ fasit_feil:['Dessuten'],
+ regel:'Tekstmarkøren «dessuten» signaliserer et tillegg i samme retning. Men her skifter teksten til noe negativt – da skal man bruke en kontrastmarkør som «likevel» eller «på den andre siden».',
+ eks:'Dessuten = tillegg i samme retning. Likevel / på den andre siden = kontrast eller nyansering.'},
 
 /* ═══════════════════════════════════════════════════
    16. SJANGERKOMPETANSE  (8 oppgaver)
@@ -2339,11 +2467,11 @@ var BANKV2 = [
 
 {kat:'spraak_stil',kat_label:'Språk og stil',type:'fix',vanske:'medium',
  q:'Bytt ut de fire uformelle uttrykkene med saklig språk.',
- tekst:'Undersøkelser viser at mange drar til syden om sommeren. Det er dritkult med sol og varme. Turister chiller på stranda og legger ut sykt mange bilder. Konklusjonen er at ferie liksom er viktig for helsa.',
- errors:{'dritkult':'svært populært','chiller':'slapper av','sykt mange':'svært mange','liksom':'åpenbart'},
- fasit:'svært populært · slapper av · svært mange · åpenbart',
- regel:'Sakprosa bruker nøytralt, formelt språk. Slang og muntlige uttrykk hører hjemme i uformelle tekster.',
- eks:'«dritkult» → «svært populært» · «chiller» → «slapper av» · «sykt mange» → «svært mange»'},
+ tekst:'Undersøkelser viser at mange drar til syden om sommeren. Det er dritkult med sol og varme. Turister er mega avslappet på stranda og bruker telefonen hele tida. Konklusjonen er at ferie liksom er viktig for helsa.',
+ errors:{'dritkult':'svært populært','mega avslappet':'avslappet','bruker telefonen hele tida':'bruker mobilen mye','liksom':'tydeligvis'},
+ fasit:'svært populært · avslappet · bruker mobilen mye · tydeligvis',
+ regel:'Sakprosa bruker nøytralt, formelt språk. Grep: (1) fjern forsterkere som «dritt-», «mega-», «kjempe-», (2) fjern fyllord som «liksom» og «jo», (3) bytt vage formuleringer med konkrete.',
+ eks:'«dritkult» → «svært populært» · «mega avslappet» → «avslappet» · «liksom» → «tydeligvis» eller fjern helt'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
  q:'Rett de tre og/å-feilene.',
