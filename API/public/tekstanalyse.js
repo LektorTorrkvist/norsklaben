@@ -71,6 +71,7 @@
     again: 'Analyser ny tekst',
     openLast: 'Siste lagra analyse',
     history: 'Historikk',
+    seeProfile: 'Sjå elevprofil',
     clearHistory: 'Tom historikk',
     historyTitle: 'Tidlegare analysar',
     latestSaved: 'Sist lagra:',
@@ -143,6 +144,7 @@
     again: 'Analyser ny tekst',
     openLast: 'Siste lagrede analyse',
     history: 'Historikk',
+    seeProfile: 'Se elevprofil',
     clearHistory: 'Tøm historikk',
     historyTitle: 'Tidligere analyser',
     latestSaved: 'Sist lagret:',
@@ -935,6 +937,7 @@
         '</section>' +
         '<div class="nl-ta-actions">' +
           '<button type="button" class="nl-ta-btn" data-nl-ta-go="1">' + esc(T.analyze) + '</button>' +
+          '<a class="nl-ta-btn nl-ta-btn-ghost" href="' + (MAAL === 'bm' ? 'elevprofil-bm.html' : 'elevprofil.html') + '">' + esc(T.seeProfile) + '</a>' +
           '<button type="button" class="nl-ta-btn nl-ta-btn-ghost" data-nl-ta-open-last="1">' + esc(T.openLast) + '</button>' +
           '<button type="button" class="nl-ta-btn nl-ta-btn-ghost" data-nl-ta-show-history="1">' + esc(T.history) + '</button>' +
         '</div>' +
