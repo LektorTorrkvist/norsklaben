@@ -127,7 +127,8 @@
     return valid ? cleaned : null;
   }
 
-  function buildRadarSvg(scores, labels) {
+  function buildRadarSvg(scores, labels, borrowedAxes) {
+    borrowedAxes = Array.isArray(borrowedAxes) ? borrowedAxes : [];
     var cx = 200, cy = 200, maxR = 150, n = 6;
     function angle(i) { return -Math.PI / 2 + i * 2 * Math.PI / n; }
     function pt(i, r) { return { x: cx + r * Math.cos(angle(i)), y: cy + r * Math.sin(angle(i)) }; }
@@ -156,22 +157,31 @@
       for (var i = 0; i < n; i++) {
         var val = Math.max(0, Math.min(6, scores[i] || 0));
         var p = pt(i, maxR * val / 6);
-        svg += '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="4.5" fill="#C8832A"/>';
-        svg += '<text x="' + p.x.toFixed(1) + '" y="' + (p.y - 8).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#7a4a10">' + val.toFixed(1) + '</text>';
+        var isBorrowed = borrowedAxes.indexOf(i) !== -1;
+        if (isBorrowed) {
+          svg += '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="5.5" fill="#fffdf8" stroke="#5A8E7A" stroke-width="2.5"/>';
+          svg += '<text x="' + p.x.toFixed(1) + '" y="' + (p.y - 9).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#5A8E7A">' + val.toFixed(1) + ' *</text>';
+        } else {
+          svg += '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="4.5" fill="#C8832A"/>';
+          svg += '<text x="' + p.x.toFixed(1) + '" y="' + (p.y - 8).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#7a4a10">' + val.toFixed(1) + '</text>';
+        }
       }
     }
     var labelR = maxR + 18;
     for (var i = 0; i < n; i++) {
       var p = pt(i, labelR);
+      var isBorrowed = borrowedAxes.indexOf(i) !== -1;
+      var labelFill = isBorrowed ? '#5A8E7A' : '#1A3D2B';
+      var labelText = labels[i] + (isBorrowed ? ' *' : '');
       var anchor = 'middle';
       if (p.x < cx - 10) anchor = 'end';
       else if (p.x > cx + 10) anchor = 'start';
       var dy = p.y < cy - 10 ? '-0.3em' : (p.y > cy + 10 ? '1.1em' : '0.35em');
-      var spIdx = labels[i].length > 16 ? labels[i].lastIndexOf(' ', Math.floor(labels[i].length / 2) + 2) : -1;
+      var spIdx = labelText.length > 16 ? labelText.lastIndexOf(' ', Math.floor(labelText.length / 2) + 2) : -1;
       if (spIdx > 0) {
-        svg += '<text x="' + p.x.toFixed(1) + '" y="' + p.y.toFixed(1) + '" text-anchor="' + anchor + '" font-size="11" font-weight="600" fill="#1A3D2B"><tspan x="' + p.x.toFixed(1) + '" dy="' + dy + '">' + escapeHtml(labels[i].substring(0, spIdx)) + '</tspan><tspan x="' + p.x.toFixed(1) + '" dy="1.2em">' + escapeHtml(labels[i].substring(spIdx + 1)) + '</tspan></text>';
+        svg += '<text x="' + p.x.toFixed(1) + '" y="' + p.y.toFixed(1) + '" text-anchor="' + anchor + '" font-size="11" font-weight="600" fill="' + labelFill + '"><tspan x="' + p.x.toFixed(1) + '" dy="' + dy + '">' + escapeHtml(labelText.substring(0, spIdx)) + '</tspan><tspan x="' + p.x.toFixed(1) + '" dy="1.2em">' + escapeHtml(labelText.substring(spIdx + 1)) + '</tspan></text>';
       } else {
-        svg += '<text x="' + p.x.toFixed(1) + '" y="' + p.y.toFixed(1) + '" text-anchor="' + anchor + '" font-size="11" font-weight="600" fill="#1A3D2B" dy="' + dy + '">' + escapeHtml(labels[i]) + '</text>';
+        svg += '<text x="' + p.x.toFixed(1) + '" y="' + p.y.toFixed(1) + '" text-anchor="' + anchor + '" font-size="11" font-weight="600" fill="' + labelFill + '" dy="' + dy + '">' + escapeHtml(labelText) + '</text>';
       }
     }
     svg += '</svg>';
@@ -645,7 +655,9 @@
       var rs = aItem.radarScores;
       if (!rs) continue;
       if (excludedSet[String(aItem.ts)]) continue;
-      var hasKildebruk = Array.isArray(aItem.categories) && aItem.categories.some(function(c) { return c && c.id === 'kildebruk'; });
+      var hasKildebruk = aItem.hasKildebruk !== undefined
+        ? aItem.hasKildebruk
+        : /kjeld|kilde|tilvising|referans|kjeldeliste|kildeliste/i.test(String(aItem.oppgaveExcerpt || ''));
       for (var rj = 0; rj < 5; rj++) radarSums[rj] += rs[rj];
       radarCount++;
       if (hasKildebruk) {
@@ -654,6 +666,7 @@
       }
     }
     var averageRadar = radarCount > 0 ? radarSums.slice(0, 5).map(function(s) { return Math.round(s / radarCount * 10) / 10; }).concat([kildebrukCount > 0 ? Math.round(kildebrukSum / kildebrukCount * 10) / 10 : 0]) : null;
+    var kildebrukIsBorrowed = radarCount > 0 && kildebrukCount > 0 && kildebrukCount < radarCount;
 
     // Strengare innhalds-cap: dersom alle siste analysar manglar oppgåvetekst, marker innhalds-aksen.
     var innhaldCapped = false;
@@ -767,7 +780,7 @@
         '<div class="ep-radar-card">' +
           '<div class="ep-panel-title">Skrivemeistring</div>' +
           '<div class="ep-panel-sub">Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'ar') + ' (1–6)' + (innhaldCapped ? ' · Innhald kappa til 4 utan oppgåvetekst' : '') + '</div>' +
-          (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES) : '<div class="ep-radar-empty">Radardiagrammet kjem når tekstar har blitt vurderte i Tekstsjekk.</div>') +
+          (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES, kildebrukIsBorrowed ? [5] : []) + (kildebrukIsBorrowed ? '<div class="ep-radar-note">* Kjeldebruk: snitt frå ' + kildebrukCount + ' av ' + radarCount + ' tekstar med kjeldebruk-krav</div>' : '') : '<div class="ep-radar-empty">Radardiagrammet kjem når tekstar har blitt vurderte i Tekstsjekk.</div>') +
         '</div>' +
         '<div class="ep-strengths-weak">' +
           '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Styrkar</h3><span>Basert på ' + escapeHtml(String(insights.totalAnalyses)) + ' analyserte tekstar, kopla mot treffprosent i samsvarande oppgåver.</span></div><span class="ep-sw-icon">🌟</span></div>' + statRows(strengths, 'Ingen styrkedata frå tekstanalysar enno. Analyser fleire tekstar først.', 'ok') + '</div>' +

@@ -311,6 +311,7 @@
     }).filter(Boolean).slice(0, 6);
 
     var hasOppgave = String(payload.oppgaveText || '').trim().length >= 20;
+    var hasKildebruk = /kjeld|kilde|tilvising|referans|kjeldeliste|kildeliste/i.test(String(payload.oppgaveText || ''));
     var innhaldRaw = Number(radar.innhald) || 0;
     var innhaldDekning = Number((payload.resultat && payload.resultat.innholdDekning && payload.resultat.innholdDekning.score)) || 0;
     var innhaldFinal = innhaldRaw;
@@ -341,6 +342,7 @@
       categories: categories,
       radarScores: radarScores,
       hasOppgaveText: hasOppgave,
+      hasKildebruk: hasKildebruk,
       oppgaveExcerpt: String(payload.oppgaveText || '').slice(0, 280),
       summary: String((payload.resultat && payload.resultat.sammendrag) || '').slice(0, 600),
       strengths: Array.isArray(payload.resultat && payload.resultat.styrker)
