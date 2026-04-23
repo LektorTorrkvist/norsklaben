@@ -23,14 +23,14 @@ function radarKeys(maal) {
     ? {
         innhald:      'innhold – måler om eleven svarer på oppgaven og oppgavetypen, og hvilket nivå innholdet er på: viser innholdet enkel kompetanse, kompetent eller svært kompetent?',
         struktur:     'struktur (innledning, hoveddel, avslutning, avsnitt)',
-        spraak_stil:  'språk og stil (ordvalg, variasjon, sjangertilpasning)',
+        spraak_stil:  'språk og stil – måler om språket er tilpasset oppgaven og mottakeren, og om det passer til sjangeren. Belønn elever som treffer: skriver konkret, tydelig, fagriktig og godt for situasjonen, eller som finner riktig stemme i kreative tekster. Treffer eleven godt på språk og stil, gi 5 eller 6.',
         rettskriving: 'rettskriving, grammatikk og tegnsetting',
         kjeldebruk:   'kildebruk (sitat, referanser, kildeliste). KALIBRERING: Hvis eleven har gjort et synlig forsøk på å føre kilder (f.eks. nevnt en kilde i teksten, satt inn en lenke eller listet opp én kilde), gi MINST 2. Hvis eleven har korrekte parentesreferanser i teksten OG en korrekt kildeliste, gi 5 eller 6 avhengig av nivå og presisjon på kildeføringen.'
       }
     : {
         innhald:      'innhald – måler om eleven svarar på oppgåva og oppgåvetypen, og kva nivå innhaldet er på: viser innhaldet enkel kompetanse, kompetent eller svært kompetent?',
         struktur:     'struktur (innleiing, hovuddel, avslutning, avsnitt)',
-        spraak_stil:  'språk og stil (ordval, variasjon, sjangertilpassing)',
+        spraak_stil:  'språk og stil – måler om språket er tilpassa oppgåva og mottakaren, og om det høver til sjangeren. Lønn elevar som treff: skriv konkret, tydeleg, fagleg rett og godt for situasjonen, eller som finn rett stemme i kreative tekstar. Treff eleven godt på språk og stil, gje 5 eller 6.',
         rettskriving: 'rettskriving, grammatikk og teiknsetting',
         kjeldebruk:   'kjeldebruk (sitat, referansar, kjeldeliste). KALIBRERING: Om eleven har gjort eit synleg forsøk på å føre kjelder (t.d. nemnt ei kjelde i teksten, sett inn ei lenkje eller lista opp éi kjelde), gje MINST 2. Om eleven har korrekte parentesreferansar i teksten OG ei korrekt kjeldeliste, gje 5 eller 6 avhengig av nivå og presisjon på kjeldeføringa.'
       };
