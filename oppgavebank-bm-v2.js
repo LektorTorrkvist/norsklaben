@@ -1864,13 +1864,12 @@ var BANKV2 = [
  eks:'Bytt ordvalg + setningsstruktur. Oppgi alltid kilden.'},
 
 {kat:'parafrase',kat_label:'Parafrase',type:'omskriv',vanske:'vanskeleg',
- q:'Rett parafrasefeilen: Teksten er for lik originalen. Skriv om med egne ord.',
+ q:'Skriv om originalteksten med dine egne ord. Husk å beholde kilden.',
  tekst:'Ungdom bruker i gjennomsnitt tre timer daglig på sosiale medier (Medietilsynet, 2024).',
- instruksjon:'Skriv om med egne ord og ny setningsstruktur. Behold kilden.',
+ instruksjon:'Skriv om med egne ord og ny setningsstruktur. Behold kilden (Medietilsynet, 2024). Unngå å kopiere hele fraser fra originalen.',
  maa_ha:['Medietilsynet'],
- maa_ikkje_ha:['bruker i gjennomsnitt tre timer daglig på sosiale medier'],
- regel:'En god parafrase endrer både ordvalg og setningsstruktur, ikke bare ett og annet ord.',
- eks:'«bruker i gjennomsnitt» → «tilbringer omtrent» · «sosiale medier» → «sosiale plattformer»'},
+ regel:'En god parafrase endrer både ordvalg og setningsstruktur, ikke bare ett og annet ord. Du kan godt bruke noen av de samme fagordene («sosiale medier», «ungdom»), men helheten må være omformulert.',
+ eks:'Forslag til omformulering: «Medietilsynet (2024) rapporterer at norske ungdommer i snitt tilbringer tre timer daglig på sosiale plattformer.» Merk: kilden er bevart, ordene er omformet, setningsstrukturen er ny.'},
 
 {kat:'parafrase',kat_label:'Parafrase',type:'cloze',vanske:'lett',
  q:'Å gjengi innholdet i en tekst med egne ord, men samme mening, heter en ___.',
@@ -1880,13 +1879,12 @@ var BANKV2 = [
  eks:'Original → parafrase (egne ord) + kildehenvisning'},
 
 {kat:'parafrase',kat_label:'Parafrase',type:'omskriv',vanske:'vanskeleg',
- q:'Parafrasér denne kilden med egne ord: «Fysisk aktivitet blant barn og unge har minket med 20 prosent de siste ti årene» (FHI, 2023).',
+ q:'Skriv om originalteksten med dine egne ord. Husk å beholde kilden.',
  tekst:'Fysisk aktivitet blant barn og unge har minket med 20 prosent de siste ti årene (FHI, 2023).',
- instruksjon:'Skriv om med helt nye ord og ny setningsstruktur. Behold kildehenvisningen.',
+ instruksjon:'Skriv om med egne ord og ny setningsstruktur. Behold kilden (FHI, 2023). Unngå å kopiere hele fraser fra originalen.',
  maa_ha:['FHI'],
- maa_ikkje_ha:['minket med 20 prosent'],
- regel:'God parafrase: endre ordvalg og setningsstruktur. Kilden (FHI, 2023) skal fortsatt være med.',
- eks:'«Barn beveger seg en femtedel mindre enn for et tiår siden (FHI, 2023).»'},
+ regel:'En god parafrase endrer både ordvalg og setningsstruktur, ikke bare ett og annet ord. Du kan godt bruke noen av de samme fagordene («fysisk aktivitet», «barn»), men helheten må være omformulert.',
+ eks:'Forslag til omformulering: «Ifølge FHI (2023) har barn og unge beveget seg en femtedel mindre enn for ti år siden.» Merk: kilden er bevart, tallet er omskrevet («en femtedel» i stedet for «20 prosent»), setningsstrukturen er ny.'},
 
 /* ═══════════════════════════════════════════════════
    22. SITAT  (8 oppgaver)
@@ -2119,27 +2117,41 @@ var BANKV2 = [
 {kat:'ordval',kat_label:'Ordvalg og presisjon',type:'omskriv',vanske:'vanskeleg',
  q:'Skriv om setningene til presist fagspråk.',
  tekst:'Det er mange greier som gjør at ungdom sover dårlig. Telefonen er liksom problemet. Folk sier det er ille.',
- instruksjon:'Bruk presise fagord, konkrete tall der mulig, og unngå slang og vage uttrykk.',
- maa_ha:['forskning'],
- maa_ikkje_ha:['greier','liksom','folk sier'],
- regel:'Fagspråk: konkrete ord, kildefestede tall og objektive formuleringer.',
- eks:'«greier» → «faktorer som skjermtid» · «liksom» → fjern · «folk sier» → «forskning viser»'},
+ instruksjon:'Bytt ut slang og vage uttrykk med presise fagord. Bruk gjerne tall og kilder der det passer.',
+ regel:'Fagspråk: konkrete ord, kildefestede tall og objektive formuleringer. Viktige grep: (1) bytt «greier/ting/sak» med presise fagord, (2) fjern fyllord som «liksom» og «jo», (3) bytt «folk sier» med «forskning viser» eller en navngitt kilde.',
+ eks:'Forslag: «Det er flere faktorer som gjør at ungdom sover dårlig. Skjermbruk er en av hovedårsakene. Forskning viser at blått lys sent på kvelden hemmer søvnen (FHI, 2023).» Merk: konkrete ord, dokumentert påstand, kildehenvisning.'},
 
 {kat:'djupneoppgaver',kat_label:'Langsvar og refleksjonsoppgaver',type:'open',vanske:'vanskeleg',
  q:'Skriv et reflekterende avsnitt (10-30 min): Hvordan påvirker sosiale medier måten ungdom leser og skriver på?',
- hint:'Ta med minst ett konkret eksempel, ett motargument og en kort avslutning.',
- regel:'Bygg resonnering med tydelig påstand, begrunnelse og nyansering. Bruk fagbegreper og presise overganger.',
+ hint:'Ta med minst ett konkret eksempel, ett motargument og en kort avslutning. Det finnes ingen fasit – bygg din egen begrunnede refleksjon.',
+ regel:'Bygg resonnering med tydelig påstand, begrunnelse og nyansering. Bruk fagbegreper og presise overganger. Husk: oppgaven ber om refleksjon, ikke ensidig argumentasjon.',
  eksempel_svak:'Sosiale medier er både bra og dårlig. Mange bruker det mye. Det påvirker skriving.',
  eksempel_god:'Sosiale medier effektiviserer kommunikasjon, men belønner ofte korte og raske ytringer. For elever kan det styrke kreativitet i idéfasen, samtidig som dyp lesing blir utfordret. En bevisst veksling mellom raske og langsomme skriveformer kan derfor gi bedre læringsutbytte.',
- eks:'Start med en tydelig hovedpåstand, bruk eksempler fra hverdagen, og avslutt med en faglig vurdering.'},
+ eks:'Kriterier for et godt reflekterende avsnitt: (1) en tydelig hovedpåstand, (2) minst ett konkret eksempel (f.eks. fra skolen, fra egen mobilbruk), (3) et motargument eller en nyansering, (4) en avslutning som samler poengene. Bruk ord som «samtidig», «likevel», «derfor», «på den andre siden».'},
 
 {kat:'djupneoppgaver',kat_label:'Langsvar og refleksjonsoppgaver',type:'open',vanske:'vanskeleg',
  q:'Skriv et drøftende miniinnlegg (10-30 min): Bør kunstig intelligens være tillatt i norsk skriftlig arbeid?',
- hint:'Presenter to tydelige argumenter for og to mot. Du bestemmer selv hvilken konklusjon du lander på – det finnes ikke ett riktig svar.',
- regel:'En god drøfting viser flere perspektiver før konklusjon. Bruk koblingsord som «på den ene siden», «samtidig» og «derfor». Hvilken konklusjon du velger, teller ikke – hvordan du argumenterer, gjør det.',
+ hint:'Presenter minst to argumenter for og to mot. Begrunn hvert argument konkret. Trekk en egen konklusjon til slutt – det finnes ingen fasit på hva du skal mene.',
+ regel:'En god drøfting viser flere perspektiver før du konkluderer. Bruk koblingsord som «på den ene siden», «samtidig», «likevel» og «derfor». Argumenter må begrunnes – ikke bare listes.',
  eksempel_svak:'KI kan være bra, men også litt dumt. Jeg synes det kommer an på.',
- eksempel_god:'På den ene siden kan KI støtte elever i idéutvikling og struktur, særlig i tidlig skrivefase. Samtidig kan ukritisk bruk svekke egen språkmestring og kildekritikk. Her er det gode argumenter på begge sider – og det er nettopp det som gjør spørsmålet til en ekte drøfting.',
- eks:'Gjør argumentene konkrete med eksempler fra skolearbeid. Konklusjonen din kan gå begge veier – det viktige er at den er begrunnet.'},
+ eksempel_god:'På den ene siden kan KI støtte elever i idéfasen og i omarbeiding av tekst. På den andre siden kan ukritisk bruk svekke skriveutviklingen og kildekritikken. Her må man veie nytte mot risiko og se på hvordan skolen kan regulere bruken. [Her trekker du din egen begrunnede konklusjon.]',
+ eks:'Kriterier for en god drøfting: (1) minst to argumenter på hver side, (2) konkrete eksempler fra skolehverdagen, (3) motargumenter som tilbakevises eller nyanseres, (4) en egen konklusjon som følger av argumentene du har presentert.'},
+
+{kat:'djupneoppgaver',kat_label:'Langsvar og refleksjonsoppgaver',type:'open',vanske:'medium',
+ q:'Skriv et motargument til påstanden: «Ungdom i dag leser mindre enn før, og det er et stort problem for samfunnet.»',
+ hint:'Et motargument skal ikke bare nekte påstanden – det skal vise en annen måte å tenke på. Prøv å finne noe som er sant, men som nyanserer bildet.',
+ regel:'Et godt motargument (1) tar påstanden på alvor, (2) viser et perspektiv som ikke er med i påstanden, (3) bruker konkrete eksempler eller kilder for å være troværdig.',
+ eksempel_svak:'Jeg er ikke enig. Ungdom leser mye, de leser bare andre ting.',
+ eksempel_god:'Det stemmer at ungdom leser færre bøker nå enn før, men definisjonen av «lesing» har også endret seg. Ungdommer leser mye hver dag – på sosiale medier, i meldinger og i spill. Spørsmålet er om all denne teksten har samme læringsverdi som lange bøker, eller om det er en annen type lesekompetanse som nå blir viktig.',
+ eks:'Kriterier: (1) motargumentet tar utgangspunkt i påstanden, (2) det legger fram et nytt perspektiv, (3) det bruker konkrete eksempler, (4) det er formulert saklig – ikke bare som uenig.'},
+
+{kat:'djupneoppgaver',kat_label:'Langsvar og refleksjonsoppgaver',type:'open',vanske:'medium',
+ q:'Skriv en innledning (3-5 setninger) til en fagartikkel om skjermtid og ungdom.',
+ hint:'En god innledning gjør tre ting: (1) vekker interesse, (2) presenterer temaet, (3) varsler hva teksten skal handle om.',
+ regel:'En faglig innledning skal ikke avsløre hele svaret, men gjøre leseren nysgjerrig. Unngå klisjéer som «I denne teksten skal jeg skrive om …». Prøv å starte med et overraskende tall, et konkret eksempel, et spørsmål eller en påstand som inviterer til undring.',
+ eksempel_svak:'I denne teksten skal jeg skrive om skjermtid. Det er et stort tema. Mange bruker skjerm mye.',
+ eksempel_god:'Norske 13-åringer bruker i snitt fem timer daglig på skjerm – mer enn de sover på en vanlig kveld. Er dette et reelt problem, eller har vi bare fått en ny form for fritid? Spørsmålet fortjener et nyansert svar.',
+ eks:'Kriterier: (1) en innledning skal ikke konkludere, (2) den skal gi leseren en grunn til å lese videre, (3) presentere tema uten å avsløre alt, (4) bruke et konkret grep (tall, eksempel, spørsmål) for å fange oppmerksomheten.'},
 
 /* ═══════════════════════════════════════════════════
    25. BRUKE EKSEMPLER  (8 oppgaver, kun BM)
@@ -4551,7 +4563,12 @@ function mtIsGibberish(text) {
 }
 
 function mtIsWritingTask(task) {
-  return !!task && (task.type === 'open' || task.type === 'omskriv');
+  if (!task) return false;
+  /* Typer som alltid er skriveoppgaver */
+  if (task.type === 'open' || task.type === 'omskriv') return true;
+  /* Kategori djupneoppgaver skal alltid behandles som skriveoppgaver */
+  if (task.kat === 'djupneoppgaver') return true;
+  return false;
 }
 
 function mtBuildWritingFeedback(t, extraMsg) {
@@ -4595,11 +4612,12 @@ function mtCheckOpen() {
   /* Åpne skriveoppgaver får kvalitativ feedback, aldri feilmarkering. */
   if (mtIsGibberish(val)) {
     el.className = 'mt-text-input mt-textarea mt-inp-neutral';
-    mtFinish(true, 0, 0, val, t, 'Skriv litt mer, så blir det lettere å gi nyttige skriveråd.', true, true);
+    /* Ingen XP for gibberish, men heller ikke feil – be eleven prøve igjen */
+    mtFinish(true, 0, 0, val, t, 'Skriv litt mer, så blir det lettere å gi nyttige skriveråd. Du kan alltid prøve igjen!', true, true);
     return;
   }
 
-  /* Sjekk maa_ha / maa_ikkje_ha (EIL) */
+  /* Sjekk maa_ha / maa_ikkje_ha (myk veiledning, ikke feil) */
   var lower = val.toLowerCase();
   var missing = [];
   var forbidden = [];
@@ -4613,17 +4631,28 @@ function mtCheckOpen() {
   var fagord = mtDetectFagord(val);
   var extra = null;
   if (missing.length) {
-    extra = 'Husk å bruke: ' + missing.join(', ');
+    extra = 'Tips: Prøv gjerne å inkludere: ' + missing.join(', ');
   } else if (forbidden.length) {
-    extra = 'Unngå disse ordene: ' + forbidden.join(', ');
+    extra = 'Neste gang: vurder å bytte ut ordene «' + forbidden.join('», «') + '» med noe mer presist.';
   } else if (fagord.length >= 2) {
     extra = 'Flott fagspråk! Du brukte: ' + fagord.join(', ');
   } else if (fagord.length === 1) {
     extra = 'Bra, du brukte fagbegrepet «' + fagord[0] + '».';
   }
 
+  /* Skriveoppgaver skal alltid ha nøytral styling – aldri rød/grønn */
   el.className = 'mt-text-input mt-textarea mt-inp-neutral';
-  mtFinish(true, 1, 1, val, t, extra, true, true);
+
+  /* XP-skala basert på lengde og oppgavespesifikk minimumsord/idealord */
+  var wordCount = val.split(/\s+/).filter(function (w) { return w.length > 0; }).length;
+  var minOrd = t.minimumsord || 30;
+  var idealOrd = t.idealord || 120;
+  var basePoints;
+  if (wordCount < minOrd) basePoints = 1;
+  else if (wordCount < idealOrd) basePoints = 2;
+  else basePoints = 3;
+
+  mtFinish(true, 3, basePoints, val, t, extra, true, true);
 }
 
 function mtBuildFixHighlightHtml(val, fixedRights, missedWrongs) {
@@ -5032,7 +5061,7 @@ function mtCheckOmskriv() {
   mtAutosaveStop();
   if (mtIsGibberish(val)) {
     el.className = 'mt-text-input mt-textarea mt-inp-neutral';
-    mtFinish(true, 0, 0, val, t, 'Skriv litt mer, så kan du bruke rådene til å omskrive teksten tydeligere.', true, true);
+    mtFinish(true, 0, 0, val, t, 'Skriv litt mer, så kan du bruke rådene til å omskrive teksten tydeligere. Du kan alltid prøve igjen!', true, true);
     return;
   }
   var lower = val.toLowerCase();
@@ -5044,10 +5073,11 @@ function mtCheckOmskriv() {
   (t.maa_ikkje_ha || []).forEach(function (kw) {
     if (lower.indexOf(kw.toLowerCase()) !== -1) forbidden.push(kw);
   });
+  /* Skriveoppgaver skal alltid ha nøytral styling – aldri rød/grønn */
   el.className = 'mt-text-input mt-textarea mt-inp-neutral';
   var extra = null;
-  if (missing.length) extra = 'Husk å bruke: ' + missing.join(', ');
-  else if (forbidden.length) extra = 'Prøv å bytte ut: ' + forbidden.join(', ');
+  if (missing.length) extra = 'Tips: Prøv gjerne å inkludere: ' + missing.join(', ');
+  else if (forbidden.length) extra = 'Neste gang: vurder å bytte ut ordene «' + forbidden.join('», «') + '» med noe mer presist.';
 
   /* Fagord-bonus for omskriv */
   var fagord = mtDetectFagord(val);
@@ -5057,7 +5087,16 @@ function mtCheckOmskriv() {
     extra = (extra ? extra + ' ' : '') + 'Bra, du brukte fagbegrepet «' + fagord[0] + '».';
   }
 
-  mtFinish(true, 1, 1, val, t, extra, true, true);
+  /* XP-skala basert på lengde og oppgavespesifikk minimumsord/idealord */
+  var wordCount = val.split(/\s+/).filter(function (w) { return w.length > 0; }).length;
+  var minOrd = t.minimumsord || 20;
+  var idealOrd = t.idealord || 80;
+  var basePoints;
+  if (wordCount < minOrd) basePoints = 1;
+  else if (wordCount < idealOrd) basePoints = 2;
+  else basePoints = 3;
+
+  mtFinish(true, 3, basePoints, val, t, extra, true, true);
 }
 
 var _srDrag = -1;
