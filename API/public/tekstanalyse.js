@@ -47,8 +47,9 @@
     oppgaveLabel: 'Oppgavetekst (valgfritt, men anbefalt)',
     oppgavePlaceholder: 'Lim inn oppgaveteksten du fikk – da kan AI-en vurdere om innholdet treffer.',
     oppgaveHint: 'Uten oppgavetekst settes innhold til maks 4 av 6 i radardiagrammet.',
-    oppgavePickLabel: 'Eller velg en oppgave fra Skrivemesteren',
-    oppgavePickPlaceholder: '— Velg ferdig oppgave —',
+    oppgavePickLabel: 'Vil du teste skriveprofilen din? Velg en åpen oppgave fra Skrivemesteren',
+    oppgavePickPlaceholder: '— Velg en øvingsoppgave —',
+    oppgavePickHint: 'Skriv et svar på oppgaven, lim det inn nedenfor, og få en personlig analyse av skrivekompetansen din.',
     formatBold: 'Fet',
     formatItalic: 'Kursiv',
     formatUnderline: 'Understreket',
@@ -111,8 +112,9 @@
     oppgaveLabel: 'Oppgåvetekst (valfritt, men tilrådd)',
     oppgavePlaceholder: 'Lim inn oppgåveteksten du fekk – då kan AI-en vurdere om innhaldet treff.',
     oppgaveHint: 'Utan oppgåvetekst blir innhald sett til maks 4 av 6 i radardiagrammet.',
-    oppgavePickLabel: 'Eller vel ei oppgåve frå Skrivemeisteren',
-    oppgavePickPlaceholder: '— Vel ferdig oppgåve —',
+    oppgavePickLabel: 'Vil du teste skriveprofilen din? Vel ei open oppgåve frå Skrivemeisteren',
+    oppgavePickPlaceholder: '— Vel ei øvingsoppgåve —',
+    oppgavePickHint: 'Skriv eit svar på oppgåva, lim det inn nedanfor, og få ein personleg analyse av skrivekompetansen din.',
     formatBold: 'Feit',
     formatItalic: 'Kursiv',
     formatUnderline: 'Understreking',
@@ -227,6 +229,10 @@
 '.nl-ta-richinput p{margin:0 0 .55rem;}' +
 '.nl-ta-richinput p:last-child{margin-bottom:0;}' +
 '.nl-ta-toolbar{display:flex;gap:.35rem;flex-wrap:wrap;margin:.1rem 0 .35rem;}' +
+'.nl-ta-pickbox{background:linear-gradient(135deg,#fff8e7 0%,#fff5e0 100%);border:1.5px solid #E6CFA8;border-left:4px solid #C8832A;border-radius:0 12px 12px 0;padding:.75rem .9rem .55rem;margin:.1rem 0 .85rem;}' +
+'.nl-ta-pick-label{display:flex;align-items:center;gap:.25rem;color:#8b5815;margin-bottom:.45rem;}' +
+'.nl-ta-pick-icon{font-size:1.05em;line-height:1;}' +
+'.nl-ta-pick-hint{margin:.4rem 0 0;color:#7a5a25;font-style:italic;font-size:.85rem;}' +
 '.nl-ta-fbtn{display:inline-flex;align-items:center;justify-content:center;min-width:2.2rem;padding:.35rem .55rem;border:1.5px solid #E6DFD2;background:#fffdf8;color:#1A3D2B;border-radius:8px;font:600 .92rem "Source Sans 3",sans-serif;cursor:pointer;line-height:1;transition:background .15s,border-color .15s;}' +
 '.nl-ta-fbtn:hover{background:#f5f1ea;border-color:#C8832A;}' +
 '.nl-ta-fbtn:active{background:#efe7d8;}' +
@@ -874,12 +880,15 @@
             '<select id="nl-ta-sjanger" class="nl-ta-select">' + sjangerOptions + '</select>' +
           '</div>' +
         '</div>' +
+        '<div class="nl-ta-pickbox" data-nl-ta-oppgave-pick-wrap hidden>' +
+          '<label class="nl-ta-label nl-ta-pick-label" for="nl-ta-oppgave-pick">' +
+            '<span class="nl-ta-pick-icon" aria-hidden="true">📝</span> ' + esc(T.oppgavePickLabel) +
+          '</label>' +
+          '<select id="nl-ta-oppgave-pick" class="nl-ta-select"><option value="">' + esc(T.oppgavePickPlaceholder) + '</option></select>' +
+          '<p class="nl-ta-hint nl-ta-pick-hint">' + esc(T.oppgavePickHint) + '</p>' +
+        '</div>' +
         '<label class="nl-ta-label" for="nl-ta-oppgave">' + esc(T.oppgaveLabel) + '</label>' +
         '<textarea id="nl-ta-oppgave" class="nl-ta-textarea nl-ta-textarea-small" placeholder="' + esc(T.oppgavePlaceholder) + '" rows="3"></textarea>' +
-        '<div class="nl-ta-meta-field" data-nl-ta-oppgave-pick-wrap hidden style="margin:.45rem 0 .15rem;">' +
-          '<label class="nl-ta-label" for="nl-ta-oppgave-pick">' + esc(T.oppgavePickLabel) + '</label>' +
-          '<select id="nl-ta-oppgave-pick" class="nl-ta-select"><option value="">' + esc(T.oppgavePickPlaceholder) + '</option></select>' +
-        '</div>' +
         '<p class="nl-ta-hint">' + esc(T.oppgaveHint) + '</p>' +
         '<label class="nl-ta-label" for="nl-ta-input">' + esc(T.label) + '</label>' +
         '<div class="nl-ta-toolbar" role="toolbar" aria-label="Tekstformatering">' +
