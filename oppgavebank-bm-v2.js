@@ -2420,7 +2420,7 @@ var BANKV2 = [
 
 /* --- og/å rett teksten (10 lengre oppgaver) --- */
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
- q:'Rett de 5 og/å-feilene i teksten. Noen «og» og «å» er allerede riktige.',
+ q:'Rett de 5 og/å-feilene i teksten.',
  tekst:'Læreren ba oss om og lese teksten og svare på spørsmålene. Jeg prøvde og konsentrere meg, men det var vanskelig og la merke til detaljene. Maria og Jonas klarte og bli ferdige først, og de fikk lov til og gå ut i friminuttet.',
  errors:{'om og lese':'om å lese','prøvde og konsentrere':'prøvde å konsentrere','vanskelig og la':'vanskelig å la','klarte og bli':'klarte å bli','lov til og gå':'lov til å gå'},
  fasit:'om å lese · prøvde å konsentrere · vanskelig å la · klarte å bli · lov til å gå',
@@ -2428,7 +2428,7 @@ var BANKV2 = [
  eks:'ba oss om å lese · prøvde å konsentrere · vanskelig å la merke til'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
- q:'Rett de 4 og/å-feilene i teksten. Noen «og» og «å» er allerede riktige.',
+ q:'Rett de 4 og/å-feilene i teksten.',
  tekst:'Familien min pleier og reise til hytta om sommeren. Vi liker å bade og fiske. Pappa forsøkte og reparere brygga, men det var umulig og finne de riktige verktøyene. Jeg og søsteren min gikk heller en tur og plukket bær.',
  errors:{'pleier og reise':'pleier å reise','forsøkte og reparere':'forsøkte å reparere','umulig og finne':'umulig å finne'},
  fasit:'pleier å reise · forsøkte å reparere · umulig å finne',
@@ -2476,7 +2476,7 @@ var BANKV2 = [
  eks:'planlegger å bygge · målet er å gi · håper å kunne starte'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
- q:'Rett de 4 og/å-feilene i teksten. Noen «og» er riktige.',
+ q:'Rett de 4 og/å-feilene i teksten.',
  tekst:'Katten og hunden lever fredelig sammen. De har lært og respektere hverandre og dele matskålene. Eieren pleier og mate dem morgen og kveld, og hun glemmer aldri og gi dem friskt vann.',
  errors:{'lært og respektere':'lært å respektere','og dele matskålene':'å dele matskålene','pleier og mate':'pleier å mate','glemmer aldri og gi':'glemmer aldri å gi'},
  fasit:'lært å respektere · å dele · pleier å mate · glemmer aldri å gi',
@@ -2666,7 +2666,7 @@ var BANKV2 = [
    OG infinitivsfeil, slik at elvane må tenke.
    ═══════════════════════════════════════════════════ */
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'lett',
- q:'Rett de to og/å-feilene. Vær nøye – noen «og» er riktige!',
+ q:'Rett de to og/å-feilene i teksten.',
  tekst:'Mora og barna bestemte seg for og ta en tur i skogen. Det var viktig og komme seg ut, og alle likte å gå på tur.',
  errors:{'for og ta':'for å ta','viktig og komme seg':'viktig å komme seg'},
  fasit:'for å ta · viktig å komme seg',
@@ -2682,7 +2682,7 @@ var BANKV2 = [
  eks:'prøvde å lage mat · klarte å redde middagen'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
- q:'Rett de tre og/å-feilene. Noen «og» i teksten er riktige – la dem stå!',
+ q:'Rett de tre og/å-feilene i teksten.',
  tekst:'Klassen og læreren bestemte seg for og holde en debatt om skolematen. Elevene fikk anledning til og si meningene sine, og læreren forsøkte og få alle til å delta.',
  errors:{'for og holde':'for å holde','til og si':'til å si','forsøkte og få':'forsøkte å få'},
  fasit:'for å holde · til å si · forsøkte å få',
@@ -2690,7 +2690,7 @@ var BANKV2 = [
  eks:'for å holde debatt · anledning til å si · forsøkte å få'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
- q:'Rett de tre og/å-feilene. Pass på – «og» mellom to substantiv er riktig!',
+ q:'Rett de tre og/å-feilene i teksten.',
  tekst:'Barne- og ungdomsteateret inviterte elever og lærere til og se en ny forestilling. Det var spennende og viktig og oppleve teater, og alle fikk muligheten og skrive anmeldelse etterpå.',
  errors:{'til og se':'til å se','viktig og oppleve':'viktig å oppleve','muligheten og skrive':'muligheten å skrive'},
  fasit:'til å se · viktig å oppleve · muligheten å skrive',
@@ -2698,7 +2698,7 @@ var BANKV2 = [
  eks:'til å se · viktig å oppleve · muligheten å skrive'},
 
 {kat:'og_aa',kat_label:'Og / å',type:'fix',vanske:'medium',
- q:'Rett de fire og/å-feilene. Teksten har også riktige «og» – la dem stå.',
+ q:'Rett de fire og/å-feilene i teksten.',
  tekst:'Politikerne ønsker og satse mer på fornybar energi og kutte utslippene. Det er viktig og handle raskt, siden sol og vindkraft allerede er kostnadseffektive løsninger. Ingen partier våger og ta regningen alene, og noen er villige til og inngå kompromiss.',
  errors:{'ønsker og satse':'ønsker å satse','viktig og handle':'viktig å handle','våger og ta':'våger å ta','til og inngå':'til å inngå'},
  fasit:'ønsker å satse · viktig å handle · våger å ta · til å inngå',
@@ -2739,11 +2739,11 @@ var BANKV2 = [
  tekst:'Guten kastet balen til kompisene og løp bort mot mål. Gutten med den røde trøya skrek høyt da han scoret.',
  errors:{'Guten':'Gutten','balen':'ballen'},
  fasit:'Gutten · ballen',
- regel:'Kort vokal → dobbel konsonant: gutt (kort u → tt), ball (kort a → ll). «Gutten» lenger ned er allerede riktig – la det stå.',
+ regel:'Kort vokal → dobbel konsonant: gutt (kort u → tt), ball (kort a → ll).',
  eks:'gutt (kort u) → gutten · ball (kort a) → ballen'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'lett',
- q:'Rett de to rettskrivingsfeilene. «Gaten» og «hagen» er riktige – la dem stå.',
+ q:'Rett de to rettskrivingsfeilene i teksten.',
  tekst:'Katten sate seg i vinduskarmen og stirret ut på gaten. Det var naten til jul, og det lå snø i hagen.',
  errors:{'sate':'satte','naten':'natten'},
  fasit:'satte · natten',
@@ -2755,15 +2755,15 @@ var BANKV2 = [
  tekst:'Familien sate seg til bords og spiste midagsmat. Etter maten hopet ungene opp og sprang ut i hagen der solen skinte.',
  errors:{'sate':'satte','midagsmat':'middagsmat','hopet':'hoppet'},
  fasit:'satte · middagsmat · hoppet',
- regel:'«Sette» → «satte» (kort a). «Middag» har kort i → dd. «Hoppe» → «hoppet» (kort o → pp). «Maten» og «hagen» har langvokal – riktige som de er.',
+ regel:'«Sette» → «satte» (kort a). «Middag» har kort i → dd. «Hoppe» → «hoppet» (kort o → pp).',
  eks:'å sette → satte · middag (kort i) → middagsmat · å hoppe → hoppet'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'medium',
- q:'Rett de tre rettskrivingsfeilene. «Hopper» og «løper» er riktige – la dem stå.',
+ q:'Rett de tre rettskrivingsfeilene i teksten.',
  tekst:'Mange ungdomer er opptatt av trening. De hopper og løper for å holde seg i form, og noen tar seg en kop kaffe etterpå. Koppen er gjerne liten, men smaken er god.',
  errors:{'ungdomer':'ungdommer','kop':'kopp'},
  fasit:'ungdommer · kopp',
- regel:'«Ungdom» + «-er» → «ungdommer» (kort o → mm). «Kopp» har kort o → pp. «Hopper» (kort o → pp) og «løper» (lang ø → p) er allerede riktige.',
+ regel:'«Ungdom» + «-er» → «ungdommer» (kort o → mm). «Kopp» har kort o → pp.',
  eks:'ungdommer (kort o) · kopp (kort o) · løper (lang ø, enkel p)'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'vanskeleg',
@@ -2771,15 +2771,15 @@ var BANKV2 = [
  tekst:'Guten og katen lekte i hagen. Gutten hopet ned fra et tre og sate seg i gresset. Katten sprang bort og snuste nysgjerrig på ham.',
  errors:{'Guten':'Gutten','katen':'katten','hopet':'hoppet','sate':'satte'},
  fasit:'Gutten · katten · hoppet · satte',
- regel:'Kort vokal → dobbel konsonant. «Gutten» og «Katten» lenger nede er allerede rett skrevet – endre bare de fire feilene øverst.',
+ regel:'Kort vokal → dobbel konsonant. Sjekk nøye hvor vokalen er kort før konsonanten.',
  eks:'gutt (kort u → tt) · katt (kort a → tt) · å hoppe → hoppet · å sette → satte'},
 
 {kat:'dobbel_konsonant',kat_label:'Dobbel konsonant',type:'fix',vanske:'vanskeleg',
- q:'Rett de fire rettskrivingsfeilene. Noen ord med dobbel konsonant er allerede riktige.',
+ q:'Rett de fire rettskrivingsfeilene i teksten.',
  tekst:'Hele klassen sate seg ned da læreren kom inn. Noen ungdomer fniste stille, men de fleste åpnet bøkene. Læreren drakk en kop kafe og begynte timen med å lese høyt fra en roman.',
  errors:{'sate':'satte','ungdomer':'ungdommer','kop':'kopp','kafe':'kaffe'},
  fasit:'satte · ungdommer · kopp · kaffe',
- regel:'«satte», «ungdommer», «kopp», «kaffe» – alle med kort vokal før konsonanten. «Klassen», «drakk», «stille» osv. er allerede riktige.',
+ regel:'«satte», «ungdommer», «kopp», «kaffe» – alle med kort vokal før konsonanten.',
  eks:'å sette → satte · ungdom → ungdommer · kopp (kort o) · kaffe (kort a)'},
 
 /* ═══════════════════════════════════════════════════
@@ -2788,7 +2788,7 @@ var BANKV2 = [
    riktige, andre må rettast.
    ═══════════════════════════════════════════════════ */
 {kat:'kildebruk',kat_label:'Kildebruk',type:'fix',vanske:'lett',
- q:'Rett de to kildebruksfeilene. Den siste kildetilvisningen i teksten er riktig – la den stå.',
+ q:'Rett de to kildebruksfeilene i teksten.',
  tekst:'Plastforurensning er et alvorlig miljøproblem. Hele åtte millioner tonn plast ender i havet hvert år. (Jensen, 2023). Forskeren skriver: Vi er i ferd med å ødelegge havet for fremtidige generasjoner (Jensen, 2023, s. 4).',
  errors:{'hvert år. (Jensen, 2023).':'hvert år (Jensen, 2023).','skriver: Vi er i ferd med å ødelegge havet for fremtidige generasjoner':'skriver: «Vi er i ferd med å ødelegge havet for fremtidige generasjoner»'},
  fasit:'Kildetilvisning flyttes foran punktum · Direkte sitat settes i hermetegn',
@@ -2796,7 +2796,7 @@ var BANKV2 = [
  eks:'... hvert år (Jensen, 2023). · «Ordrett sitat» (Kilde, årstall).'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'fix',vanske:'lett',
- q:'Rett de to kildebruksfeilene. Kildetilvisningen foran «Tidlig innsats» er riktig.',
+ q:'Rett de to kildebruksfeilene i teksten.',
  tekst:'Mange unge sliter med psykisk helse (fhi.no). Solvang skriver: Unge jenter er den gruppen som opplever mest press (Solvang, 2024, s. 22). Tidlig innsats er ifølge forskning det viktigste tiltaket.',
  errors:{'(fhi.no)':'(FHI, 2024)','Solvang skriver: Unge jenter er den gruppen som opplever mest press':'Solvang skriver: «Unge jenter er den gruppen som opplever mest press»'},
  fasit:'(fhi.no) → (FHI, 2024) · Direkte sitat i hermetegn',
@@ -2804,7 +2804,7 @@ var BANKV2 = [
  eks:'(FHI, 2024) ikke (fhi.no) · «Ordrett tekst» (Kilde, årstall).'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'fix',vanske:'medium',
- q:'Rett de to kildebruksfeilene. Kildetilvisningen på slutten av teksten er riktig.',
+ q:'Rett de to kildebruksfeilene i teksten.',
  tekst:'Klimaendringer er en av vår tids største utfordringer (Kari Jensen, 2023). Jensen konkluderer med at: Vi er nødt til å handle innen 2030, ellers er det for sent (Jensen, 2023, s. 15). Det er bred enighet om dette blant forskere.',
  errors:{'(Kari Jensen, 2023)':'(Jensen, 2023)','Jensen konkluderer med at: Vi er nødt til å handle innen 2030, ellers er det for sent':'Jensen konkluderer med at: «Vi er nødt til å handle innen 2030, ellers er det for sent»'},
  fasit:'(Kari Jensen, 2023) → (Jensen, 2023) · Direkte sitat i hermetegn',
@@ -2812,7 +2812,7 @@ var BANKV2 = [
  eks:'I løpende tekst: (Jensen, 2023) ikke (Kari Jensen, 2023). Sitat: «…» (Jensen, 2023).'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'fix',vanske:'medium',
- q:'Rett de tre kildebruksfeilene. Den første kildetilvisningen i teksten er riktig.',
+ q:'Rett de tre kildebruksfeilene i teksten.',
  tekst:'Forsker Berg skriver: Ungdom bruker i gjennomsnitt seks timer daglig på skjerm (Berg, 2024, s. 31). En rapport fra SSB bekrefter dette (ssb.no, 2023). Statistikken viser store endringer. (SSB, 2021).',
  errors:{'Berg skriver: Ungdom bruker i gjennomsnitt seks timer daglig på skjerm':'Berg skriver: «Ungdom bruker i gjennomsnitt seks timer daglig på skjerm»','(ssb.no, 2023)':'(SSB, 2023)','store endringer. (SSB, 2021).':'store endringer (SSB, 2021).'},
  fasit:'Sitat i hermetegn · (ssb.no, 2023) → (SSB, 2023) · Kildetilvisning flyttes foran punktum',
@@ -2828,7 +2828,7 @@ var BANKV2 = [
  eks:'Hansen (2021) skriver: «Tekst» (s. 45). · argumenterer Hansen for · dybde (Hansen, 2021).'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'fix',vanske:'vanskeleg',
- q:'Rett de fire kildebruksfeilene. To kildetilvisningar i teksten er riktige – la dem stå.',
+ q:'Rett de fire kildebruksfeilene i teksten.',
  tekst:'Demokratiet er avhengig av en opplyst befolkning. Ifølge Eriksen, 2022 er mediekritikk viktigere enn noensinne. Han hevder: All informasjon bør kildekritisk vurderes (Eriksen, 2022, s. 8). En undersøkelse fra Karl Ivar Karlsen viser at 40 prosent av nyheter ikke er faktasjekket. (Karlsen, 2023). Det er et urovekkende funn.',
  errors:{'Eriksen, 2022 er':'Eriksen (2022) er','Han hevder: All informasjon bør kildekritisk vurderes':'Han hevder: «All informasjon bør kildekritisk vurderes»','Karl Ivar Karlsen':'Karlsen','faktasjekket. (Karlsen, 2023).':'faktasjekket (Karlsen, 2023).'},
  fasit:'Eriksen (2022) · Sitat i hermetegn · Karl Ivar Karlsen → Karlsen · Kildetilvisning foran punktum',
@@ -3840,7 +3840,7 @@ function mtEscHighlight(text, tokens, className) {
   return html;
 }
 
-function mtBuildFixCorrectionHtml(task) {
+function mtBuildFixCorrectionHtml(task, missedWrongs) {
   var text = String(task.tekst || '');
   var map = task.errors || {};
   var wrongs = Object.keys(map);
@@ -3852,10 +3852,21 @@ function mtBuildFixCorrectionHtml(task) {
   });
 
   var correctedTokens = wrongs.map(function (w) { return map[w]; });
-  return '<div class="mt-fb-correction">' +
-    '<div class="mt-fb-corr-row"><strong>Retting i teksten:</strong> ' + mtEscHighlight(text, wrongs, 'mt-mark-bad') + '</div>' +
-    '<div class="mt-fb-corr-row"><strong>Foreslått versjon:</strong> ' + mtEscHighlight(corrected, correctedTokens, 'mt-mark-ok') + '</div>' +
-    '</div>';
+  var html = '<div class="mt-fb-correction">' +
+    '<div class="mt-fb-corr-row"><strong>Slik skulle det v\u00e6re:</strong> ' + mtEscHighlight(corrected, correctedTokens, 'mt-mark-ok') + '</div>';
+
+  var missed = Array.isArray(missedWrongs) ? missedWrongs : [];
+  if (missed.length) {
+    var rows = missed.map(function (w) {
+      var right = map[w] || '';
+      return '<li><span class="mt-mark-bad">' + mtEsc(w) + '</span> <span class="mt-fb-arrow">\u2192</span> <span class="mt-mark-ok">' + mtEsc(right) + '</span></li>';
+    }).join('');
+    html += '<div class="mt-fb-corr-row mt-fb-missed"><strong>Feil du ikke rettet (' + missed.length + '):</strong>' +
+      '<ul class="mt-fb-missed-list">' + rows + '</ul></div>';
+  }
+
+  html += '</div>';
+  return html;
 }
 
 function mtBuildFillselCorrectionHtml(task, selects) {
@@ -4679,12 +4690,17 @@ function mtCheckFix() {
     el.className = 'mt-text-input mt-textarea mt-mono mt-fix-field ' + (correct ? 'mt-inp-correct' : (partial ? 'mt-inp-neutral' : 'mt-inp-wrong'));
     el.innerHTML = mtBuildFixHighlightHtml(val, fixedRights, missedWrongs);
   }
+  var prev = el.previousSibling;
+  if (!prev || !prev.classList || !prev.classList.contains('mt-fix-userlabel')) {
+    var labelHtml = '<p class="mt-fix-userlabel">Teksten din \u2014 <span class="mt-mark-ok">gr\u00f8nne</span> ord er riktige rettelser, <span class="mt-mark-bad">r\u00f8de</span> er feil som st\u00e5r igjen.</p>';
+    el.insertAdjacentHTML('beforebegin', labelHtml);
+  }
   var feedback = correct ? null : mtSmartFeedback(val, t);
   mtFinish(correct, keys.length, hits, val, t, feedback);
 
   if (!correct) {
     var fb = $mt('mt-feedback');
-    if (fb) fb.innerHTML += mtBuildFixCorrectionHtml(t);
+    if (fb) fb.innerHTML += mtBuildFixCorrectionHtml(t, missedWrongs);
   }
 }
 

@@ -2567,6 +2567,40 @@ nav a.active { font-weight: 700; }
   padding: 0 3px;
 }
 
+.mt-fix-userlabel {
+  margin: .35rem 0 .25rem;
+  font-size: .82rem;
+  color: var(--tmuted);
+  font-style: italic;
+}
+
+.mt-fb-missed {
+  margin-top: .55rem;
+  padding-top: .45rem;
+  border-top: 1px dashed rgba(140,115,66,.22);
+}
+
+.mt-fb-missed-list {
+  margin: .35rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: .25rem;
+}
+
+.mt-fb-missed-list li {
+  font-size: .85rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .35rem;
+}
+
+.mt-fb-arrow {
+  color: var(--tmuted);
+  font-weight: 700;
+}
+
 .mt-fb-fasit-inline {
   color: #17653e;
   font-weight: 600;
