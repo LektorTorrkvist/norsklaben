@@ -21,14 +21,14 @@ function buildCategoryList(maal) {
 function radarKeys(maal) {
   return maal === 'bm'
     ? {
-        innhald:      'innhold (relevans, dybde, ideer)',
+        innhald:      'innhold – måler om eleven svarer på oppgaven og oppgavetypen (relevans, dekning av alle punkt, sjangerkrav)',
         struktur:     'struktur (innledning, hoveddel, avslutning, avsnitt)',
         spraak_stil:  'språk og stil (ordvalg, variasjon, sjangertilpasning)',
         rettskriving: 'rettskriving, grammatikk og tegnsetting',
         kjeldebruk:   'kildebruk (sitat, referanser, kildeliste)'
       }
     : {
-        innhald:      'innhald (relevans, djupne, idear)',
+        innhald:      'innhald – måler om eleven svarar på oppgåva og oppgåvetypen (relevans, dekning av alle punkt, sjangerkrav)',
         struktur:     'struktur (innleiing, hovuddel, avslutning, avsnitt)',
         spraak_stil:  'språk og stil (ordval, variasjon, sjangertilpassing)',
         rettskriving: 'rettskriving, grammatikk og teiknsetting',
