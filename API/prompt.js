@@ -37,25 +37,25 @@ function radarKeys(maal) {
 }
 
 function rubrikk(maal) {
-  // Intern diagnose-skala – samme strenghet som ein sensor, men brukt til å bygge elevprofil.
+  // Intern diagnose-skala – kalibrert mot ungdomstrinnet (8.–10. klasse).
   // Eleven ser ikkje skalaen som karakter, men som radar i profilen sin.
   return maal === 'bm'
-    ? `RADAR-SKALA 1–6 (intern diagnose – ver STRENG og realistisk):
-  6 = framifrå. Godt over forventet på 10. trinn.
-  5 = svært god. Tydelig over snittet.
-  4 = god. På forventet nivå for trinnet.
+    ? `RADAR-SKALA 1–6 (intern diagnose – kalibrert for 8.–10. trinn):
+  6 = framifrå tekst fra en ungdomsskoleelev. Sjelden, men oppnåelig.
+  5 = svært god ungdomsskoletekst. Tydelig over snittet for trinnet.
+  4 = solid tekst på forventet nivå.
   3 = noe under forventet. Flere svakheter.
   2 = svak. Store mangler.
   1 = svært svak / nesten ikke besvart.
-Bruk hele skalaen. Ikke gi 5–6 uten at det er tydelig fortjent. En realistisk profil hjelper eleven mer enn snille tall.`
-    : `RADAR-SKALA 1–6 (intern diagnose – ver STRENG og realistisk):
-  6 = framifrå. Klart over forventa på 10. trinn.
-  5 = svært god. Tydeleg over snittet.
-  4 = god. På forventa nivå for trinnet.
+Bruk hele skalaen. Belønn det eleven faktisk mestrer: en 10.-elev som leverer en helhetlig, tydelig tekst med få mønstrede feil skal kunne få 5. Vær ærlig, men ikke kunstig streng – realistiske tall som gjenspeiler trinnet motiverer mer enn systematisk underrating.`
+    : `RADAR-SKALA 1–6 (intern diagnose – kalibrert for 8.–10. trinn):
+  6 = framifrå tekst frå ein ungdomsskuleelev. Sjeldan, men oppnåeleg.
+  5 = svært god ungdomsskuletekst. Tydeleg over snittet for trinnet.
+  4 = solid tekst på forventa nivå.
   3 = litt under forventa. Fleire svakheiter.
   2 = svak. Store manglar.
   1 = svært svak / nesten ikkje besvart.
-Bruk heile skalaen. Ikkje gje 5–6 utan at det er tydeleg fortent. Ein realistisk profil hjelper eleven meir enn snille tal.`;
+Bruk heile skalaen. Belønn det eleven faktisk meistrar: ein 10.-elev som leverer ein heilskapleg, tydeleg tekst med få mønstra feil skal kunne få 5. Ver ærleg, men ikkje kunstig streng – realistiske tal som speglar trinnet motiverer meir enn systematisk underrating.`;
 }
 
 /* ─── System-prompt ─────────────────────────────────── */
@@ -95,14 +95,16 @@ RADAR_FORKLARING: For hvert av de fem radarfeltene, skriv en kort begrunnelse (m
 
 INNHOLDSDEKNING (eget felt "innholdDekning"):
 - Hvis oppgavetekst er gitt: vurder strengt om eleven svarer på det oppgaven faktisk krever. Gi score 1–6.
-- Hvis oppgavetekst MANGLER: sett "innholdDekning.score": 0 og begrunnelse: "Ingen oppgavetekst gitt." I dette tilfellet skal "radar.innhald" aldri være over 4.
+- Hvis oppgavetekst MANGLER: sett "innholdDekning.score": 0 og begrunnelse: "Ingen oppgavetekst gitt." Vurder da "radar.innhald" ut fra hva teksten faktisk leverer (relevans, dybde, ideer på egne premisser) – uten taktisk underrating.
 
 FORSLAG (det viktigste feltet): Velg 3–5 øvingskategorier fra listen under som er det MEST NYTTIGE eleven kan trene på nå – basert på de tydeligste svakhetene i akkurat denne teksten. Bare disse nøklene er gyldige:
 ${katListe}
 
 Reglar for forslag:
 - Prioriter kategorier der teksten faktisk har problemer (ikke generelle råd).
-- Match sjanger: er teksten en novelle, foreslå sjanger-relevante kategorier (novelle, spraak_stil, setningsbygging) framfor f.eks. kildebruk.
+- VIKTIG: Når du ser hyppige feil av samme type, foreslå konkrete grammatikkategorier framfor brede sjanger-kategorier. Eksempler: og_aa (blander og/å), sammensatt (deler sammensatte ord: "jule middag"), dobbel_konsonant ("katen" → "katten"), kj_skj (blander kj-/skj-lyd), tegnsetting (mangler komma/punktum), setningsbygging (fragmenter, kjempelange setninger). Disse gir rask, målbar progresjon.
+- Ikke trekk for enkeltstående småfeil som ikke påvirker lesingen. Se etter MØNSTER: samme type feil 3+ ganger eller systematisk svakhet.
+- Match sjanger der det er relevant, men la ikke sjangertilpasning skygge for konkrete språkfeil eleven faktisk gjør.
 - Hvert forslag MÅ ha et kort, ORDRETT sitat fra elevteksten i "eksempel_fra_teksten" (3–10 ord) som viser hvorfor eleven trenger akkurat denne øvingen.
 - Ikke foreslå samme kategori to ganger.
 
@@ -141,14 +143,16 @@ RADAR_FORKLARING: For kvart av dei fem radarfelta, skriv ei kort grunngjeving (m
 
 INNHALDSDEKNING (eige felt "innholdDekning"):
 - Om oppgåvetekst er gjeven: vurder strengt om eleven svarar på det oppgåva faktisk krev. Gje score 1–6.
-- Om oppgåvetekst MANGLAR: set "innholdDekning.score": 0 og grunngje med "Inga oppgåvetekst gjeven." I dette tilfellet skal "radar.innhald" aldri vere over 4.
+- Om oppgåvetekst MANGLAR: set "innholdDekning.score": 0 og grunngje med "Inga oppgåvetekst gjeven." Vurder då "radar.innhald" ut frå kva teksten faktisk leverer (relevans, djupne, idear på eigne premissar) – utan taktisk underrating.
 
 FORSLAG (det viktigaste feltet): Vel 3–5 øvingskategoriar frå lista under som er det MEST NYTTIGE eleven kan trene på no – basert på dei tydelegaste svakheitene i akkurat denne teksten. Berre desse nøklane er gyldige:
 ${katListe}
 
 Reglar for forslag:
 - Prioriter kategoriar der teksten faktisk har problem (ikkje generelle råd).
-- Match sjanger: er teksten ei novelle, foreslå sjangerrelevante kategoriar (novelle, spraak_stil, setningsbygging) framfor t.d. kjeldebruk.
+- VIKTIG: Når du ser hyppige feil av same type, foreslå konkrete grammatikkategoriar framfor breie sjanger-kategoriar. Døme: og_aa (blandar og/å), samansett (deler samansette ord: «jule middag»), dobbel_konsonant («katen» → «katten»), kj_skj (blandar kj-/skj-lyd), teiknsetting (manglar komma/punktum), setningsbygging (fragment, kjempelange setningar). Desse gjev rask, målbar progresjon.
+- Ikkje trekk for enkeltståande småfeil som ikkje påverkar lesinga. Sjå etter MØNSTER: same type feil 3+ gonger eller systematisk svakheit.
+- Match sjanger der det er relevant, men lat ikkje sjangertilpassing skugge for konkrete språkfeil eleven faktisk gjer.
 - Kvart forslag MÅ ha eit kort, ORDRETT sitat frå elevteksten i "eksempel_fra_teksten" (3–10 ord) som viser kvifor eleven treng akkurat denne øvinga.
 - Ikkje foreslå same kategori to gonger.
 
@@ -167,8 +171,8 @@ function buildUserPrompt(elevtekst, maal = 'nn', oppgavetekst = '') {
         ? `OPPGAVETEKST:\n"""\n${oppgavetekst.trim()}\n"""\n\n`
         : `OPPGÅVETEKST:\n"""\n${oppgavetekst.trim()}\n"""\n\n`)
     : (maal === 'bm'
-        ? `OPPGAVETEKST: (mangler – innhold maks 4)\n\n`
-        : `OPPGÅVETEKST: (manglar – innhald maks 4)\n\n`);
+        ? `OPPGAVETEKST: (mangler – innholdDekning.score = 0, men radar.innhald vurderes på tekstens egne premisser)\n\n`
+        : `OPPGÅVETEKST: (manglar – innholdDekning.score = 0, men radar.innhald vert vurdert på teksten sine eigne premissar)\n\n`);
 
   // Minimalt JSON-skjelett (sparer tokens vs. fullstendig eksempel).
   const skjelett = maal === 'bm'
