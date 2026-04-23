@@ -264,6 +264,14 @@ async function kallOllamaRaw(systemPrompt, userPrompt) {
 
 /* ─── Endepunkt ────────────────────────────────────── */
 
+app.get('/api/koe', (req, res) => {
+  // Frontend pollar denne under analyse for å vise kønummer.
+  res.json({
+    lengd: ollamaQueueLen,
+    busy: ollamaQueueLen > 0
+  });
+});
+
 app.get('/api/health', async (req, res) => {
   try {
     const r = await fetch(`${OLLAMA_URL}/api/tags`);

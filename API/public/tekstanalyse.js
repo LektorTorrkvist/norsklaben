@@ -74,7 +74,17 @@
     short: 'Teksten er kort – analysen blir bedre med en lengre tekst.',
     gemma4Info: 'Lokal LLM: Gemma 4',
     etaPrefix: 'Analyserer med Gemma 4 –',
-    etaSuffix: 'sek. igjen …'
+    etaSuffix: 'sek. igjen …',
+    queueWaiting: 'Du er nummer {n} i køen. Det startar straks …',
+    queueNext: 'Du er neste i køen …',
+    overtimeMsgs: [
+      'Tar litt lenger enn ventet – AI-en leser nøye …',
+      'Bygger elevprofilen din …',
+      'Sjekker struktur og setningsbygging …',
+      'Vurderer ordvalg og språklig variasjon …',
+      'Velger ut de mest treffende øvingene …',
+      'Næsten ferdig – takk for tålmodigheten!'
+    ]
   } : {
     title: 'Elevprofil',
     intro: 'Lim inn den siste teksten du har levert. Du får ein grundig analyse, ein elevprofil og konkrete oppgåver å øve på.',
@@ -111,7 +121,17 @@
     short: 'Teksten er kort – analysen blir betre med ein lengre tekst.',
     gemma4Info: 'Lokal LLM: Gemma 4',
     etaPrefix: 'Analyserer med Gemma 4 –',
-    etaSuffix: 'sek. att …'
+    etaSuffix: 'sek. att …',
+    queueWaiting: 'Du er nummer {n} i køen. Det startar straks …',
+    queueNext: 'Du er neste i køen …',
+    overtimeMsgs: [
+      'Tek litt lenger enn venta – AI-en les nøye …',
+      'Byggjer elevprofilen din …',
+      'Sjekkar struktur og setningsbygging …',
+      'Vurderer ordval og språkleg variasjon …',
+      'Vel ut dei mest treffande øvingane …',
+      'Snart ferdig – takk for tålmodet!'
+    ]
   };
 
   var MAAL_ALTERNATIV = MAAL === 'bm'
@@ -901,19 +921,67 @@
     if (tekst.length < 200) status.textContent = T.short;
 
     var wordCount = Math.round(tekst.length / 5);
-    var etaSec = Math.max(8, Math.round(wordCount * 0.07 + 10));
-    var etaRemaining = etaSec;
+    // Realistisk ETA for Gemma 4 e4b Q4 paa CX53 CPU (~12 tokens/sek output,
+    // ~50 tokens/sek prefill). JSON-svaret er typisk 700–1400 output-tokens.
+    var inputTokens = Math.round(wordCount * 1.4);
+    var outputTokens = 900;
+    var etaSec = Math.round(inputTokens / 50 + outputTokens / 12 + 6);
+    etaSec = Math.max(35, Math.min(180, etaSec));
+    var etaStart = Date.now();
+    var etaTotal = etaSec;
+    var queuePos = 0;
+    var phase = 'pending';   // 'pending' (i kø) | 'running' | 'overtime'
+    var overtimeIdx = 0;
     var modelInfo = host.querySelector('[data-nl-ta-model-info]');
-    if (modelInfo) {
-      modelInfo.innerHTML = '<span class="nl-ta-model-dot nl-ta-model-dot--pulse"></span> ' +
-        esc(T.etaPrefix) + ' <strong data-nl-ta-eta>' + etaRemaining + '</strong> ' + esc(T.etaSuffix);
+
+    function renderProgress() {
+      if (!modelInfo) return;
+      var html = '<span class="nl-ta-model-dot nl-ta-model-dot--pulse"></span> ';
+      if (phase === 'pending' && queuePos > 1) {
+        html += esc(T.queueWaiting.replace('{n}', String(queuePos - 1)));
+      } else if (phase === 'overtime') {
+        var msgs = T.overtimeMsgs || [];
+        var msg = msgs[overtimeIdx % Math.max(1, msgs.length)] || '';
+        html += esc(msg);
+      } else {
+        var elapsed = Math.round((Date.now() - etaStart) / 1000);
+        var remaining = Math.max(0, etaTotal - elapsed);
+        html += esc(T.etaPrefix) + ' <strong>' + remaining + '</strong> ' + esc(T.etaSuffix);
+      }
+      modelInfo.innerHTML = html;
     }
+
+    // Poll kø-status kvart 2. sek.
+    var queueInterval = setInterval(function () {
+      fetch(API_BASE + '/api/koe').then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          if (!data) return;
+          queuePos = data.lengd || 0;
+          if (queuePos <= 1 && phase === 'pending') {
+            phase = 'running';
+            etaStart = Date.now(); // resett ETA når vi faktisk startar
+          }
+          renderProgress();
+        })
+        .catch(function () {});
+    }, 2000);
+
+    // Tick kvart sek for nedteljing/overtime-rotasjon
     var etaInterval = setInterval(function () {
-      etaRemaining--;
-      var etaEl = host.querySelector('[data-nl-ta-eta]');
-      if (etaEl) etaEl.textContent = String(Math.max(0, etaRemaining));
-      if (etaRemaining <= 0) clearInterval(etaInterval);
+      if (phase === 'running') {
+        var elapsed = Math.round((Date.now() - etaStart) / 1000);
+        if (elapsed >= etaTotal) {
+          phase = 'overtime';
+          overtimeIdx = 0;
+        }
+      } else if (phase === 'overtime') {
+        // Roter melding kvart 6. sek
+        if (((Date.now() - etaStart) / 1000) % 6 < 1) overtimeIdx++;
+      }
+      renderProgress();
     }, 1000);
+
+    renderProgress();
 
     fetch(API_BASE + '/api/analyser-tekst', {
       method: 'POST',
@@ -948,6 +1016,7 @@
         btn.disabled = false;
         btn.textContent = origLabel;
         clearInterval(etaInterval);
+        clearInterval(queueInterval);
         var mi = host.querySelector('[data-nl-ta-model-info]');
         if (mi) mi.innerHTML = '<span class="nl-ta-model-dot"></span> ' + esc(T.gemma4Info);
       });
