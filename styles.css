@@ -4728,6 +4728,13 @@ tr:nth-child(even) td { background: var(--bg); }
   width: 100%;
   margin-bottom: 1rem;
 }
+.ep-panel-meta {
+  font-size: .82rem;
+  color: var(--tmuted);
+  font-style: italic;
+  width: 100%;
+  margin-bottom: .4rem;
+}
 .ep-radar-svg { width: 100%; max-width: 420px; min-height: 360px; display: block; overflow: visible; }
 .ep-radar-empty { text-align: center; color: var(--tmuted); font-size: .9rem; padding: 2rem 1rem; min-height: 360px; display: flex; align-items: center; justify-content: center; }
 .ep-radar-note { text-align: center; font-size: .8rem; color: #5A8E7A; margin-top: .3rem; font-style: italic; }

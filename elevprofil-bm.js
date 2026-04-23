@@ -721,15 +721,6 @@
     var strengths = insights.strengths;
     var weaknesses = insights.weaknesses;
 
-    var innhaldCapped = false;
-    if (averageRadar && analysisStore.analyses.length) {
-      var withOppgave = 0, withoutOppgave = 0;
-      analysisStore.analyses.forEach(function(a) {
-        if (a.hasOppgaveText) withOppgave++; else withoutOppgave++;
-      });
-      if (withoutOppgave > 0 && withOppgave === 0) innhaldCapped = true;
-    }
-
     var totalAnalyses = analysisStore.analyses.length;
     var welcomeTitle, welcomeText;
     if (totalAnalyses === 0 && sessionCount === 0) {
@@ -891,7 +882,8 @@
       '<div class="ep-writing">' +
         '<div class="ep-radar-card">' +
           '<div class="ep-panel-title">Skrivemestring</div>' +
-          '<div class="ep-panel-sub">Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'er') + ' (1–6)' + (innhaldCapped ? ' · Innhold kappet til 4 uten oppgavetekst' : '') + '</div>' +
+          '<div class="ep-panel-meta">Radardiagrammet vurderer skrivekompetansen din som en streng sensor på norskeksamen.</div>' +
+          '<div class="ep-panel-sub">Snitt av ' + escapeHtml(String(radarCount)) + ' vurdert' + (radarCount === 1 ? '' : 'e') + ' tekst' + (radarCount === 1 ? '' : 'er') + ' (1–6)</div>' +
           (averageRadar ? buildRadarSvg(averageRadar, RADAR_CATEGORIES, kildebrukIsBorrowed ? [5] : []) + (kildebrukIsBorrowed ? '<div class="ep-radar-note">* Kildebruk: snittet er regnet ut fra ' + kildebrukCount + ' av ' + radarCount + ' tekster. Tekster uten krav til kildebruk (f.eks. fortellinger) er holdt utenfor, slik at aksen ikke blir trukket ned av irrelevant data.</div>' : '') : '<div class="ep-radar-empty">Radardiagrammet vises når tekster har blitt vurdert i Tekstsjekk.</div>') +
         '</div>' +
         '<div class="ep-strengths-weak">' +
