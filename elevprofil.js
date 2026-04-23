@@ -657,7 +657,8 @@
       if (excludedSet[String(aItem.ts)]) continue;
       var hasKildebruk = aItem.hasKildebruk !== undefined
         ? aItem.hasKildebruk
-        : /kjeld|kilde|tilvising|referans|kjeldeliste|kildeliste/i.test(String(aItem.oppgaveExcerpt || ''));
+        : (/kjeld|kilde|tilvising|referans|kjeldeliste|kildeliste|i\s*f(?:ø|o)lgj?e|https?:\/\/|snl\.no|wikipedia|\(\s*\w+[^)]{0,40}\b(?:19|20)\d{2}\s*\)|\[[1-9]\d?\]/i.test(String(aItem.oppgaveExcerpt || '') + ' ' + String(aItem.textExcerpt || ''))
+           || (Number(rs[5]) || 0) > 1);
       for (var rj = 0; rj < 5; rj++) radarSums[rj] += rs[rj];
       radarCount++;
       if (hasKildebruk) {

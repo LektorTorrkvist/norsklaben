@@ -465,7 +465,13 @@
     }).filter(Boolean).slice(0, 6);
 
     var hasOppgave = String(payload.oppgaveText || '').trim().length >= 20;
-    var hasKildebruk = /kjeld|kilde|tilvising|referans|kjeldeliste|kildeliste/i.test(String(payload.oppgaveText || ''));
+    var oppgaveStr = String(payload.oppgaveText || '');
+    var elevStr = String(payload.tekst || '');
+    var kildebrukRe = /kjeld|kilde|tilvising|referans|kjeldeliste|kildeliste|i\s*f(?:ø|o)lgj?e|https?:\/\/|snl\.no|wikipedia|\(\s*\w+[^)]{0,40}\b(?:19|20)\d{2}\s*\)|\[[1-9]\d?\]/i;
+    var aiKjeldeScore = Number(radar.kjeldebruk) || 0;
+    // hasKildebruk er sann om: oppgava nemner kjelder, eleven faktisk har kjelder i teksten,
+    // eller AI-en sjolv vurderte kjeldebruk (score > 1, der 1 = ikkje relevant per prompt).
+    var hasKildebruk = kildebrukRe.test(oppgaveStr) || kildebrukRe.test(elevStr) || aiKjeldeScore > 1;
     var innhaldRaw = Number(radar.innhald) || 0;
     var innhaldDekning = Number((payload.resultat && payload.resultat.innholdDekning && payload.resultat.innholdDekning.score)) || 0;
     var innhaldFinal = innhaldRaw;
