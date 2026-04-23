@@ -40,7 +40,14 @@
 
   var T = MAAL === 'bm' ? {
     title: 'Elevprofil',
-    intro: 'Lim inn den siste teksten du har levert. Du får en grundig analyse, en elevprofil og konkrete oppgaver å øve på.',
+    intro: 'Få en grundig analyse av en tekst, en personlig elevprofil og konkrete øvingsoppgaver – basert på din skrivekompetanse.',
+    pathsTitle: 'Det finnes to måter å lage en elevprofil på:',
+    path1Title: 'Velg en oppgave fra Skrivemesteren',
+    path1Desc: 'Velg en åpen oppgave fra nedtrekksmenyen, skriv et svar, og lim det inn nedenfor.',
+    path2Title: 'Lim inn en tekst du har skrevet på skolen',
+    path2Desc: 'Lim inn en stil, fagtekst eller annen tekst du allerede har skrevet – og få analysen.',
+    step1Title: 'Steg 1: Hva skal du skrive om?',
+    step2Title: 'Steg 2: Din tekst',
     maalLabel: 'Målform',
     sjangerLabel: 'Sjanger',
     sjangerPlaceholder: 'Velg sjanger (valgfritt)',
@@ -105,7 +112,14 @@
     ]
   } : {
     title: 'Elevprofil',
-    intro: 'Lim inn den siste teksten du har levert. Du får ein grundig analyse, ein elevprofil og konkrete oppgåver å øve på.',
+    intro: 'Få ein grundig analyse av ein tekst, ein personleg elevprofil og konkrete øvingsoppgåver – basert på din skrivekompetanse.',
+    pathsTitle: 'Det finst to måtar å lage ein elevprofil på:',
+    path1Title: 'Vel ei oppgåve frå Skrivemeisteren',
+    path1Desc: 'Vel ei open oppgåve frå nedtrekksmenyen, skriv eit svar, og lim det inn nedanfor.',
+    path2Title: 'Lim inn ein tekst du har skrive på skulen',
+    path2Desc: 'Lim inn ein stil, fagtekst eller annan tekst du allereie har skrive – og få analysen.',
+    step1Title: 'Steg 1: Kva skal du skrive om?',
+    step2Title: 'Steg 2: Teksten din',
     maalLabel: 'Målform',
     sjangerLabel: 'Sjanger',
     sjangerPlaceholder: 'Vel sjanger (valfritt)',
@@ -229,6 +243,19 @@
 '.nl-ta-richinput p{margin:0 0 .55rem;}' +
 '.nl-ta-richinput p:last-child{margin-bottom:0;}' +
 '.nl-ta-toolbar{display:flex;gap:.35rem;flex-wrap:wrap;margin:.1rem 0 .35rem;}' +
+'.nl-ta-paths{background:#f6fbf7;border:1px solid #d4e8d9;border-radius:12px;padding:.85rem 1rem;margin:.1rem 0 1rem;}' +
+'.nl-ta-paths-title{font-weight:700;color:#1A3D2B;margin-bottom:.55rem;font-size:.95rem;}' +
+'.nl-ta-paths-list{list-style:none;padding:0;margin:0;display:grid;gap:.5rem;}' +
+'.nl-ta-paths-list li{display:flex;gap:.65rem;align-items:flex-start;}' +
+'.nl-ta-paths-list li > div{display:flex;flex-direction:column;gap:.1rem;line-height:1.4;}' +
+'.nl-ta-paths-list strong{color:#1A3D2B;font-size:.95rem;}' +
+'.nl-ta-paths-list span{color:#3a4a3f;font-size:.88rem;}' +
+'.nl-ta-paths-num{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:1.65rem;height:1.65rem;border-radius:50%;background:#1A3D2B;color:#fff;font:700 .9rem "Source Sans 3",sans-serif;}' +
+'.nl-ta-step{margin:1.1rem 0 .25rem;padding-top:.85rem;border-top:1px solid #ece5d4;}' +
+'.nl-ta-step:first-of-type{border-top:none;padding-top:.4rem;}' +
+'.nl-ta-step-title{display:flex;align-items:center;gap:.55rem;font-family:"Playfair Display",serif;font-size:1.05rem;color:#1A3D2B;margin:0 0 .65rem;font-weight:600;}' +
+'.nl-ta-step-num{display:inline-flex;align-items:center;justify-content:center;width:1.55rem;height:1.55rem;border-radius:50%;background:#C8832A;color:#fff;font:700 .85rem "Source Sans 3",sans-serif;flex:0 0 auto;}' +
+'.nl-ta-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}' +
 '.nl-ta-pickbox{background:linear-gradient(135deg,#fff8e7 0%,#fff5e0 100%);border:1.5px solid #E6CFA8;border-left:4px solid #C8832A;border-radius:0 12px 12px 0;padding:.75rem .9rem .55rem;margin:.1rem 0 .85rem;}' +
 '.nl-ta-pick-label{display:flex;align-items:center;gap:.25rem;color:#8b5815;margin-bottom:.45rem;}' +
 '.nl-ta-pick-icon{font-size:1.05em;line-height:1;}' +
@@ -865,6 +892,13 @@
       '<div class="nl-ta-card">' +
         '<h3>' + esc(T.title) + '</h3>' +
         '<p class="nl-ta-intro">' + esc(T.intro) + '</p>' +
+        '<div class="nl-ta-paths" role="note">' +
+          '<div class="nl-ta-paths-title">' + esc(T.pathsTitle) + '</div>' +
+          '<ol class="nl-ta-paths-list">' +
+            '<li><span class="nl-ta-paths-num">1</span><div><strong>' + esc(T.path1Title) + '</strong><span>' + esc(T.path1Desc) + '</span></div></li>' +
+            '<li><span class="nl-ta-paths-num">2</span><div><strong>' + esc(T.path2Title) + '</strong><span>' + esc(T.path2Desc) + '</span></div></li>' +
+          '</ol>' +
+        '</div>' +
         '<div class="nl-ta-actions nl-ta-actions-top">' +
           '<button type="button" class="nl-ta-btn nl-ta-btn-ghost" data-nl-ta-open-last="1">' + esc(T.openLast) + '</button>' +
           '<button type="button" class="nl-ta-btn nl-ta-btn-ghost" data-nl-ta-show-history="1">' + esc(T.history) + '</button>' +
@@ -880,24 +914,30 @@
             '<select id="nl-ta-sjanger" class="nl-ta-select">' + sjangerOptions + '</select>' +
           '</div>' +
         '</div>' +
-        '<div class="nl-ta-pickbox" data-nl-ta-oppgave-pick-wrap hidden>' +
-          '<label class="nl-ta-label nl-ta-pick-label" for="nl-ta-oppgave-pick">' +
-            '<span class="nl-ta-pick-icon" aria-hidden="true">📝</span> ' + esc(T.oppgavePickLabel) +
-          '</label>' +
-          '<select id="nl-ta-oppgave-pick" class="nl-ta-select"><option value="">' + esc(T.oppgavePickPlaceholder) + '</option></select>' +
-          '<p class="nl-ta-hint nl-ta-pick-hint">' + esc(T.oppgavePickHint) + '</p>' +
-        '</div>' +
-        '<label class="nl-ta-label" for="nl-ta-oppgave">' + esc(T.oppgaveLabel) + '</label>' +
-        '<textarea id="nl-ta-oppgave" class="nl-ta-textarea nl-ta-textarea-small" placeholder="' + esc(T.oppgavePlaceholder) + '" rows="3"></textarea>' +
-        '<p class="nl-ta-hint">' + esc(T.oppgaveHint) + '</p>' +
-        '<label class="nl-ta-label" for="nl-ta-input">' + esc(T.label) + '</label>' +
-        '<div class="nl-ta-toolbar" role="toolbar" aria-label="Tekstformatering">' +
+        '<section class="nl-ta-step">' +
+          '<h4 class="nl-ta-step-title"><span class="nl-ta-step-num">1</span>' + esc(T.step1Title) + '</h4>' +
+          '<div class="nl-ta-pickbox" data-nl-ta-oppgave-pick-wrap hidden>' +
+            '<label class="nl-ta-label nl-ta-pick-label" for="nl-ta-oppgave-pick">' +
+              '<span class="nl-ta-pick-icon" aria-hidden="true">📝</span> ' + esc(T.oppgavePickLabel) +
+            '</label>' +
+            '<select id="nl-ta-oppgave-pick" class="nl-ta-select"><option value="">' + esc(T.oppgavePickPlaceholder) + '</option></select>' +
+            '<p class="nl-ta-hint nl-ta-pick-hint">' + esc(T.oppgavePickHint) + '</p>' +
+          '</div>' +
+          '<label class="nl-ta-label" for="nl-ta-oppgave">' + esc(T.oppgaveLabel) + '</label>' +
+          '<textarea id="nl-ta-oppgave" class="nl-ta-textarea nl-ta-textarea-small" placeholder="' + esc(T.oppgavePlaceholder) + '" rows="3"></textarea>' +
+          '<p class="nl-ta-hint">' + esc(T.oppgaveHint) + '</p>' +
+        '</section>' +
+        '<section class="nl-ta-step">' +
+          '<h4 class="nl-ta-step-title"><span class="nl-ta-step-num">2</span>' + esc(T.step2Title) + '</h4>' +
+          '<label class="nl-ta-label nl-ta-sr-only" for="nl-ta-input">' + esc(T.label) + '</label>' +
+          '<div class="nl-ta-toolbar" role="toolbar" aria-label="Tekstformatering">' +
           '<button type="button" class="nl-ta-fbtn nl-ta-fbtn-b" data-nl-ta-fmt="bold" title="' + esc(T.formatBoldTitle) + '" aria-label="' + esc(T.formatBold) + '">B</button>' +
           '<button type="button" class="nl-ta-fbtn nl-ta-fbtn-i" data-nl-ta-fmt="italic" title="' + esc(T.formatItalicTitle) + '" aria-label="' + esc(T.formatItalic) + '">I</button>' +
           '<button type="button" class="nl-ta-fbtn nl-ta-fbtn-u" data-nl-ta-fmt="underline" title="' + esc(T.formatUnderlineTitle) + '" aria-label="' + esc(T.formatUnderline) + '">U</button>' +
         '</div>' +
         '<div id="nl-ta-input" class="nl-ta-richinput" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" data-placeholder="' + esc(T.placeholder) + '" data-empty="1"></div>' +
         '<p class="nl-ta-hint">' + esc(T.richHint) + '</p>' +
+        '</section>' +
         '<div class="nl-ta-actions">' +
           '<button type="button" class="nl-ta-btn" data-nl-ta-go="1">' + esc(T.analyze) + '</button>' +
         '</div>' +
