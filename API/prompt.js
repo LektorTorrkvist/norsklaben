@@ -22,14 +22,14 @@ function radarKeys(maal) {
   return maal === 'bm'
     ? {
         innhald:      'innhold – måler om eleven svarer på oppgaven og oppgavetypen, og hvilket nivå innholdet er på: viser innholdet enkel kompetanse, kompetent eller svært kompetent?',
-        struktur:     'struktur (innledning, hoveddel, avslutning, avsnitt)',
+        struktur:     'struktur – alt fra overordnet tekststruktur (innledning, hoveddel, avslutning, avsnitt) til setningsstruktur. VIKTIG: matche forventningene i oppgaveformuleringen – ikke forvent strukturer som ikke samsvarer med bestillingen i oppgaveteksten (en kort SMS, et dikt eller et leserinnlegg har andre strukturkrav enn en artikkel). Har eleven svart med god struktur i forhold til bestillingen, gi 5 eller 6.',
         spraak_stil:  'språk og stil – måler om språket er tilpasset oppgaven og mottakeren, og om det passer til sjangeren. Belønn elever som treffer: skriver konkret, tydelig, fagriktig og godt for situasjonen, eller som finner riktig stemme i kreative tekster. Treffer eleven godt på språk og stil, gi 5 eller 6.',
         rettskriving: 'rettskriving, grammatikk og tegnsetting',
         kjeldebruk:   'kildebruk (sitat, referanser, kildeliste). KALIBRERING: Hvis eleven har gjort et synlig forsøk på å føre kilder (f.eks. nevnt en kilde i teksten, satt inn en lenke eller listet opp én kilde), gi MINST 2. Hvis eleven har korrekte parentesreferanser i teksten OG en korrekt kildeliste, gi 5 eller 6 avhengig av nivå og presisjon på kildeføringen.'
       }
     : {
         innhald:      'innhald – måler om eleven svarar på oppgåva og oppgåvetypen, og kva nivå innhaldet er på: viser innhaldet enkel kompetanse, kompetent eller svært kompetent?',
-        struktur:     'struktur (innleiing, hovuddel, avslutning, avsnitt)',
+        struktur:     'struktur – alt frå overordna tekststruktur (innleiing, hovuddel, avslutning, avsnitt) til setningsstruktur. VIKTIG: match forventingane i oppgåveformuleringa – ikkje forvent strukturar som ikkje samsvarar med bestillinga i oppgåveteksten (ein kort SMS, eit dikt eller eit lesarinnlegg har andre strukturkrav enn ein artikkel). Har eleven svara med god struktur i forhold til bestillinga, gje 5 eller 6.',
         spraak_stil:  'språk og stil – måler om språket er tilpassa oppgåva og mottakaren, og om det høver til sjangeren. Lønn elevar som treff: skriv konkret, tydeleg, fagleg rett og godt for situasjonen, eller som finn rett stemme i kreative tekstar. Treff eleven godt på språk og stil, gje 5 eller 6.',
         rettskriving: 'rettskriving, grammatikk og teiknsetting',
         kjeldebruk:   'kjeldebruk (sitat, referansar, kjeldeliste). KALIBRERING: Om eleven har gjort eit synleg forsøk på å føre kjelder (t.d. nemnt ei kjelde i teksten, sett inn ei lenkje eller lista opp éi kjelde), gje MINST 2. Om eleven har korrekte parentesreferansar i teksten OG ei korrekt kjeldeliste, gje 5 eller 6 avhengig av nivå og presisjon på kjeldeføringa.'
