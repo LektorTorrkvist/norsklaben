@@ -25,14 +25,14 @@ function radarKeys(maal) {
         struktur:     'struktur (innledning, hoveddel, avslutning, avsnitt)',
         spraak_stil:  'språk og stil (ordvalg, variasjon, sjangertilpasning)',
         rettskriving: 'rettskriving, grammatikk og tegnsetting',
-        kjeldebruk:   'kildebruk (sitat, referanser, kildeliste)'
+        kjeldebruk:   'kildebruk – elever som har gjort forsøk på kildeføring skal ha minst 2. Korrekt kildeføring i parentes + korrekt kildeliste skal gi 5 eller 6 avhengig av nivået'
       }
     : {
         innhald:      'innhald – måler om eleven svarar på oppgåva og oppgåvetypen, og kva nivå innhaldet er på: viser innhaldet enkel kompetanse, kompetent eller svært kompetent?',
         struktur:     'struktur (innleiing, hovuddel, avslutning, avsnitt)',
         spraak_stil:  'språk og stil (ordval, variasjon, sjangertilpassing)',
         rettskriving: 'rettskriving, grammatikk og teiknsetting',
-        kjeldebruk:   'kjeldebruk (sitat, referansar, kjeldeliste)'
+        kjeldebruk:   'kjeldebruk – elevar som har gjort forsøk på kjeldeføring skal ha minst 2. Korrekt kjeldeføring i parentes + korrekt kjeldeliste skal gje 5 eller 6 avhengig av nivået'
       };
 }
 
