@@ -579,9 +579,9 @@ var BANKV2 = [
  q:'Klikk på alle substantivene i setningen.',
  tekst:'Læreren skrev en lang oppgave på tavlen hver dag.',
  maalordklasse:'substantiv',
- fasit_ord:['læreren','oppgave','tavlen','dag'],
+ fasit_ord:['Læreren','oppgave','tavlen','dag'],
  regel:'Substantiv er navn på personer, ting, steder og begreper.',
- eks:'læreren (person), oppgave (ting), tavlen (ting), dag (tid/begrep)'},
+ eks:'Læreren (person), oppgave (ting), tavlen (ting), dag (tid/begrep)'},
 
 {kat:'ordklasser',kat_label:'Ordklasser',type:'mc',vanske:'lett',
  q:'Hvilken ordklasse hører «rask» til i «Han er en rask løper»?',
@@ -2956,15 +2956,15 @@ var BANKV2 = [
  tekst:'Forsker Berg skriver: Ungdom bruker i gjennomsnitt seks timer daglig på skjerm (Berg, 2024, s. 31). En rapport fra SSB bekrefter dette (ssb.no, 2023). Statistikken viser store endringer. (SSB, 2021).',
  errors:{'Berg skriver: Ungdom bruker i gjennomsnitt seks timer daglig på skjerm':'Berg skriver: «Ungdom bruker i gjennomsnitt seks timer daglig på skjerm»','(ssb.no, 2023)':'(SSB, 2023)','store endringer. (SSB, 2021).':'store endringer (SSB, 2021).'},
  fasit:'Sitat i hermetegn · (ssb.no, 2023) → (SSB, 2023) · Kildetilvisning flyttes foran punktum',
- regel:'Tre reglar: 1) Direkte sitat krev hermetegn. 2) Bruk (Institusjon, årstall), ikkje URL. 3) Kildetilvisning kjem FØR punktum.',
- eks:'«Sitat» (Kilde, årstall). · (SSB, 2023) ikkje (ssb.no). · ...endringer (SSB, 2021).'},
+ regel:'Tre regler: 1) Direkte sitat krever hermetegn. 2) Bruk (Institusjon, årstall), ikke URL. 3) Kildetilvisning kommer FØR punktum.',
+ eks:'«Sitat» (Kilde, årstall). · (SSB, 2023) ikke (ssb.no). · ...endringer (SSB, 2021).'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'fix',vanske:'vanskeleg',
- q:'Rett de tre kildebruksfeilene i denne teksten frå ein litterær analyse.',
+ q:'Rett de tre kildebruksfeilene i denne teksten fra en litterær analyse.',
  tekst:'I novellen «Vinterlys» bruker forfatteren naturen som symbol. Hansen (2021) skriver: Naturen speiler karakterens indre liv (s. 45). Videre argumenterer Hansen, Sara for at symbolbruken skaper dybde i teksten. (Hansen, 2021).',
  errors:{'Hansen (2021) skriver: Naturen speiler karakterens indre liv':'Hansen (2021) skriver: «Naturen speiler karakterens indre liv»','Hansen, Sara':'Hansen','skaper dybde i teksten. (Hansen, 2021).':'skaper dybde i teksten (Hansen, 2021).'},
  fasit:'Sitat i hermetegn · «Hansen, Sara» → «Hansen» · Kildetilvisning foran punktum',
- regel:'1) Direkte sitat krev hermetegn. 2) I løpende tekst brukes berre etternavn. 3) Kildetilvisning kjem FØR punktum.',
+ regel:'1) Direkte sitat krever hermetegn. 2) I løpende tekst brukes bare etternavn. 3) Kildetilvisning kommer FØR punktum.',
  eks:'Hansen (2021) skriver: «Tekst» (s. 45). · argumenterer Hansen for · dybde (Hansen, 2021).'},
 
 {kat:'kildebruk',kat_label:'Kildebruk',type:'fix',vanske:'vanskeleg',
@@ -2972,8 +2972,8 @@ var BANKV2 = [
  tekst:'Demokratiet er avhengig av en opplyst befolkning. Ifølge Eriksen, 2022 er mediekritikk viktigere enn noensinne. Han hevder: All informasjon bør kildekritisk vurderes (Eriksen, 2022, s. 8). En undersøkelse fra Karl Ivar Karlsen viser at 40 prosent av nyheter ikke er faktasjekket. (Karlsen, 2023). Det er et urovekkende funn.',
  errors:{'Eriksen, 2022 er':'Eriksen (2022) er','Han hevder: All informasjon bør kildekritisk vurderes':'Han hevder: «All informasjon bør kildekritisk vurderes»','Karl Ivar Karlsen':'Karlsen','faktasjekket. (Karlsen, 2023).':'faktasjekket (Karlsen, 2023).'},
  fasit:'Eriksen (2022) · Sitat i hermetegn · Karl Ivar Karlsen → Karlsen · Kildetilvisning foran punktum',
- regel:'Fire reglar: 1) Årstall i parentes etter etternavn i tekst: Eriksen (2022). 2) Sitat krev hermetegn. 3) Berre etternavn i løpende tekst. 4) Kildetilvisning FØR punktum.',
- eks:'Eriksen (2022) mener · «Sitat» (Kilde, år) · Karlsen, ikkje fullt navn · ...funn (Karlsen, 2023).'}
+ regel:'Fire regler: 1) Årstall i parentes etter etternavn i tekst: Eriksen (2022). 2) Sitat krever hermetegn. 3) Bare etternavn i løpende tekst. 4) Kildetilvisning FØR punktum.',
+ eks:'Eriksen (2022) mener · «Sitat» (Kilde, år) · Karlsen, ikke fullt navn · ...funn (Karlsen, 2023).'}
 
 ]; // end BANKV2
 if (typeof window !== 'undefined') window.BANKV2 = BANKV2;

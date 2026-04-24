@@ -579,9 +579,9 @@ var BANKV2 = [
  q:'Klikk på alle substantiva i setninga.',
  tekst:'Læraren skreiv ei lang oppgåve på tavla kvar dag.',
  maalordklasse:'substantiv',
- fasit_ord:['læraren','oppgåve','tavla','dag'],
+ fasit_ord:['Læraren','oppgåve','tavla','dag'],
  regel:'Substantiv er namn på personar, ting, stader og omgrep.',
- eks:'læraren (person), oppgåve (ting), tavla (ting), dag (tid/omgrep)'},
+ eks:'Læraren (person), oppgåve (ting), tavla (ting), dag (tid/omgrep)'},
 
 {kat:'ordklassar',kat_label:'Ordklassar',type:'mc',vanske:'lett',
  q:'Kva ordklasse høyrer «rask» til i «Han er ein rask løpar»?',
