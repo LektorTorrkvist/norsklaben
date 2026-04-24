@@ -996,10 +996,11 @@ var BANKV2 = [
   {tekst:'Sensasjonsoverskrifter er eit teikn på påliteleg journalistikk.',sann:false},
   {tekst:'Ein bør vurdere forfattarens kompetanse og mogleg agenda.',sann:true},
   {tekst:'Fagfellevurderte tidsskrift har høg standard.',sann:true},
-  {tekst:'Alder på ei kjelde spelar aldri noka rolle.',sann:false}
+  {tekst:'Ei kjelde frå 2005 er like god som ei frå 2024, uansett tema.',sann:false},
+  {tekst:'Det er smart å bruke fleire kjelder som seier det same – då blir argumentet meir truverdig.',sann:true}
  ],
- regel:'Vurder: kven, kvar, når, kvifor. Fagfellevurdering = kvalitetsstempel.',
- eks:'Primærkjelde: NOU-rapport. Sekundærkjelde: avisomtale av rapporten.'},
+ regel:'Fire kjeldekritiske spørsmål: (1) KVEN er forfattaren – har dei fagleg kompetanse? (2) KVAR er det publisert – forskingsinstitusjon, avis, blogg? (3) NÅR er det skrive – er opplysningane framleis aktuelle? (4) KVIFOR er det skrive – kva er agendaen? Fleire kjelder som seier det same, styrkjer truverdet.',
+ eks:'Primærkjelde: NOU-rapport, forskingsartikkel, lovtekst. Sekundærkjelde: avisomtale av ein rapport. Kjeldekritikk er ikkje å avvise – det er å vurdere.'},
 
 {kat:'kjeldebruk',kat_label:'Kjeldebruk',type:'drag_kolonne',vanske:'medium',
  q:'Kva treng hermeteikn (direkte sitat), og kva kan stå fritt med kjeldetilvising (omskriving)?',
@@ -1050,6 +1051,25 @@ var BANKV2 = [
  ],
  regel:'Parafrase = eiga formulering med kjelde. NRK rapporterer om annan forsking = sekundærkjelde.',
  eks:'Parafrase: «Ifølge NRK (2024) …» – eigne ord, med kjelde.'},
+
+{kat:'kjeldebruk',kat_label:'Kjeldebruk',type:'mcset',vanske:'vanskeleg',
+ q:'Du skal skrive ein fagartikkel om mobilbruk i skulen. Vurder desse kjeldene.',
+ tekst:'KJELDE A: Artikkel på bloggen til ein mobilselgar, skriven i 2019, utan forfattarnamn. KJELDE B: Rapport frå Medietilsynet, publisert 2024. KJELDE C: Innlegg frå ei mor på Facebook, skrive i 2023, med 200 likes.',
+ questions:[
+  {q:'Kva kjelde er truverdig nok for fagartikkelen?',alt:['Berre A','Berre B','Berre C','Alle tre'],fasit:1},
+  {q:'Kva er hovudproblemet med kjelde A?',alt:['For gammal','Anonym forfattar og mogleg agenda (mobilselgar)','For kort'],fasit:1},
+  {q:'Kva er hovudproblemet med kjelde C?',alt:['For få likes','Personleg meining, ikkje fagleg kjelde','For fersk'],fasit:1}
+ ],
+ regel:'Ei god fagleg kjelde er: namngitt, publisert av ein institusjon med fagleg kompetanse, og oppdatert nok. Blogg frå nokon som kan ha økonomisk interesse, og private Facebook-innlegg, er ikkje gode fagkjelder – uansett kor mange likes dei har.',
+ eks:'Truverdige fagkjelder: Medietilsynet, FHI, SSB, Lesesenteret, forsking.no, fagfellevurderte tidsskrift. Mindre truverdige: blogg, sosiale medium, anonyme nettstader.'},
+
+{kat:'kjeldebruk',kat_label:'Kjeldebruk',type:'fix',vanske:'medium',
+ q:'Rett dei tre kjeldetilvisingsfeila.',
+ tekst:'Ein studie viser at ungdom les mindre (nrk). Ifølgje forsking er dette urovekkjande. Medietilsynet skriv i artikkelen sin at skjermtida har auka (Medietilsynet, 2024, artikkel på nett).',
+ errors:{'(nrk)':'(NRK, 2024)','Ifølgje forsking er dette urovekkjande':'Ifølgje Lesesenteret (2023) er dette urovekkjande','(Medietilsynet, 2024, artikkel på nett)':'(Medietilsynet, 2024)'},
+ fasit:'(NRK, 2024) · Ifølgje Lesesenteret (2023) … · (Medietilsynet, 2024)',
+ regel:'Standardformat for kjeldetilvising: (Namn, årstal). NRK skal ha stor bokstav. Vage kjelder som «forsking» treng eit konkret namn. Ekstra informasjon i parentesen («artikkel på nett», «side 5») høyrer heime i kjeldelista, ikkje i teksten.',
+ eks:'Rett: (SSB, 2023) · (Medietilsynet, 2024) · (Lesesenteret, 2023). Feil: (nrk), (ein artikkel eg las), (forsking)'},
 
 /* ═══════════════════════════════════════════════════
    11. OPPGÅVETOLKING  (8 oppgåver)
@@ -1553,11 +1573,34 @@ var BANKV2 = [
  eks:'Fagartikkel: tema, innleiing, argument + kjelder, avslutting'},
 
 {kat:'sjangerkompetanse',kat_label:'Sjangerkompetanse',type:'mc',vanske:'lett',
- q:'Kva kjenneteiknar eit debattinnlegg?',
- alt:['Nøytral framstilling utan eiga meining','Klar meining, argument for og mot, og eit tydeleg standpunkt','Berre fakta utan vurdering','Korte dialogar mellom to personar'],
+ q:'Kva kjenneteiknar eit debattinnlegg – i motsetnad til ein fagartikkel?',
+ alt:[
+  'Nøytral framstilling utan eiga meining (som i fagartikkel)',
+  'Klar meining, argument for og mot, og eit tydeleg standpunkt',
+  'Berre fakta utan vurdering (som i referat)',
+  'Ingen kjeldetilvisingar – berre personleg erfaring'
+ ],
  fasit:'Klar meining, argument for og mot, og eit tydeleg standpunkt',
- regel:'Eit debattinnlegg argumenterer for eit standpunkt, brukar retoriske verkemiddel og avsluttar med ei oppmoding.',
- eks:'Påstand → argument for → motargument → tilbakevising → konklusjon/oppmoding'},
+ regel:'Eit debattinnlegg argumenterer for eit standpunkt, brukar retoriske verkemiddel og avsluttar med ei oppmoding. Hovudskilnaden frå fagartikkelen er at du MÅ ta stilling. Men du bør likevel bruke kjelder og saklege argument – ein god debatt er ikkje berre kjensler.',
+ eks:'Påstand → argument for (med kjelder) → motargument → tilbakevising → konklusjon/oppmoding'},
+
+{kat:'sjangerkompetanse',kat_label:'Sjangerkompetanse',type:'mcset',vanske:'vanskeleg',
+ q:'Les dette tekstutdraget frå ein elev og svar.',
+ tekst:'Mobilen er eit problem i skulen. Elevane mine bruker for mykje tid på han. Forsking frå Medietilsynet (2024) viser at ungdom bruker i snitt tre timar dagleg på sosiale medium. Difor bør vi forby mobil heilt i skuletida.',
+ questions:[
+  {q:'Kva sjanger passar best til denne teksten?',alt:['Fagartikkel','Debattinnlegg','Novelle'],fasit:1},
+  {q:'Kva element frå debatt er tydeleg?',alt:['Dialog','Påstand + oppmoding','Spenningskurve'],fasit:1},
+  {q:'Kva manglar for at det skal vere ein god fagartikkel?',alt:['Standpunktet må takast bort, teksten må vere nøytral','Spenningskurva må byggjast opp','Teksten må skrivast i fortid'],fasit:0}
+ ],
+ regel:'Teksten har både sakleg innhald (kjeldebruk) og tydeleg standpunkt (forby heilt). Kombinasjonen gjer det til eit debattinnlegg, ikkje ein fagartikkel. Ein fagartikkel hadde presentert problemet utan å konkludere politisk.',
+ eks:'Debattinnlegg: påstand + kjelder + oppmoding. Fagartikkel: same kjelder, men presenterer fleire sider og lar lesaren trekkje konklusjonen.'},
+
+{kat:'sjangerkompetanse',kat_label:'Sjangerkompetanse',type:'omskriv',vanske:'vanskeleg',
+ q:'Teksten nedunder er skriven i fagartikkelstil. Skriv om til eit debattinnlegg – behald fakta, men legg til standpunkt, retorikk og oppmoding.',
+ tekst:'Ungdom bruker i snitt tre timar dagleg på sosiale medium (Medietilsynet, 2024). Forsking frå FHI (2023) viser at mykje skjermtid kan henge saman med søvnproblem og auka stress.',
+ instruksjon:'Legg til: (1) eit tydeleg standpunkt tidleg i teksten, (2) minst eitt retorisk verkemiddel (spørsmål, direkte tiltale, gjentaking), (3) ei oppmoding til lesaren eller til styresmaktene.',
+ regel:'Fagartikkel → debatt: same fakta, men fleire grep. Du må ta stilling, bruke retorikk og peike på kva som må gjerast. Kjeldene gjer argumenta truverdige også i debatt.',
+ eks:'Forslag: «Skal vi late ungdommen brenne ut før dei er ferdige på skulen? Tre timar dagleg på sosiale medium (Medietilsynet, 2024) – det er meir enn dei brukar på lekser. FHI (2023) viser at det kostar dei søvn og livskvalitet. Skulane må handle no.»'},
 
 {kat:'sjangerkompetanse',kat_label:'Sjangerkompetanse',type:'drag_kolonne',vanske:'medium',
  q:'Sorter trekka: Høyrer dei til fagartikkel, debattinnlegg eller novelle?',
@@ -1654,8 +1697,8 @@ var BANKV2 = [
  tekst:'Alle veit at plast er ekstremt farleg. Eg synest at vi er altfor late. Det er jo heilt dust å kaste plast i naturen.',
  errors:{'Alle veit at plast er ekstremt farleg':'Forsking tyder på at plast er skadeleg for miljøet','Eg synest at vi er altfor late':'Fleire forskarar peikar på at tiltaka kjem for seint','Det er jo heilt dust å kaste plast i naturen':'Forsøpling utgjer eit alvorleg miljøproblem'},
  fasit:'Forsking tyder på … · Fleire forskarar peikar på … · Forsøpling utgjer …',
- regel:'Fagleg språk brukar objektive formuleringar, ikkje slang, kjensleord eller «alle veit».',
- eks:'«Eg synest» → «Forsking viser» · «dust» → «problematisk» · «alle veit» → «studiar tyder på»'},
+ regel:'Tre grep for fagleg språk: (1) Erstatt «alle veit»/«det er klart» med kjeldebaserte formuleringar («forsking viser», «studiar tyder på»). (2) Fjern personlege meiningsmarkørar («eg synest/trur») – lat kjeldene tale. (3) Bytt kjensleord («dust», «ekstremt») med saklege vurderingar («problematisk», «alvorleg»).',
+ eks:'«alle veit» → «studiar tyder på» · «eg synest» → «fleire forskarar peikar på» · «dust» → «problematisk»'},
 
 {kat:'fagartikkel',kat_label:'Fagartikkel',type:'fillsel',vanske:'lett',
  q:'Vel rett formulering for ein fagartikkel.',
@@ -1664,8 +1707,8 @@ var BANKV2 = [
   {pre:'',alt:['Ifølgje SSB (2023) har forbruket auka med 12 %.','Alle handlar altfor mykje.','Det er jo sjukt kor mykje folk kjøper.'],fasit:'Ifølgje SSB (2023) har forbruket auka med 12 %.',post:''},
   {pre:'',alt:['Seriøst, vi må gjere noko.','Det hastar å finne berekraftige løysingar.','Whatever, ingen gjer noko uansett.'],fasit:'Det hastar å finne berekraftige løysingar.',post:''}
  ],
- regel:'Fagartikkelspråk er sakleg, konkret og bygd på kjeldefesta informasjon.',
- eks:'«Forsking viser …» / «Ifølgje SSB …» / «Det hastar å finne …»'},
+ regel:'Fagartikkelspråk gjenkjenner du på tre teikn: (1) KJELDER – «Forsking viser», «Ifølgje SSB», ikkje «alle seier». (2) NØYTRAL TONE – ingen slang, ingen overdrivingar, ingen emojiar. (3) PRESISJON – konkrete tal, ikkje «mega mykje», «sinnsjukt».',
+ eks:'«Forsking viser …» (kjelde) · «Ifølgje SSB …» (kjelde) · «12 % auke» (presisjon) · «Det hastar å finne …» (nøytral)'},
 
 {kat:'fagartikkel',kat_label:'Fagartikkel',type:'sann_usann_serie',vanske:'medium',
  q:'Er påstandane om fagartikkelsjangeren sanne eller usanne?',
@@ -1681,10 +1724,10 @@ var BANKV2 = [
 
 {kat:'fagartikkel',kat_label:'Fagartikkel',type:'cloze',vanske:'lett',
  q:'Skriv inn rett ord: «___ Helsedirektoratet (2023) har fysisk aktivitet minka blant ungdom.»',
- hint:'Eit ord som viser til ei namngitt kjelde.',
+ hint:'Eit ord som viser til ei namngitt kjelde. Både «ifølgje» (eitt ord) og «ifølge» er korrekt nynorsk – men ikkje «i følgje» (to ord, som tyder «i reisefølgje med»).',
  fasit:'Ifølgje',fasit_v:['Ifølgje','ifølgje','Ifølge','ifølge','I følgje','I følge'],
- regel:'«Ifølgje» + kjelde innleier eit kjeldefesta argument i fagprosa.',
- eks:'Ifølgje SSB … / Ifølgje Helsedirektoratet … / Ifølgje forskarane …'},
+ regel:'«Ifølgje» brukast for å vise til ei kjelde. Merk: på norsk skal det skrivast i eitt ord. «I følgje» (to ord) tyder noko anna: «vere i følgje med nokon». Typiske kjeldetilvisingsord: ifølgje, som nemnt av, basert på, dokumentert av.',
+ eks:'Ifølgje SSB (2024) · Som nemnt av Medietilsynet (2024) · Basert på tal frå FHI (2023)'},
 
 {kat:'fagartikkel',kat_label:'Fagartikkel',type:'mcset',vanske:'vanskeleg',
  q:'Les fagartikkelutkastet og svar.',
@@ -1696,6 +1739,20 @@ var BANKV2 = [
  ],
  regel:'God fagartikkel: kjelder, nyansering med «likevel» og avslutning som opnar for refleksjon.',
  eks:'Kjelde: Medietilsynet 2024. «Likevel» = nyansering. Retorisk spørsmål i avslutning.'},
+
+{kat:'fagartikkel',kat_label:'Fagartikkel',type:'drag_kolonne',vanske:'medium',
+ q:'Sorter: Kva setningar er påstandar som tåler ein fagartikkel?',
+ kolonner:['OK i fagartikkel – dokumenterbar','Problematisk – treng kjelde eller omskriving'],
+ ord:[
+  {tekst:'Ifølgje SSB (2023) les 60 % av ungdom bøker dagleg.',fasit:0},
+  {tekst:'Alle veit at ungdom les for lite.',fasit:1},
+  {tekst:'Medietilsynet (2024) rapporterer at skjermtida har auka med 40 minutt sidan 2020.',fasit:0},
+  {tekst:'Det er heilt openbert at mobilen øydelegg konsentrasjonen.',fasit:1},
+  {tekst:'Forsking ved UiO tyder på ein samanheng mellom søvn og skjermbruk.',fasit:0},
+  {tekst:'Dei fleste meiner at skulen må forby mobilar.',fasit:1}
+ ],
+ regel:'I fagartikkel må påstandar tole nærlesing. Kjeldebaserte påstandar («Ifølgje SSB», «Forsking tyder på») står støtt. Udokumenterte påstandar («alle veit», «det er openbert», «dei fleste meiner») gjer teksten mindre truverdig – du må anten finne ei kjelde, eller formulere om til noko du faktisk kan dokumentere.',
+ eks:'DOKUMENTERBAR: «Ifølgje SSB (2023) les 60 %…» · PROBLEMATISK: «alle veit», «det er openbert», «dei fleste meiner»'},
 
 /* ═══════════════════════════════════════════════════
    18. DEBATTINNLEGG  (8 oppgåver)
@@ -1772,10 +1829,28 @@ var BANKV2 = [
 
 {kat:'debattinnlegg',kat_label:'Debattinnlegg',type:'cloze',vanske:'lett',
  q:'Skriv inn rett ord: «Vi ___ kommunepolitikarane til å auke budsjettet for skulebibliotek.»',
- hint:'Eit verb som tyder å be nokon om å handle.',
- fasit:'oppmodar',fasit_v:['oppmodar','oppfordrar','ber'],
- regel:'«Oppmodar» er eit vanleg verb i oppmoding/avslutning av debattinnlegg.',
- eks:'Vi oppmodar / Vi ber / Vi krev – typiske avslutningsverb i debatt'},
+ hint:'Eit verb som tyder å be nokon om å handle – typisk i avslutninga av eit debattinnlegg.',
+ fasit:'oppmodar',fasit_v:['oppmodar','oppfordrar','ber','krev'],
+ regel:'Eit debattinnlegg sluttar gjerne med ei oppmoding – eit verb som ber lesaren om å handle. Vanlege val: oppmodar (høfleg), oppfordrar (litt sterkare), ber (nøytralt), krev (sterkt). Vel styrke etter saka – «krev» er for sterkt for små saker.',
+ eks:'«Vi oppmodar politikarane til å …» (mild) · «Vi oppfordrar styresmaktene om å …» (fast) · «Vi krev at …» (aggressiv, brukast sparsamt)'},
+
+{kat:'debattinnlegg',kat_label:'Debattinnlegg',type:'finn_feil',vanske:'vanskeleg',
+ q:'Klikk på dei to formuleringane som er usaklege eller personangrep.',
+ tekst:'Vi treng betre skulebibliotek. Forsking viser at lesing styrkjer ordforrådet. Ministeren som er imot dette, har aldri forstått kor viktig lesing er. Ho er ein inkompetent politikar. Difor må kommunen auke budsjettet.',
+ fasit_feil:['Ho er ein inkompetent politikar','har aldri forstått kor viktig lesing er'],
+ regel:'Eit godt debattinnlegg argumenterer mot saka, ikkje mot personen. Personangrep («ho er inkompetent») og nedlatande påstandar om motstandaren («har aldri forstått») svekkjer argumentasjonen din – lesaren mistar tillit. Gode grep: vis kva ministeren faktisk har sagt, og argumenter mot dei konkrete argumenta.',
+ eks:'USAKLEG: «Ministeren er inkompetent.» SAKLEG: «Ministeren har hevda at digital lesing er nok, men forsking (Lesesenteret, 2023) viser at papirbøker gir betre konsentrasjon.»'},
+
+{kat:'debattinnlegg',kat_label:'Debattinnlegg',type:'mcset',vanske:'medium',
+ q:'Les dette debattinnlegget og svar på spørsmåla.',
+ tekst:'Mobilforbod er vegen å gå. Elevane mine er konstant distraherte. Forsking frå Universitetet i Stavanger (2023) viser at mobilforbod aukar konsentrasjonen med 15 %. Somme vil seie at mobilen er nødvendig for tryggleik, men skulane har telefonar for dette. Difor må vi innføre mobilforbod på ungdomsskulen.',
+ questions:[
+  {q:'Kva er standpunktet i teksten?',alt:['Mobilen bør vere frivillig','Mobilforbod er nødvendig','Elevane er distraherte'],fasit:1},
+  {q:'Kva retorisk grep blir brukt i andre setning?',alt:['Kjeldetilvising','Personleg erfaring (etos)','Motargument'],fasit:1},
+  {q:'Korleis blir motargumentet handsama?',alt:['Ikkje nemnt','Nemnt og tilbakevist','Nemnt og støtta'],fasit:1}
+ ],
+ regel:'Eit godt debattinnlegg har: tydeleg standpunkt, minst eitt argument med kjelde (logos), personleg erfaring eller autoritet (etos), eit motargument som blir tilbakevist, og ei oppmoding.',
+ eks:'Sjekk: Standpunkt (ja) + Kjelde (ja: UiS 2023) + Etos (ja: «mine elevar») + Motargument handsama (ja) + Oppmoding (ja: «må innføre»).'},
 
 /* ═══════════════════════════════════════════════════
    19. OVERSKRIFT OG INGRESS  (8 oppgåver)
@@ -1815,16 +1890,27 @@ var BANKV2 = [
   {pre:'Debattinnlegg om leksefri skule:',alt:['Om lekser','Leksene må bort – la ungdommane få fri','Eit lesarbrev'],fasit:'Leksene må bort – la ungdommane få fri',post:''},
   {pre:'Fagartikkel om søvn og ungdom:',alt:['Kvifor søv ungdom for lite?','Søvn','Ein tekst eg har skrive'],fasit:'Kvifor søv ungdom for lite?',post:''}
  ],
- regel:'Ei god overskrift er konkret, vekker interesse og passar til sjangeren.',
- eks:'Klima → «Isbreane smeltar …» · Lekser → «Leksene må bort …» · Søvn → «Kvifor søv ungdom …?»'},
+ regel:'Ei god overskrift passar til sjangeren: FAGARTIKKEL = tema + antydning om funn («Isbreane smeltar – raskare enn nokon gong»). DEBATTINNLEGG = standpunkt eller oppmoding («Leksene må bort!»). Unngå ordet «Om» – det er nesten alltid tom. Spørsmålsforma fungerer i fagartiklar for å skape nysgjerrigheit.',
+ eks:'Fagartikkel (temp + funn): «Isbreane smeltar …» · Debatt (standpunkt): «Leksene må bort …» · Fagartikkel (spørsmål): «Kvifor søv ungdom for lite?»'},
 
-{kat:'overskrift_ingress',kat_label:'Overskrift og ingress',type:'fix',vanske:'medium',
- q:'Rett den dårlege overskrifta og ingressen til ein fagartikkel om plast.',
+{kat:'overskrift_ingress',kat_label:'Overskrift og ingress',type:'omskriv',vanske:'medium',
+ q:'Lag ei betre overskrift og ingress til ein fagartikkel om plast.',
  tekst:'Min artikkel. Denne teksten handlar om plast. Plast er over alt og det er ganske ekkelt eigenleg.',
- errors:{'Min artikkel':'Plast i havet – ein trussel mot livet under vatn','Denne teksten handlar om plast. Plast er over alt og det er ganske ekkelt eigenleg.':'Kvart år hamnar millionar tonn plast i havet. Ny forsking viser korleis det truar heile næringskjeda.'},
- fasit:'Plast i havet – ein trussel … · Kvart år hamnar millionar tonn …',
- regel:'Overskrift: presis og fengande. Ingress: saklege hovudfunn, ikkje slang eller vage formuleringar.',
- eks:'«Min artikkel» → «Plast i havet – …» · «ganske ekkelt» → sakleg formulering'},
+ instruksjon:'Skriv ei overskrift (ca. 4-10 ord) og ein ingress (1-2 setningar). Overskrifta skal vere presis og fengande. Ingressen skal gi lesaren hovudfunna med éin gong.',
+ regel:'Overskrift: presis + fengande + fortel temaet. Unngå intetsigande titlar («Min artikkel», «Om plast»). Ingress: saklege hovudfunn med konkret tal eller poeng som gjer lesaren nysgjerrig. Unngå slang og vage formuleringar.',
+ eks:'Overskrift-forslag: «Plast i havet – ein trussel mot livet under vatn» / «Mikroplast i maten: Kva skjer med helsa vår?» / «Kvart år hamnar 8 millionar tonn plast i havet». Ingress-forslag: «Kvart år hamnar millionar tonn plast i havet. Ny forsking viser korleis det truar heile næringskjeda.»'},
+
+{kat:'overskrift_ingress',kat_label:'Overskrift og ingress',type:'mc',vanske:'vanskeleg',
+ q:'Kva overskrift fungerer BEST for ein fagartikkel om søvn og ungdom, og kvifor?',
+ alt:[
+  '«Søvn» – fordi ho er kort og enkel',
+  '«Ungdom søv for lite – kva gjer det med hjernen?» – fordi ho har tema, funn og eit spørsmål som vekkjer nysgjerrigheit',
+  '«Om søvn hos ungdom» – fordi ho seier nøyaktig kva teksten handlar om',
+  '«Søvn er jo viktig!!!» – fordi ho er fengande'
+ ],
+ fasit:'«Ungdom søv for lite – kva gjer det med hjernen?» – fordi ho har tema, funn og eit spørsmål som vekkjer nysgjerrigheit',
+ regel:'Ei god fagartikkel-overskrift har tre element: (1) TEMA – kva handlar teksten om? (2) VINKEL – kva er hovudfunnet eller spørsmålet? (3) FENGSEL – noko som får lesaren til å ville lese meir. «Søvn» manglar vinkel og fengsel. «Om søvn» har berre tema. «Søvn er jo viktig!!!» manglar fagleg vinkel og bruker utropsteikn som høyrer heime i tabloidaviser, ikkje fagtekstar.',
+ eks:'Mønster: [Tema] + [Vinkel/funn] + [Spørsmål eller dashstrek]. Døme: «Plast i havet – ein stille katastrofe» eller «Kvifor les ungdom mindre bøker?»'},
 
 {kat:'overskrift_ingress',kat_label:'Overskrift og ingress',type:'sann_usann_serie',vanske:'lett',
  q:'Er påstandane om overskrift og ingress sanne eller usanne?',
@@ -1934,6 +2020,41 @@ var BANKV2 = [
  regel:'Sanseskildring (regnet) skaper stemning. Uopna brevet skaper spenning (frampek). Tredjeperson = «ho».',
  eks:'Sanseskildring → stemning. Uopna brev → frampek/spenning. «Ho» → tredjeperson.'},
 
+{kat:'novelle',kat_label:'Novelle',type:'mc',vanske:'medium',
+ q:'Kva er «in medias res»?',
+ alt:[
+  'Å starte forteljinga midt i hendinga',
+  'Å skrive novella i første person',
+  'Å ha ei overraskande slutt',
+  'Å bruke dialogar i staden for skildring'
+ ],
+ fasit:'Å starte forteljinga midt i hendinga',
+ regel:'«In medias res» (latin for «midt i saka») er eit klassisk novellegrep: starte rett inn i handlinga, utan lang innleiing. Lesaren får raskt forstå kven og kva, og blir dregen inn i stemninga. Motsetninga er å starte med lang bakgrunn – noko novellesjangeren sjeldan tillèt på grunn av lengda.',
+ eks:'In medias res: «Ho slo opp døra og skreik.» Ikkje-in-medias-res: «Det var ein fredag i november, og Anna var seks år gammal då ho …» (for mykje bakgrunn).'},
+
+{kat:'novelle',kat_label:'Novelle',type:'drag_kolonne',vanske:'medium',
+ q:'Kva grep høyrer heime i novella, og kva i fagteksten?',
+ kolonner:['Novellegrep','Fagtekstgrep'],
+ ord:[
+  {tekst:'Skildring av stemning og miljø',fasit:0},
+  {tekst:'Kjeldetilvising i parentes',fasit:1},
+  {tekst:'Dialog som avslører karakteren',fasit:0},
+  {tekst:'Statistikk og prosenttal',fasit:1},
+  {tekst:'Frampek mot noko som skal skje',fasit:0},
+  {tekst:'Nøytral, sakleg tone',fasit:1},
+  {tekst:'Vending som endrar alt',fasit:0},
+  {tekst:'Logiske argument med grunngjeving',fasit:1}
+ ],
+ regel:'Novelle viser og antyder (skildringar, dialog, frampek, vending). Fagtekst forklarer og dokumenterer (kjelder, tal, argument, nøytral tone). Ein novelle utan skildring blir flat; ein fagtekst med skildring blir uprofesjonell.',
+ eks:'NOVELLE: «Regnet sila mot vindauget. Ho heldt kaffekoppen hardare.» FAGTEKST: «Nedbøren i Noreg auka med 18 % frå 2010 til 2023 (Meteorologisk institutt, 2024).»'},
+
+{kat:'novelle',kat_label:'Novelle',type:'omskriv',vanske:'vanskeleg',
+ q:'Skriv om dette referatet til opninga av ei novelle. Bruk in medias res, skildring og frampek.',
+ tekst:'Jonas gjekk på skulen. Han hadde gløymt matpakka. Han vart sur på mora si. Seinare den dagen fekk han tilbod om lunsj av ein ny elev.',
+ instruksjon:'Kutt «Jonas gjekk på skulen» – start midt i ei hending. Bruk skildring (kva ser, høyrer, luktar Jonas?). Gi eit frampek om noko som skal skje.',
+ regel:'Ei god novelleopning har tre grep: (1) In medias res – ikkje start med introduksjon. (2) Skildring – visuelle, konkrete detaljar som gir stemning. (3) Frampek – eit hint om at noko skal skje eller endre seg.',
+ eks:'Forslag: «Jonas rota i sekken tredje gong. Matpakka var der ikkje. Magen knurra, klokka var berre ti over ni, og resten av dagen strekte seg framføre han som ein ørken. Ingen visste endå at dette skulle bli ein av dei dagane han seinare kom til å hugse.»'},
+
 /* ═══════════════════════════════════════════════════
    21. PARAFRASE  (8 oppgåver)
    ═══════════════════════════════════════════════════ */
@@ -1972,8 +2093,8 @@ var BANKV2 = [
   {tekst:'Forsking viser at barn beveger seg mye mindre nå. (ingen kjelde)',fasit:2},
   {tekst:'«Barn beveger seg mye mindre nå» (FHI, 2023).',fasit:1}
  ],
- regel:'God parafrase: eigne ord + kjelde. Direkte sitat: ordrett + hermeteikn + kjelde. Plagiat: andres ord utan kjelde.',
- eks:'Parafrase: eigne ord (FHI, 2023). Sitat: «…» (FHI, 2023). Plagiat: ordrett utan kjelde.'},
+ regel:'Tre kategoriar: (1) PARAFRASE – dine ord + kjeldetilvising. (2) SITAT – kjelda sine ord + hermeteikn + kjelde. (3) PLAGIAT – kjelda sine ord utan hermeteikn og/eller utan kjelde. Viktig: Det er IKKJE plagiat å bruke nokre av dei same fagorda («fysisk aktivitet», «barn») – plagiat er å overta kjernen i formuleringa utan å gje kreditt.',
+ eks:'Parafrase: «Born rører seg mindre (FHI, 2023).» Sitat: «…minka med 20 prosent» (FHI, 2023). Plagiat: «Fysisk aktivitet blant barn har minka med 20 %» (utan kjelde = stolen formulering).'},
 
 {kat:'parafrase',kat_label:'Parafrase',type:'sann_usann_serie',vanske:'medium',
  q:'Er påstandane om parafrase sanne eller usanne?',
@@ -2087,8 +2208,30 @@ var BANKV2 = [
   {q:'Kva manglar i den andre setninga?',alt:['Ingenting','Hermeteikn rundt det direkte sitatet','Kjeldetilvising'],fasit:1},
   {q:'Kva type gjengiving er den tredje setninga?',alt:['Direkte sitat','Indirekte sitat','Parafrase'],fasit:1}
  ],
- regel:'Direkte sitat: «…» + kjelde. Indirekte: «sa at …» + kjelde. Kontroller at alle sitat er markerte rett.',
- eks:'OK: «…» (FN, 2022). Feil: sa: Vi må … (manglar « »). Indirekte: meiner at …'},
+ regel:'Tre typar gjengiving: (1) DIREKTE SITAT – ordrett, i hermeteikn, med kjelde: «…» (Kjelde, årstal). (2) INDIREKTE SITAT – «sa at / skriv at / meiner at» + omforma innhald + kjelde. (3) PARAFRASE – eigne ord + kjelde. Alle tre krev kjeldetilvising. Direkte sitat MÅ ha hermeteikn – utan er det plagiat.',
+ eks:'Direkte: «Plasten truar livet» (FN, 2022). Indirekte: FN skriv at plasten trugar livet (FN, 2022). Parafrase: Havet er i fare på grunn av plastforureining (FN, 2022).'},
+
+{kat:'sitat',kat_label:'Sitat og sitatbruk',type:'fix',vanske:'vanskeleg',
+ q:'Rett dei tre sitatfeila i teksten.',
+ tekst:'Forskaren sa at: «Klimaendringane er dramatiske». Medietilsynet skriv: Ungdom brukar tre timar dagleg på mobil (2024). Ein rapport meiner «plastproblemet er alvorleg», (WWF, 2023).',
+ errors:{'sa at: «Klimaendringane er dramatiske»':'sa: «Klimaendringane er dramatiske» (Hansen, 2024)','Medietilsynet skriv: Ungdom brukar tre timar dagleg på mobil (2024)':'Medietilsynet (2024) skriv at ungdom brukar tre timar dagleg på mobil','«plastproblemet er alvorleg», (WWF, 2023)':'«plastproblemet er alvorleg» (WWF, 2023)'},
+ fasit:'sa: «Klimaendringane er dramatiske» (Hansen, 2024) · Medietilsynet (2024) skriv at ungdom brukar … · «plastproblemet er alvorleg» (WWF, 2023)',
+ regel:'Tre vanlege sitatfeil: (1) «sa at» + hermeteikn – bland ikkje direkte og indirekte sitat. Bruk «sa:» før direkte sitat, eller «sa at» før indirekte. (2) Manglande hermeteikn – direkte sitat må alltid ha « ». (3) Feil komma/punktum-plassering – kjeldetilvising står etter sitatet, utan komma framfor parentesen.',
+ eks:'Direkte: Hansen sa: «Klimaendringane er dramatiske» (Hansen, 2024). Indirekte: Hansen sa at klimaendringane er dramatiske (Hansen, 2024).'},
+
+{kat:'sitat',kat_label:'Sitat og sitatbruk',type:'drag_kolonne',vanske:'medium',
+ q:'Sorter: Kva type gjengiving er kvar setning?',
+ kolonner:['Direkte sitat','Indirekte sitat','Parafrase'],
+ ord:[
+  {tekst:'«Plast er den største trugselen mot havlivet» (WWF, 2023).',fasit:0},
+  {tekst:'WWF (2023) seier at plast er den største trugselen mot havlivet.',fasit:1},
+  {tekst:'Havforureining er blitt den alvorlegaste risikofaktoren for marint dyreliv (WWF, 2023).',fasit:2},
+  {tekst:'«Ungdom les 30 % mindre enn for ti år sidan» (SSB, 2023).',fasit:0},
+  {tekst:'SSB (2023) rapporterer at lesetala hos ungdom har gått ned.',fasit:1},
+  {tekst:'Lesevanar blant unge har endra seg dramatisk det siste tiåret (SSB, 2023).',fasit:2}
+ ],
+ regel:'Direkte sitat: Ordrett, i hermeteikn. Indirekte sitat: «sa at / skriv at / meiner at» + omforma innhald. Parafrase: Heilt eigne ord, men same innhald. Alle treng kjeldetilvising.',
+ eks:'Direkte: «Plast er trugsel» (WWF, 2023). Indirekte: WWF seier at plast er ein trugsel. Parafrase: Plastforureining er kritisk (WWF, 2023).'},
 
 /* ═══════════════════════════════════════════════════
    23. TAL OG STATISTIKK  (8 oppgåver)
@@ -2104,8 +2247,20 @@ var BANKV2 = [
  q:'Kva er skilnaden på prosent og prosentpoeng?',
  alt:['Dei tyder det same','Prosent er ein del av hundre; prosentpoeng er forskjellen mellom to prosenttal','Prosentpoeng er større enn prosent','Prosent brukast i fagartiklar, prosentpoeng i debattinnlegg'],
  fasit:'Prosent er ein del av hundre; prosentpoeng er forskjellen mellom to prosenttal',
- regel:'Prosentpoeng = forskjellen mellom to prosenttal. Auke frå 40 % til 60 % = 20 prosentpoeng, ikkje 20 %.',
- eks:'Frå 40 % til 60 % = 20 prosentpoeng. 20 % av 40 ville vore 8, altså 48 %.'},
+ regel:'PROSENT (%) er ein del av eit heile – «60 % av ungdom les». PROSENTPOENG er differansen mellom to prosenttal. Hugseregel: Viss talet i seg sjølv har ei eining (%), så er endringa i prosentpoeng. Viss talet er noko anna (kroner, folketal), så er endringa i prosent. Typisk elevfeil: å blande desse.',
+ eks:'Frå 40 % til 60 % = 20 prosentpoeng (ikkje 20 %). Frå 40 kr til 60 kr = auke med 50 % (ikkje 20 kr er 50 %). Frå 40 % til 60 % er også ein auke på 50 % i relativ forstand (men dette skriv ein sjeldan i fagtekst – det skaper forvirring).'},
+
+{kat:'tal_og_statistikk',kat_label:'Tal og statistikk',type:'mc',vanske:'vanskeleg',
+ q:'Lesetala på skule X gjekk frå 60 % til 90 % mellom 2018 og 2024. Kva er ein korrekt måte å beskrive endringa på?',
+ alt:[
+  'Auka med 30 %',
+  'Auka med 30 prosentpoeng',
+  'Halvert',
+  'Tredobla'
+ ],
+ fasit:'Auka med 30 prosentpoeng',
+ regel:'Når ein samanliknar to prosenttal, er differansen alltid prosentpoeng. Viss du vil seie «auka med 30 %», må du spesifisere kva 30 % er av. 30 % av 60 % ville vore 18 (altså frå 60 til 78, ikkje frå 60 til 90). Den relative auken frå 60 til 90 er 50 %, ikkje 30 %. For å unngå forvirring: bruk prosentpoeng for skilnad, og ver forsiktig med relative prosent når opphavstalet også er eit prosenttal.',
+ eks:'60 % → 90 % = 30 prosentpoeng · Den relative auken: (90-60)/60 = 50 % · IKKJE «auka med 30 %» – det er misvisande.'},
 
 {kat:'tal_og_statistikk',kat_label:'Tal og statistikk',type:'fillsel',vanske:'medium',
  q:'Vel den mest presise formuleringa.',
@@ -2115,8 +2270,8 @@ var BANKV2 = [
   {pre:'200 av 10 000 innbyggjarar:',alt:['Mange innbyggjarar','2 % av innbyggjarane','Tusenvis'],fasit:'2 % av innbyggjarane',post:''},
   {pre:'Prisen gjekk frå 100 til 200 kr:',alt:['Auka med 50 %','Dobla seg','Auka med 200 %'],fasit:'Dobla seg',post:''}
  ],
- regel:'Ver presis: bruk prosentpoeng for differanse mellom prosenttal, prosent for proporsjon, og konkrete tal.',
- eks:'15 prosentpoeng (ikkje 15 %) · 96 % bestod · 2 % · dobla seg'},
+ regel:'Tre reglar for tal i fagtekst: (1) DIFFERANSE mellom prosenttal = prosentpoeng (aldri prosent). (2) PROPORSJON av eit heile = prosent. (3) DOBLING, TREDOBLING eller HALVERING er presise verb som lesaren forstar umiddelbart – bruk dei framfor «auka med 100 %». Unngå vage uttrykk som «ganske mange», «nesten alle», «litt over halvparten» – kom med konkrete tal med kjelde.',
+ eks:'15 prosentpoeng (differanse) · 96 % (proporsjon) · dobla seg (klår endring) · ikkje «ganske mange» eller «veldig få»'},
 
 {kat:'tal_og_statistikk',kat_label:'Tal og statistikk',type:'drag_kolonne',vanske:'medium',
  q:'Sorter: Er talbruken presis og kjeldefesta, eller upresis og udokumentert?',
@@ -2169,6 +2324,20 @@ var BANKV2 = [
  ],
  regel:'Prosentpoeng for differanse. Vage påstandar utan kjelde svekkjer teksten. Alltid konkret + kjelde.',
  eks:'75 % → 60 % = 15 prosentpoeng. «Skulane opplyser» → treng kjelde.'},
+
+{kat:'tal_og_statistikk',kat_label:'Tal og statistikk',type:'drag_kolonne',vanske:'medium',
+ q:'Sorter: Er tallbruken presis og kjeldefesta, eller upresis?',
+ kolonner:['Presis og kjeldefesta','Upresis eller udokumentert'],
+ ord:[
+  {tekst:'Ifølgje SSB (2023) har forbruket auka med 12 %.',fasit:0},
+  {tekst:'Ganske mange ungdomar les lite.',fasit:1},
+  {tekst:'Frå 2010 til 2023 auka talet frå 45 % til 60 % – ein auke på 15 prosentpoeng (Medietilsynet, 2023).',fasit:0},
+  {tekst:'Veldig mange er på sosiale medium no for tida.',fasit:1},
+  {tekst:'Talet på røykjarar er halvert sidan 2000 (FHI, 2023).',fasit:0},
+  {tekst:'Lesetala har gått ned ei god stund.',fasit:1}
+ ],
+ regel:'Presis talbruk har tre element: (1) konkret tal, (2) kjeldetilvising, (3) tidsramme. Vage uttrykk som «ganske mange», «veldig mange», «ei god stund» fortel lesaren ingenting – og fjernar truverdet.',
+ eks:'PRESIS: «12 % auke (SSB, 2023)» · VAGT: «ganske mange»'},
 
 /* ═══════════════════════════════════════════════════
    EKSTRA: 10 lukka omskrivingsoppgåver (fix-type)
