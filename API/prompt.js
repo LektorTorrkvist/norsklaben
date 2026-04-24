@@ -14,8 +14,10 @@ const { CATEGORIES } = require('./categories');
 /* ─── Hjelparar ─────────────────────────────────────── */
 
 function buildCategoryList(maal) {
-  // Kompakt: «key — label». Ingen ekstra forklaringar (sparar tokens).
-  return CATEGORIES[maal].map(c => `${c.key} — ${c.label}`).join('\n');
+  // «key — label — typiske feil». Inkluderer examples slik at LLMen
+  // faktisk veit kva slags konkrete feil kvar kategori dekkjer
+  // (utan dette finn modellen ofte ikkje rett kategori for f.eks. dobbel_konsonant).
+  return CATEGORIES[maal].map(c => `${c.key} — ${c.label} — ${c.examples}`).join('\n');
 }
 
 function radarKeys(maal) {
@@ -112,6 +114,7 @@ ${katListe}
 
 Reglar for forslag:
 - Prioriter kategorier der teksten faktisk har problemer (ikke generelle råd).
+- KONSISTENS RADAR↔FORSLAG: Hvis radar.rettskriving ≤ 4, MÅ minst én av forslagene være en konkret rettskriving/grammatikk-kategori (og_aa, sammensatt, dobbel_konsonant, kj_skj, tegnsetting, ordklasser, setningsbygging). Tilsvarende: lav score på struktur ⇒ foreslå tekststruktur/logisk_struktur/bindeord; lav på spraak_stil ⇒ spraak_stil/referansekjede; lav på kildebruk ⇒ kildebruk/sitat. Det skal aldri være svake aksjer i radaren uten at forslagene speiler dem.
 - VIKTIG: Når du ser hyppige feil av samme type, foreslå konkrete grammatikkategorier framfor brede sjanger-kategorier. Eksempler: og_aa (blander og/å), sammensatt (deler sammensatte ord: "jule middag"), dobbel_konsonant ("katen" → "katten"), kj_skj (blander kj-/skj-lyd), tegnsetting (mangler komma/punktum), setningsbygging (fragmenter, kjempelange setninger). Disse gir rask, målbar progresjon.
 - Ikke trekk for enkeltstående småfeil som ikke påvirker lesingen. Se etter MØNSTER: samme type feil 3+ ganger eller systematisk svakhet.
 - Match sjanger der det er relevant, men la ikke sjangertilpasning skygge for konkrete språkfeil eleven faktisk gjør.
@@ -160,6 +163,7 @@ ${katListe}
 
 Reglar for forslag:
 - Prioriter kategoriar der teksten faktisk har problem (ikkje generelle råd).
+- KONSISTENS RADAR↔FORSLAG: Om radar.rettskriving ≤ 4, MÅ minst eitt av forslaga vere ein konkret rettskriving/grammatikk-kategori (og_aa, samansett, dobbel_konsonant, kj_skj, teiknsetting, ordklassar, setningsbygging). Tilsvarande: låg score på struktur ⇒ foreslå tekststruktur/logisk_struktur/bindeord; låg på spraak_stil ⇒ spraak_stil/referansekjede; låg på kjeldebruk ⇒ kjeldebruk/sitat. Det skal aldri vere svake aksar i radaren utan at forslaga speglar dei.
 - VIKTIG: Når du ser hyppige feil av same type, foreslå konkrete grammatikkategoriar framfor breie sjanger-kategoriar. Døme: og_aa (blandar og/å), samansett (deler samansette ord: «jule middag»), dobbel_konsonant («katen» → «katten»), kj_skj (blandar kj-/skj-lyd), teiknsetting (manglar komma/punktum), setningsbygging (fragment, kjempelange setningar). Desse gjev rask, målbar progresjon.
 - Ikkje trekk for enkeltståande småfeil som ikkje påverkar lesinga. Sjå etter MØNSTER: same type feil 3+ gonger eller systematisk svakheit.
 - Match sjanger der det er relevant, men lat ikkje sjangertilpassing skugge for konkrete språkfeil eleven faktisk gjer.
