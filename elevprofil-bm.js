@@ -888,7 +888,7 @@
         '</div>' +
         '<div class="ep-strengths-weak">' +
           '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Styrker</h3><span>De tre høyeste aksene i radardiagrammet – snitt fra tekstanalysene.</span></div><span class="ep-sw-icon">🌟</span></div>' + statRows(strengths, 'Ingen styrkedata ennå. Få en tekst vurdert i Tekstsjekk først.', 'ok') + aiStrengthRows(includedAnalyses) + '</div>' + 
-          '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Svakheter</h3><span>De tre laveste aksene i radardiagrammet – det er her det er mest å hente.</span></div><span class="ep-sw-icon">🎯</span></div>' + statRows(weaknesses, 'Ingen svakhetsdata ennå. Få en tekst vurdert i Tekstsjekk først.', 'warn') + forslagRows(insights.forslag) + '</div>' +
+          '<div class="ep-sw-panel"><div class="ep-sw-head"><div class="ep-sw-head-text"><h3>Svakheter</h3><span>De tre laveste aksene i radardiagrammet – det er her det er mest å hente.</span></div><span class="ep-sw-icon">🎯</span></div>' + statRows(weaknesses, 'Ingen svakhetsdata ennå. Få en tekst vurdert i Tekstsjekk først.', 'warn') + '</div>' +
         '</div>' +
       '</div>' +
       '<div class="ep-sp-actions"><button type="button" class="ep-btn-ghost" data-ep-reset-skriveprofil="1">Tilbakestill skriveprofil</button><span class="ep-sp-actions-hint">Sletter bare tekstanalysene og radarvalget på denne enheten. XP, økter og feillogg blir ikke rørt.</span></div>';
