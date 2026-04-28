@@ -705,7 +705,7 @@
         var meta = it.hits + ' gjentaking' + (it.hits === 1 ? '' : 'ar') + ' i tekstanalysane' + (it.reason ? ' · ' + it.reason : '');
         return '<div class="ep-ai-strength">' + escapeHtml(getCategoryIcon(it.id) + ' ' + it.label) + '<span class="ep-ai-strength-meta">' + escapeHtml(meta) + '</span></div>';
       }).join('');
-      return '<div class="ep-ai-strengths"><p class="ep-ai-strengths-title">Konkrete utviklingsområde frå tekstanalysane</p>' + rows + '</div>';
+      return '<div class="ep-ai-strengths">' + rows + '</div>';
     }
 
     function aiStrengthRows(analyses) {
@@ -811,7 +811,6 @@
       '<div class="ep-sp-actions"><button type="button" class="ep-btn-ghost" data-ep-reset-skriveprofil="1">Tilbakestill skriveprofil</button><span class="ep-sp-actions-hint">Slettar berre tekstanalysane og radarvalet på denne eininga. XP, økter og feillogg blir tatt vare på.</span></div>';
 
     zoneReco.innerHTML = '' +
-      '<div class="ep-reco-intro"><strong>Tips:</strong> Tilrådingar frå tekstanalysen blir prioriterte høgast, sidan dei viser mønster i fri skriving.</div>' +
       '<div class="ep-reco-grid">' + recommendationRows(recommendations) + '</div>';
 
     zoneHistory.innerHTML = '' +
