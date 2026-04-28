@@ -119,9 +119,10 @@
   function sanitizeRadarScores(scores) {
     if (!Array.isArray(scores) || scores.length !== 6) return null;
     var valid = true;
-    var cleaned = scores.map(function(v) {
+    var cleaned = scores.map(function(v, i) {
       var n = Number(v);
-      if (isNaN(n) || n < 1 || n > 6) { valid = false; return 0; }
+      var minVal = (i === 5) ? 0 : 1; // Allow 0 for kjeldebruk (ikkje vurdert)
+      if (isNaN(n) || n < minVal || n > 6) { valid = false; return 0; }
       return Math.round(n * 10) / 10;
     });
     return valid ? cleaned : null;

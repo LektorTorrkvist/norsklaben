@@ -568,6 +568,11 @@
     return entry;
   }
 
+  function computeHasKildebruk(oppgaveText, elevText, aiKjeldeScore) {
+    var re = /kjeld|kilde|tilvising|referans|kjeldeliste|kildeliste|i\s*f(?:ø|o)lgj?e|https?:\/\/|snl\.no|wikipedia|\(\s*\w+[^)]{0,40}\b(?:19|20)\d{2}\s*\)|\[[1-9]\d?\]/i;
+    return re.test(String(oppgaveText || '')) || re.test(String(elevText || '')) || Number(aiKjeldeScore) > 1;
+  }
+
   function syncToElevprofilStore(payload) {
     var radar = payload.resultat && payload.resultat.radar ? payload.resultat.radar : {};
     var forslag = Array.isArray(payload.resultat && payload.resultat.forslag) ? payload.resultat.forslag : [];
@@ -585,11 +590,8 @@
     var hasOppgave = String(payload.oppgaveText || '').trim().length >= 20;
     var oppgaveStr = String(payload.oppgaveText || '');
     var elevStr = String(payload.tekst || '');
-    var kildebrukRe = /kjeld|kilde|tilvising|referans|kjeldeliste|kildeliste|i\s*f(?:ø|o)lgj?e|https?:\/\/|snl\.no|wikipedia|\(\s*\w+[^)]{0,40}\b(?:19|20)\d{2}\s*\)|\[[1-9]\d?\]/i;
     var aiKjeldeScore = Number(radar.kjeldebruk) || 0;
-    // hasKildebruk er sann om: oppgava nemner kjelder, eleven faktisk har kjelder i teksten,
-    // eller AI-en sjolv vurderte kjeldebruk (score > 1, der 1 = ikkje relevant per prompt).
-    var hasKildebruk = kildebrukRe.test(oppgaveStr) || kildebrukRe.test(elevStr) || aiKjeldeScore > 1;
+    var hasKildebruk = computeHasKildebruk(oppgaveStr, elevStr, aiKjeldeScore);
     var innhaldRaw = Number(radar.innhald) || 0;
     var innhaldDekning = Number((payload.resultat && payload.resultat.innholdDekning && payload.resultat.innholdDekning.score)) || 0;
     var innhaldFinal = innhaldRaw;
@@ -607,8 +609,9 @@
       Number(radar.spraak_stil) || 0,
       Number(radar.rettskriving) || 0,
       Number(radar.rettskriving) || 0,
-      Number(radar.kjeldebruk) || 0
-    ].map(function (v) {
+      hasKildebruk ? (Number(radar.kjeldebruk) || 1) : 0
+    ].map(function (v, i) {
+      if (i === 5 && !hasKildebruk) return 0;
       return Math.max(1, Math.min(6, v || 1));
     });
 
@@ -673,7 +676,9 @@
   function showSavedEntry(host, entry) {
     if (!entry || !entry.resultat) return;
     applyEntryToForm(host, entry);
-    renderResult(host, entry.resultat);
+    var aiKjSc = Number(entry.resultat && entry.resultat.radar && entry.resultat.radar.kjeldebruk) || 0;
+    var savedHasKildebruk = computeHasKildebruk(entry.oppgaveText, entry.tekst, aiKjSc);
+    renderResult(host, entry.resultat, savedHasKildebruk);
     var status = host.querySelector('[data-nl-ta-status]');
     if (status) {
       status.classList.remove('err');
@@ -712,7 +717,7 @@
     resultsEl.innerHTML = html;
   }
 
-  function buildRadarSvg(radar, forklaring) {
+  function buildRadarSvg(radar, forklaring, hasKildebruk) {
     var size = 280;
     var cx = size / 2, cy = size / 2;
     var rMax = 105;
@@ -749,19 +754,27 @@
     var areaPts = [], dots = '';
     for (var k = 0; k < n; k++) {
       var key = RADAR_AKSAR[k].key;
-      var v = Number(radar[key]);
-      if (!Number.isFinite(v)) v = 1;
-      v = Math.max(1, Math.min(6, v));
+      var isKjeldeNotUsed = (key === 'kjeldebruk' && hasKildebruk === false);
+      var v, tipTxt;
+      if (isKjeldeNotUsed) {
+        v = 0;
+        tipTxt = MAAL === 'bm' ? 'Kildebruk er ikke vurdert i denne oppgaven' : 'Kjeldebruk er ikkje vurdert i denne oppgåva';
+      } else {
+        v = Number(radar[key]);
+        if (!Number.isFinite(v)) v = 1;
+        v = Math.max(1, Math.min(6, v));
+        tipTxt = (forklaring && forklaring[key]) ? String(forklaring[key]) : '';
+      }
       var pp = point(k, v);
-      var tipTxt = (forklaring && forklaring[key]) ? String(forklaring[key]) : '';
       areaPts.push(pp[0].toFixed(1) + ',' + pp[1].toFixed(1));
       dots += '<g class="nl-ta-point-group" data-nl-ax="' + key +
               '" data-nl-score="' + v +
+              '" data-nl-not-used="' + (isKjeldeNotUsed ? '1' : '0') +
               '" data-nl-tip="' + esc(tipTxt) +
               '" data-nl-label="' + esc(RADAR_AKSAR[k].label) + '">' +
               '<circle class="point" cx="' + pp[0].toFixed(1) + '" cy="' + pp[1].toFixed(1) + '" r="3.5"/>' +
               '<circle class="point-hit" cx="' + pp[0].toFixed(1) + '" cy="' + pp[1].toFixed(1) + '" r="14" fill="transparent"/>' +
-              '<title>' + esc(RADAR_AKSAR[k].label + ' ' + v + '/6' + (tipTxt ? ': ' + tipTxt : '')) + '</title>' +
+              '<title>' + esc(RADAR_AKSAR[k].label + (isKjeldeNotUsed ? ': ' + tipTxt : ' ' + v + '/6' + (tipTxt ? ': ' + tipTxt : ''))) + '</title>' +
               '</g>';
     }
 
@@ -771,7 +784,7 @@
            dots + labels + '</svg>';
   }
 
-  function renderResult(host, data) {
+  function renderResult(host, data, hasKildebruk) {
     var html = '<div class="nl-ta-card">';
     html += '<h3>' + esc(T.title) + '</h3>';
 
@@ -787,7 +800,8 @@
     if (hasRadar || hasStrengths) {
       html += '<div class="nl-ta-grid">';
       if (hasRadar) {
-        html += '<div><h4>' + esc(T.radarTitle) + '</h4><div class="nl-ta-radar-wrap">' + buildRadarSvg(data.radar, data.radar_forklaring) + '</div><div class="nl-ta-radar-tip" data-nl-radar-tip></div></div>';
+        var kjeldeNote = (hasKildebruk === false) ? '<div style="font-size:.82rem;color:#7a6a4a;font-style:italic;margin:.3rem 0 0;text-align:center;">* ' + esc(MAAL === 'bm' ? 'Kildebruk er ikke vurdert for denne teksten.' : 'Kjeldebruk er ikkje vurdert for denne teksten.') + '</div>' : '';
+        html += '<div><h4>' + esc(T.radarTitle) + '</h4><div class="nl-ta-radar-wrap">' + buildRadarSvg(data.radar, data.radar_forklaring, hasKildebruk) + '</div><div class="nl-ta-radar-tip" data-nl-radar-tip></div>' + kjeldeNote + '</div>';
       }
       if (hasStrengths) {
         html += '<div><h4>' + esc(T.strengthsTitle) + '</h4><ul class="nl-ta-strengths">';
@@ -841,7 +855,8 @@
           var lbl = g.getAttribute('data-nl-label') || '';
           var sc  = g.getAttribute('data-nl-score') || '';
           var tip = g.getAttribute('data-nl-tip') || '';
-          tipEl.textContent = lbl + ' ' + sc + '/6' + (tip ? ' – ' + tip : '');
+          var notUsed = g.getAttribute('data-nl-not-used') === '1';
+          tipEl.textContent = notUsed ? (lbl + ': ' + tip) : (lbl + ' ' + sc + '/6' + (tip ? ' – ' + tip : ''));
           tipEl.classList.add('vis');
         });
         g.addEventListener('mouseleave', function () { tipEl.classList.remove('vis'); });
@@ -1228,7 +1243,9 @@
         addHistoryEntry(payload);
         syncToElevprofilStore(payload);
         updateSavedControls(host);
-        renderResult(host, data);
+        var aiKjeldeScore = Number(data && data.radar && data.radar.kjeldebruk) || 0;
+        var hasKildebruk = computeHasKildebruk(oppgaveText, tekst, aiKjeldeScore);
+        renderResult(host, data, hasKildebruk);
         status.textContent = '';
         var resEl = host.querySelector('[data-nl-ta-results]');
         if (resEl && resEl.scrollIntoView) resEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
