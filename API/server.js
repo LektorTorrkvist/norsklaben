@@ -151,6 +151,7 @@ function normaliser(json, maal) {
     forslag.push({
       kategori: key,
       tittel:    f.tittel || getLabel(maal, key),
+      antall_funn: Number.isInteger(Number(f.antall_funn)) ? Number(f.antall_funn) : null,
       forklaring: String(f.forklaring || '').slice(0, 400),
       eksempel_fra_teksten: String(f.eksempel_fra_teksten || f.eksempel || '').slice(0, 300),
       url: buildOppgaveUrl(maal, key)
@@ -348,9 +349,12 @@ app.post('/api/analyser-tekst', async (req, res) => {
     const normalisert = normaliser(json, maal);
 
     if (!normalisert.forslag.length) {
+      const positivMerknad = maal === 'bm'
+        ? 'Ingen tydelige mønsterfeil i denne teksten – godt jobbet! Skriv mer for at vi skal kunne foreslå øvingskategorier.'
+        : 'Ingen tydelege mønsterfeil i denne teksten – godt jobba! Skriv meir for at vi skal kunne foreslå øvingskategoriar.';
       return res.status(200).json({
         ...normalisert,
-        merknad: 'Modellen gav ingen gyldige kategoriforslag. Prøv ein lengre tekst eller køyr på nytt.'
+        merknad: positivMerknad
       });
     }
 

@@ -109,17 +109,42 @@ INNHOLDSDEKNING (eget felt "innholdDekning"):
 - Hvis oppgavetekst er gitt: vurder strengt om eleven svarer på det oppgaven faktisk krever. Gi score 1–6.
 - Hvis oppgavetekst MANGLER: sett "innholdDekning.score": 0 og begrunnelse: "Ingen oppgavetekst gitt." Vurder da "radar.innhald" ut fra hva teksten faktisk leverer (relevans, dybde, ideer på egne premisser) – uten taktisk underrating.
 
-FORSLAG (det viktigste feltet): Velg 3–5 øvingskategorier fra listen under som er det MEST NYTTIGE eleven kan trene på nå – basert på de tydeligste svakhetene i akkurat denne teksten. Bare disse nøklene er gyldige:
+FORSLAG (det viktigste feltet): Velg 0–5 øvingskategorier fra listen under – BARE der du ser FAKTISKE mønsterfeil eller systematiske svakheter i akkurat denne teksten. Det er HELT OK å returnere en TOM forslag-liste hvis teksten er sterk og ikke har tydelige svakheter. Bare disse nøklene er gyldige:
 ${katListe}
 
-Reglar for forslag:
-- Prioriter kategorier der teksten faktisk har problemer (ikke generelle råd).
-- KONSISTENS RADAR↔FORSLAG: Hvis radar.rettskriving ≤ 4, MÅ minst én av forslagene være en konkret rettskriving/grammatikk-kategori (og_aa, sammensatt, dobbel_konsonant, kj_skj, tegnsetting, ordklasser, setningsbygging). Tilsvarende: lav score på struktur ⇒ foreslå tekststruktur/logisk_struktur/bindeord; lav på spraak_stil ⇒ spraak_stil/referansekjede; lav på kildebruk ⇒ kildebruk/sitat. Det skal aldri være svake aksjer i radaren uten at forslagene speiler dem.
-- VIKTIG: Når du ser hyppige feil av samme type, foreslå konkrete grammatikkategorier framfor brede sjanger-kategorier. Eksempler: og_aa (blander og/å), sammensatt (deler sammensatte ord: "jule middag"), dobbel_konsonant ("katen" → "katten"), kj_skj (blander kj-/skj-lyd), tegnsetting (mangler komma/punktum), setningsbygging (fragmenter, kjempelange setninger). Disse gir rask, målbar progresjon.
-- Ikke trekk for enkeltstående småfeil som ikke påvirker lesingen. Se etter MØNSTER: samme type feil 3+ ganger eller systematisk svakhet.
-- Match sjanger der det er relevant, men la ikke sjangertilpasning skygge for konkrete språkfeil eleven faktisk gjør.
-- Hvert forslag MÅ ha et kort, ORDRETT sitat fra elevteksten i "eksempel_fra_teksten" (3–10 ord) som viser hvorfor eleven trenger akkurat denne øvingen.
-- Ikke foreslå samme kategori to ganger.
+ANTI-HALLUSINASJON – viktigste regel:
+- Foreslå ALDRI en kategori med mindre du kan peke på minst 2 konkrete, verifiserbare feil-eksempler i elevteksten.
+- Foreslå ALDRI "for sikkerhets skyld" eller fordi "det kunne vært mer av X". Generelle råd uten konkrete belærende feil i teksten skal IKKE genereres.
+- Hvis du er usikker på om en feil faktisk er feil (f.eks. valgfri komma, stilistisk valg, dialektform): IKKE foreslå kategorien.
+- Bedre med 0 eller 2 presise forslag enn 5 generelle.
+
+Bevis-krav per forslag:
+- "antall_funn": heltall ≥ 2 – hvor mange ganger denne typen feil opptrer i teksten.
+- "eksempel_fra_teksten": ordrett sitat (3–10 ord) som DEMONSTRERER feilen – ikke et tilfeldig utdrag.
+- "forklaring": 1–2 setninger som viser hva feilen er og hvorfor denne øvingen vil hjelpe.
+
+Prioriter konkrete grammatikkategorier framfor brede sjanger-kategorier når du ser mønsterfeil. Eksempler: og_aa (blander og/å), sammensatt (deler sammensatte ord: "jule middag"), dobbel_konsonant ("katen" → "katten"), kj_skj (blander kj-/skj-lyd), tegnsetting (mangler komma/punktum), setningsbygging (fragmenter, kjempelange setninger). Disse gir rask, målbar progresjon.
+
+Ikke foreslå samme kategori to ganger.
+
+SAMMENHENG RADAR ↔ FORSLAG (viktig prinsipp):
+Radar og forslag skal speile SAMME observasjoner – ikke være uavhengige vurderinger.
+
+Arbeidsmåte (evidens først):
+1. Les teksten og noter mentalt konkrete feil-tilfeller per akse (ordrette sitat).
+2. Sett radar-score basert på disse observasjonene:
+   • 5–6: Få/ingen mønsterfeil i denne aksen.
+   • 4:   Solid med små svakheter – forslag i denne aksen er VALGFRITT.
+   • 1–3: Tydelig mønsterfeil (≥2 tilfeller) – bør gi forslag som dekker dette.
+3. Foreslå bare kategorier der du faktisk har ≥2 konkrete tilfeller (samme observasjoner som drev radarscoren).
+
+SELVSJEKK før du svarer:
+• For hver akse med score ≤ 3: Har du faktisk ≥2 konkrete tilfeller du kan sitere?
+   → Nei: Hev radar-scoren til 4. Ikke gi lav score uten evidensgrunnlag.
+   → Ja: Sjekk at minst ett forslag dekker denne aksen (med ordrett sitat).
+• Score 4 uten forslag i samme akse er HELT OK.
+• Score 5–6 skal aldri ha forslag i samme akse.
+• Et forslag uten lav radar-score i tilsvarende akse er OK hvis evidensen er sterk – men sjekk at radarscoren ikke er for høy i lys av funnene.
 
 STIL PÅ TILBAKEMELDING:
 - Skriv "du", enkelt og vennlig, men ærlig.
@@ -158,17 +183,42 @@ INNHALDSDEKNING (eige felt "innholdDekning"):
 - Om oppgåvetekst er gjeven: vurder strengt om eleven svarar på det oppgåva faktisk krev. Gje score 1–6.
 - Om oppgåvetekst MANGLAR: set "innholdDekning.score": 0 og grunngje med "Inga oppgåvetekst gjeven." Vurder då "radar.innhald" ut frå kva teksten faktisk leverer (relevans, djupne, idear på eigne premissar) – utan taktisk underrating.
 
-FORSLAG (det viktigaste feltet): Vel 3–5 øvingskategoriar frå lista under som er det MEST NYTTIGE eleven kan trene på no – basert på dei tydelegaste svakheitene i akkurat denne teksten. Berre desse nøklane er gyldige:
+FORSLAG (det viktigaste feltet): Vel 0–5 øvingskategoriar frå lista under – BERRE der du ser FAKTISKE mønsterfeil eller systematiske svakheiter i akkurat denne teksten. Det er HEILT OK å returnere ei TOM forslag-liste om teksten er sterk og ikkje har tydelege svakheiter. Berre desse nøklane er gyldige:
 ${katListe}
 
-Reglar for forslag:
-- Prioriter kategoriar der teksten faktisk har problem (ikkje generelle råd).
-- KONSISTENS RADAR↔FORSLAG: Om radar.rettskriving ≤ 4, MÅ minst eitt av forslaga vere ein konkret rettskriving/grammatikk-kategori (og_aa, samansett, dobbel_konsonant, kj_skj, teiknsetting, ordklassar, setningsbygging). Tilsvarande: låg score på struktur ⇒ foreslå tekststruktur/logisk_struktur/bindeord; låg på spraak_stil ⇒ spraak_stil/referansekjede; låg på kjeldebruk ⇒ kjeldebruk/sitat. Det skal aldri vere svake aksar i radaren utan at forslaga speglar dei.
-- VIKTIG: Når du ser hyppige feil av same type, foreslå konkrete grammatikkategoriar framfor breie sjanger-kategoriar. Døme: og_aa (blandar og/å), samansett (deler samansette ord: «jule middag»), dobbel_konsonant («katen» → «katten»), kj_skj (blandar kj-/skj-lyd), teiknsetting (manglar komma/punktum), setningsbygging (fragment, kjempelange setningar). Desse gjev rask, målbar progresjon.
-- Ikkje trekk for enkeltståande småfeil som ikkje påverkar lesinga. Sjå etter MØNSTER: same type feil 3+ gonger eller systematisk svakheit.
-- Match sjanger der det er relevant, men lat ikkje sjangertilpassing skugge for konkrete språkfeil eleven faktisk gjer.
-- Kvart forslag MÅ ha eit kort, ORDRETT sitat frå elevteksten i "eksempel_fra_teksten" (3–10 ord) som viser kvifor eleven treng akkurat denne øvinga.
-- Ikkje foreslå same kategori to gonger.
+ANTI-HALLUSINASJON – viktigaste regel:
+- Foreslå ALDRI ein kategori med mindre du kan peike på minst 2 konkrete, verifiserbare feil-døme i elevteksten.
+- Foreslå ALDRI «for sikkerheits skuld» eller fordi «det kunne vore meir av X». Generelle råd utan konkrete feil i teksten skal IKKJE genererast.
+- Om du er usikker på om noko faktisk er feil (t.d. valfritt komma, stilistisk val, dialektform): IKKJE foreslå kategorien.
+- Betre med 0 eller 2 presise forslag enn 5 generelle.
+
+Bevis-krav per forslag:
+- "antall_funn": heiltal ≥ 2 – kor mange gonger denne typen feil opptrer i teksten.
+- "eksempel_fra_teksten": ordrett sitat (3–10 ord) som DEMONSTRERER feilen – ikkje eit tilfeldig utdrag.
+- "forklaring": 1–2 setningar som viser kva feilen er og kvifor denne øvinga vil hjelpe.
+
+Prioriter konkrete grammatikkategoriar framfor breie sjanger-kategoriar når du ser mønsterfeil. Døme: og_aa (blandar og/å), samansett (deler samansette ord: «jule middag»), dobbel_konsonant («katen» → «katten»), kj_skj (blandar kj-/skj-lyd), teiknsetting (manglar komma/punktum), setningsbygging (fragment, kjempelange setningar). Desse gjev rask, målbar progresjon.
+
+Ikkje foreslå same kategori to gonger.
+
+SAMANHENG RADAR ↔ FORSLAG (viktig prinsipp):
+Radar og forslag skal spegle SAME observasjonar – ikkje vere uavhengige vurderingar.
+
+Arbeidsmåte (evidens først):
+1. Les teksten og noter mentalt konkrete feil-tilfelle per akse (ordrette sitat).
+2. Set radar-score basert på desse observasjonane:
+   • 5–6: Få/ingen mønsterfeil i denne aksen.
+   • 4:   Solid med små svakheiter – forslag i denne aksen er VALFRITT.
+   • 1–3: Tydeleg mønsterfeil (≥2 tilfelle) – bør gje forslag som dekkjer dette.
+3. Foreslå berre kategoriar der du faktisk har ≥2 konkrete tilfelle (same observasjonar som dreiv radarscoren).
+
+SJØLVSJEKK før du svarar:
+• For kvar akse med score ≤ 3: Har du faktisk ≥2 konkrete tilfelle du kan sitere?
+   → Nei: Hev radar-scoren til 4. Ikkje gje låg score utan evidensgrunnlag.
+   → Ja: Sjekk at minst eitt forslag dekkjer denne aksen (med ordrett sitat).
+• Score 4 utan forslag i same akse er HEILT OK.
+• Score 5–6 skal aldri ha forslag i same akse.
+• Eit forslag utan låg radar-score i tilsvarande akse er OK om evidensen er sterk – men sjekk at radarscoren ikkje er for høg i lys av funna.
 
 STIL PÅ TILBAKEMELDING:
 - Skriv «du», enkelt og venleg, men ærleg.
@@ -197,7 +247,7 @@ function buildUserPrompt(elevtekst, maal = 'nn', oppgavetekst = '') {
   "radar_forklaring": { "innhald": "...", "struktur": "...", "spraak_stil": "...", "rettskriving": "...", "kjeldebruk": "..." },
   "innholdDekning": { "score": 0, "begrunnelse": "..." },
   "forslag": [
-    { "kategori": "nøkkel_fra_liste", "tittel": "...", "forklaring": "...", "eksempel_fra_teksten": "..." }
+    { "kategori": "nøkkel_fra_liste", "tittel": "...", "antall_funn": 0, "forklaring": "...", "eksempel_fra_teksten": "..." }
   ]
 }`
     : `{
@@ -207,14 +257,14 @@ function buildUserPrompt(elevtekst, maal = 'nn', oppgavetekst = '') {
   "radar_forklaring": { "innhald": "...", "struktur": "...", "spraak_stil": "...", "rettskriving": "...", "kjeldebruk": "..." },
   "innholdDekning": { "score": 0, "begrunnelse": "..." },
   "forslag": [
-    { "kategori": "nokkel_fra_liste", "tittel": "...", "forklaring": "...", "eksempel_fra_teksten": "..." }
+    { "kategori": "nokkel_fra_liste", "tittel": "...", "antall_funn": 0, "forklaring": "...", "eksempel_fra_teksten": "..." }
   ]
 }`;
 
   const slutt = maal === 'bm'
-    ? `Returner KUN gyldig JSON i nøyaktig dette formatet (3–5 forslag):
+    ? `Returner KUN gyldig JSON i nøyaktig dette formatet (0–5 forslag – tom liste er OK om teksten er sterk):
 ${skjelett}`
-    : `Returner KUN gyldig JSON i nøyaktig dette formatet (3–5 forslag):
+    : `Returner KUN gyldig JSON i nøyaktig dette formatet (0–5 forslag – tom liste er OK om teksten er sterk):
 ${skjelett}`;
 
   const maalNavn = maal === 'bm' ? 'bokmål' : 'nynorsk';
