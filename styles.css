@@ -5039,6 +5039,26 @@ tr:nth-child(even) td { background: var(--bg); }
 @media (max-width: 700px) {
   .ep-bars { grid-template-columns: repeat(3, 1fr); }
   .ep-hero-left h1 { font-size: 1.7rem; }
+  .ep-shell { padding: 0 1rem 2.5rem; }
+  .ep-hero { padding: 1.75rem 1rem 2.25rem; }
+  .ep-game { padding: 1.25rem; gap: 1.25rem; }
+  .ep-radar-card { padding: 1rem 1.1rem; }
+  .ep-hist-panel { padding: 1rem 1.1rem; }
+  .ep-sw-panel { padding: 1rem 1.1rem; }
+}
+@media (max-width: 480px) {
+  .ep-hero-left h1 { font-size: 1.45rem; }
+  .ep-hero-left p { font-size: .9rem; }
+  .ep-hero-kicker { font-size: .67rem; }
+  .ep-shell { padding: 0 .75rem 2rem; }
+  .ep-game { padding: 1rem; gap: 1rem; }
+  .ep-game-level-name { font-size: 1.25rem; }
+  .ep-radar-svg { min-height: 260px; }
+  .ep-radar-card { padding: .9rem; }
+  .ep-reco-grid { grid-template-columns: 1fr; }
+  .ep-zone-title { margin-top: 2rem; }
+  .ep-bars { gap: .4rem; }
+  .ep-bars { grid-template-columns: repeat(3, 1fr); }
 }
 /* Siste tekstanalysar — scrollbar panel i historikk */
 .ep-hist-analyses {

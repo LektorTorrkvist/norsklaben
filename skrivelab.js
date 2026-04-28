@@ -492,7 +492,7 @@ function nlEnsureBankShell() {
     else document.body.appendChild(mainEl);
   }
 
-  var hasLandingApi = document.getElementById('nl-tekstanalyse') || document.getElementById('nl-skrivelab-ai');
+  var hasLandingApi = document.getElementById('nl-tekstanalyse') || document.getElementById('nl-skrivelab-ai') || document.getElementById('nl-ad-start');
 
   if (!mainEl.querySelector('.nl-bank-scan') && !hasLandingApi) {
     var scanWrap = document.createElement('section');

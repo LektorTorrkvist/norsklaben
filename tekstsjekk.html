@@ -81,7 +81,8 @@
   <div class="adp-win-bg" id="nl-ad-win-bg"></div>
   <div class="adp-win-card" role="dialog" aria-modal="true" aria-labelledby="nl-ad-win-title">
     <div class="adp-win-head">
-      <h3 id="nl-ad-win-title">Skrivemeisteren - manuell modus</h3>
+      <h3 id="nl-ad-win-title">Skrivemeisteren – manuell modus</h3>
+      <button class="adp-win-close" id="nl-ad-win-close" aria-label="Lukk økta">Lukk</button>
     </div>
 
     <div class="adp-win-body" id="nl-ad-win-body"></div>
@@ -114,7 +115,6 @@
     </section>
 
     <div class="adp-run-actions" id="nl-ad-actions">
-      <button class="adp-win-close" id="nl-ad-win-close" aria-label="Lukk økta">Lukk</button>
       <button class="adp-btn" id="nl-ad-check">Sjekk svar</button>
       <button class="adp-btn adp-btn-pri" id="nl-ad-next">Neste oppgåve →</button>
     </div>
@@ -304,7 +304,7 @@
         .replace(/\s+/g, ' ')
         .trim();
       if (q.length > 135) q = q.slice(0, 132) + '...';
-      return '<li class="ob-task-item"><button type="button" class="ob-task-link" data-kat="' + esc(kat) + '" data-task-idx="' + i + '">' + esc((i + 1) + '. ' + q) + '</button></li>';
+      return '<li class="ob-task-item"><button type="button" class="ob-task-link" data-kat="' + esc(kat) + '" data-task-idx="' + i + '">' + esc(q) + '</button></li>';
     }).join('');
 
     return '<details class="ob-task-drop"><summary>Sjå alle oppgåvene i kategorien</summary><ol class="ob-task-list">' + items + '</ol></details>';
