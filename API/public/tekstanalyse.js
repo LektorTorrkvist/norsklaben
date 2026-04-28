@@ -933,7 +933,7 @@
           '<button type="button" class="nl-ta-fbtn nl-ta-fbtn-i" data-nl-ta-fmt="italic" title="' + esc(T.formatItalicTitle) + '" aria-label="' + esc(T.formatItalic) + '">I</button>' +
           '<button type="button" class="nl-ta-fbtn nl-ta-fbtn-u" data-nl-ta-fmt="underline" title="' + esc(T.formatUnderlineTitle) + '" aria-label="' + esc(T.formatUnderline) + '">U</button>' +
         '</div>' +
-        '<div id="nl-ta-input" class="nl-ta-richinput" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" data-placeholder="' + esc(T.placeholder) + '" data-empty="1"></div>' +
+        '<div id="nl-ta-input" class="nl-ta-richinput" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" lang="' + (MAAL === 'bm' ? 'nb' : 'nn') + '" data-placeholder="' + esc(T.placeholder) + '" data-empty="1"></div>' +
         '</section>' +
         '<div class="nl-ta-actions">' +
           '<button type="button" class="nl-ta-btn" data-nl-ta-go="1">' + esc(T.analyze) + '</button>' +
@@ -1038,6 +1038,15 @@
       });
       richInput.addEventListener('input', function () { updateRichEmptyState(richInput); });
       richInput.addEventListener('blur', function () { updateRichEmptyState(richInput); });
+    }
+
+    /* ─── Sync spellcheck language with Målform select ─── */
+    var maalSelSpell = host.querySelector('#nl-ta-maal');
+    var richInputSpell = host.querySelector('#nl-ta-input');
+    if (maalSelSpell && richInputSpell) {
+      maalSelSpell.addEventListener('change', function () {
+        richInputSpell.lang = maalSelSpell.value === 'bm' ? 'nb' : 'nn';
+      });
     }
 
     /* ─── Format-toolbar (B/I/U) ─── */
